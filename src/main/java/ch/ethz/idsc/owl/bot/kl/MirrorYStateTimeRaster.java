@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.alg.Flatten;
     return Tensors.vector(type, px, sy - py - Block.values()[type].wy);
   }
 
-  @Override
+  @Override // from StateTimeRaster
   public Tensor convertToKey(StateTime stateTime) {
     Tensor state = stateTime.state();
     Tensor key1 = KlotskiStateTimeRaster.convertToKey(state);

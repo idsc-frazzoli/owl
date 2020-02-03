@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public KlotskiProblem create() {
     return KlotskiAdapter.create( //
         tensor, //
-        name(), //
+        "Solomon." + name(), //
         KlotskiStateTimeRaster.INSTANCE, //
         Tensors.vector(5, 5), //
         Tensors.vector(6, 0, 0), //

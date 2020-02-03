@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.kl;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,10 +17,13 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.io.TableBuilder;
 
 /* package */ class KlotskiDemo {
+  public static final File FOLDER_SOLUTIONS = HomeDirectory.Documents("klotski");
   private final KlotskiProblem klotskiProblem;
   private final KlotskiFrame klotskiFrame;
 
@@ -31,10 +34,11 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     klotskiFrame.setVisible(700, 700);
   }
 
-  List<StateTime> compute() {
+  KlotskiSolution compute() {
     PlannerConstraint plannerConstraint = //
         RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
+    TableBuilder tb_domain = new TableBuilder();
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
         klotskiProblem.stateTimeRaster(), //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
@@ -42,6 +46,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         plannerConstraint, //
         new KlotskiGoalAdapter(klotskiProblem.getGoal()));
     standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.startState(), RealScalar.ZERO));
+    int expandCount = 0;
     while (true) {
       {
         Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
@@ -52,7 +57,10 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
             System.out.println("BEST IN GOAL");
             System.out.println("$=" + glcNode.costFromRoot());
           }
-          return GlcNodes.getPathFromRootTo(glcNode);
+          return new KlotskiSolution( //
+              klotskiProblem, //
+              GlcNodes.getPathFromRootTo(glcNode), //
+              tb_domain.getTable());
         }
       }
       Optional<GlcNode> optional = standardTrajectoryPlanner.pollNext();
@@ -62,8 +70,10 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         GlcNode nextNode = optional.get();
         {
           klotskiFrame._board = nextNode.state();
+          tb_domain.appendRow(Tensors.vector(expandCount, domainMap.size(), queue.size(), nextNode.costFromRoot().number().intValue()));
         }
         standardTrajectoryPlanner.expand(nextNode);
+        ++expandCount;
         // if (print)
         System.out.println(String.format("#=%3d   q=%3d   $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
       } else { // queue is empty
@@ -77,14 +87,17 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     klotskiFrame.timerFrame.close();
   }
 
+  public static File solutionFile(KlotskiProblem klotskiProblem) {
+    FOLDER_SOLUTIONS.mkdir();
+    return new File(FOLDER_SOLUTIONS, klotskiProblem.name() + ".object");
+  }
+
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
-    // Pennant.PUZZLE.create();
-    // TrafficJam.PROPAEDEUTIC5.create();
+    KlotskiProblem klotskiProblem = Huarong.ONLY_18_STEPS.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
-    List<StateTime> list = klotskiDemo.compute();
-    Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
+    KlotskiSolution klotskiSolution = klotskiDemo.compute();
+    Export.object(solutionFile(klotskiProblem), klotskiSolution);
     klotskiDemo.close();
-    KlotskiPlot.export(klotskiProblem, list);
+    KlotskiPlot.export(klotskiSolution);
   }
 }

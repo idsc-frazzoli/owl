@@ -9,12 +9,14 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiFrame extends AbstractDemo {
+  private static final int RES = 128;
+  // ---
   private final KlotskiPlot klotskiPlot;
   // TODO bad design
   Tensor _board = null;
 
   public KlotskiFrame(KlotskiProblem klotskiProblem) {
-    klotskiPlot = new KlotskiPlot(klotskiProblem);
+    klotskiPlot = new KlotskiPlot(klotskiProblem, RES);
   }
 
   @Override

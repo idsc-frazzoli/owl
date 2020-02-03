@@ -112,6 +112,23 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 4, 0), //
       Tensors.vector(3, 4, 3)),
   /** type (3, 2)
+   * steps 90
+   * not part of Klotski app */
+  CUBISM( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 3, 2), //
+      Tensors.vector(1, 3, 3), //
+      // ---
+      Tensors.vector(2, 3, 0), //
+      Tensors.vector(2, 4, 0), //
+      // ---
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 3), //
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 3)),
+  /** type (3, 2)
    * steps 106
    * not part of Klotski app */
   ANDROID( //
@@ -203,7 +220,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public KlotskiProblem create() {
     return KlotskiAdapter.create( //
         tensor, //
-        name(), //
+        "Huarong." + name(), //
         new MirrorYStateTimeRaster(4), //
         Tensors.vector(5, 4), //
         Tensors.vector(0, 3, 1), //

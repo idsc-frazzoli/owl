@@ -21,7 +21,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ class KlotskiPlot {
-  static final int RES = 128;
+  private static final Color STONE_GOAL = new Color(128 - 32, 128 - 32, 255);
+  private static final Color STONE_MISC = new Color(128 + 32, 128 + 32, 255);
   static final double MARGIN = 0.08;
   static final Tensor BLOCKS = Tensors.of( //
       Tensors.vector(2, 2), //
@@ -30,15 +31,17 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       Tensors.vector(1, 1), //
       Tensors.vector(3, 1));
   // ---
+  private final int RES;
   private final Tensor border;
   private final int sx;
   private final int sy;
 
-  public KlotskiPlot(KlotskiProblem klotskiProblem) {
+  public KlotskiPlot(KlotskiProblem klotskiProblem, int res) {
     Tensor size = klotskiProblem.size();
     sx = size.Get(0).number().intValue();
     sy = size.Get(1).number().intValue();
     this.border = klotskiProblem.getFrame();
+    this.RES = res;
   }
 
   BufferedImage plot(Tensor board) {
@@ -68,7 +71,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       for (Tensor stone : board) {
         int index = stone.Get(0).number().intValue();
         geometricLayer.pushMatrix(Se2Matrix.translation(stone.extract(1, 3)));
-        graphics.setColor(index == 0 ? new Color(255, 128 - 32, 128 - 32) : new Color(255, 128, 128));
+        graphics.setColor(index == 0 ? STONE_GOAL : STONE_MISC);
         {
           Tensor polygon = Tensors.empty();
           int limit = BLOCKS.length();
@@ -110,12 +113,15 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     }
   }
 
-  public static void export(KlotskiProblem klotskiProblem, List<StateTime> list) throws IOException {
+  public static void export(KlotskiSolution klotskiSolution) throws IOException {
+    KlotskiProblem klotskiProblem = klotskiSolution.klotskiProblem;
+    List<StateTime> list = klotskiSolution.list;
     System.out.println(list.size());
     int index = 0;
     File folder = HomeDirectory.Pictures(klotskiProblem.name());
     folder.mkdir();
-    KlotskiPlot klotskiPlot = new KlotskiPlot(klotskiProblem);
+    int RES = 128;
+    KlotskiPlot klotskiPlot = new KlotskiPlot(klotskiProblem, RES);
     for (StateTime stateTime : list) {
       BufferedImage bufferedImage = klotskiPlot.plot(stateTime.state());
       Graphics2D graphics = bufferedImage.createGraphics();

@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public KlotskiProblem create() {
     return KlotskiAdapter.create( //
         tensor, //
-        name(), //
+        "TrafficJam." + name(), //
         KlotskiStateTimeRaster.INSTANCE, //
         Tensors.vector(5, 6), //
         Tensors.vector(0, 3, 4), //
