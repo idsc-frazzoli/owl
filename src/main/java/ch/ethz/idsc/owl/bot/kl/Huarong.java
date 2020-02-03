@@ -178,7 +178,10 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 0), //
       Tensors.vector(3, 3, 3)),
   /** type (2, 3)
-   * steps 158 */
+   * steps 158
+   * 
+   * 17551 q=363 $=157
+   * 34426 q=722 $=157 */
   AMBUSH( //
       Tensors.vector(0, 0, 1), //
       // ---
@@ -204,6 +207,7 @@ import ch.ethz.idsc.tensor.Tensors;
     return KlotskiAdapter.create( //
         tensor, //
         name(), //
+        new MirrorYStateTimeRaster(4), //
         Tensors.vector(5, 4), //
         Tensors.vector(0, 3, 1), //
         Tensors.of( //

@@ -38,6 +38,7 @@ import ch.ethz.idsc.tensor.Tensors;
     return KlotskiAdapter.create( //
         tensor, //
         name(), //
+        KlotskiStateTimeRaster.INSTANCE, //
         Tensors.vector(5, 5), //
         Tensors.vector(6, 0, 0), //
         Tensors.of( //

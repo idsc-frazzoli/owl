@@ -17,6 +17,7 @@ public enum VectorLexicographic implements Comparator<Tensor> {
 
   @Override // from Comparator
   public int compare(Tensor vector1, Tensor vector2) {
+    // TODO checks can be tuned down
     VectorQ.requireLength(vector1, VectorQ.require(vector2).length());
     int cmp = 0;
     for (int index = 0; index < vector1.length() && cmp == 0; ++index)

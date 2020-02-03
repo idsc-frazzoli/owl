@@ -32,10 +32,11 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   List<StateTime> compute() {
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
+    PlannerConstraint plannerConstraint = //
+        RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
-        KlotskiStateTimeRaster.INSTANCE, //
+        klotskiProblem.stateTimeRaster(), //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
         new KlotskiFlows(klotskiProblem), //
         plannerConstraint, //
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.BALANCE.create();
+    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
     // Pennant.PUZZLE.create();
     // TrafficJam.PROPAEDEUTIC5.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
