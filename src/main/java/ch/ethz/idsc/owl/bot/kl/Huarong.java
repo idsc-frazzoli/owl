@@ -178,10 +178,7 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 0), //
       Tensors.vector(3, 3, 3)),
   /** type (2, 3)
-   * steps 158
-   * 
-   * 17551 q=363 $=157
-   * 34426 q=722 $=157 */
+   * steps 158 */
   AMBUSH( //
       Tensors.vector(0, 0, 1), //
       // ---

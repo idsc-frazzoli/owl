@@ -68,4 +68,19 @@ public class VectorLexicographicTest extends TestCase {
       // ---
     }
   }
+
+  public void testScalarVectorFail() {
+    try {
+      VectorLexicographic.COMPARATOR.compare(RealScalar.ONE, Tensors.vector(0, 2, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      VectorLexicographic.COMPARATOR.compare(Tensors.vector(0, 2, 3), RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

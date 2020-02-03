@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public Tensor getState() {
+  public Tensor startState() {
     return board;
   }
 

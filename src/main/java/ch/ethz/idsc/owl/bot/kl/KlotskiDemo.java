@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         new KlotskiFlows(klotskiProblem), //
         plannerConstraint, //
         new KlotskiGoalAdapter(klotskiProblem.getGoal()));
-    standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getState(), RealScalar.ZERO));
+    standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.startState(), RealScalar.ZERO));
     while (true) {
       {
         Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();

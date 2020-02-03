@@ -7,21 +7,21 @@ public class KlotskiObstacleRegionTest extends TestCase {
   public void testHuarong() {
     for (Huarong huarong : Huarong.values()) {
       KlotskiProblem klotskiProblem = huarong.create();
-      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getState()));
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
     }
   }
 
   public void testPennant() {
     for (Pennant pennant : Pennant.values()) {
       KlotskiProblem klotskiProblem = pennant.create();
-      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getState()));
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
     }
   }
 
   public void testSolomon() {
     for (Solomon solomon : Solomon.values()) {
       KlotskiProblem klotskiProblem = solomon.create();
-      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getState()));
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
     }
   }
 
@@ -29,7 +29,7 @@ public class KlotskiObstacleRegionTest extends TestCase {
     for (TrafficJam trafficJam : TrafficJam.values()) {
       System.out.println(trafficJam);
       KlotskiProblem klotskiProblem = trafficJam.create();
-      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getState()));
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
     }
   }
 }

@@ -33,10 +33,10 @@ import ch.ethz.idsc.tensor.alg.Flatten;
     Tensor state = stateTime.state();
     Tensor key1 = KlotskiStateTimeRaster.convertToKey(state);
     Tensor key2 = KlotskiStateTimeRaster.convertToKey(mirror(state));
-    // TODO should be simplified
-    Tensor v1 = Flatten.of(key1);
-    Tensor v2 = Flatten.of(key2);
-    int compare = VectorLexicographic.COMPARATOR.compare(v1, v2);
-    return 0 < compare ? key2 : key1;
+    return VectorLexicographic.COMPARATOR.compare( //
+        Flatten.of(key1), //
+        Flatten.of(key2)) < 1 //
+            ? key1
+            : key2;
   }
 }
