@@ -39,16 +39,16 @@ import ch.ethz.idsc.tensor.pdf.BinCounts;
       htmlUtf8.appendln("<table>");
       htmlUtf8.appendln("<tr>");
       htmlUtf8.appendln("<th>Problem");
-      htmlUtf8.appendln("<th>Init<td>");
+      htmlUtf8.appendln("<th>Start<td>");
       htmlUtf8.appendln("<th>Solution<td>");
-      htmlUtf8.appendln("<th>Last<td>");
+      htmlUtf8.appendln("<th>Goal<td>");
       htmlUtf8.appendln("<th>Expansion Count vs. Leaves and Depth");
       for (Huarong huarong : Huarong.values())
         try {
           KlotskiProblem klotskiProblem = huarong.create();
           KlotskiSolution klotskiSolution = Import.object(KlotskiDemo.solutionFile(klotskiProblem));
           htmlUtf8.appendln("<tr>");
-          htmlUtf8.appendln("<td>" + klotskiProblem.name() + "<br/>");
+          htmlUtf8.appendln("<td>" + klotskiProblem.name().replace(".", "<br/>") + "<br/>");
           Tensor binCounts = BinCounts.of(klotskiProblem.startState().get(Tensor.ALL, 0));
           htmlUtf8.appendln(binCounts + "<br/>");
           htmlUtf8.appendln(klotskiSolution.list.size() + "<br/>");

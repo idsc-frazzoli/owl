@@ -19,9 +19,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
-import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinates;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -48,14 +46,14 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
-  private final SpinnerLabel<Barycenter> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<R2Barycentrics> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerFactor = new SpinnerLabel<>();
 
   public R2BarycentricCoordinatesDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
     {
-      spinnerBarycentric.setArray(Barycenter.values());
+      spinnerBarycentric.setArray(R2Barycentrics.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -93,8 +91,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
           graphics.draw(path2d);
           graphics.setStroke(new BasicStroke(1));
         }
-        TensorUnaryOperator tensorUnaryOperator = //
-            new R2BarycentricCoordinates(spinnerBarycentric.getValue()).of(domain);
+        TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().span(domain);
         Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
         Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
         Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
