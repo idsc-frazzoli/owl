@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
@@ -38,8 +40,10 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Boole;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class R2BarycentricCoordinatesDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
@@ -47,6 +51,8 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
   private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
   private final SpinnerLabel<R2Barycentrics> spinnerBarycentric = new SpinnerLabel<>();
+  private final JToggleButton jToggleEntire = new JToggleButton("entire");
+  private final JToggleButton jToggleButton = new JToggleButton("heatmap");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerFactor = new SpinnerLabel<>();
 
@@ -67,6 +73,14 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
       spinnerFactor.setIndex(0);
       spinnerFactor.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "factor");
     }
+    timerFrame.jToolBar.addSeparator();
+    {
+      timerFrame.jToolBar.add(jToggleEntire);
+    }
+    {
+      jToggleButton.setSelected(true);
+      timerFrame.jToolBar.add(jToggleButton);
+    }
     setControlPointsSe2(Tensors.fromString("{{0, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}}"));
   }
 
@@ -75,10 +89,10 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Scalar factor = RealScalar.of(spinnerFactor.getValue());
-    Tensor controlPointsSe2 = getGeodesicControlPoints().multiply(factor);
+    Tensor controlPoints = getGeodesicControlPoints().multiply(factor);
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
+    Tensor domain = Tensor.of(controlPoints.stream().map(Extract2D.FUNCTION));
     if (2 < domain.length())
       try {
         GraphicsUtil.setQualityHigh(graphics);
@@ -94,67 +108,83 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
         TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().span(domain);
         Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
         Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
-        Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
-        Tensor sY = Subdivide.of(min.Get(1), max.Get(1), spinnerRefine.getValue());
-        Tensor[][] array = new Tensor[sX.length()][sY.length()];
-        Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, sX.length(), sY.length(), domain.length());
+        final int n = spinnerRefine.getValue();
+        Tensor sX = Subdivide.of(min.Get(0), max.Get(0), n - 1);
+        Tensor sY = Subdivide.of(min.Get(1), max.Get(1), n - 1);
+        Tensor[][] array = new Tensor[n][n];
+        Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n, n, domain.length());
+        Tensor neg = Array.of(l -> DoubleScalar.INDETERMINATE, n, n);
+        boolean[][] nag = new boolean[n][n];
         int c0 = 0;
         for (Tensor x : sX) {
           int c1 = 0;
           for (Tensor y : sY) {
             Tensor px = Tensors.of(x, y);
-            if (Polygons.isInside(domain, px)) {
+            if (jToggleEntire.isSelected() || Polygons.isInside(domain, px)) {
               Tensor weights = tensorUnaryOperator.apply(px);
-              wgs.set(weights, c0, c1);
-              Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
+              wgs.set(weights, n - c1 - 1, c0);
+              boolean anyNegative = weights.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
+              neg.set(Boole.of(anyNegative), n - c1 - 1, c0);
+              nag[c0][c1] = anyNegative;
+              Tensor mean = biinvariantMean.mean(controlPoints, weights);
               array[c0][c1] = mean.divide(factor);
             }
             ++c1;
           }
           ++c0;
         }
-        // render basis functions
-        int pix = 0;
-        for (int basis = 0; basis < domain.length(); ++basis) {
-          Tensor image = ArrayPlot.of(wgs.get(Tensor.ALL, Tensor.ALL, basis), ColorDataGradients.CLASSIC);
-          BufferedImage bufferedImage = ImageFormat.of(image);
-          int wid = bufferedImage.getWidth() * 4;
-          graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
-          pix += wid;
+        if (jToggleButton.isSelected()) { // render basis functions
+          int pix = 0;
+          for (int basis = 0; basis < domain.length(); ++basis) {
+            Tensor image = ArrayPlot.of(wgs.get(Tensor.ALL, Tensor.ALL, basis), ColorDataGradients.CLASSIC);
+            BufferedImage bufferedImage = ImageFormat.of(image);
+            int wid = bufferedImage.getWidth() * 4;
+            graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
+            pix += wid;
+          }
+          pix += 10;
+          {
+            Tensor image = ArrayPlot.of(neg, ColorDataGradients.TEMPERATURE);
+            BufferedImage bufferedImage = ImageFormat.of(image);
+            int wid = bufferedImage.getWidth() * 4;
+            graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
+            pix += wid;
+          }
         }
         // render grid lines functions
-        graphics.setColor(Color.LIGHT_GRAY);
-        for (int i0 = 1; i0 < array.length; ++i0)
-          for (int i1 = 1; i1 < array.length; ++i1) {
+        for (int i0 = 1; i0 < n; ++i0)
+          for (int i1 = 1; i1 < n; ++i1) {
             Tensor c = array[i0][i1];
             if (Objects.nonNull(c)) {
               Tensor p0 = array[i0 - 1][i1];
               Tensor p1 = array[i0][i1 - 1];
               Tensor pc = array[i0 - 1][i1 - 1];
-              if (Objects.nonNull(p0))
-                graphics.draw(geometricLayer.toPath2D(Tensors.of(p0, c)));
-              if (Objects.nonNull(p1))
-                graphics.draw(geometricLayer.toPath2D(Tensors.of(p1, c)));
               if (Objects.nonNull(p0) && Objects.nonNull(p1) && Objects.nonNull(pc)) {
                 Scalar scalar = VectorAngle.of(p0.subtract(c), p1.subtract(c)).get();
                 Tensor rgba = COLOR_DATA_GRADIENT.apply(scalar.divide(Pi.VALUE));
                 graphics.setColor(ColorFormat.toColor(rgba));
                 graphics.fill(geometricLayer.toPath2D(Unprotect.byRef(c, p0, pc, p1)));
               }
+              if (Objects.nonNull(p0))
+                graphics.draw(geometricLayer.toPath2D(Tensors.of(p0, c)));
+              if (Objects.nonNull(p1))
+                graphics.draw(geometricLayer.toPath2D(Tensors.of(p1, c)));
             }
           }
-        Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.5));
-        for (int i0 = 0; i0 < array.length; ++i0)
-          for (int i1 = 0; i1 < array.length; ++i1) {
-            Tensor mean = array[i0][i1];
-            if (Objects.nonNull(mean)) {
-              Tensor matrix = geodesicDisplay.matrixLift(mean);
-              geometricLayer.pushMatrix(matrix);
-              graphics.setColor(new Color(128, 128, 128, 64));
-              graphics.fill(geometricLayer.toPath2D(shape));
-              geometricLayer.popMatrix();
+        {
+          Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.5));
+          for (int i0 = 0; i0 < n; ++i0)
+            for (int i1 = 0; i1 < n; ++i1) {
+              Tensor mean = array[i0][i1];
+              if (Objects.nonNull(mean)) {
+                Tensor matrix = geodesicDisplay.matrixLift(mean);
+                geometricLayer.pushMatrix(matrix);
+                graphics.setColor(nag[i0][i1] ? new Color(255, 128, 128, 128 + 32) : new Color(128, 128, 128, 64));
+                graphics.fill(geometricLayer.toPath2D(shape));
+                geometricLayer.popMatrix();
+              }
             }
-          }
+        }
       } catch (Exception exception) {
         exception.printStackTrace();
       }

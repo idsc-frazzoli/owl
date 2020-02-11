@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.RnMotionFits;
 import ch.ethz.idsc.sophus.app.api.RnPointWeights;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -24,7 +25,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
-import ch.ethz.idsc.tensor.opt.RigidMotionFit;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -36,6 +36,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       new PointsRender(new Color(64, 255, 64, 64), new Color(64, 255, 64, 255));
   // ---
   private final SpinnerLabel<RnPointWeights> spinnerRnPointWeights = new SpinnerLabel<>();
+  private final SpinnerLabel<RnMotionFits> spinnerRnMotionFits = new SpinnerLabel<>();
+  //
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private Tensor points;
@@ -47,7 +49,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     {
       spinnerRnPointWeights.setArray(RnPointWeights.values());
       spinnerRnPointWeights.setIndex(0);
-      spinnerRnPointWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(280, 28), "refinement");
+      spinnerRnPointWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(280, 28), "point weights");
+    }
+    {
+      spinnerRnMotionFits.setArray(RnMotionFits.values());
+      spinnerRnMotionFits.setIndex(0);
+      spinnerRnMotionFits.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "motion fits");
     }
     {
       spinnerRefine.setList(Arrays.asList(10, 15, 20, 25, 30, 35, 40));
@@ -84,11 +91,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       Tensor dx = Subdivide.of(0, 6, n - 1);
       Tensor dy = Subdivide.of(0, 6, n - 1);
       Tensor[][] array = new Tensor[dx.length()][dy.length()];
+      RnMotionFits rnMotionFits = spinnerRnMotionFits.getValue();
       for (int cx = 0; cx < n; ++cx)
         for (int cy = 0; cy < n; ++cy) {
           Tensor p = Tensors.of(dx.get(cx), dy.get(cy));
           Tensor weights = tensorUnaryOperator.apply(p);
-          array[cx][cy] = RigidMotionFit.of(points, target, weights).apply(p);
+          array[cx][cy] = rnMotionFits.map(points, target, weights, p);
         }
       ColorDataGradient colorDataGradient = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
       new ArrayRender(array, colorDataGradient).render(geometricLayer, graphics);

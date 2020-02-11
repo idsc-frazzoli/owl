@@ -81,10 +81,9 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (jToggleButtonAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    // Scalar factor = RealScalar.of(spinnerFactor.getValue());
-    Tensor controlPointsSe2 = getGeodesicControlPoints();
+    Tensor controlPoints = getGeodesicControlPoints();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
+    Tensor domain = Tensor.of(controlPoints.stream().map(Extract2D.FUNCTION));
     if (2 < domain.length())
       try {
         GraphicsUtil.setQualityHigh(graphics);
@@ -104,7 +103,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
             Tensor px = Tensors.of(x, y);
             Tensor weights = tensorUnaryOperator.apply(px);
             wgs.set(weights, c0, c1);
-            Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
+            Tensor mean = biinvariantMean.mean(controlPoints, weights);
             array[c0][c1] = mean;
             ++c1;
           }
