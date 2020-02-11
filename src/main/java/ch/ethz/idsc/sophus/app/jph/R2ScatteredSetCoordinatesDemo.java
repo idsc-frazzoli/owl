@@ -13,6 +13,7 @@ import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -21,27 +22,19 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Entrywise;
-import ch.ethz.idsc.tensor.red.VectorAngle;
 
 // TODO redundancy with R2BarycentricCoordinatesDemo
 /* package */ class R2ScatteredSetCoordinatesDemo extends ControlPointsDemo {
-  // private static final ColorDataGradient COLOR_DATA_GRADIENT = //
-  // ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
-  // ---
   private final SpinnerLabel<R2Barycentrics> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -130,21 +123,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
         // render grid lines functions
         graphics.setColor(Color.LIGHT_GRAY);
         ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RationalScalar.HALF);
-        for (int i0 = 1; i0 < array.length; ++i0)
-          for (int i1 = 1; i1 < array.length; ++i1) {
-            Tensor c = array[i0][i1];
-            Tensor p0 = array[i0 - 1][i1];
-            Tensor p1 = array[i0][i1 - 1];
-            Tensor pc = array[i0 - 1][i1 - 1];
-            graphics.draw(geometricLayer.toPath2D(Tensors.of(p0, c)));
-            graphics.draw(geometricLayer.toPath2D(Tensors.of(p1, c)));
-            {
-              Scalar scalar = VectorAngle.of(p0.subtract(c), p1.subtract(c)).get();
-              Tensor rgba = colorDataGradient.apply(scalar.divide(Pi.VALUE));
-              graphics.setColor(ColorFormat.toColor(rgba));
-              graphics.fill(geometricLayer.toPath2D(Unprotect.byRef(c, p0, pc, p1)));
-            }
-          }
+        new ArrayRender(array, colorDataGradient).render(geometricLayer, graphics);
         Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(3.0 / Math.sqrt(spinnerRefine.getValue())));
         for (int i0 = 0; i0 < array.length; ++i0)
           for (int i1 = 0; i1 < array.length; ++i1) {
