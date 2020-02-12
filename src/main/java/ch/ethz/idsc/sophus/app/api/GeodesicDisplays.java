@@ -55,4 +55,7 @@ public enum GeodesicDisplays {
       ClothoidDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE);
+  // ---
+  public static final List<GeodesicDisplay> SPD2_ONLY = Arrays.asList( //
+      Spd2GeodesicDisplay.INSTANCE);
 }

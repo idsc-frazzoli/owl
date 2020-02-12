@@ -1,9 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.hs.spd.SpdDistance;
+import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdMean;
+import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -13,8 +14,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Diagonal;
+import ch.ethz.idsc.tensor.sca.Log;
 
 /** symmetric positive definite 2 x 2 matrices */
 public enum Spd2GeodesicDisplay implements GeodesicDisplay {
@@ -35,19 +38,22 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    // TODO Auto-generated method stub
-    return null;
+    Tensor matrix = DiagonalMatrix.with(xya.extract(0, 2));
+    matrix.set(xya.Get(2), 0, 1);
+    matrix.set(xya.Get(2), 1, 0);
+    return SpdExponential.INSTANCE.exp(matrix);
   }
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
-    // TODO apply logarithm
-    return Diagonal.of(p);
+    return Diagonal.of(SpdExponential.INSTANCE.log(p));
   }
 
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     Tensor matrix = PAD_RIGHT.apply(p);
+    matrix.set(Log.FUNCTION.apply(p.Get(0, 0)), 0, 2);
+    matrix.set(Log.FUNCTION.apply(p.Get(1, 1)), 1, 2);
     matrix.set(RealScalar.ONE, 2, 2);
     return matrix;
   }
@@ -64,11 +70,16 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
-    return SpdDistance.INSTANCE.distance(p, q);
+    return SpdMetric.INSTANCE.distance(p, q);
   }
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return SpdMean.INSTANCE;
+  }
+
+  @Override
+  public String toString() {
+    return "Spd2";
   }
 }

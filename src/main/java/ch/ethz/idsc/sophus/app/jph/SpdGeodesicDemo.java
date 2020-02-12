@@ -11,26 +11,23 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Spd2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-/* package */ class SpdGeodesicDemo extends AbstractDemo {
+/* package */ class SpdGeodesicDemo extends GeodesicDisplayDemo {
   private static final Distribution DISTRIBUTION = UniformDistribution.of(-1, 1);
-  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43);
   // ---
   private final JButton jButton = new JButton("suffle");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -39,6 +36,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private Tensor q;
 
   public SpdGeodesicDemo() {
+    super(GeodesicDisplays.SPD2_ONLY);
     jButton.addActionListener(e -> shuffle());
     timerFrame.jToolBar.add(jButton);
     // ---
@@ -57,26 +55,23 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    // AxesRender.INSTANCE.render(geometricLayer, graphics);
+    AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
     ScalarTensorFunction scalarTensorFunction = SpdGeodesic.INSTANCE.curve(p, q);
     graphics.setStroke(new BasicStroke(1.5f));
     graphics.setColor(Color.LIGHT_GRAY);
+    Tensor shape = Spd2GeodesicDisplay.INSTANCE.shape();
     for (Tensor _t : Subdivide.of(0, 1, spinnerRefine.getValue())) {
-      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.of(_t.multiply(RealScalar.of(10)), RealScalar.ZERO)));
       Tensor pq = scalarTensorFunction.apply(_t.Get());
       geometricLayer.pushMatrix(Spd2GeodesicDisplay.INSTANCE.matrixLift(pq));
-      graphics.draw(geometricLayer.toPath2D(CIRCLE_POINTS, true));
-      geometricLayer.popMatrix();
+      graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
     }
     graphics.setColor(Color.BLUE);
     for (Tensor _t : Subdivide.of(0, 1, 1)) {
-      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.of(_t.multiply(RealScalar.of(10)), RealScalar.ZERO)));
       Tensor pq = scalarTensorFunction.apply(_t.Get());
       geometricLayer.pushMatrix(Spd2GeodesicDisplay.INSTANCE.matrixLift(pq));
-      graphics.draw(geometricLayer.toPath2D(CIRCLE_POINTS, true));
-      geometricLayer.popMatrix();
+      graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
     }
     graphics.setStroke(new BasicStroke());
