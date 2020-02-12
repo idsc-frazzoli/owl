@@ -37,10 +37,10 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(2, 4, 0), //
       Tensors.vector(2, 4, 2), //
       // ---
-      Tensors.vector(3, 0, 3), //
-      Tensors.vector(3, 1, 3), //
       Tensors.vector(3, 0, 0), //
-      Tensors.vector(3, 1, 0)),
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 0), //
+      Tensors.vector(3, 1, 3)),
   /** type (3, 0)
    * steps 45 */
   VIOLET( //

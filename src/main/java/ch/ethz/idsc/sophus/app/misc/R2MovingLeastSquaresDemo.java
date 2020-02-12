@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
+import javax.swing.JButton;
+
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
@@ -17,6 +19,7 @@ import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.RnMotionFits;
 import ch.ethz.idsc.sophus.app.api.RnPointWeights;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -40,6 +43,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   //
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
+  private final JButton jButton = new JButton("snap");
   private Tensor points;
 
   R2MovingLeastSquaresDemo() {
@@ -65,7 +69,11 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       spinnerLength.addSpinnerListener(this::shufflePoints);
       spinnerLength.setList(Arrays.asList(3, 4, 5, 6, 7, 8, 9, 10));
       spinnerLength.setValue(4);
-      spinnerLength.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+      spinnerLength.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "number of points");
+    }
+    {
+      jButton.addActionListener(l -> points = Tensor.of(getControlPointsSe2().stream().map(Extract2D.FUNCTION)));
+      timerFrame.jToolBar.add(jButton);
     }
     shufflePoints(spinnerLength.getValue());
     timerFrame.configCoordinateOffset(300, 500);

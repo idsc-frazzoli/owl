@@ -39,7 +39,7 @@ public interface GeodesicDisplay {
 
   /** @param p control point
    * @param q control point
-   * @return pseudo difference between given control points p and q */
+   * @return (pseudo-) distance between given control points p and q */
   Scalar parametricDistance(Tensor p, Tensor q);
 
   /** @return biinvariantMean
