@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   private final JToggleButton jToggleButtonAxes = new JToggleButton("axes");
 
   public R2ScatteredSetCoordinatesDemo() {
-    super(true, GeodesicDisplays.SE2C_SPD2_R2);
+    super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
       spinnerBarycentric.setArray(PointWeights.values());
       spinnerBarycentric.setIndex(0);

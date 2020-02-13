@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   public R2BarycentricCoordinatesDemo() {
-    super(true, GeodesicDisplays.SE2C_SPD2_R2);
+    super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
       spinnerBarycentric.setArray(PolygonWeights.values());
       spinnerBarycentric.setIndex(0);
