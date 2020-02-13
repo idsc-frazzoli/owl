@@ -31,7 +31,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     spinnerRefine.setValue(6);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    setMidpointIndicated(false);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
   }
 

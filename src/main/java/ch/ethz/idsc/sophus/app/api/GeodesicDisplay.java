@@ -22,7 +22,7 @@ public interface GeodesicDisplay {
   Tensor project(Tensor xya);
 
   /** @param p control point
-   * @return {x, y} */
+   * @return vector of length 2 with grid coordinates {x, y} */
   Tensor toPoint(Tensor p);
 
   /** @param p control point

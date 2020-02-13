@@ -66,7 +66,6 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);
     }
-    setMidpointIndicated(false);
     setControlPointsSe2(Tensors.fromString("{{2, -3, 1.5}, {3, 5, 1}, {-4, -3, 1}, {-5, 3, 2}}"));
     timerFrame.configCoordinateOffset(500, 500);
   }

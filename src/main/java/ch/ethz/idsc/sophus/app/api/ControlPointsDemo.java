@@ -52,6 +52,28 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   // ---
   private final static Color ORANGE = new Color(255, 200, 0, 192);
   private final static Color GREEN = new Color(0, 255, 0, 192);
+
+  private class Midpoints {
+    private final GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    private final Tensor midpoints;
+    private final int index;
+
+    public Midpoints() {
+      CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay.geodesicInterface());
+      midpoints = curveSubdivision.string(getGeodesicControlPoints());
+      Tensor mouse_dist = Tensor.of(midpoints.stream() //
+          .map(geodesicDisplay::toPoint) //
+          .map(mouse.extract(0, 2)::subtract) //
+          .map(Norm._2::ofVector));
+      ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+      index = argMinValue.index();
+    }
+
+    Tensor closestXY() {
+      return geodesicDisplay.toPoint(midpoints.get(index));
+    }
+  }
+
   // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -84,21 +106,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           geometricLayer.popMatrix();
         }
         if (!hold && Tensors.nonEmpty(control) && midpointIndicated) {
-          CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay.geodesicInterface());
-          Tensor midpoints = curveSubdivision.string(control);
-          // graphics.setColor(new Color(128, 128, 128, 32));
-          // Tensor shape = getControlPointShape().multiply(RealScalar.of(.5));
-          // for (Tensor midpoint : midpoints) {
-          // geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(midpoint)));
-          // graphics.fill(geometricLayer.toPath2D(shape));
-          // geometricLayer.popMatrix();
-          // }
-          Tensor mouse_dist = Tensor.of(midpoints.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-          ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-          int pos_index = argMinValue.index();
           graphics.setColor(Color.RED);
           graphics.setStroke(STROKE);
-          graphics.draw(geometricLayer.toLine2D(mouse, midpoints.get(pos_index)));
+          graphics.draw(geometricLayer.toLine2D(mouse, new Midpoints().closestXY()));
           graphics.setStroke(new BasicStroke());
         }
       }
@@ -140,13 +150,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
                 control = control.append(mouse);
                 min_index = control.length() - 1;
               } else {
-                CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay().geodesicInterface());
-                Tensor midpoints = curveSubdivision.string(control);
-                Tensor mouse_dist = Tensor.of(midpoints.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-                ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-                int pos_index = argMinValue.index();
-                control = Insert.of(control, mouse, pos_index);
-                min_index = argMinValue.index();
+                Midpoints midpoints = new Midpoints();
+                control = Insert.of(control, mouse, midpoints.index);
+                min_index = midpoints.index;
               }
             }
           } else {

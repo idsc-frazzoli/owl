@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.hs.sn.SnMean;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
@@ -27,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** symmetric positive definite 2 x 2 matrices */
-public class S2GeodesicDisplay implements GeodesicDisplay {
+public class S2GeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.2));
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
   private static final Scalar RADIUS = RealScalar.of(7);
@@ -50,11 +52,11 @@ public class S2GeodesicDisplay implements GeodesicDisplay {
   }
 
   /** @param xyz normalized vector
-   * @return 3x3 matrix */
-  /* package */ static Tensor frame(Tensor xyz) {
+   * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
+  /* package */ static Tensor tangentSpace(Tensor xyz) {
     Tensor frame = Tensors.of(xyz);
     IdentityMatrix.of(3).stream().forEach(frame::append);
-    return Transpose.of(Orthogonalize.of(frame).extract(0, 3));
+    return Orthogonalize.of(frame).extract(1, 3);
   }
 
   @Override // from GeodesicDisplay
@@ -77,10 +79,10 @@ public class S2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor xyz) {
-    Tensor frame = frame(xyz);
-    Tensor skew = PAD_RIGHT.apply(Tensors.of( //
-        frame.get(0, Tensor.ALL).extract(1, 3), //
-        frame.get(1, Tensor.ALL).extract(1, 3)));
+    Tensor frame = tangentSpace(xyz);
+    Tensor skew = PAD_RIGHT.apply(Transpose.of(Tensors.of( //
+        frame.get(0).extract(0, 2), //
+        frame.get(1).extract(0, 2))));
     skew.set(RealScalar.ONE, 2, 2);
     return Se2Matrix.translation(toPoint(xyz)).dot(skew);
   }

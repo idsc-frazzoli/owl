@@ -20,6 +20,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -74,7 +75,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       jToggleButton.setSelected(true);
       timerFrame.jToolBar.add(jToggleButton);
     }
-    setMidpointIndicated(false); // TODO
+    setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}}"));
   }
 
