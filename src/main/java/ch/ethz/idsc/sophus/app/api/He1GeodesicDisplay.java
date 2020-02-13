@@ -28,6 +28,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
     return HeGeodesic.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 3;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return SQUARE;

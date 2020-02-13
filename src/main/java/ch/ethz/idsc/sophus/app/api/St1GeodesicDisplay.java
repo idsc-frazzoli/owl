@@ -31,6 +31,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
     return StGeodesic.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 2;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return PENTAGON;

@@ -26,6 +26,11 @@ public enum PolarClothoidDisplay implements GeodesicDisplay {
     return PolarClothoids.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 3;
+  }
+
   @Override // from GeodesicDisplay
   public final Tensor shape() {
     return ARROWHEAD;

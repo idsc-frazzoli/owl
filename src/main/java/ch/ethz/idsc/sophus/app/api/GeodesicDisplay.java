@@ -15,6 +15,8 @@ public interface GeodesicDisplay {
   /** @return */
   GeodesicInterface geodesicInterface();
 
+  int dimensions();
+
   /** @return polygon to visualize the control point */
   Tensor shape();
 

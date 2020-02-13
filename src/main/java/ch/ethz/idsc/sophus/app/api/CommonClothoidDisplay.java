@@ -26,6 +26,11 @@ public enum CommonClothoidDisplay implements GeodesicDisplay {
     return CommonClothoids.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 3;
+  }
+
   @Override // from GeodesicDisplay
   public final Tensor shape() {
     return ARROWHEAD;

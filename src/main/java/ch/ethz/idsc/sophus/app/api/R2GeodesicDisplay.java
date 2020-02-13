@@ -29,6 +29,11 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
     return RnGeodesic.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 2;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return CIRCLE;

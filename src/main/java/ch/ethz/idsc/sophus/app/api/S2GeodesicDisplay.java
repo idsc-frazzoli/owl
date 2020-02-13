@@ -48,6 +48,11 @@ public class S2GeodesicDisplay implements GeodesicDisplay, Serializable {
     return SnGeodesic.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 2;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return CIRCLE;

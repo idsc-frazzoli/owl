@@ -29,6 +29,11 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
     return new SplitParametricCurve(H2Geodesic.INSTANCE);
   }
 
+  @Override
+  public int dimensions() {
+    return 2;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return TRIANGLE;

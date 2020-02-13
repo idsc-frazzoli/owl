@@ -35,6 +35,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     this.radius = radius;
   }
 
+  @Override
+  public int dimensions() {
+    return 3;
+  }
+
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
     return So3Geodesic.INSTANCE;

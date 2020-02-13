@@ -34,6 +34,11 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
     return SpdGeodesic.INSTANCE;
   }
 
+  @Override
+  public int dimensions() {
+    return 3;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor shape() {
     return CIRCLE_POINTS;
