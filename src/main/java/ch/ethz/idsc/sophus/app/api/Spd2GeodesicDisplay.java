@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,13 +18,12 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Diagonal;
-import ch.ethz.idsc.tensor.sca.Log;
 
 /** symmetric positive definite 2 x 2 matrices */
 public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
-  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43);
+  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43).multiply(RealScalar.of(0.2));
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
 
   @Override // from GeodesicDisplay
@@ -52,10 +52,9 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     Tensor matrix = PAD_RIGHT.apply(p);
-    matrix.set(Log.FUNCTION.apply(p.Get(0, 0)), 0, 2);
-    matrix.set(Log.FUNCTION.apply(p.Get(1, 1)), 1, 2);
     matrix.set(RealScalar.ONE, 2, 2);
-    return matrix;
+    Tensor log = SpdExponential.INSTANCE.log(p);
+    return Se2Matrix.translation(Diagonal.of(log)).dot(matrix);
   }
 
   @Override // from GeodesicDisplay

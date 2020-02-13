@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.lie.rn.RnVectorNorm;
+import ch.ethz.idsc.sophus.lie.rn.RnNorm;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           graphics.setStroke(new BasicStroke(1));
         }
         TensorUnaryOperator tensorUnaryOperator = //
-            InverseDistanceCoordinates.of(RnVectorNorm.INSTANCE, controlPoints);
+            InverseDistanceCoordinates.of(RnNorm.INSTANCE, controlPoints);
         Tensor origin = controlPoints.get(0).map(Scalar::zero);
         Tensor weights = tensorUnaryOperator.apply(origin);
         graphics.setColor(Color.DARK_GRAY);
