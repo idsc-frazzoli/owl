@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ enum R2Barycentrics {
+/* package */ enum PolygonWeights {
   WACHSPRESS() {
     @Override
     public TensorUnaryOperator span(Tensor polygon) {

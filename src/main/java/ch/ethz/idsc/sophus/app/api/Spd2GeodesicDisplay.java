@@ -23,7 +23,8 @@ import ch.ethz.idsc.tensor.red.Diagonal;
 public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
-  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43).multiply(RealScalar.of(0.2));
+  private static final Scalar SCALE = RealScalar.of(0.2);
+  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43).multiply(SCALE);
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
 
   @Override // from GeodesicDisplay
@@ -36,25 +37,35 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
     return CIRCLE_POINTS;
   }
 
+  private static Tensor xya2sim(Tensor xya) {
+    xya = xya.multiply(SCALE);
+    Tensor sim = DiagonalMatrix.with(xya.extract(0, 2));
+    sim.set(xya.Get(2), 0, 1);
+    sim.set(xya.Get(2), 1, 0);
+    return sim;
+  }
+
+  private static Tensor sim2xya(Tensor sim) {
+    return Diagonal.of(sim).append(sim.get(0, 1)).divide(SCALE);
+  }
+
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    Tensor matrix = DiagonalMatrix.with(xya.extract(0, 2));
-    matrix.set(xya.Get(2), 0, 1);
-    matrix.set(xya.Get(2), 1, 0);
-    return SpdExponential.INSTANCE.exp(matrix);
+    Tensor sim = xya2sim(xya);
+    return SpdExponential.INSTANCE.exp(sim);
   }
 
   @Override // from GeodesicDisplay
-  public Tensor toPoint(Tensor p) {
-    return Diagonal.of(SpdExponential.INSTANCE.log(p));
+  public Tensor toPoint(Tensor sym) {
+    Tensor sim = SpdExponential.INSTANCE.log(sym);
+    return sim2xya(sim).extract(0, 2);
   }
 
   @Override // from GeodesicDisplay
-  public Tensor matrixLift(Tensor p) {
-    Tensor matrix = PAD_RIGHT.apply(p);
+  public Tensor matrixLift(Tensor sym) {
+    Tensor matrix = PAD_RIGHT.apply(sym); // log is possible
     matrix.set(RealScalar.ONE, 2, 2);
-    Tensor log = SpdExponential.INSTANCE.log(p);
-    return Se2Matrix.translation(Diagonal.of(log)).dot(matrix);
+    return Se2Matrix.translation(toPoint(sym)).dot(matrix);
   }
 
   @Override // from GeodesicDisplay
