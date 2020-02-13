@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitParametricCurve;
+import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -67,6 +68,11 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public InverseDistanceCoordinates inverseDistanceCoordinates() {
     throw new UnsupportedOperationException();
   }
 

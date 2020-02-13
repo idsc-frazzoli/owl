@@ -10,7 +10,9 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -63,6 +65,11 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return Se2BiinvariantMean.FILTER;
+  }
+
+  @Override
+  public InverseDistanceCoordinates inverseDistanceCoordinates() {
+    return Se2CoveringInverseDistanceCoordinates.INSTANCE;
   }
 
   @Override // from Object

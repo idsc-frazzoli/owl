@@ -2,10 +2,8 @@
 package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.Path2D;
 
 import javax.swing.JToggleButton;
 
@@ -15,12 +13,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.lie.rn.RnNorm;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class BarycentricLeversDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
@@ -31,7 +26,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
 
   public BarycentricLeversDemo() {
-    super(true, GeodesicDisplays.SE2C_R2);
+    super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     // {
     // spinnerBarycentric.setArray(R2Barycentrics.values());
     // spinnerBarycentric.setIndex(0);
@@ -50,31 +45,34 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GraphicsUtil.setQualityHigh(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPoints = getGeodesicControlPoints();
-    if (2 < controlPoints.length())
+    Tensor controlPointsAll = getGeodesicControlPoints();
+    if (2 < controlPointsAll.length()) {
+      Tensor origin = controlPointsAll.get(0);
+      Tensor controlPoints = controlPointsAll.extract(1, controlPointsAll.length());
       try {
-        GraphicsUtil.setQualityHigh(graphics);
-        {
-          graphics.setColor(Color.LIGHT_GRAY);
-          graphics.setStroke(STROKE);
-          Path2D path2d = geometricLayer.toPath2D(controlPoints);
-          path2d.closePath();
-          graphics.draw(path2d);
-          graphics.setStroke(new BasicStroke(1));
-        }
-        TensorUnaryOperator tensorUnaryOperator = //
-            InverseDistanceCoordinates.of(RnNorm.INSTANCE, controlPoints);
-        Tensor origin = controlPoints.get(0).map(Scalar::zero);
-        Tensor weights = tensorUnaryOperator.apply(origin);
-        graphics.setColor(Color.DARK_GRAY);
-        for (Tensor p : weights.pmul(controlPoints))
-          graphics.draw(geometricLayer.toLine2D(p));
+        // {
+        // graphics.setColor(Color.LIGHT_GRAY);
+        // graphics.setStroke(STROKE);
+        // Path2D path2d = geometricLayer.toPath2D(controlPoints);
+        // path2d.closePath();
+        // graphics.draw(path2d);
+        // graphics.setStroke(new BasicStroke(1));
+        // }
+        TensorNorm tensorNorm = q -> geodesicDisplay.parametricDistance(origin, q);
+        // TensorUnaryOperator tensorUnaryOperator = //
+        // RnInverseDistanceCoordinates.INSTANCE.idc(tensorNorm, controlPoints);
+        // Tensor weights = tensorUnaryOperator.apply(origin);
+        // graphics.setColor(Color.DARK_GRAY);
+        // for (Tensor p : weights.pmul(controlPoints))
+        // graphics.draw(geometricLayer.toLine2D(geodesicDisplay.toPoint(p)));
       } catch (Exception exception) {
         exception.printStackTrace();
       }
+    }
   }
 
   public static void main(String[] args) {

@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.hs.sn.SnMean;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -11,6 +12,7 @@ import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -105,6 +107,11 @@ public class S2GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return new SnMean(Chop._05);
+  }
+
+  @Override
+  public InverseDistanceCoordinates inverseDistanceCoordinates() {
+    return SnInverseDistanceCoordinates.INSTANCE;
   }
 
   @Override

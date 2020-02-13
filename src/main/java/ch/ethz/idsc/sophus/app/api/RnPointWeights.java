@@ -24,7 +24,7 @@ public enum RnPointWeights {
   INVERSE_DISTANCE_COORDINATES() {
     @Override
     public TensorUnaryOperator of(Tensor points) {
-      return RnInverseDistanceCoordinates.of(points);
+      return p -> RnInverseDistanceCoordinates.INSTANCE.weights(points, p);
     }
   }, //
   ;

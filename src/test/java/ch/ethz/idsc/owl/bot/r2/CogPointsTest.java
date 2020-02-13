@@ -3,10 +3,10 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.opt.ConvexHull;
 import junit.framework.TestCase;
 
 public class CogPointsTest extends TestCase {

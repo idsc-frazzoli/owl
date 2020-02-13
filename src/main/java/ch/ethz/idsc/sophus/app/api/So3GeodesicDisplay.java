@@ -11,8 +11,10 @@ import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
+import ch.ethz.idsc.sophus.lie.so3.So3InverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -80,6 +82,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return So3BiinvariantMean.INSTANCE;
+  }
+
+  @Override
+  public InverseDistanceCoordinates inverseDistanceCoordinates() {
+    return So3InverseDistanceCoordinates.INSTANCE;
   }
 
   @Override

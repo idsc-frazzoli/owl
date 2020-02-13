@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -45,6 +46,9 @@ public interface GeodesicDisplay {
   /** @return biinvariantMean
    * @throws Exception if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();
+
+  /** @return */
+  InverseDistanceCoordinates inverseDistanceCoordinates();
 
   @Override // from Object
   String toString();
