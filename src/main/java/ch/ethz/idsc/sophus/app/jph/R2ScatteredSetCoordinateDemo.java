@@ -14,6 +14,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
+import ch.ethz.idsc.sophus.app.api.BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -34,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 
 // TODO redundancy with R2BarycentricCoordinatesDemo
 /* package */ class R2ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<PointWeights> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<BarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
@@ -43,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   public R2ScatteredSetCoordinateDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
-      spinnerBarycentric.setArray(PointWeights.values());
+      spinnerBarycentric.setArray(BarycentricCoordinates.SCATTERED);
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -80,7 +81,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       GraphicsUtil.setQualityHigh(graphics);
-      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().idc;
+      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().barycentricCoordinate();
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);

@@ -17,6 +17,7 @@ import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -50,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
-  private final SpinnerLabel<PolygonWeights> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<BarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
   private final JToggleButton jToggleEntire = new JToggleButton("entire");
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -58,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public R2BarycentricCoordinateDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
-      spinnerBarycentric.setArray(PolygonWeights.values());
+      spinnerBarycentric.setArray(BarycentricCoordinates.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -98,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().idc;
+      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().barycentricCoordinate();
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = spinnerRefine.getValue();
