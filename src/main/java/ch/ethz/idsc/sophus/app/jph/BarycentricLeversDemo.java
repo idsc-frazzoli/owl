@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (1 + geodesicDisplay.dimensions() < controlPointsAll.length()) {
       Tensor origin = controlPointsAll.get(0);
       Tensor controlPoints = controlPointsAll.extract(1, controlPointsAll.length());
-      InverseDistanceCoordinates inverseDistanceCoordinates = geodesicDisplay.inverseDistanceCoordinates();
+      BarycentricCoordinate inverseDistanceCoordinates = geodesicDisplay.inverseDistanceCoordinates();
       Tensor weights = inverseDistanceCoordinates.weights(controlPoints, origin);
       {
         int index = 0;

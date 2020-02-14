@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
-import ch.ethz.idsc.sophus.hs.spd.SpdInverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.hs.spd.SpdInverseDistanceCoordinate;
 import ch.ethz.idsc.sophus.hs.spd.SpdMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -96,8 +96,8 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public InverseDistanceCoordinates inverseDistanceCoordinates() {
-    return SpdInverseDistanceCoordinates.INSTANCE;
+  public BarycentricCoordinate inverseDistanceCoordinates() {
+    return SpdInverseDistanceCoordinate.INSTANCE;
   }
 
   @Override

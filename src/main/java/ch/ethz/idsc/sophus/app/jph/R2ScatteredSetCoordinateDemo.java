@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -29,18 +30,17 @@ import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
 // TODO redundancy with R2BarycentricCoordinatesDemo
-/* package */ class R2ScatteredSetCoordinatesDemo extends ControlPointsDemo {
+/* package */ class R2ScatteredSetCoordinateDemo extends ControlPointsDemo {
   private final SpinnerLabel<PointWeights> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
   private final JToggleButton jToggleButtonAxes = new JToggleButton("axes");
 
-  public R2ScatteredSetCoordinatesDemo() {
+  public R2ScatteredSetCoordinateDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
       spinnerBarycentric.setArray(PointWeights.values());
@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       GraphicsUtil.setQualityHigh(graphics);
-      TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().span(domain);
+      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().idc;
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);
@@ -95,7 +95,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
-          Tensor weights = tensorUnaryOperator.apply(px);
+          Tensor weights = barycentricCoordinates.weights(domain, px);
           wgs.set(weights, c0, c1);
           Tensor mean = biinvariantMean.mean(controlPoints, weights);
           array[c0][c1] = mean;
@@ -132,6 +132,6 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   }
 
   public static void main(String[] args) {
-    new R2ScatteredSetCoordinatesDemo().setVisible(1200, 900);
+    new R2ScatteredSetCoordinateDemo().setVisible(1200, 900);
   }
 }

@@ -24,6 +24,7 @@ import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -39,13 +40,12 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Boole;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class R2BarycentricCoordinatesDemo extends ControlPointsDemo {
+/* package */ class R2BarycentricCoordinateDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
-  public R2BarycentricCoordinatesDemo() {
+  public R2BarycentricCoordinateDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
       spinnerBarycentric.setArray(PolygonWeights.values());
@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().span(domain);
+      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().idc;
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = spinnerRefine.getValue();
@@ -114,7 +114,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
           if (jToggleEntire.isSelected() || Polygons.isInside(domain, px)) {
-            Tensor weights = tensorUnaryOperator.apply(px);
+            Tensor weights = barycentricCoordinates.weights(domain, px);
             wgs.set(weights, n - c1 - 1, c0);
             boolean anyNegative = weights.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
             neg.set(Boole.of(anyNegative), n - c1 - 1, c0);
@@ -185,6 +185,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   public static void main(String[] args) {
-    new R2BarycentricCoordinatesDemo().setVisible(1200, 600);
+    new R2BarycentricCoordinateDemo().setVisible(1200, 600);
   }
 }

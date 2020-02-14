@@ -14,13 +14,13 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -53,12 +53,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         return power.apply(distance);
       }
     };
-    InverseDistanceWeighting inverseDistanceWeighting = new InverseDistanceWeighting(tensorMetric);
+    BarycentricCoordinate barycentricCoordinates = InverseDistanceWeighting.of(tensorMetric);
     Tensor domain = Tensor.of(controlPointsSe2.stream().map(geodesicDisplay::project));
-    TensorUnaryOperator tuo = inverseDistanceWeighting.of(domain);
     Tensor point = geodesicDisplay.project(geometricLayer.getMouseSe2State());
-    if (0 < controlPointsSe2.length()) {
-      Tensor weights = tuo.apply(point);
+    if (geodesicDisplay.dimensions() < controlPointsSe2.length()) {
+      Tensor weights = barycentricCoordinates.weights(domain, point);
       AffineQ.require(weights);
       Tensor mean = biinvariantMean.mean(getGeodesicControlPoints(), weights);
       Tensor matrix = geodesicDisplay.matrixLift(mean);

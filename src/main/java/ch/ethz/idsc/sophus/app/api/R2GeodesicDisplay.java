@@ -8,11 +8,11 @@ import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinate;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -75,8 +75,8 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public InverseDistanceCoordinates inverseDistanceCoordinates() {
-    return RnInverseDistanceCoordinates.INSTANCE;
+  public BarycentricCoordinate inverseDistanceCoordinates() {
+    return RnInverseDistanceCoordinate.INSTANCE;
   }
 
   @Override // from Object

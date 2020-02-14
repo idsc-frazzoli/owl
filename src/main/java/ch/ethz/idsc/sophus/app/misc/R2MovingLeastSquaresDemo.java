@@ -21,6 +21,7 @@ import ch.ethz.idsc.sophus.app.api.RnMotionFits;
 import ch.ethz.idsc.sophus.app.api.RnPointWeights;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,7 +29,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -94,7 +94,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     {
       Tensor target = Tensor.of(getGeodesicControlPoints().stream().map(R2GeodesicDisplay.INSTANCE::project));
       graphics.setColor(Color.BLUE);
-      TensorUnaryOperator tensorUnaryOperator = spinnerRnPointWeights.getValue().of(points);
+      BarycentricCoordinate tensorUnaryOperator = spinnerRnPointWeights.getValue().idc;
       int n = spinnerRefine.getValue();
       Tensor dx = Subdivide.of(0, 6, n - 1);
       Tensor dy = Subdivide.of(0, 6, n - 1);
@@ -103,7 +103,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       for (int cx = 0; cx < n; ++cx)
         for (int cy = 0; cy < n; ++cy) {
           Tensor p = Tensors.of(dx.get(cx), dy.get(cy));
-          Tensor weights = tensorUnaryOperator.apply(p);
+          Tensor weights = tensorUnaryOperator.weights(points, p);
           array[cx][cy] = rnMotionFits.map(points, target, weights, p);
         }
       ColorDataGradient colorDataGradient = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);

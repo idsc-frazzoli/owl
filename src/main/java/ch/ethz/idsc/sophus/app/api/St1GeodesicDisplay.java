@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.lie.st.StExponential;
 import ch.ethz.idsc.sophus.lie.st.StGeodesic;
 import ch.ethz.idsc.sophus.lie.st.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -79,7 +79,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public InverseDistanceCoordinates inverseDistanceCoordinates() {
+  public BarycentricCoordinate inverseDistanceCoordinates() {
     throw new UnsupportedOperationException();
   }
 

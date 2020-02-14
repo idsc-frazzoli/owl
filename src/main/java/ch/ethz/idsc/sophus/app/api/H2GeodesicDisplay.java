@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitParametricCurve;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -77,7 +77,7 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public InverseDistanceCoordinates inverseDistanceCoordinates() {
+  public BarycentricCoordinate inverseDistanceCoordinates() {
     throw new UnsupportedOperationException();
   }
 
