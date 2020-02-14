@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 public enum CogPoints {
   ;

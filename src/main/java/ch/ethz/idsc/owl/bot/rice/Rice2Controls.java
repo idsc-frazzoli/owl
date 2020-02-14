@@ -8,11 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 /** controls for position and velocity */
 /* package */ class Rice2Controls implements FlowsInterface, Serializable {

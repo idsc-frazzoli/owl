@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** controls for position and velocity */
