@@ -96,7 +96,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public BarycentricCoordinate inverseDistanceCoordinates() {
+  public BarycentricCoordinate barycentricCoordinate() {
     return SpdInverseDistanceCoordinate.INSTANCE;
   }
 

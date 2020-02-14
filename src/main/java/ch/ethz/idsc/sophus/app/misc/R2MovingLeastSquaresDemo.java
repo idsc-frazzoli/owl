@@ -13,11 +13,11 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
-import ch.ethz.idsc.sophus.app.api.BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.RnMotionFits;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Extract2D;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 255, 64, 64), new Color(64, 255, 64, 255));
   // ---
-  private final SpinnerLabel<BarycentricCoordinates> spinnerRnPointWeights = new SpinnerLabel<>();
+  private final SpinnerLabel<RnBarycentricCoordinates> spinnerRnPointWeights = new SpinnerLabel<>();
   private final SpinnerLabel<RnMotionFits> spinnerRnMotionFits = new SpinnerLabel<>();
   //
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     setMidpointIndicated(false);
     // ---
     {
-      spinnerRnPointWeights.setArray(BarycentricCoordinates.SCATTERED);
+      spinnerRnPointWeights.setArray(RnBarycentricCoordinates.SCATTERED);
       spinnerRnPointWeights.setIndex(0);
       spinnerRnPointWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(280, 28), "point weights");
     }

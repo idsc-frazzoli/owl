@@ -50,7 +50,7 @@ public interface GeodesicDisplay {
   BiinvariantMean biinvariantMean();
 
   /** @return */
-  BarycentricCoordinate inverseDistanceCoordinates();
+  BarycentricCoordinate barycentricCoordinate();
 
   @Override // from Object
   String toString();

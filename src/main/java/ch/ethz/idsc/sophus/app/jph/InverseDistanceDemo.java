@@ -5,59 +5,35 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
-import javax.swing.JSlider;
-
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.AffineQ;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class InverseDistanceDemo extends ControlPointsDemo {
-  final JSlider jSlider = new JSlider(0, 100);
-
   public InverseDistanceDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2_R2);
-    // ---
-    {
-      timerFrame.jToolBar.add(jSlider);
-    }
+    super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     setControlPointsSe2(Tensors.fromString("{{-1, 0, 0}, {3, 0, 0}, {2, 3, 1}, {5, -1, 2}}"));
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPointsSe2 = getControlPointsSe2();
+    Tensor domain = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    Scalar exponent = RationalScalar.of(jSlider.getValue() * 3, jSlider.getMaximum());
-    graphics.drawString(exponent.map(Round._3).toString(), 0, 30);
-    ScalarUnaryOperator power = Power.function(exponent);
-    TensorMetric tensorMetric = new TensorMetric() {
-      @Override
-      public Scalar distance(Tensor p, Tensor q) {
-        Scalar distance = geodesicDisplay.parametricDistance(p, q);
-        return power.apply(distance);
-      }
-    };
-    BarycentricCoordinate barycentricCoordinates = InverseDistanceWeighting.of(tensorMetric);
-    Tensor domain = Tensor.of(controlPointsSe2.stream().map(geodesicDisplay::project));
+    BarycentricCoordinate barycentricCoordinate = geodesicDisplay.barycentricCoordinate();
     Tensor point = geodesicDisplay.project(geometricLayer.getMouseSe2State());
-    if (geodesicDisplay.dimensions() < controlPointsSe2.length()) {
-      Tensor weights = barycentricCoordinates.weights(domain, point);
+    if (geodesicDisplay.dimensions() < domain.length()) {
+      Tensor weights = barycentricCoordinate.weights(domain, point);
       AffineQ.require(weights);
       Tensor mean = biinvariantMean.mean(getGeodesicControlPoints(), weights);
       Tensor matrix = geodesicDisplay.matrixLift(mean);

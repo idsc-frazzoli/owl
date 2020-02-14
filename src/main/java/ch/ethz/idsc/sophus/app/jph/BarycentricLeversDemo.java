@@ -58,8 +58,8 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (1 + geodesicDisplay.dimensions() < controlPointsAll.length()) {
       Tensor origin = controlPointsAll.get(0);
       Tensor controlPoints = controlPointsAll.extract(1, controlPointsAll.length());
-      BarycentricCoordinate inverseDistanceCoordinates = geodesicDisplay.inverseDistanceCoordinates();
-      Tensor weights = inverseDistanceCoordinates.weights(controlPoints, origin);
+      BarycentricCoordinate barycentricCoordinate = geodesicDisplay.barycentricCoordinate();
+      Tensor weights = barycentricCoordinate.weights(controlPoints, origin);
       {
         int index = 0;
         for (Tensor q : controlPoints) {

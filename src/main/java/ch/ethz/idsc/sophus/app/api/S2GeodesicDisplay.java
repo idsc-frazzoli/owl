@@ -115,7 +115,7 @@ public class S2GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override
-  public BarycentricCoordinate inverseDistanceCoordinates() {
+  public BarycentricCoordinate barycentricCoordinate() {
     return SnInverseDistanceCoordinate.INSTANCE;
   }
 

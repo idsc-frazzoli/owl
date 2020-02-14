@@ -6,9 +6,9 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
-public class BarycentricCoordinatesTest extends TestCase {
+public class RnBarycentricCoordinatesTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    for (BarycentricCoordinates barycentricCoordinates : BarycentricCoordinates.values())
+    for (RnBarycentricCoordinates barycentricCoordinates : RnBarycentricCoordinates.values())
       Serialization.copy(barycentricCoordinates.barycentricCoordinate());
   }
 }

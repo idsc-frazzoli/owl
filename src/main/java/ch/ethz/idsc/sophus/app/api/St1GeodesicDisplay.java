@@ -79,7 +79,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BarycentricCoordinate inverseDistanceCoordinates() {
+  public BarycentricCoordinate barycentricCoordinate() {
     throw new UnsupportedOperationException();
   }
 

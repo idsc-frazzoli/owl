@@ -14,10 +14,10 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
-import ch.ethz.idsc.sophus.app.api.BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 
 // TODO redundancy with R2BarycentricCoordinatesDemo
 /* package */ class R2ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<BarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<RnBarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("heatmap");
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   public R2ScatteredSetCoordinateDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
-      spinnerBarycentric.setArray(BarycentricCoordinates.SCATTERED);
+      spinnerBarycentric.setArray(RnBarycentricCoordinates.SCATTERED);
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       GraphicsUtil.setQualityHigh(graphics);
-      BarycentricCoordinate barycentricCoordinates = spinnerBarycentric.getValue().barycentricCoordinate();
+      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().barycentricCoordinate();
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);
@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
-          Tensor weights = barycentricCoordinates.weights(domain, px);
+          Tensor weights = barycentricCoordinate.weights(domain, px);
           wgs.set(weights, c0, c1);
           Tensor mean = biinvariantMean.mean(controlPoints, weights);
           array[c0][c1] = mean;

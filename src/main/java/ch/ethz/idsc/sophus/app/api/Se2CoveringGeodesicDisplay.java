@@ -73,7 +73,7 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public BarycentricCoordinate inverseDistanceCoordinates() {
+  public BarycentricCoordinate barycentricCoordinate() {
     return Se2CoveringInverseDistanceCoordinate.INSTANCE;
   }
 

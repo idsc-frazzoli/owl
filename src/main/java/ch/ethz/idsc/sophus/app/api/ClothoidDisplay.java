@@ -72,7 +72,7 @@ public enum ClothoidDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public BarycentricCoordinate inverseDistanceCoordinates() {
+  public BarycentricCoordinate barycentricCoordinate() {
     throw new UnsupportedOperationException();
   }
 

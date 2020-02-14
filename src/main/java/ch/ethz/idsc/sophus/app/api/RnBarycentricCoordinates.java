@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.math.win.AffineCoordinate;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
 
-public enum BarycentricCoordinates {
+public enum RnBarycentricCoordinates {
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
@@ -21,11 +21,11 @@ public enum BarycentricCoordinates {
   SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
   ;
 
-  public static final BarycentricCoordinates[] SCATTERED = { //
+  public static final RnBarycentricCoordinates[] SCATTERED = { //
       INVERSE_DISTANCE, INVERSE_DISTANCE2, AFFINE, SHEPARD, SHEPARD2 };
   private final BarycentricCoordinate barycentricCoordinate;
 
-  private BarycentricCoordinates(BarycentricCoordinate barycentricCoordinate) {
+  private RnBarycentricCoordinates(BarycentricCoordinate barycentricCoordinate) {
     this.barycentricCoordinate = barycentricCoordinate;
   }
 
