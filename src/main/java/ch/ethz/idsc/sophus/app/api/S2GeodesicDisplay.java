@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -42,15 +44,22 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
+    Optional<Tensor> optional = optionalProject(xya);
+    if (optional.isPresent())
+      return optional.get();
+    Tensor xyz = xya.divide(getRadius());
+    xyz.set(RealScalar.ZERO, 2);
+    return Normalize.with(Norm._2).apply(xyz);
+  }
+
+  public Optional<Tensor> optionalProject(Tensor xya) {
     Tensor xy = xya.extract(0, 2).divide(getRadius());
     Scalar normsq = Norm2Squared.ofVector(xy);
     if (Scalars.lessThan(normsq, RealScalar.ONE)) {
       Scalar z = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq));
-      return xy.append(z);
+      return Optional.of(xy.append(z));
     }
-    Tensor xyz = xya.divide(getRadius());
-    xyz.set(RealScalar.ZERO, 2);
-    return Normalize.with(Norm._2).apply(xyz);
+    return Optional.empty();
   }
 
   @Override // from GeodesicDisplay

@@ -3,21 +3,19 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
@@ -34,7 +32,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ArrayReshape;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -46,35 +47,16 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class R2BarycentricCoordinateDemo extends ControlPointsDemo {
+/* package */ class R2BarycentricCoordinateDemo extends ScatteredSetCoordinateDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
-  private final SpinnerLabel<RnBarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
   private final JToggleButton jToggleEntire = new JToggleButton("entire");
-  private final JToggleButton jToggleButton = new JToggleButton("heatmap");
-  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   public R2BarycentricCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
-    {
-      spinnerBarycentric.setArray(RnBarycentricCoordinates.values());
-      spinnerBarycentric.setIndex(0);
-      spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
-    }
-    {
-      spinnerRefine.setList(Arrays.asList(5, 10, 15, 20, 25, 30, 35, 40));
-      spinnerRefine.setValue(15);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
-    }
-    timerFrame.jToolBar.addSeparator();
+    super(GeodesicDisplays.SE2C_SPD2_S2_R2, RnBarycentricCoordinates.values());
     {
       timerFrame.jToolBar.add(jToggleEntire);
-    }
-    {
-      jToggleButton.setSelected(true);
-      timerFrame.jToolBar.add(jToggleButton);
     }
     setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}}"));
@@ -82,6 +64,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    ColorDataGradient colorDataGradient = colorDataGradient();
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
@@ -99,18 +82,18 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().get();
+      BarycentricCoordinate barycentricCoordinate = barycentricCoordinate();
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
-      final int n = spinnerRefine.getValue();
+      final int n = refinement();
       Tensor sX = Subdivide.of(min.Get(0), max.Get(0), n - 1);
       Tensor sY = Subdivide.of(min.Get(1), max.Get(1), n - 1);
       Tensor[][] array = new Tensor[n][n];
       Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n, n, domain.length());
       Tensor neg = Array.of(l -> DoubleScalar.INDETERMINATE, n, n);
       boolean[][] nag = new boolean[n][n];
-      int c0 = 0;
-      for (Tensor x : sX) {
+      IntStream.range(0, sX.length()).parallel().forEach(c0 -> {
+        Scalar x = sX.Get(c0);
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
@@ -125,27 +108,28 @@ import ch.ethz.idsc.tensor.sca.Sign;
           }
           ++c1;
         }
-        ++c0;
-      }
-      if (jToggleButton.isSelected()) { // render basis functions
-        int pix = 0;
-        for (int basis = 0; basis < domain.length(); ++basis) {
-          Tensor image = ArrayPlot.of(wgs.get(Tensor.ALL, Tensor.ALL, basis), ColorDataGradients.CLASSIC);
-          BufferedImage bufferedImage = ImageFormat.of(image);
-          int wid = bufferedImage.getWidth() * 4;
-          graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
-          pix += wid;
+        // ++c0;
+      });
+      if (jToggleHeatmap.isSelected()) { // render basis functions
+        final int pix;
+        {
+          List<Integer> dims = Dimensions.of(wgs);
+          Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+          BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));
+          graphics.drawImage(bufferedImage, //
+              0, 32, //
+              bufferedImage.getWidth() * 2, bufferedImage.getHeight() * 2, null);
+          pix = bufferedImage.getWidth() * 2;
         }
-        pix += 10;
         {
           Tensor image = ArrayPlot.of(neg, ColorDataGradients.TEMPERATURE);
           BufferedImage bufferedImage = ImageFormat.of(image);
-          int wid = bufferedImage.getWidth() * 4;
-          graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
-          pix += wid;
+          int wid = bufferedImage.getWidth() * 2;
+          graphics.drawImage(bufferedImage, pix + 10, 32, wid, bufferedImage.getHeight() * 2, null);
         }
       }
       // render grid lines functions
+      ColorDataGradient cdg = colorDataGradient.deriveWithOpacity(RationalScalar.HALF);
       for (int i0 = 1; i0 < n; ++i0)
         for (int i1 = 1; i1 < n; ++i1) {
           Tensor ao = array[i0][i1];
@@ -159,7 +143,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
               Tensor p1 = geodesicDisplay.toPoint(a1);
               Tensor pc = geodesicDisplay.toPoint(ac);
               Scalar scalar = VectorAngle.of(p0.subtract(po), p1.subtract(po)).get();
-              Tensor rgba = COLOR_DATA_GRADIENT.apply(scalar.divide(Pi.VALUE));
+              Tensor rgba = cdg.apply(scalar.divide(Pi.VALUE));
               graphics.setColor(ColorFormat.toColor(rgba));
               graphics.fill(geometricLayer.toPath2D(Unprotect.byRef(po, p0, pc, p1)));
             }

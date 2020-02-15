@@ -68,4 +68,7 @@ public enum GeodesicDisplays {
   // ---
   public static final List<GeodesicDisplay> SPD2_ONLY = Arrays.asList( //
       Spd2GeodesicDisplay.INSTANCE);
+  // ---
+  public static final List<GeodesicDisplay> S2_ONLY = Arrays.asList( //
+      S2GeodesicDisplay.INSTANCE);
 }
