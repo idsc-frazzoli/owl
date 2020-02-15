@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       GraphicsUtil.setQualityHigh(graphics);
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().barycentricCoordinate();
+      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().get();
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);

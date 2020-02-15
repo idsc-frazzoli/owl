@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().barycentricCoordinate();
+      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().get();
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = spinnerRefine.getValue();

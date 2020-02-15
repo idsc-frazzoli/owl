@@ -1,79 +1,33 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.jph;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-
-import ch.ethz.idsc.java.awt.GraphicsUtil;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
-import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
-import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ class R1BarycentricCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<RnBarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
+/* package */ class R1BarycentricCoordinateDemo extends A1BarycentricCoordinateDemo {
+  private static final Scalar MARGIN = RealScalar.of(2);
 
   public R1BarycentricCoordinateDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
-    {
-      spinnerBarycentric.setArray(RnBarycentricCoordinates.SCATTERED);
-      spinnerBarycentric.setIndex(0);
-      spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
-    }
-    // ---
-    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 2, 0}}"));
-    // ---
-    timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
+    super(RnBarycentricCoordinates.SCATTERED);
   }
 
-  @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
-    renderControlPoints(geometricLayer, graphics);
-    Tensor control = getGeodesicControlPoints();
-    if (1 < control.length()) {
-      Tensor support = control.get(Tensor.ALL, 0);
-      Tensor funceva = control.get(Tensor.ALL, 1);
-      Scalar min = (Scalar) support.stream().reduce(Min::of).get().subtract(RealScalar.ONE);
-      Scalar max = (Scalar) support.stream().reduce(Max::of).get().add(RealScalar.ONE);
-      // ---
-      Clip clip = Clips.interval(min, max);
-      Tensor domain = Subdivide.increasing(clip, 128);
-      // ---
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().barycentricCoordinate();
-      Tensor sequence = Tensor.of(support.stream().map(Tensors::of));
-      ScalarTensorFunction scalarTensorFunction = //
-          point -> barycentricCoordinate.weights(sequence, Tensors.of(point));
-      Tensor basis = domain.map(scalarTensorFunction);
-      {
-        Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));
-        new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);
-      }
-      ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
-      for (int index = 0; index < funceva.length(); ++index) {
-        Color color = colorDataIndexed.getColor(index);
-        Tensor curve = Transpose.of(Tensors.of(domain, basis.get(Tensor.ALL, index)));
-        new PathRender(color, 1f).setCurve(curve, false).render(geometricLayer, graphics);
-      }
-    }
+  @Override
+  Tensor domain(Tensor support) {
+    return Subdivide.of( //
+        support.stream().reduce(Min::of).get().add(MARGIN.negate()), //
+        support.stream().reduce(Max::of).get().add(MARGIN), 128).map(N.DOUBLE);
+  }
+
+  @Override
+  Tensor lift(Scalar x) {
+    return Tensors.of(x);
   }
 
   public static void main(String[] args) {

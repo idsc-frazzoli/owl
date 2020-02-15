@@ -9,6 +9,6 @@ import junit.framework.TestCase;
 public class RnBarycentricCoordinatesTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     for (RnBarycentricCoordinates barycentricCoordinates : RnBarycentricCoordinates.values())
-      Serialization.copy(barycentricCoordinates.barycentricCoordinate());
+      Serialization.copy(barycentricCoordinates.get());
   }
 }

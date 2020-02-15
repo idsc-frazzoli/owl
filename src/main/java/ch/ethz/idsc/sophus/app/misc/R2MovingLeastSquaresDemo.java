@@ -94,7 +94,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     {
       Tensor target = Tensor.of(getGeodesicControlPoints().stream().map(R2GeodesicDisplay.INSTANCE::project));
       graphics.setColor(Color.BLUE);
-      BarycentricCoordinate barycentricCoordinate = spinnerRnPointWeights.getValue().barycentricCoordinate();
+      BarycentricCoordinate barycentricCoordinate = spinnerRnPointWeights.getValue().get();
       int n = spinnerRefine.getValue();
       Tensor dx = Subdivide.of(0, 6, n - 1);
       Tensor dy = Subdivide.of(0, 6, n - 1);
