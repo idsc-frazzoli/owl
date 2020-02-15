@@ -23,6 +23,12 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
     }
+    timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
+      @Override
+      public GeodesicDisplay getGeodesicDisplay() {
+        return geodesicDisplay();
+      }
+    });
   }
 
   /** @return */

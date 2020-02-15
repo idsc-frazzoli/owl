@@ -33,7 +33,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
-// TODO redundancy with R2BarycentricCoordinatesDemo
+/** transfer weights from barycentric coordinates defined by set of control points
+ * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class R2ScatteredSetCoordinateDemo extends ControlPointsDemo {
   private final SpinnerLabel<RnBarycentricCoordinates> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

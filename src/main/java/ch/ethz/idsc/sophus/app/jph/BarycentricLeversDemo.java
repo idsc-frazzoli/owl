@@ -11,7 +11,6 @@ import java.awt.geom.Point2D;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -32,17 +31,12 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
-  private final JToggleButton jToggleEntire = new JToggleButton("entire");
-  private final JToggleButton jToggleButton = new JToggleButton("heatmap");
+  private final JToggleButton jToggleEntire = new JToggleButton("mean");
 
   public BarycentricLeversDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_R2);
     {
       timerFrame.jToolBar.add(jToggleEntire);
-    }
-    {
-      jToggleButton.setSelected(true);
-      timerFrame.jToolBar.add(jToggleButton);
     }
     setControlPointsSe2(Tensors.fromString("{{-1, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
     setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
@@ -51,10 +45,10 @@ import ch.ethz.idsc.tensor.sca.Round;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor controlPointsAll = getGeodesicControlPoints();
+    renderControlPoints(geometricLayer, graphics);
     if (1 + geodesicDisplay.dimensions() < controlPointsAll.length()) {
       Tensor origin = controlPointsAll.get(0);
       Tensor controlPoints = controlPointsAll.extract(1, controlPointsAll.length());
@@ -97,7 +91,7 @@ import ch.ethz.idsc.tensor.sca.Round;
           ++index;
         }
       }
-      {
+      if (jToggleEntire.isSelected()) {
         Tensor mean = geodesicDisplay.biinvariantMean().mean(controlPoints,
             ConstantArray.of(RationalScalar.of(1, controlPoints.length()), controlPoints.length()));
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
@@ -109,7 +103,6 @@ import ch.ethz.idsc.tensor.sca.Round;
         geometricLayer.popMatrix();
       }
     }
-    renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

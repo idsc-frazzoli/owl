@@ -15,10 +15,12 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ class HeadTailGeodesicDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -27,7 +29,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     super(false, GeodesicDisplays.ALL);
     // ---
     setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
-    spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+    spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(6);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
@@ -51,6 +53,11 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     Tensor xys = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
     graphics.setColor(new Color(128, 255, 0));
     graphics.draw(geometricLayer.toPath2D(xys, false));
+    Scalar pseudoDistance = geodesicDisplay.parametricDistance(p, q);
+    {
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.drawString("" + pseudoDistance.map(Round._4), 10, 20);
+    }
     // ---
     graphics.setColor(Color.LIGHT_GRAY);
     for (Tensor _t : domain) {

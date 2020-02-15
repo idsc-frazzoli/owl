@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
@@ -37,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
     // ---
-    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 2, 0}}"));
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
@@ -54,14 +56,23 @@ import ch.ethz.idsc.tensor.sca.Clips;
       Scalar max = (Scalar) support.stream().reduce(Max::of).get().add(RealScalar.ONE);
       // ---
       Clip clip = Clips.interval(min, max);
-      Tensor domain = Subdivide.increasing(clip, 255);
+      Tensor domain = Subdivide.increasing(clip, 128);
       // ---
       BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().barycentricCoordinate();
       Tensor sequence = Tensor.of(support.stream().map(Tensors::of));
       ScalarTensorFunction scalarTensorFunction = //
           point -> barycentricCoordinate.weights(sequence, Tensors.of(point));
-      Tensor curve = Transpose.of(Tensors.of(domain, domain.map(scalarTensorFunction).dot(funceva)));
-      new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);
+      Tensor basis = domain.map(scalarTensorFunction);
+      {
+        Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));
+        new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);
+      }
+      ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
+      for (int index = 0; index < funceva.length(); ++index) {
+        Color color = colorDataIndexed.getColor(index);
+        Tensor curve = Transpose.of(Tensors.of(domain, basis.get(Tensor.ALL, index)));
+        new PathRender(color, 1f).setCurve(curve, false).render(geometricLayer, graphics);
+      }
     }
   }
 
