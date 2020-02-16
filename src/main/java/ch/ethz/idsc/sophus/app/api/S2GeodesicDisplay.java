@@ -15,8 +15,11 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.Orthogonalize;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.CopySign;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** symmetric positive definite 2 x 2 matrices */
@@ -44,26 +47,22 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    Tensor xy = xya.extract(0, 2).divide(getRadius());
-    Optional<Tensor> optional = optionalZpos(xy);
+    Tensor xyz = xya.divide(getRadius());
+    Optional<Tensor> optional = optionalZ(xyz);
     if (optional.isPresent())
       return optional.get();
-    Tensor xyz = xya.divide(getRadius());
     xyz.set(RealScalar.ZERO, 2);
+    // intersection of front and back hemisphere
     return Normalize.with(Norm._2).apply(xyz);
   }
 
-  public Optional<Tensor> optionalZpos(Tensor xy) {
+  public Optional<Tensor> optionalZ(Tensor xya) {
+    Tensor xy = xya.extract(0, 2);
     Scalar normsq = Norm2Squared.ofVector(xy);
-    if (Scalars.lessThan(normsq, RealScalar.ONE))
-      return Optional.of(xy.copy().append(Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq))));
-    return Optional.empty();
-  }
-
-  public Optional<Tensor> optionalZneg(Tensor xy) {
-    Scalar normsq = Norm2Squared.ofVector(xy);
-    if (Scalars.lessThan(normsq, RealScalar.ONE))
-      return Optional.of(xy.copy().append(Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq)).negate()));
+    if (Scalars.lessThan(normsq, RealScalar.ONE)) {
+      Scalar z = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq));
+      return Optional.of(xy.append(CopySign.of(z, xya.Get(2))));
+    }
     return Optional.empty();
   }
 
@@ -72,6 +71,8 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     return xyz.extract(0, 2).multiply(getRadius());
   }
 
+  private static final Clip CLIP_Z = Clips.interval(-2.5, 1);
+
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor xyz) {
     Tensor frame = tangentSpace(xyz);
@@ -79,6 +80,8 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
         frame.get(0).extract(0, 2), //
         frame.get(1).extract(0, 2))));
     skew.set(RealScalar.ONE, 2, 2);
+    Scalar r = CLIP_Z.rescale(xyz.Get(2));
+    skew = Tensors.of(r, r, RealScalar.ONE).pmul(skew);
     return Se2Matrix.translation(toPoint(xyz)).dot(skew);
   }
 }

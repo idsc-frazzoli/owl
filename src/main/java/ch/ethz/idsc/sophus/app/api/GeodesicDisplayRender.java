@@ -9,6 +9,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Scalar;
@@ -47,6 +48,9 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       graphics.setPaint(paint);
       Tensor box = Tensors.fromString("{{-20, 0}, {+20, 0}, {+20, 5}, {-20, 5}}");
       graphics.fill(geometricLayer.toPath2D(box));
+    } else //
+    if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
+      AxesRender.INSTANCE.render(geometricLayer, graphics);
     }
   }
 

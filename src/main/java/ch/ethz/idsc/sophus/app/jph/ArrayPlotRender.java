@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class ArrayPlotRender implements RenderInterface {
+  public static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
+  // ---
   private final BufferedImage bufferedImage;
   private final ScalarSummaryStatistics scalarSummaryStatistics;
   private final int pix;
@@ -27,7 +29,6 @@ public class ArrayPlotRender implements RenderInterface {
   private final int width;
   private final int height;
   private final BufferedImage legend;
-  private Font font = new Font(Font.DIALOG_INPUT, Font.PLAIN, 12);
 
   public ArrayPlotRender(Tensor tensor, ColorDataGradient colorDataGradient, int pix, int piy, int magnify) {
     Rescale rescale = new Rescale(tensor);
@@ -54,14 +55,14 @@ public class ArrayPlotRender implements RenderInterface {
         height, null);
     if (0 < scalarSummaryStatistics.getCount()) {
       graphics.setColor(Color.BLACK);
-      graphics.setFont(font);
+      graphics.setFont(FONT);
       FontMetrics fontMetrics = graphics.getFontMetrics();
       String smax = "" + scalarSummaryStatistics.getMax().map(Round._3);
       int wmax = fontMetrics.stringWidth(smax);
       String smin = "" + scalarSummaryStatistics.getMin().map(Round._3);
       int wmin = fontMetrics.stringWidth(smin);
       int ofx = pix + width + 22 + Math.max(wmin, wmax);
-      graphics.drawString(smax, ofx - wmax, piy + fontMetrics.getHeight());
+      graphics.drawString(smax, ofx - wmax, piy + fontMetrics.getAscent());
       graphics.drawString(smin, ofx - wmin, piy + height);
     }
   }

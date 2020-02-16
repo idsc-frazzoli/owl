@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class R3GeodesicDisplay extends RnGeodesicDisplay {
-  private static final Tensor CIRCLE = Arrowhead.of(RealScalar.of(0.2));
+  private static final Tensor CIRCLE = Arrowhead.of(RealScalar.of(0.3));
   public static final R3GeodesicDisplay INSTANCE = new R3GeodesicDisplay();
 
   private R3GeodesicDisplay() {

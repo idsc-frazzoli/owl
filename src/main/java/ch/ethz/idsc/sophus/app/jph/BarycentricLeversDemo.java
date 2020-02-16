@@ -3,10 +3,11 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 
 import javax.swing.JToggleButton;
 
@@ -15,7 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -31,15 +32,17 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
-  private final JToggleButton jToggleEntire = new JToggleButton("mean");
+  private final JToggleButton jToggleMean = new JToggleButton("mean");
 
   public BarycentricLeversDemo() {
     super(true, GeodesicDisplays.SE2C_SPD2_S2_Rn);
     {
-      timerFrame.jToolBar.add(jToggleEntire);
+      timerFrame.jToolBar.add(jToggleMean);
     }
     setControlPointsSe2(Tensors.fromString("{{-1, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
-    setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
+    // setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0}}"));
+    setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
+    setMidpointIndicated(false);
   }
 
   @Override // from RenderInterface
@@ -71,7 +74,7 @@ import ch.ethz.idsc.tensor.sca.Round;
             Tensor domain = Subdivide.of(weights.Get(index), RealScalar.ONE, 15);
             Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream() //
                 .map(geodesicDisplay::toPoint));
-            graphics.setColor(new Color(0, 255, 255, 128));
+            graphics.setColor(new Color(128, 128, 128, 128));
             graphics.draw(geometricLayer.toPath2D(ms));
           }
           ++index;
@@ -79,19 +82,27 @@ import ch.ethz.idsc.tensor.sca.Round;
         graphics.setStroke(new BasicStroke());
       }
       {
-        graphics.setColor(Color.BLACK);
+        graphics.setFont(ArrayPlotRender.FONT);
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        int fheight = fontMetrics.getAscent();
         int index = 0;
-        graphics.setColor(Color.BLUE);
+        Tensor shape = geodesicDisplay.shape();
         for (Tensor q : controlPoints) {
-          Tensor xy = geodesicDisplay.toPoint(q);
-          Point2D point2d = geometricLayer.toPoint2D(xy);
-          graphics.drawString("" + weights.Get(index).map(Round._3), //
-              (int) point2d.getX(), //
-              (int) point2d.getY());
+          Tensor matrix = geodesicDisplay.matrixLift(q);
+          geometricLayer.pushMatrix(matrix);
+          Path2D path2d = geometricLayer.toPath2D(shape, true);
+          // graphics.setColor(Color.RED);
+          // graphics.draw(path2d.getBounds());
+          graphics.setColor(Color.BLACK);
+          Rectangle rectangle = path2d.getBounds();
+          graphics.drawString(" " + weights.Get(index).map(Round._3), //
+              rectangle.x + rectangle.width, //
+              rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2);
+          geometricLayer.popMatrix();
           ++index;
         }
       }
-      if (jToggleEntire.isSelected()) {
+      if (jToggleMean.isSelected()) {
         Tensor mean = geodesicDisplay.biinvariantMean().mean(controlPoints,
             ConstantArray.of(RationalScalar.of(1, controlPoints.length()), controlPoints.length()));
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
