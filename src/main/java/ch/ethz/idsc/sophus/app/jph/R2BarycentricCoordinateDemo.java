@@ -111,21 +111,25 @@ import ch.ethz.idsc.tensor.sca.Sign;
         // ++c0;
       });
       if (jToggleHeatmap.isSelected()) { // render basis functions
-        final int pix;
+        final int magnify = 3;
+        List<Integer> dims = Dimensions.of(wgs);
+        Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+        ArrayPlotRender arrayPlotRender = new ArrayPlotRender(_wgs, colorDataGradient, 0, 32, magnify);
+        arrayPlotRender.render(geometricLayer, graphics);
         {
-          List<Integer> dims = Dimensions.of(wgs);
-          Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-          BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));
-          graphics.drawImage(bufferedImage, //
-              0, 32, //
-              bufferedImage.getWidth() * 2, bufferedImage.getHeight() * 2, null);
-          pix = bufferedImage.getWidth() * 2;
+          // BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));
+          // graphics.drawImage(bufferedImage, //
+          // 0, 32, //
+          // bufferedImage.getWidth() * 2, bufferedImage.getHeight() * 2, null);
+          // pix = bufferedImage.getWidth() * 2;
         }
         {
           Tensor image = ArrayPlot.of(neg, ColorDataGradients.TEMPERATURE);
           BufferedImage bufferedImage = ImageFormat.of(image);
-          int wid = bufferedImage.getWidth() * 2;
-          graphics.drawImage(bufferedImage, pix + 10, 32, wid, bufferedImage.getHeight() * 2, null);
+          // int wid = ;
+          graphics.drawImage(bufferedImage, 0, 32 + arrayPlotRender.height(), //
+              bufferedImage.getWidth() * magnify, //
+              bufferedImage.getHeight() * magnify, null);
         }
       }
       // render grid lines functions
@@ -153,7 +157,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
               graphics.draw(geometricLayer.toPath2D(Tensors.of(geodesicDisplay.toPoint(a1), po)));
           }
         }
-      {
+      if (jToggleArrows.isSelected()) {
         Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.5));
         for (int i0 = 0; i0 < n; ++i0)
           for (int i1 = 0; i1 < n; ++i1) {

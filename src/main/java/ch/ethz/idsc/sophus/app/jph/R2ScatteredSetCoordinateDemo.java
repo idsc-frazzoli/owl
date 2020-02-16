@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -31,9 +30,7 @@ import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
@@ -41,7 +38,6 @@ import ch.ethz.idsc.tensor.red.Entrywise;
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class R2ScatteredSetCoordinateDemo extends ScatteredSetCoordinateDemo {
   private final JToggleButton jToggleButtonAxes = new JToggleButton("axes");
-  private final JToggleButton jToggleButtonArrows = new JToggleButton("arrows");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
   // ---
@@ -52,8 +48,6 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     {
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);
-      jToggleButtonArrows.setSelected(true);
-      timerFrame.jToolBar.add(jToggleButtonArrows);
     }
     {
       jToggleAnimate.addActionListener(new ActionListener() {
@@ -129,13 +123,10 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       if (jToggleHeatmap.isSelected()) { // render basis functions
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));
-        graphics.drawImage(bufferedImage, //
-            0, 32, //
-            bufferedImage.getWidth() * 2, bufferedImage.getHeight() * 2, null);
+        new ArrayPlotRender(_wgs, colorDataGradient, 0, 32, 3).render(geometricLayer, graphics);
       }
       // render grid lines functions
-      if (jToggleButtonArrows.isSelected()) {
+      if (jToggleArrows.isSelected()) {
         graphics.setColor(Color.LIGHT_GRAY);
         Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(Math.min(1, 3.0 / Math.sqrt(refinement()))));
         for (int i0 = 0; i0 < array.length; ++i0)

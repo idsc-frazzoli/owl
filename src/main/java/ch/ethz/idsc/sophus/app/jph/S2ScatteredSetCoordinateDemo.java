@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -28,9 +27,7 @@ import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
@@ -71,17 +68,25 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
       Tensor sX = Subdivide.of(-1.0, +1.0, refinement());
       Tensor sY = Subdivide.of(-1.0, +1.0, refinement());
       int n = sX.length();
-      Scalar radius = s2GeodesicDisplay.getRadius();
-      Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n, n, controlPoints.length());
+      Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n * 2, n, controlPoints.length());
       IntStream.range(0, n).parallel().forEach(c0 -> {
         Scalar x = sX.Get(c0);
         int c1 = 0;
         for (Tensor y : sY) {
-          Tensor px = Tensors.of(x, y, x.zero()).multiply(radius);
-          Optional<Tensor> optional = s2GeodesicDisplay.optionalProject(px);
-          if (optional.isPresent()) {
-            Tensor weights = barycentricCoordinate.weights(controlPoints, optional.get());
-            wgs.set(weights, n - c1 - 1, c0);
+          Tensor xy = Tensors.of(x, y);
+          {
+            Optional<Tensor> optional = s2GeodesicDisplay.optionalZpos(xy);
+            if (optional.isPresent()) {
+              Tensor weights = barycentricCoordinate.weights(controlPoints, optional.get());
+              wgs.set(weights, n - c1 - 1, c0);
+            }
+          }
+          {
+            Optional<Tensor> optional = s2GeodesicDisplay.optionalZneg(xy);
+            if (optional.isPresent()) {
+              Tensor weights = barycentricCoordinate.weights(controlPoints, optional.get());
+              wgs.set(weights, n + n - c1 - 1, c0);
+            }
           }
           ++c1;
         }
@@ -89,11 +94,8 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
       // ---
       if (jToggleHeatmap.isSelected()) { // render basis functions
         List<Integer> dims = Dimensions.of(wgs);
-        Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));
-        graphics.drawImage(bufferedImage, //
-            0, 32, //
-            bufferedImage.getWidth() * 2, bufferedImage.getHeight() * 2, null);
+        Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+        new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, 3).render(geometricLayer, graphics);
       }
     }
   }

@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
+  final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
   public ScatteredSetCoordinateDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
     super(true, list);
@@ -30,7 +31,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     }
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
-      spinnerRefine.setValue(10);
+      spinnerRefine.setValue(20);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
     }
     {
@@ -41,6 +42,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     {
       jToggleHeatmap.setSelected(true);
       timerFrame.jToolBar.add(jToggleHeatmap);
+      jToggleArrows.setSelected(false);
+      timerFrame.jToolBar.add(jToggleArrows);
     }
     timerFrame.jToolBar.addSeparator();
   }

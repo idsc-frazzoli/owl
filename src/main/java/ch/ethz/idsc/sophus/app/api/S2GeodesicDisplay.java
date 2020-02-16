@@ -44,7 +44,8 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    Optional<Tensor> optional = optionalProject(xya);
+    Tensor xy = xya.extract(0, 2).divide(getRadius());
+    Optional<Tensor> optional = optionalZpos(xy);
     if (optional.isPresent())
       return optional.get();
     Tensor xyz = xya.divide(getRadius());
@@ -52,13 +53,17 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     return Normalize.with(Norm._2).apply(xyz);
   }
 
-  public Optional<Tensor> optionalProject(Tensor xya) {
-    Tensor xy = xya.extract(0, 2).divide(getRadius());
+  public Optional<Tensor> optionalZpos(Tensor xy) {
     Scalar normsq = Norm2Squared.ofVector(xy);
-    if (Scalars.lessThan(normsq, RealScalar.ONE)) {
-      Scalar z = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq));
-      return Optional.of(xy.append(z));
-    }
+    if (Scalars.lessThan(normsq, RealScalar.ONE))
+      return Optional.of(xy.copy().append(Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq))));
+    return Optional.empty();
+  }
+
+  public Optional<Tensor> optionalZneg(Tensor xy) {
+    Scalar normsq = Norm2Squared.ofVector(xy);
+    if (Scalars.lessThan(normsq, RealScalar.ONE))
+      return Optional.of(xy.copy().append(Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq)).negate()));
     return Optional.empty();
   }
 
