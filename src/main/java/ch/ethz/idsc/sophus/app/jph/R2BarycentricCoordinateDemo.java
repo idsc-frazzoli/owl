@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final JToggleButton jToggleEntire = new JToggleButton("entire");
 
   public R2BarycentricCoordinateDemo() {
-    super(GeodesicDisplays.SE2C_SPD2_S2_R2, RnBarycentricCoordinates.values());
+    super(GeodesicDisplays.SE2C_SPD2_S2_Rn, RnBarycentricCoordinates.values());
     {
       timerFrame.jToolBar.add(jToggleEntire);
     }

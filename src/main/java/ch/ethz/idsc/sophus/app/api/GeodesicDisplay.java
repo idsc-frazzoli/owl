@@ -50,6 +50,7 @@ public interface GeodesicDisplay {
   BiinvariantMean biinvariantMean();
 
   /** @return */
+  // TODO probably obsolete because not unique!
   BarycentricCoordinate barycentricCoordinate();
 
   @Override // from Object

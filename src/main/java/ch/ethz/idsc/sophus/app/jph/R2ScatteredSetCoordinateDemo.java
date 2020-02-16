@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   private Tensor snapshot;
 
   public R2ScatteredSetCoordinateDemo() {
-    super(GeodesicDisplays.SE2C_SPD2_S2_R2, RnBarycentricCoordinates.SCATTERED);
+    super(GeodesicDisplays.SE2C_SPD2_S2_Rn, RnBarycentricCoordinates.SCATTERED);
     {
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);
@@ -123,7 +123,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       if (jToggleHeatmap.isSelected()) { // render basis functions
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        new ArrayPlotRender(_wgs, colorDataGradient, 0, 32, 3).render(geometricLayer, graphics);
+        new ArrayPlotRender(_wgs, colorDataGradient, 0, 12, 3).render(geometricLayer, graphics);
       }
       // render grid lines functions
       if (jToggleArrows.isSelected()) {
