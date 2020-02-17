@@ -56,7 +56,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     return Normalize.with(Norm._2).apply(xyz);
   }
 
-  public Optional<Tensor> optionalZ(Tensor xya) {
+  public static Optional<Tensor> optionalZ(Tensor xya) {
     Tensor xy = xya.extract(0, 2);
     Scalar normsq = Norm2Squared.ofVector(xy);
     if (Scalars.lessThan(normsq, RealScalar.ONE)) {

@@ -52,6 +52,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     return spinnerRefine.getValue();
   }
 
+  void refinement(int value) {
+    spinnerRefine.setValueSafe(value);
+  }
+
   ColorDataGradient colorDataGradient() {
     return spinnerColorData.getValue();
   }
