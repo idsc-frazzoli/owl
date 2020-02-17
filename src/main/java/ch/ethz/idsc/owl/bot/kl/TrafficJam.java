@@ -9,11 +9,11 @@ import ch.ethz.idsc.tensor.Tensors;
   CORNERS_ONLY( //
       Tensors.vector(0, 0, 0), //
       // ---
-      Tensors.vector(5, 0, 3), //
-      Tensors.vector(5, 3, 0), //
+      Tensors.vector(6, 0, 3), //
+      Tensors.vector(6, 3, 0), //
       // ---
-      Tensors.vector(6, 1, 4), //
-      Tensors.vector(6, 3, 1)), //
+      Tensors.vector(7, 1, 4), //
+      Tensors.vector(7, 3, 1)), //
   NO_CORNERS( //
       Tensors.vector(0, 0, 0), //
       // ---
@@ -43,8 +43,8 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 3), //
       Tensors.vector(3, 4, 3), //
       // ---
-      Tensors.vector(6, 1, 4), //
-      Tensors.vector(6, 3, 1)),
+      Tensors.vector(7, 1, 4), //
+      Tensors.vector(7, 3, 1)),
   /** 181 */
   INSTANCE( //
       Tensors.vector(0, 0, 0), //
@@ -61,11 +61,11 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 3), //
       Tensors.vector(3, 4, 3), //
       // ---
-      Tensors.vector(5, 0, 3), //
-      Tensors.vector(5, 3, 0), //
+      Tensors.vector(6, 0, 3), //
+      Tensors.vector(6, 3, 0), //
       // ---
-      Tensors.vector(6, 1, 4), //
-      Tensors.vector(6, 3, 1)), //
+      Tensors.vector(7, 1, 4), //
+      Tensors.vector(7, 3, 1)), //
   ;
 
   private final Tensor tensor;

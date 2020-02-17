@@ -29,7 +29,9 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       Tensors.vector(2, 1), //
       Tensors.vector(1, 2), //
       Tensors.vector(1, 1), //
-      Tensors.vector(3, 1));
+      Tensors.vector(3, 1), //
+      Tensors.vector(5, 5) //
+  );
   // ---
   private final int RES;
   private final Tensor frame;
@@ -76,10 +78,11 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         graphics.setColor(new Color(128, 128, 128));
         graphics.draw(geometricLayer.toPath2D(frame));
       }
+      // int count = 0;
+      graphics.setColor(STONE_GOAL);
       for (Tensor stone : board) {
         int index = stone.Get(0).number().intValue();
         geometricLayer.pushMatrix(Se2Matrix.translation(stone.extract(1, 3)));
-        graphics.setColor(index == 0 ? STONE_GOAL : STONE_MISC);
         {
           Tensor polygon = Tensors.empty();
           int limit = BLOCKS.length();
@@ -92,7 +95,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
                 format.pmul(Tensors.vector(1, 0)).add(Tensors.vector(-MARGIN, +MARGIN)));
           } else {
             switch (index) {
-            case 5:
+            case 6:
               polygon = Tensors.of( //
                   Tensors.vector(0 + MARGIN, 0 + MARGIN), //
                   Tensors.vector(2 - MARGIN, 0 + MARGIN), //
@@ -101,7 +104,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
                   Tensors.vector(1 - MARGIN, 2 - MARGIN), //
                   Tensors.vector(0 + MARGIN, 2 - MARGIN));
               break;
-            case 6:
+            case 7:
               polygon = Tensors.of( //
                   Tensors.vector(2 - MARGIN, 2 - MARGIN), //
                   Tensors.vector(0 + MARGIN, 2 - MARGIN), //
@@ -110,12 +113,29 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
                   Tensors.vector(1 + MARGIN, 0 + MARGIN), //
                   Tensors.vector(2 - MARGIN, 0 + MARGIN));
               break;
+            case 8:
+              polygon = Tensors.of( //
+                  Tensors.vector(0 + MARGIN, 1 + MARGIN), //
+                  Tensors.vector(1 + MARGIN, 1 + MARGIN), //
+                  Tensors.vector(1 + MARGIN, 0 + MARGIN), //
+                  Tensors.vector(4 - MARGIN, 0 + MARGIN), //
+                  Tensors.vector(4 - MARGIN, 1 + MARGIN), //
+                  Tensors.vector(5 - MARGIN, 1 + MARGIN), //
+                  Tensors.vector(5 - MARGIN, 4 - MARGIN), //
+                  Tensors.vector(4 - MARGIN, 4 - MARGIN), //
+                  Tensors.vector(4 - MARGIN, 5 - MARGIN), //
+                  Tensors.vector(1 + MARGIN, 5 - MARGIN), //
+                  Tensors.vector(1 + MARGIN, 4 - MARGIN), //
+                  Tensors.vector(0 + MARGIN, 4 - MARGIN) //
+              );
+              break;
             default:
               throw new RuntimeException("index=" + index);
             }
           }
           graphics.fill(geometricLayer.toPath2D(polygon));
         }
+        graphics.setColor(STONE_MISC);
         geometricLayer.popMatrix();
       }
     }

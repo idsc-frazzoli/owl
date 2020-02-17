@@ -27,8 +27,14 @@ public class KlotskiObstacleRegionTest extends TestCase {
 
   public void testTrafficJam() {
     for (TrafficJam trafficJam : TrafficJam.values()) {
-      System.out.println(trafficJam);
       KlotskiProblem klotskiProblem = trafficJam.create();
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
+    }
+  }
+
+  public void testSunshine() {
+    for (Sunshine sunshine : Sunshine.values()) {
+      KlotskiProblem klotskiProblem = sunshine.create();
       assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.startState()));
     }
   }

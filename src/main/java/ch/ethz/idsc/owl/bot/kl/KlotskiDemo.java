@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
 /* package */ class KlotskiDemo {
   public static final File FOLDER_SOLUTIONS = HomeDirectory.Documents("klotski");
   private final KlotskiProblem klotskiProblem;
-  private final KlotskiFrame klotskiFrame;
+  final KlotskiFrame klotskiFrame;
 
   public KlotskiDemo(KlotskiProblem klotskiProblem) {
     this.klotskiProblem = klotskiProblem;
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
           klotskiFrame._board = nextNode.state();
           tableBuilder.appendRow(Tensors.vector(expandCount, domainMap.size(), queue.size(), nextNode.costFromRoot().number().intValue()));
         }
-        // System.out.println(String.format("#=%5d q=%3d $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
+        System.out.println(String.format("#=%5d q=%3d $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
         standardTrajectoryPlanner.expand(nextNode);
         ++expandCount;
       } else { // queue is empty
