@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public S2ScatteredSetCoordinateDemo() {
-    super(GeodesicDisplays.S2_ONLY, SnBarycentricCoordinates.values());
+    super(true, GeodesicDisplays.S2_ONLY, SnBarycentricCoordinates.values());
     {
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);

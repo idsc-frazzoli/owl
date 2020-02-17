@@ -22,8 +22,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
-  public ScatteredSetCoordinateDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
-    super(true, list);
+  public ScatteredSetCoordinateDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
+    super(addRemoveControlPoints, list);
     {
       spinnerBarycentric.setArray(array);
       spinnerBarycentric.setIndex(0);

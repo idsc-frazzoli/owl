@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   private Tensor snapshot;
 
   public R2ScatteredSetCoordinateDemo() {
-    super(GeodesicDisplays.SE2C_SPD2_S2_Rn, RnBarycentricCoordinates.SCATTERED);
+    super(true, GeodesicDisplays.SE2C_SPD2_S2_Rn, RnBarycentricCoordinates.SCATTERED);
     {
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);
