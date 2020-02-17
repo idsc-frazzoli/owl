@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class S2MovingInverseDistancesDemo extends ScatteredSetCoordinateDemo {
-  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.2));
+  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.4));
   private static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 255, 64, 64), new Color(64, 255, 64, 255));
   // ---
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.N;
     }
     refinement(10);
     shufflePoints(spinnerLength.getValue());
-    timerFrame.configCoordinateOffset(300, 500);
+    timerFrame.configCoordinateOffset(400, 400);
   }
 
   private synchronized void shufflePoints(int n) {
