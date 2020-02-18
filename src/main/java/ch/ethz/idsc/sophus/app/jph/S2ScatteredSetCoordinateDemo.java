@@ -103,10 +103,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
       }
     }
   }
-  
+
   @Override
   public void released() {
-   System.out.println("RELEASED");
+    System.out.println("RELEASED");
   }
 
   public static void main(String[] args) {

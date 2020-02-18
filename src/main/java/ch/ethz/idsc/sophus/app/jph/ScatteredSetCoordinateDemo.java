@@ -48,19 +48,15 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     timerFrame.jToolBar.addSeparator();
   }
 
-  int refinement() {
+  final int refinement() {
     return spinnerRefine.getValue();
   }
 
-  void refinement(int value) {
-    spinnerRefine.setValueSafe(value);
-  }
-
-  ColorDataGradient colorDataGradient() {
+  final ColorDataGradient colorDataGradient() {
     return spinnerColorData.getValue();
   }
 
-  BarycentricCoordinate barycentricCoordinate() {
+  final BarycentricCoordinate barycentricCoordinate() {
     return spinnerBarycentric.getValue().get();
   }
 }
