@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -37,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 255, 64, 64), new Color(64, 255, 64, 255));
   // ---
-  private final SpinnerLabel<SnMeans> spinnerMotionFits = new SpinnerLabel<>();
+  private final SpinnerLabel<SnMeans> spinnerSnMeans = new SpinnerLabel<>();
   // ---
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("snap");
@@ -49,9 +50,9 @@ import ch.ethz.idsc.tensor.sca.N;
     setMidpointIndicated(false);
     // ---
     {
-      spinnerMotionFits.setArray(SnMeans.values());
-      spinnerMotionFits.setIndex(0);
-      spinnerMotionFits.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "motion fits");
+      spinnerSnMeans.setArray(SnMeans.values());
+      spinnerSnMeans.setValue(SnMeans.PHONG);
+      spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
     }
     {
       spinnerLength.addSpinnerListener(this::shufflePoints);
@@ -63,7 +64,6 @@ import ch.ethz.idsc.tensor.sca.N;
       jButton.addActionListener(l -> updateOrigin(getControlPointsSe2().map(N.DOUBLE)));
       timerFrame.jToolBar.add(jButton);
     }
-    refinement(10);
     shufflePoints(spinnerLength.getValue());
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
@@ -96,13 +96,14 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from RenderInterface
   public synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    ColorDataGradient colorDataGradient = colorDataGradient();
     GraphicsUtil.setQualityHigh(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     S2GeodesicDisplay s2geodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();
-    Tensor[][] array = movingDomain2D.forward(target, spinnerMotionFits.getValue().get());
-    new ArrayRender(array, colorDataGradient().deriveWithOpacity(RationalScalar.HALF)) //
+    Tensor[][] array = movingDomain2D.forward(target, spinnerSnMeans.getValue().get());
+    new ArrayRender(array, colorDataGradient.deriveWithOpacity(RationalScalar.HALF)) //
         .render(geometricLayer, graphics);
     graphics.setColor(Color.RED);
     for (int index = 0; index < origin.length(); ++index)
@@ -113,6 +114,8 @@ import ch.ethz.idsc.tensor.sca.N;
         .show(s2geodesicDisplay::matrixLift, TRIANGLE, movingDomain2D.origin()) //
         .render(geometricLayer, graphics);
     renderControlPoints(geometricLayer, graphics);
+    if (jToggleHeatmap.isSelected())
+      new ArrayPlotRender(movingDomain2D.weights(), colorDataGradient, 0, 12, 3).render(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

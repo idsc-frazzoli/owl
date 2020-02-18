@@ -45,8 +45,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
       jToggleAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleAxes);
     }
-    setControlPointsSe2(Tensors.fromString("{{-5, 3, 0}, {3, 5, 0}, {-4, -3, 0}, {2, -3, 0}}"));
+    setControlPointsSe2(Tensors.fromString("{{-0.5, 0.3, 0}, {0.3, 0.5, 0}, {-0.4, -0.3, 0}, {0.2, -0.3, 0}}"));
     setMidpointIndicated(false);
+    Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
+    timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(500, 500);
   }
 
@@ -59,35 +61,35 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
     graphics.drawString("" + spinnerBarycentric.getValue(), 0, 10 + 17);
-    final Tensor controlPoints = getGeodesicControlPoints();
+    final Tensor origin = getGeodesicControlPoints();
     S2GeodesicDisplay s2GeodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
-    for (int index = 0; index < controlPoints.length(); ++index) {
-      Tensor xyz = controlPoints.get(index);
+    for (int index = 0; index < origin.length(); ++index) {
+      Tensor xyz = origin.get(index);
       geometricLayer.pushMatrix(s2GeodesicDisplay.matrixLift(xyz));
       Point2D point2d = geometricLayer.toPoint2D(0, 0);
       graphics.drawString("  " + index, (int) point2d.getX(), (int) point2d.getY());
       geometricLayer.popMatrix();
     }
     // ---
-    if (s2GeodesicDisplay.dimensions() < controlPoints.length()) {
+    if (s2GeodesicDisplay.dimensions() < origin.length()) {
       GraphicsUtil.setQualityHigh(graphics);
       Tensor sX = Subdivide.of(-1.0, +1.0, refinement());
       Tensor sY = Subdivide.of(-1.0, +1.0, refinement());
       int n = sX.length();
       boolean lower = jToggleLower.isSelected();
       BarycentricCoordinate barycentricCoordinate = barycentricCoordinate();
-      Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, lower ? n * 2 : n, n, controlPoints.length());
+      Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, lower ? n * 2 : n, n, origin.length());
       IntStream.range(0, n).parallel().forEach(c0 -> {
         Scalar x = sX.Get(c0);
         int c1 = 0;
         for (Tensor y : sY) {
-          Optional<Tensor> optionalP = s2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
+          Optional<Tensor> optionalP = S2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
           if (optionalP.isPresent()) {
             Tensor point = optionalP.get();
-            wgs.set(barycentricCoordinate.weights(controlPoints, point), n - c1 - 1, c0);
+            wgs.set(barycentricCoordinate.weights(origin, point), n - c1 - 1, c0);
             if (lower) {
               point.set(Scalar::negate, 2);
-              wgs.set(barycentricCoordinate.weights(controlPoints, point), n + n - c1 - 1, c0);
+              wgs.set(barycentricCoordinate.weights(origin, point), n + n - c1 - 1, c0);
             }
           }
           ++c1;
@@ -100,6 +102,11 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
         new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, 2).render(geometricLayer, graphics);
       }
     }
+  }
+  
+  @Override
+  public void released() {
+   System.out.println("RELEASED");
   }
 
   public static void main(String[] args) {
