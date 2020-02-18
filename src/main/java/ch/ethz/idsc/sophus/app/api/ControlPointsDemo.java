@@ -184,7 +184,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   /** function is called when mouse is released */
   public void released() {
-    // ---
+    // TODO API needs comments and better naming
   }
 
   public void setPositioningEnabled(boolean enabled) {

@@ -25,11 +25,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** symmetric positive definite 2 x 2 matrices */
 public class S2GeodesicDisplay extends SnGeodesicDisplay {
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
-  public static final GeodesicDisplay INSTANCE = new S2GeodesicDisplay(RADIUS);
+  public static final GeodesicDisplay INSTANCE = new S2GeodesicDisplay();
 
   /***************************************************/
-  public S2GeodesicDisplay(Scalar radius) {
-    super(radius);
+  private S2GeodesicDisplay() {
+    // ---
   }
 
   @Override
@@ -47,7 +47,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    Tensor xyz = xya.divide(getRadius());
+    Tensor xyz = xya.copy();
     Optional<Tensor> optional = optionalZ(xyz);
     if (optional.isPresent())
       return optional.get();
@@ -68,7 +68,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor xyz) {
-    return xyz.extract(0, 2).multiply(getRadius());
+    return xyz.extract(0, 2);
   }
 
   private static final Clip CLIP_Z = Clips.interval(-2.5, 1);

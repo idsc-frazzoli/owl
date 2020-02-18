@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -25,21 +24,17 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = getGeodesicDisplay();
     if (geodesicDisplay instanceof S1GeodesicDisplay) {
-      S1GeodesicDisplay s1GeodesicDisplay = (S1GeodesicDisplay) geodesicDisplay;
-      Scalar radius = s1GeodesicDisplay.getRadius();
       graphics.setColor(BORDER);
-      graphics.draw(geometricLayer.toPath2D(CIRCLE.multiply(radius)));
+      graphics.draw(geometricLayer.toPath2D(CIRCLE));
     } else //
     if (geodesicDisplay instanceof S2GeodesicDisplay) {
-      S2GeodesicDisplay s2GeodesicDisplay = (S2GeodesicDisplay) geodesicDisplay;
       Point2D center = geometricLayer.toPoint2D(0, 0);
-      Scalar radius = s2GeodesicDisplay.getRadius();
-      float fradius = geometricLayer.model2pixelWidth(radius.number().doubleValue());
+      float fradius = geometricLayer.model2pixelWidth(1);
       float[] dist = { 0.0f, 0.70f, 1.0f };
       Color[] colors = { CENTER, new Color(224, 224, 224, 128), BORDER };
       Paint paint = new RadialGradientPaint(center, fradius, dist, colors);
       graphics.setPaint(paint);
-      graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(radius)));
+      graphics.fill(geometricLayer.toPath2D(CIRCLE));
     } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       Paint paint = new GradientPaint( //

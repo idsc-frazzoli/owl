@@ -20,14 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.3));
-  protected static final Scalar RADIUS = RealScalar.of(6);
-  /***************************************************/
-  private final Scalar radius;
-
-  public SnGeodesicDisplay(Scalar radius) {
-    this.radius = radius;
-  }
+  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05));
 
   @Override // from GeodesicDisplay
   public final GeodesicInterface geodesicInterface() {
@@ -67,9 +60,5 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override
   public final String toString() {
     return "S" + dimensions();
-  }
-
-  public final Scalar getRadius() {
-    return radius;
   }
 }

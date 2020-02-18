@@ -10,10 +10,10 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class S1GeodesicDisplay extends SnGeodesicDisplay {
-  public static final GeodesicDisplay INSTANCE = new S1GeodesicDisplay(RADIUS);
+  public static final GeodesicDisplay INSTANCE = new S1GeodesicDisplay();
 
-  public S1GeodesicDisplay(Scalar radius) {
-    super(radius);
+  private S1GeodesicDisplay() {
+    // ---
   }
 
   @Override
@@ -32,7 +32,7 @@ public class S1GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor xy) {
-    return xy.multiply(getRadius());
+    return xy.copy();
   }
 
   @Override // from GeodesicDisplay
