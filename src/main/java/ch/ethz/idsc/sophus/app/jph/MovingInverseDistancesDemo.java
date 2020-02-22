@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
@@ -23,9 +24,10 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ abstract class MovingInverseDistancesDemo extends ScatteredSetCoordinateDemo {
   private static final PointsRender POINTS_RENDER_POINTS = //
-      new PointsRender(new Color(64, 255, 64, 64), new Color(64, 255, 64, 255));
+      new PointsRender(new Color(64, 64, 64, 64), new Color(64, 64, 64, 255));
   // ---
   private final JButton jButton = new JButton("snap");
+  private final JToggleButton jToggleButton = new JToggleButton("axes");
   // ---
   MovingDomain2D movingDomain2D;
 
@@ -34,6 +36,7 @@ import ch.ethz.idsc.tensor.sca.N;
     setMidpointIndicated(false);
     // ---
     spinnerBarycentric.addSpinnerListener(v -> recompute());
+    timerFrame.jToolBar.add(jToggleButton);
     {
       jButton.addActionListener(l -> recompute());
       timerFrame.jToolBar.add(jButton);
@@ -53,7 +56,8 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override // from RenderInterface
   public synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    AxesRender.INSTANCE.render(geometricLayer, graphics);
+    if (jToggleButton.isSelected())
+      AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();

@@ -34,9 +34,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       JFreeChart jFreeChart = plot(subPath, subPath, "Number batches", "Error", visualSet);
       try {
         savePlot(directory(), path, jFreeChart);
-      } catch (Exception e) {
-        System.err.println();
-        e.printStackTrace();
+      } catch (Exception exception) {
+        exception.printStackTrace();
       }
     }
   }

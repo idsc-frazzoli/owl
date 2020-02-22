@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /* package */ class R2MovingInverseDistancesDemo extends MovingInverseDistancesDemo {
-  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.2));
+  private static final Tensor ORIGIN = CirclePoints.of(5).multiply(RealScalar.of(0.1));
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
 
   R2MovingInverseDistancesDemo() {

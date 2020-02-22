@@ -39,8 +39,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       export(groupSmoothedGCM, "GCMidSeeded", index, radius, smoothingKernel);
       // export(groupSmoothedGBM, "Biinvariant", index, radius, smoothingKernel);
       // export(control, "GroupRaw", index, radius, smoothingKernel);
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
   }
 
