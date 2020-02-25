@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JToggleButton jToggleMean = new JToggleButton("mean");
 
   public BarycentricLeversDemo() {
-    super(true, GeodesicDisplays.SE2C_SPD2_S2_Rn);
+    super(true, GeodesicDisplays.ALL);
     {
       timerFrame.jToolBar.add(jToggleMean);
     }

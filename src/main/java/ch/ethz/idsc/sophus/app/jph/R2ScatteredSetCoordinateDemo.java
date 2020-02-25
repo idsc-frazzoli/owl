@@ -77,7 +77,6 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     ColorDataGradient colorDataGradient = colorDataGradient();
     if (jToggleButtonAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    setMidpointIndicated(!jToggleAnimate.isSelected());
     if (jToggleAnimate.isSelected()) {
       double toc = timing.seconds() * 0.3;
       int n = snapshot.length();

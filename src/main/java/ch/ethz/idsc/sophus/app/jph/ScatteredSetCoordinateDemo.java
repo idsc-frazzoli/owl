@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
+  // final JToggleButton jToggleMidpoints = new JToggleButton("midp.");
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
@@ -40,12 +41,16 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "color scheme");
     }
     {
+      // jToggleMidpoints.setSelected(isMidpointIndicated());
+      // jToggleMidpoints.addActionListener(l -> setMidpointIndicated(jToggleMidpoints.isSelected()));
+      // timerFrame.jToolBar.add(jToggleMidpoints);
       jToggleHeatmap.setSelected(true);
       timerFrame.jToolBar.add(jToggleHeatmap);
       jToggleArrows.setSelected(false);
       timerFrame.jToolBar.add(jToggleArrows);
     }
     timerFrame.jToolBar.addSeparator();
+    setMidpointIndicated(false);
   }
 
   final int refinement() {

@@ -6,11 +6,11 @@ import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringInverseDistanceCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -74,7 +74,7 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return Se2CoveringInverseDistanceCoordinate.INSTANCE;
+    return Se2CoveringBiinvariantCoordinate.SQUARED;
   }
 
   @Override // from Object

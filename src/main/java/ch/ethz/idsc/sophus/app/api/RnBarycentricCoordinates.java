@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
@@ -18,13 +19,17 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   INVERSE_DISTANCE(RnInverseDistanceCoordinate.INSTANCE), //
   INVERSE_DISTANCE2(RnInverseDistanceCoordinate.SQUARED), //
+  BIINVARIANT(RnBiinvariantCoordinate.INSTANCE), //
+  BIINVARIANT2(RnBiinvariantCoordinate.SQUARED), //
   AFFINE(AffineCoordinate.INSTANCE), //
   SHEPARD(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
-      INVERSE_DISTANCE, INVERSE_DISTANCE2, AFFINE, SHEPARD, SHEPARD2 };
+      INVERSE_DISTANCE, INVERSE_DISTANCE2, //
+      BIINVARIANT, BIINVARIANT2, //
+      AFFINE, SHEPARD, SHEPARD2 };
   private final BarycentricCoordinate barycentricCoordinate;
 
   private RnBarycentricCoordinates(BarycentricCoordinate barycentricCoordinate) {

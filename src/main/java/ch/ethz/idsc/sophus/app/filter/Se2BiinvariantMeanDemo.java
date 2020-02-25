@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2FilterBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.so2.So2GlobalBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.so2.So2PhongBiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.red.Nest;
  * illustration of three ways to average the angular component:
  * {@link So2LinearBiinvariantMean}
  * {@link So2FilterBiinvariantMean}
- * {@link So2GlobalBiinvariantMean} */
+ * {@link So2PhongBiinvariantMean} */
 public class Se2BiinvariantMeanDemo extends DatasetKernelDemo {
   private final SpinnerLabel<Se2BiinvariantMean> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
