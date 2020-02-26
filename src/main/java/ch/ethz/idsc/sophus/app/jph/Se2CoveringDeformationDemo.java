@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -17,11 +16,11 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-/* package */ class Se2CoveringMovingInverseDistancesDemo extends MovingInverseDistancesDemo {
+/* package */ class Se2CoveringDeformationDemo extends DeformationDemo {
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
 
-  Se2CoveringMovingInverseDistancesDemo() {
+  Se2CoveringDeformationDemo() {
     super(GeodesicDisplays.SE2C_ONLY, Se2CoveringBarycentricCoordinates.values());
     // ---
     {
@@ -37,19 +36,17 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private synchronized void shufflePoints(int n) {
     Distribution distributionp = UniformDistribution.of(-1, 7);
     Distribution distributiona = UniformDistribution.of(-1, 1);
-    updateOrigin(Tensors.vector(i -> RandomVariate.of(distributionp, 2).append(RandomVariate.of(distributiona)), n));
+    setControlPointsSe2(Tensors.vector(i -> RandomVariate.of(distributionp, 2).append(RandomVariate.of(distributiona)), n));
+    snap();
   }
 
   @Override
-  void updateOrigin(Tensor originSe2) {
-    setControlPointsSe2(originSe2);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor origin = Tensor.of(originSe2.stream().map(geodesicDisplay::project));
+  void updateMovingDomain2D() {
     int res = refinement();
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    movingDomain2D = new MovingDomain2D(origin, barycentricCoordinate(), domain);
+    movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 
   @Override
@@ -63,6 +60,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   public static void main(String[] args) {
-    new Se2CoveringMovingInverseDistancesDemo().setVisible(1000, 800);
+    new Se2CoveringDeformationDemo().setVisible(1000, 800);
   }
 }

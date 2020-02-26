@@ -1,8 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.jph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -16,40 +18,48 @@ import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ abstract class MovingInverseDistancesDemo extends ScatteredSetCoordinateDemo {
+/* package */ abstract class DeformationDemo extends ScatteredSetCoordinateDemo {
   private static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 64, 64, 64), new Color(64, 64, 64, 255));
+  private static final Stroke STROKE = //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
   private final JButton jButton = new JButton("snap");
   private final JToggleButton jToggleButton = new JToggleButton("axes");
   // ---
+  /** in coordinate specific to geodesic display */
+  Tensor movingOrigin;
   MovingDomain2D movingDomain2D;
 
-  MovingInverseDistancesDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
+  DeformationDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---
-    spinnerBarycentric.addSpinnerListener(v -> recompute());
+    spinnerBarycentric.addSpinnerListener(v -> updateMovingDomain2D());
     timerFrame.jToolBar.add(jToggleButton);
     {
-      jButton.addActionListener(l -> recompute());
+      jButton.addActionListener(l -> snap());
       timerFrame.jToolBar.add(jButton);
     }
   }
 
-  final void recompute() {
-    updateOrigin(getControlPointsSe2().map(N.DOUBLE));
+  final void snap() {
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
+    updateMovingDomain2D();
   }
 
   abstract BiinvariantMean biinvariantMean();
 
-  abstract void updateOrigin(Tensor originSe2);
+  abstract void updateMovingDomain2D();
 
   abstract Tensor shapeOrigin();
 
@@ -64,9 +74,20 @@ import ch.ethz.idsc.tensor.sca.N;
     Tensor[][] array = movingDomain2D.forward(target, biinvariantMean());
     new ArrayRender(array, colorDataGradient().deriveWithOpacity(RationalScalar.HALF)) //
         .render(geometricLayer, graphics);
-    graphics.setColor(Color.RED);
-    for (int index = 0; index < origin.length(); ++index)
-      graphics.draw(geometricLayer.toPath2D(Tensors.of(origin.get(index), target.get(index))));
+    { // connect origin and target pairs with lines/geodesics
+      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      graphics.setColor(new Color(128, 128, 128, 255));
+      graphics.setStroke(STROKE);
+      for (int index = 0; index < origin.length(); ++index) {
+        ScalarTensorFunction scalarTensorFunction = //
+            geodesicInterface.curve(origin.get(index), target.get(index));
+        Tensor domain = Subdivide.of(0, 1, 15);
+        Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream() //
+            .map(geodesicDisplay::toPoint));
+        graphics.draw(geometricLayer.toPath2D(ms));
+      }
+      graphics.setStroke(new BasicStroke(1));
+    }
     POINTS_RENDER_POINTS //
         .show(geodesicDisplay::matrixLift, shapeOrigin(), origin) //
         .render(geometricLayer, graphics);

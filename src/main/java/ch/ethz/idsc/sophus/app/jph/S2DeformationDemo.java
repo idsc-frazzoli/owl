@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.SnMeans;
@@ -22,18 +21,18 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class S2MovingInverseDistancesDemo extends MovingInverseDistancesDemo {
+/* package */ class S2DeformationDemo extends DeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
   // ---
   private final SpinnerLabel<SnMeans> spinnerSnMeans = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
 
-  S2MovingInverseDistancesDemo() {
+  S2DeformationDemo() {
     super(GeodesicDisplays.S2_ONLY, SnBarycentricCoordinates.values());
     // ---
     {
       spinnerSnMeans.setArray(SnMeans.values());
-      spinnerSnMeans.setValue(SnMeans.PHONG);
+      spinnerSnMeans.setValue(SnMeans.FAST);
       spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
     }
     {
@@ -50,21 +49,19 @@ import ch.ethz.idsc.tensor.red.Norm;
 
   private synchronized void shufflePoints(int n) {
     Distribution distribution = UniformDistribution.of(-0.5, 0.5);
-    updateOrigin(Tensor.of(RandomVariate.of(distribution, n, 2).stream() //
+    setControlPointsSe2(Tensor.of(RandomVariate.of(distribution, n, 2).stream() //
         .map(Tensor::copy) //
         .map(row -> row.append(RealScalar.ZERO))));
+    snap();
   }
 
   @Override
-  void updateOrigin(Tensor originSe2) {
-    setControlPointsSe2(originSe2);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor origin = Tensor.of(originSe2.stream().map(geodesicDisplay::project));
+  void updateMovingDomain2D() {
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(2))), dx.length(), dy.length());
-    movingDomain2D = new MovingDomain2D(origin, barycentricCoordinate(), domain);
+    movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
@@ -80,6 +77,6 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   public static void main(String[] args) {
-    new S2MovingInverseDistancesDemo().setVisible(1000, 800);
+    new S2DeformationDemo().setVisible(1000, 800);
   }
 }

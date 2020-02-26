@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** RMF(p,t,w)[x] == w.t for w = IDC(p,x) */
 public enum SnMeans implements Supplier<BiinvariantMean> {
   EXACT(new SnMean(Chop._05)), //
-  APPRX(SnFastMean.INSTANCE), //
+  FAST(SnFastMean.INSTANCE), //
   PHONG(SnPhongMean.INSTANCE), //
   ;
 
