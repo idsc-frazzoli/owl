@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
-    Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(2))), dx.length(), dy.length());
+    Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
     movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 

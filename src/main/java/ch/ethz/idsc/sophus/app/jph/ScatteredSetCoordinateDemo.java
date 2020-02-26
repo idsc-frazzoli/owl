@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
   final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   // final JToggleButton jToggleMidpoints = new JToggleButton("midp.");
@@ -34,6 +35,11 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
       spinnerRefine.setValue(20);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
+    }
+    {
+      spinnerMagnif.setList(Arrays.asList(1, 2, 3, 4));
+      spinnerMagnif.setValue(2);
+      spinnerMagnif.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
     }
     {
       spinnerColorData.setArray(ColorDataGradients.values());
@@ -55,6 +61,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
   final int refinement() {
     return spinnerRefine.getValue();
+  }
+
+  final int magnification() {
+    return spinnerMagnif.getValue();
   }
 
   final ColorDataGradient colorDataGradient() {

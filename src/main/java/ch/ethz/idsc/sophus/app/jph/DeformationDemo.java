@@ -28,11 +28,12 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ abstract class DeformationDemo extends ScatteredSetCoordinateDemo {
   private static final PointsRender POINTS_RENDER_POINTS = //
-      new PointsRender(new Color(64, 64, 64, 64), new Color(64, 64, 64, 255));
+      new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255));
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
   private final JButton jButton = new JButton("snap");
+  private final JToggleButton jToggleAnchor = new JToggleButton("anchor");
   private final JToggleButton jToggleButton = new JToggleButton("axes");
   // ---
   /** in coordinate specific to geodesic display */
@@ -45,6 +46,9 @@ import ch.ethz.idsc.tensor.sca.N;
     // ---
     spinnerBarycentric.addSpinnerListener(v -> updateMovingDomain2D());
     timerFrame.jToolBar.add(jToggleButton);
+    jToggleAnchor.setSelected(true);
+    jToggleAnchor.setToolTipText("display anchor");
+    timerFrame.jToolBar.add(jToggleAnchor);
     {
       jButton.addActionListener(l -> snap());
       timerFrame.jToolBar.add(jButton);
@@ -91,7 +95,8 @@ import ch.ethz.idsc.tensor.sca.N;
     POINTS_RENDER_POINTS //
         .show(geodesicDisplay::matrixLift, shapeOrigin(), origin) //
         .render(geometricLayer, graphics);
-    renderControlPoints(geometricLayer, graphics);
+    if (jToggleAnchor.isSelected())
+      renderControlPoints(geometricLayer, graphics);
     if (jToggleHeatmap.isSelected())
       new ArrayPlotRender(movingDomain2D.weights(), colorDataGradient(), 0, 12, 3).render(geometricLayer, graphics);
   }

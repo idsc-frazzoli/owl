@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
       if (jToggleHeatmap.isSelected()) { // render basis functions
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, 2).render(geometricLayer, graphics);
+        new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, magnification()).render(geometricLayer, graphics);
       }
     }
   }
