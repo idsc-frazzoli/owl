@@ -36,7 +36,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** mouse snaps 20 pixel to control points */
   private static final Scalar PIXEL_THRESHOLD = RealScalar.of(20.0);
   /** control points */
-  private static final PointsRender POINTS_RENDER_0 = //
+  protected static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
   /** refined points */
   private static final PointsRender POINTS_RENDER_1 = //

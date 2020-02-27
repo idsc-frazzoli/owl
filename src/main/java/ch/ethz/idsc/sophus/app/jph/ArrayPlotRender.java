@@ -70,4 +70,12 @@ public class ArrayPlotRender implements RenderInterface {
   public int height() {
     return height;
   }
+
+  public BufferedImage export() {
+    BufferedImage bi = new BufferedImage( //
+        bufferedImage.getWidth() + 100, //
+        bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    render(null, bi.createGraphics());
+    return bi;
+  }
 }
