@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.awt.Dimension;
 import java.util.Arrays;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
@@ -17,13 +19,19 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
+/** moving least squares */
 /* package */ class R2DeformationDemo extends DeformationDemo {
-  private static final Tensor ORIGIN = CirclePoints.of(5).multiply(RealScalar.of(0.1));
+  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.1));
+  private final JToggleButton jToggleMLS = new JToggleButton("MLS");
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
 
   R2DeformationDemo() {
     super(GeodesicDisplays.R2_ONLY, RnBarycentricCoordinates.SCATTERED);
     // ---
+    {
+      jToggleMLS.addActionListener(l -> recomputeMD2D());
+      timerFrame.jToolBar.add(jToggleMLS);
+    }
     {
       spinnerLength.addSpinnerListener(this::shufflePoints);
       spinnerLength.setList(Arrays.asList(3, 4, 5, 6, 7, 8, 9, 10));
@@ -43,16 +51,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   @Override
-  void updateMovingDomain2D() {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
-    movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
-  }
-
-  public static void main(String[] args) {
-    new R2DeformationDemo().setVisible(1000, 800);
+    return jToggleMLS.isSelected() //
+        ? new LSMovingDomain2D(movingOrigin, barycentricCoordinate(), domain)
+        : new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 
   @Override
@@ -63,5 +69,9 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override
   BiinvariantMean biinvariantMean() {
     return geodesicDisplay().biinvariantMean();
+  }
+
+  public static void main(String[] args) {
+    new R2DeformationDemo().setVisible(1000, 800);
   }
 }

@@ -41,12 +41,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   @Override
-  void updateMovingDomain2D() {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
+    return new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 
   @Override

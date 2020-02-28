@@ -27,9 +27,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ abstract class DeformationDemo extends ScatteredSetCoordinateDemo {
-  private static final PointsRender POINTS_RENDER_POINTS = //
+  static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255));
-  private static final Stroke STROKE = //
+  static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
   private final JButton jButton = new JButton("snap");
@@ -37,14 +37,14 @@ import ch.ethz.idsc.tensor.sca.N;
   private final JToggleButton jToggleButton = new JToggleButton("axes");
   // ---
   /** in coordinate specific to geodesic display */
-  Tensor movingOrigin;
-  MovingDomain2D movingDomain2D;
+  private Tensor movingOrigin;
+  private MovingDomain2D movingDomain2D;
 
   DeformationDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---
-    spinnerBarycentric.addSpinnerListener(v -> updateMovingDomain2D());
+    spinnerBarycentric.addSpinnerListener(v -> recomputeMD2D());
     timerFrame.jToolBar.add(jToggleButton);
     jToggleAnchor.setSelected(true);
     jToggleAnchor.setToolTipText("display anchor");
@@ -58,17 +58,21 @@ import ch.ethz.idsc.tensor.sca.N;
   final void snap() {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
-    updateMovingDomain2D();
+    recomputeMD2D();
+  }
+
+  final void recomputeMD2D() {
+    movingDomain2D = updateMovingDomain2D(movingOrigin);
   }
 
   abstract BiinvariantMean biinvariantMean();
 
-  abstract void updateMovingDomain2D();
+  abstract MovingDomain2D updateMovingDomain2D(Tensor movingOrigin);
 
   abstract Tensor shapeOrigin();
 
   @Override // from RenderInterface
-  public synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public final synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     if (jToggleButton.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);

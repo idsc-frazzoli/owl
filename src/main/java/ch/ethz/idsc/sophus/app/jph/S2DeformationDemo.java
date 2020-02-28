@@ -56,12 +56,12 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   @Override
-  void updateMovingDomain2D() {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
-    movingDomain2D = new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
+    return new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);

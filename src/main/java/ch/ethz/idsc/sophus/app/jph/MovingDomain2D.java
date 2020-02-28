@@ -17,9 +17,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
 class MovingDomain2D {
-  private final Tensor origin;
-  private final Tensor domain;
-  private final Tensor[][] weights;
+  final Tensor origin;
+  final Tensor domain;
+  final Tensor[][] weights;
   private final Tensor _wgs;
 
   public MovingDomain2D(Tensor origin, BarycentricCoordinate barycentricCoordinate, Tensor domain) {
