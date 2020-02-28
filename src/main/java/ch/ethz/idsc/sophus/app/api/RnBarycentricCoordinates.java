@@ -17,18 +17,18 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
-  INVERSE_DISTANCE(RnInverseDistanceCoordinate.INSTANCE), //
-  INVERSE_DISTANCE2(RnInverseDistanceCoordinate.SQUARED), //
   BIINVARIANT(RnBiinvariantCoordinate.INSTANCE), //
   BIINVARIANT2(RnBiinvariantCoordinate.SQUARED), //
+  INVERSE_DISTANCE(RnInverseDistanceCoordinate.INSTANCE), //
+  INVERSE_DISTANCE2(RnInverseDistanceCoordinate.SQUARED), //
   AFFINE(AffineCoordinate.INSTANCE), //
   SHEPARD(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
-      INVERSE_DISTANCE, INVERSE_DISTANCE2, //
       BIINVARIANT, BIINVARIANT2, //
+      INVERSE_DISTANCE, INVERSE_DISTANCE2, //
       AFFINE, SHEPARD, SHEPARD2 };
   private final BarycentricCoordinate barycentricCoordinate;
 

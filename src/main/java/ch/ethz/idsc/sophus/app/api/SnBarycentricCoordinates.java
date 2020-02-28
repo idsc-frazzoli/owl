@@ -12,10 +12,10 @@ import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
 
 public enum SnBarycentricCoordinates implements Supplier<BarycentricCoordinate> {
-  INVERSE_DISTANCE(SnInverseDistanceCoordinate.INSTANCE), //
-  INVERSE_DISTANCE2(SnInverseDistanceCoordinate.SQUARED), //
   BIINVARIANT(SnBiinvariantCoordinate.INSTANCE), //
   BIINVARIANT2(SnBiinvariantCoordinate.SQUARED), //
+  INVERSE_DISTANCE(SnInverseDistanceCoordinate.INSTANCE), //
+  INVERSE_DISTANCE2(SnInverseDistanceCoordinate.SQUARED), //
   AFFINE(SnAffineCoordinate.INSTANCE), //
   SHEPARD(InverseDistanceWeighting.of(SnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(SnMetricSquared.INSTANCE)), //

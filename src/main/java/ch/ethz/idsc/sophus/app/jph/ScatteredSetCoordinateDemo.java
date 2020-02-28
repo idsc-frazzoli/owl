@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
   final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
+  final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   // final JToggleButton jToggleMidpoints = new JToggleButton("midp.");
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
