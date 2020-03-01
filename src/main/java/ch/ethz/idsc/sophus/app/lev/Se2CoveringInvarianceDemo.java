@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.jph;
+package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 import java.awt.geom.Path2D;
 
 import javax.swing.JTextField;
@@ -17,30 +16,27 @@ import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupOps;
-import ch.ethz.idsc.sophus.app.api.PointsRender;
+import ch.ethz.idsc.sophus.app.jph.ArrayPlotRender;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class Se2CoveringInvarianceDemo extends ControlPointsDemo {
-  private static final Stroke STROKE = //
-      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  // ---
+/* package */ class Se2CoveringInvarianceDemo extends LeversDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JTextField jTextField = new JTextField();
 
   public Se2CoveringInvarianceDemo() {
-    super(true, GeodesicDisplays.SE2C_ONLY);
+    super(GeodesicDisplays.SE2C_ONLY);
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }
@@ -49,15 +45,8 @@ import ch.ethz.idsc.tensor.sca.Round;
       jTextField.setPreferredSize(new Dimension(100, 28));
       timerFrame.jToolBar.add(jTextField);
     }
-    setControlPointsSe2(Tensors.fromString("{{-1, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
-    // setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0}}"));
-    setMidpointIndicated(false);
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
   }
-
-  private static final PointsRender POINTS_RENDER_0 = //
-      new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
-  private static final PointsRender ORIGIN_RENDER_0 = //
-      new PointsRender(new Color(64, 255, 64, 128), new Color(64, 255, 64, 255));
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -93,6 +82,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Tensor shape = geodesicDisplay.shape();
       if (0 < controlPointsAll.length()) {
         Tensor origin = controlPointsAll.get(0);
         if (1 + geodesicDisplay.dimensions() < controlPointsAll.length()) {
@@ -118,7 +108,6 @@ import ch.ethz.idsc.tensor.sca.Round;
             FontMetrics fontMetrics = graphics.getFontMetrics();
             int fheight = fontMetrics.getAscent();
             int index = 0;
-            Tensor shape = geodesicDisplay.shape();
             for (Tensor q : controlPoints) {
               Tensor matrix = geodesicDisplay.matrixLift(q);
               geometricLayer.pushMatrix(matrix);
@@ -133,9 +122,8 @@ import ch.ethz.idsc.tensor.sca.Round;
             }
           }
         }
-        ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), Tensors.of(origin)).render(geometricLayer, graphics);
-        POINTS_RENDER_0.show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), controlPointsAll.extract(1, controlPointsAll.length()))
-            .render(geometricLayer, graphics);
+        ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, shape.multiply(RealScalar.of(1.4)), Tensors.of(origin)).render(geometricLayer, graphics);
+        POINTS_RENDER_0.show(geodesicDisplay::matrixLift, shape, controlPointsAll.extract(1, controlPointsAll.length())).render(geometricLayer, graphics);
       }
     }
   }

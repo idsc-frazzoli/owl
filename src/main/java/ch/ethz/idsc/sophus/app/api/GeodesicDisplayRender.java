@@ -6,10 +6,10 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RadialGradientPaint;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Tensor;
@@ -45,7 +45,11 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       graphics.fill(geometricLayer.toPath2D(box));
     } else //
     if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
-      AxesRender.INSTANCE.render(geometricLayer, graphics);
+      Point2D point2d = geometricLayer.toPoint2D(0, 0);
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.fill(new Rectangle( //
+          (int) point2d.getX(), //
+          (int) point2d.getY(), 1, 1));
     }
   }
 

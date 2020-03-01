@@ -19,6 +19,8 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   BIINVARIANT(RnBiinvariantCoordinate.INSTANCE), //
   BIINVARIANT2(RnBiinvariantCoordinate.SQUARED), //
+  BIINVARIANTD(RnBiinvariantCoordinate.DIAGONAL), //
+  BIINVARIANTD2(RnBiinvariantCoordinate.DIAGONAL_SQUARED), //
   INVERSE_DISTANCE(RnInverseDistanceCoordinate.INSTANCE), //
   INVERSE_DISTANCE2(RnInverseDistanceCoordinate.SQUARED), //
   AFFINE(AffineCoordinate.INSTANCE), //
@@ -28,6 +30,7 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
       BIINVARIANT, BIINVARIANT2, //
+      BIINVARIANTD, BIINVARIANTD2, //
       INVERSE_DISTANCE, INVERSE_DISTANCE2, //
       AFFINE, SHEPARD, SHEPARD2 };
   private final BarycentricCoordinate barycentricCoordinate;
