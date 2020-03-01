@@ -75,6 +75,7 @@ import ch.ethz.idsc.tensor.io.Timing;
       LeverRender leverRender = new LeverRender( //
           geodesicDisplay, controlPoints.extract(1, controlPoints.length()), controlPoints.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
+      leverRender.renderWeights();
       leverRender.renderSequence();
       leverRender.renderOrigin();
     }

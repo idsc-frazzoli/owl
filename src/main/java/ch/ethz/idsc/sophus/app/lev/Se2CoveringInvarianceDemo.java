@@ -50,7 +50,9 @@ import ch.ethz.idsc.tensor.Tensors;
       {
         LeverRender leverRender = new LeverRender(geodesicDisplay, controlPointsAll.extract(1, controlPointsAll.length()), controlPointsAll.get(0),
             geometricLayer, graphics);
+        leverRender.renderSequence();
         leverRender.renderLevers();
+        leverRender.renderWeights();
         leverRender.renderOrigin();
       }
       try {
@@ -58,7 +60,10 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
         Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
         LeverRender leverRender = new LeverRender(geodesicDisplay, result.extract(1, result.length()), result.get(0), geometricLayer, graphics);
+        leverRender.renderSequence();
         leverRender.renderLevers();
+        leverRender.renderWeights();
+        leverRender.renderOrigin();
         geometricLayer.popMatrix();
       } catch (Exception exception) {
         exception.printStackTrace();

@@ -39,7 +39,9 @@ import ch.ethz.idsc.tensor.Tensors;
       LeverRender leverRender = new LeverRender(geodesicDisplay, controlPointsAll.extract(1, controlPointsAll.length()), controlPointsAll.get(0),
           geometricLayer, graphics);
       leverRender.renderLevers();
+      leverRender.renderWeights();
       leverRender.renderSequence();
+      leverRender.renderOrigin();
     }
   }
 

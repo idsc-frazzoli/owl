@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.BasicStroke;
@@ -8,7 +9,6 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
@@ -62,44 +62,42 @@ public class LeverRender {
   }
 
   public void renderLevers() {
-    GraphicsUtil.setQualityHigh(graphics);
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     if (geodesicDisplay.dimensions() < sequence.length()) {
-      { // draw geodesics
-        int index = 0;
-        Tensor rescale = Rescale.of(weights);
-        for (Tensor q : sequence) {
-          ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, q);
-          graphics.setStroke(STROKE);
-          Tensor domain = Subdivide.of(0, 1, 21);
-          Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
-          Tensor rgba = COLOR_DATA_GRADIENT.apply(Clips.unit().apply(rescale.Get(index)));
-          graphics.setColor(ColorFormat.toColor(rgba));
-          graphics.draw(geometricLayer.toPath2D(ms));
-          ++index;
-        }
-        graphics.setStroke(new BasicStroke());
+      int index = 0;
+      Tensor rescale = Rescale.of(getWeights());
+      for (Tensor q : sequence) {
+        ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, q);
+        graphics.setStroke(STROKE);
+        Tensor domain = Subdivide.of(0, 1, 21);
+        Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
+        Tensor rgba = COLOR_DATA_GRADIENT.apply(Clips.unit().apply(rescale.Get(index)));
+        graphics.setColor(ColorFormat.toColor(rgba));
+        graphics.draw(geometricLayer.toPath2D(ms));
+        ++index;
       }
-      {
-        graphics.setFont(ArrayPlotRender.FONT);
-        FontMetrics fontMetrics = graphics.getFontMetrics();
-        int fheight = fontMetrics.getAscent();
-        int index = 0;
-        for (Tensor q : sequence) {
-          Tensor matrix = geodesicDisplay.matrixLift(q);
-          geometricLayer.pushMatrix(matrix);
-          Path2D path2d = geometricLayer.toPath2D(shape, true);
-          graphics.setColor(Color.BLACK);
-          Rectangle rectangle = path2d.getBounds();
-          Scalar rounded = Round._2.apply(weights.Get(index));
-          String string = " " + rounded.toString();
-          graphics.drawString(string, //
-              rectangle.x + rectangle.width, //
-              rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2);
-          geometricLayer.popMatrix();
-          ++index;
-        }
-      }
+      graphics.setStroke(new BasicStroke());
+    }
+  }
+
+  public void renderWeights() {
+    graphics.setFont(ArrayPlotRender.FONT);
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    int fheight = fontMetrics.getAscent();
+    int index = 0;
+    for (Tensor q : sequence) {
+      Tensor matrix = geodesicDisplay.matrixLift(q);
+      geometricLayer.pushMatrix(matrix);
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      graphics.setColor(Color.BLACK);
+      Rectangle rectangle = path2d.getBounds();
+      Scalar rounded = Round._2.apply(getWeights().Get(index));
+      String string = " " + rounded.toString();
+      graphics.drawString(string, //
+          rectangle.x + rectangle.width, //
+          rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2);
+      geometricLayer.popMatrix();
+      ++index;
     }
   }
 
@@ -110,5 +108,9 @@ public class LeverRender {
   public void renderOrigin() {
     ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, shape.multiply(RealScalar.of(1.2)), Tensors.of(origin)) //
         .render(geometricLayer, graphics);
+  }
+
+  public Tensor getWeights() {
+    return weights;
   }
 }

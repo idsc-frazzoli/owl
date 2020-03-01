@@ -187,12 +187,16 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     // TODO API needs comments and better naming
   }
 
+  /** when positioning is disabled, the mouse position is not indicated graphically
+   * 
+   * @param enabled */
   public void setPositioningEnabled(boolean enabled) {
     if (!enabled)
       min_index = null;
     mousePositioning = enabled;
   }
 
+  /** @return */
   public boolean isPositioningEnabled() {
     return mousePositioning;
   }
