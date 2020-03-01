@@ -12,13 +12,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 public class S1GeodesicDisplay extends SnGeodesicDisplay {
   public static final GeodesicDisplay INSTANCE = new S1GeodesicDisplay();
 
+  /***************************************************/
   private S1GeodesicDisplay() {
-    // ---
-  }
-
-  @Override
-  public int dimensions() {
-    return 1;
+    super(1);
   }
 
   @Override // from GeodesicDisplay

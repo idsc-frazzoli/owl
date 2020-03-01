@@ -21,10 +21,20 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05));
+  private final int dimensions;
+
+  public SnGeodesicDisplay(int dimensions) {
+    this.dimensions = dimensions;
+  }
 
   @Override // from GeodesicDisplay
   public final GeodesicInterface geodesicInterface() {
     return SnGeodesic.INSTANCE;
+  }
+
+  @Override
+  public final int dimensions() {
+    return dimensions;
   }
 
   @Override // from GeodesicDisplay
@@ -54,7 +64,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final BarycentricCoordinate barycentricCoordinate() {
-    return SnInverseDistanceCoordinate.INSTANCE;
+    return SnInverseDistanceCoordinate.SQUARED;
   }
 
   @Override

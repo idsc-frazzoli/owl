@@ -81,7 +81,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BarycentricCoordinate barycentricCoordinate() {
-    return StBiinvariantCoordinate.INSTANCE;
+    return StBiinvariantCoordinate.SQUARED;
   }
 
   @Override // from Object

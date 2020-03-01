@@ -91,7 +91,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return So3InverseDistanceCoordinate.INSTANCE;
+    return So3InverseDistanceCoordinate.SQUARED;
   }
 
   @Override

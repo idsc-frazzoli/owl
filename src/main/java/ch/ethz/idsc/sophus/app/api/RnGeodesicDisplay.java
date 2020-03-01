@@ -61,7 +61,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final BarycentricCoordinate barycentricCoordinate() {
-    return RnInverseDistanceCoordinate.INSTANCE;
+    return RnInverseDistanceCoordinate.SQUARED;
   }
 
   @Override // from Object

@@ -17,38 +17,42 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
-  INSTANCE;
-
+public class Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
+  public static final GeodesicDisplay INSTANCE = new Se2CoveringGeodesicDisplay();
+
+  /***************************************************/
+  protected Se2CoveringGeodesicDisplay() {
+    // ---
+  }
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
     return Se2CoveringGeodesic.INSTANCE;
   }
 
-  @Override
-  public int dimensions() {
+  @Override // from GeodesicDisplay
+  public final int dimensions() {
     return 3;
   }
 
   @Override // from GeodesicDisplay
-  public Tensor shape() {
+  public final Tensor shape() {
     return ARROWHEAD;
   }
 
   @Override // from GeodesicDisplay
-  public Tensor project(Tensor xya) {
+  public final Tensor project(Tensor xya) {
     return xya;
   }
 
   @Override // from GeodesicDisplay
-  public Tensor toPoint(Tensor p) {
+  public final Tensor toPoint(Tensor p) {
     return p.extract(0, 2);
   }
 
   @Override // from GeodesicDisplay
-  public Tensor matrixLift(Tensor p) {
+  public final Tensor matrixLift(Tensor p) {
     return Se2Matrix.of(p);
   }
 
@@ -58,7 +62,7 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
+  public final LieExponential lieExponential() {
     return Se2CoveringExponential.INSTANCE;
   }
 
@@ -72,7 +76,7 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
     return Se2CoveringBiinvariantMean.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public BarycentricCoordinate barycentricCoordinate() {
     return Se2CoveringBiinvariantCoordinate.SQUARED;
   }

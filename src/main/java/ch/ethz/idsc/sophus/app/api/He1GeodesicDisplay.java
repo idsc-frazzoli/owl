@@ -78,7 +78,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return HeBiinvariantCoordinate.INSTANCE;
+    return HeBiinvariantCoordinate.SQUARED;
   }
 
   @Override

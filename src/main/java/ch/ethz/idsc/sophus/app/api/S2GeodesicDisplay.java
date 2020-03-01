@@ -29,12 +29,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   /***************************************************/
   private S2GeodesicDisplay() {
-    // ---
-  }
-
-  @Override
-  public int dimensions() {
-    return 2;
+    super(2);
   }
 
   /** @param xyz normalized vector
