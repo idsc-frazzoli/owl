@@ -3,71 +3,92 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
 
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.jph.ArrayPlotRender;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
-import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class Se2CoveringInvarianceDemo extends LeversDemo {
+/* package */ class Se2CoveringAnimationDemo extends LeversDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
-  private final JTextField jTextField = new JTextField();
+  private final JToggleButton jToggleAnimate = new JToggleButton("animate");
+  private final Timing timing = Timing.started();
+  // ---
+  private Tensor snapshotUncentered;
+  private Tensor snapshot;
 
-  public Se2CoveringInvarianceDemo() {
+  public Se2CoveringAnimationDemo() {
     super(GeodesicDisplays.SE2C_ONLY);
     {
       timerFrame.jToolBar.add(jToggleAxes);
+      jToggleAxes.setSelected(true);
     }
     {
-      jTextField.setText("{1, 1, 1}");
-      jTextField.setPreferredSize(new Dimension(100, 28));
-      timerFrame.jToolBar.add(jTextField);
+      jToggleAnimate.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          if (jToggleAnimate.isSelected()) {
+            snapshotUncentered = getControlPointsSe2();
+            Tensor controlPointsAll = getGeodesicControlPoints();
+            if (0 < controlPointsAll.length()) {
+              GeodesicDisplay geodesicDisplay = geodesicDisplay();
+              LieGroup lieGroup = geodesicDisplay.lieGroup();
+              LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
+              Tensor origin = controlPointsAll.get(0);
+              snapshot = lieGroupOps.allLeft(controlPointsAll, lieGroup.element(origin).inverse().toCoordinate());
+            }
+          } else
+            setControlPointsSe2(snapshotUncentered);
+        }
+      });
+      timerFrame.jToolBar.add(jToggleAnimate);
     }
-    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}, {-3, 0, 0}}"));
+  }
+
+  private static Tensor random(double toc, int index) {
+    return Tensors.vector( //
+        SimplexContinuousNoise.FUNCTION.at(toc, index, 0) * 3, //
+        SimplexContinuousNoise.FUNCTION.at(toc, index, 1) * 3, //
+        SimplexContinuousNoise.FUNCTION.at(toc, index, 2));
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
-    Tensor controlPointsAll = getGeodesicControlPoints();
-    new Flush(geodesicDisplay, controlPointsAll).render(geometricLayer, graphics);
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
-    if (0 < controlPointsAll.length())
-      try {
-        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
-        Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
-        Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
-        new Flush(geodesicDisplay, result).render(geometricLayer, graphics);
-        geometricLayer.popMatrix();
-      } catch (Exception exception) {
-        exception.printStackTrace();
-      }
+    Tensor controlPointsAll = getGeodesicControlPoints();
+    if (jToggleAnimate.isSelected())
+      if (0 < controlPointsAll.length())
+        setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
+    GraphicsUtil.setQualityHigh(graphics);
+    new Flush(geodesicDisplay, controlPointsAll).render(geometricLayer, graphics);
   }
 
   public static class Flush implements RenderInterface {
@@ -122,13 +143,13 @@ import ch.ethz.idsc.tensor.sca.Round;
             }
           }
         }
-        ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, shape.multiply(RealScalar.of(1.4)), Tensors.of(origin)).render(geometricLayer, graphics);
+        ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, shape.multiply(RealScalar.of(1.2)), Tensors.of(origin)).render(geometricLayer, graphics);
         POINTS_RENDER_0.show(geodesicDisplay::matrixLift, shape, controlPointsAll.extract(1, controlPointsAll.length())).render(geometricLayer, graphics);
       }
     }
   }
 
   public static void main(String[] args) {
-    new Se2CoveringInvarianceDemo().setVisible(1200, 600);
+    new Se2CoveringAnimationDemo().setVisible(1200, 600);
   }
 }
