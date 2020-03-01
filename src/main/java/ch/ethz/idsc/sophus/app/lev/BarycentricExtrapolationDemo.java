@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 public class BarycentricExtrapolationDemo extends ControlPointsDemo {
-  static final Stroke STROKE = //
+  private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 
   public BarycentricExtrapolationDemo() {
