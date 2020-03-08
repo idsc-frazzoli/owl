@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -17,7 +19,7 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class Se2CoveringGeodesicDisplay implements GeodesicDisplay {
+public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
   public static final GeodesicDisplay INSTANCE = new Se2CoveringGeodesicDisplay();
 

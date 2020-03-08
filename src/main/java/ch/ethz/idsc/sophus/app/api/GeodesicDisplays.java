@@ -22,6 +22,19 @@ public enum GeodesicDisplays {
       He1GeodesicDisplay.INSTANCE, //
       St1GeodesicDisplay.INSTANCE);
   // ---
+  public static final List<GeodesicDisplay> WITHOUT_Sn_SO3 = Arrays.asList( //
+      CommonClothoidDisplay.INSTANCE, //
+      ClothoidDisplay.INSTANCE, //
+      PolarClothoidDisplay.INSTANCE, //
+      Se2CoveringGeodesicDisplay.INSTANCE, //
+      Se2GeodesicDisplay.INSTANCE, //
+      Spd2GeodesicDisplay.INSTANCE, //
+      R2GeodesicDisplay.INSTANCE, //
+      R3GeodesicDisplay.INSTANCE, //
+      H2GeodesicDisplay.INSTANCE, //
+      He1GeodesicDisplay.INSTANCE, //
+      St1GeodesicDisplay.INSTANCE);
+  // ---
   /** lie groups */
   public static final List<GeodesicDisplay> LIE_GROUPS = Arrays.asList( //
       Se2CoveringGeodesicDisplay.INSTANCE, //

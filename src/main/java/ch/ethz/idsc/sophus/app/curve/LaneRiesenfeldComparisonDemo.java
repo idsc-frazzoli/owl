@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
   private final List<PathRender> pathRenders = new ArrayList<>();
 
   public LaneRiesenfeldComparisonDemo() {
-    this(GeodesicDisplays.ALL);
+    this(GeodesicDisplays.WITHOUT_Sn_SO3);
   }
 
   public LaneRiesenfeldComparisonDemo(List<GeodesicDisplay> list) {

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,13 +15,18 @@ public class GeodesicDisplaysTest extends TestCase {
     assertTrue(12 <= GeodesicDisplays.ALL.size());
   }
 
-  public void testToPoint() throws ClassNotFoundException, IOException {
-    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.ALL) {
-      Tensor xya = Tensors.vector(1, 2, 3);
-      Tensor p = Serialization.copy(geodesicDisplay).project(xya);
-      VectorQ.requireLength(geodesicDisplay.toPoint(p), 2);
-      Tensor matrix = geodesicDisplay.matrixLift(p);
-      assertEquals(Dimensions.of(matrix), Arrays.asList(3, 3));
-    }
+  public void testToPoint() {
+    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.ALL)
+      try {
+        Tensor xya = Tensors.vector(1, 2, 3);
+        Tensor p = Serialization.copy(geodesicDisplay).project(xya);
+        VectorQ.requireLength(geodesicDisplay.toPoint(p), 2);
+        Tensor matrix = geodesicDisplay.matrixLift(p);
+        assertEquals(Dimensions.of(matrix), Arrays.asList(3, 3));
+      } catch (Exception exception) {
+        System.out.println(geodesicDisplay);
+        exception.printStackTrace();
+        fail();
+      }
   }
 }

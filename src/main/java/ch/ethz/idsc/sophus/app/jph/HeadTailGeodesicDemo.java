@@ -53,10 +53,14 @@ import ch.ethz.idsc.tensor.sca.Round;
     Tensor xys = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
     graphics.setColor(new Color(128, 255, 0));
     graphics.draw(geometricLayer.toPath2D(xys, false));
-    Scalar pseudoDistance = geodesicDisplay.parametricDistance(p, q);
-    {
-      graphics.setColor(Color.DARK_GRAY);
-      graphics.drawString("" + pseudoDistance.map(Round._4), 10, 20);
+    try {
+      Scalar pseudoDistance = geodesicDisplay.parametricDistance(p, q);
+      {
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.drawString("" + pseudoDistance.map(Round._4), 10, 20);
+      }
+    } catch (Exception exception) {
+      // ---
     }
     // ---
     graphics.setColor(Color.LIGHT_GRAY);
