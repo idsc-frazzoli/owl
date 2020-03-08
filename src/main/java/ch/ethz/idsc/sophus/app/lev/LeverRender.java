@@ -113,4 +113,12 @@ public class LeverRender {
   public Tensor getWeights() {
     return weights;
   }
+
+  public Tensor getSequence() {
+    return sequence;
+  }
+
+  public Tensor getOrigin() {
+    return origin;
+  }
 }

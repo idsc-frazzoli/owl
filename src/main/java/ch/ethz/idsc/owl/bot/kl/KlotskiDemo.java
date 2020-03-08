@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.RED_DONKEY.create();
+    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     KlotskiSolution klotskiSolution = klotskiDemo.compute();
     Export.object(solutionFile(klotskiProblem), klotskiSolution);
