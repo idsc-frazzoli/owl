@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PolarClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.ErfClothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.red.Nest;
       jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     }
     {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, 3);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ErfClothoids.INSTANCE, 3);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
       new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

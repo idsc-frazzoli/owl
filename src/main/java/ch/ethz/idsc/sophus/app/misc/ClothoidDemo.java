@@ -4,17 +4,19 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.ErfClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.CommonClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.ErfClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Legendre3Clothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -30,7 +32,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, degree)
+/** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, degree)
  * in order to connect two points p and q, then the (odd) degree has little influence on the
  * resulting curve. The difference is only noticeable for S shaped curves.
  * 
@@ -42,6 +44,12 @@ import ch.ethz.idsc.tensor.red.Nest;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
   private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 255, 128, 64));
+  private final JToggleButton jToggleButton = new JToggleButton("all");
+
+  public ClothoidDemo() {
+    jToggleButton.setSelected(true);
+    timerFrame.jToolBar.add(jToggleButton);
+  }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -56,39 +64,46 @@ import ch.ethz.idsc.tensor.red.Nest;
       geometricLayer.popMatrix();
     }
     {
-      Tensor points = DOMAIN.map(Clothoids.INSTANCE.curve(START, mouse));
+      Tensor points = DOMAIN.map(ErfClothoids.INSTANCE.curve(START, mouse));
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
     }
-    int count = 1;
-    for (int degree = 1; degree <= 5; degree += 2) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, degree);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
-      new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
+    {
+      Tensor points = DOMAIN.map(Legendre3Clothoids.INSTANCE.curve(START, mouse));
+      new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      ++count;
     }
-    { // polar clothoid
-      ScalarTensorFunction curve = //
-          PolarClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
-      {
-        Tensor points = DOMAIN.map(curve);
-        new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+    if (jToggleButton.isSelected()) {
+      int count = 1;
+      for (int degree = 1; degree <= 5; degree += 2) {
+        CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ErfClothoids.INSTANCE, degree);
+        Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
+        new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
+        ++count;
       }
-      POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
-          .render(geometricLayer, graphics);
-    }
-    { // common clothoid
-      ScalarTensorFunction curve = //
-          CommonClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
-      {
-        Tensor points = DOMAIN.map(curve);
-        new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
-            .setCurve(points, false).render(geometricLayer, graphics);
+      { // polar clothoid
+        ScalarTensorFunction curve = //
+            PolarClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+        {
+          Tensor points = DOMAIN.map(curve);
+          new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+              .setCurve(points, false).render(geometricLayer, graphics);
+        }
+        POINTS_RENDER_P.show(ErfClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+            .render(geometricLayer, graphics);
       }
-      POINTS_RENDER_C.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
-          .render(geometricLayer, graphics);
+      { // common clothoid
+        ScalarTensorFunction curve = //
+            Legendre3Clothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+        {
+          Tensor points = DOMAIN.map(curve);
+          new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
+              .setCurve(points, false).render(geometricLayer, graphics);
+        }
+        POINTS_RENDER_C.show(ErfClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+            .render(geometricLayer, graphics);
+      }
     }
   }
 

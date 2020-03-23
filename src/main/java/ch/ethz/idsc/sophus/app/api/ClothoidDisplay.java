@@ -1,8 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -10,24 +11,16 @@ import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum ClothoidDisplay implements GeodesicDisplay {
-  INSTANCE;
-
+public abstract class ClothoidDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
 
-  @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
-    return Clothoids.INSTANCE;
-  }
-
   @Override
-  public int dimensions() {
+  public final int dimensions() {
     return 3;
   }
 
@@ -72,12 +65,10 @@ public enum ClothoidDisplay implements GeodesicDisplay {
   }
 
   @Override
-  public BarycentricCoordinate barycentricCoordinate() {
+  public final BarycentricCoordinate barycentricCoordinate() {
     throw new UnsupportedOperationException();
   }
 
-  @Override // from Object
-  public String toString() {
-    return "Cl";
-  }
+  @Override
+  public abstract String toString();
 }

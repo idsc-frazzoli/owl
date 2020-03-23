@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.ErfClothoids;
 import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,13 +18,13 @@ public class ClothoidDisplayTest extends TestCase {
     // 4 2.564420707620397
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor q = Tensors.vector(0, 2, 0);
-    Scalar scalar = ClothoidDisplay.INSTANCE.parametricDistance(p, q);
+    Scalar scalar = ErfClothoidDisplay.INSTANCE.parametricDistance(p, q);
     Clips.interval(2.58, 2.59).requireInside(scalar);
     Scalar result = Se2ParametricDistance.INSTANCE.distance(p, q);
     assertEquals(result, RealScalar.of(2));
   }
 
   public void testInstance() {
-    assertEquals(ClothoidDisplay.INSTANCE.geodesicInterface(), Clothoids.INSTANCE);
+    assertEquals(ErfClothoidDisplay.INSTANCE.geodesicInterface(), ErfClothoids.INSTANCE);
   }
 }

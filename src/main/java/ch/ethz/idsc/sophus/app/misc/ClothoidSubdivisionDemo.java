@@ -10,11 +10,11 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.ErfClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.CommonClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.ErfClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Legendre3Clothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     // }
     int count = 0;
     for (int degree = 1; degree <= 5; degree += 7) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, degree);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ErfClothoids.INSTANCE, degree);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
@@ -83,18 +83,18 @@ import ch.ethz.idsc.tensor.red.Nest;
         new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_P.show(ErfClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
     { // common clothoid
       ScalarTensorFunction curve = //
-          CommonClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+          Legendre3Clothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       {
         Tensor points = DOMAIN.map(curve);
         new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      POINTS_RENDER_C.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_C.show(ErfClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
   }

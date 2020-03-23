@@ -158,6 +158,15 @@ Clothoid
 </tr>
 </table>
 
+### Visualization of Geodesic Averages
+
+![deboor5](https://user-images.githubusercontent.com/4012178/51075948-ade4cc80-1692-11e9-9c9a-1e75084df796.png)
+
+A geodesic average is the generalization of an affine combination from the Euclidean space to a non-linear space.
+A geodesic average consists of a nested binary averages.
+Generally, an affine combination does not have a unique expression as a geodesic average.
+Instead, several geodesic averages reduce to the same affine combination when applied in Euclidean space. 
+
 ## Integration
 
 Specify `repository` and `dependency` of the owl library in the `pom.xml` file of your maven project:
