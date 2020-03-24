@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.owl.lane.StableLanes;
-import ch.ethz.idsc.sophus.app.api.ErfClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.curve.BaseCurvatureDemo;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 
   public LaneConsumptionDemo(Collection<Consumer<LaneInterface>> consumers) {
     super(Arrays.asList( //
-        ErfClothoidDisplay.INSTANCE, //
+        ClothoidDisplay.INSTANCE, //
         Se2CoveringGeodesicDisplay.INSTANCE, //
         Se2GeodesicDisplay.INSTANCE));
     jToggleCurvature.setSelected(false);

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
@@ -25,8 +25,8 @@ public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
 
   static Scalar transitionCost(Tensor p, Tensor q, Tensor r) {
     return AbsSquared.between( //
-        ClothoidTerminalRatios.tail(p, q), //
-        ClothoidTerminalRatios.head(q, r));
+        new Clothoid(p, q).new Curvature().tail(), //
+        new Clothoid(q, r).new Curvature().head());
   }
 
   @Override // from TransitionCostFunction

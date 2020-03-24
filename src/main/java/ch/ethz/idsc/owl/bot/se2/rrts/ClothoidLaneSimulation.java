@@ -36,7 +36,7 @@ import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.app.api.ErfClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static final Scalar OVERHEAD = RealScalar.of(.5);
   private static final Scalar MIN_RESOLUTION = RealScalar.of(.1);
   // ---
-  private static final GeodesicDisplay GEODESIC_DISPLAY = ErfClothoidDisplay.INSTANCE;
+  private static final GeodesicDisplay GEODESIC_DISPLAY = ClothoidDisplay.INSTANCE;
   private static final int DEGREE = 3;
   private static final int LEVELS = 5;
   private static final Scalar LANE_WIDTH = RealScalar.of(1.1);

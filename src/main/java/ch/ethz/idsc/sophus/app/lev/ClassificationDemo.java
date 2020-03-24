@@ -17,13 +17,14 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 /* package */ class ClassificationDemo extends AbstractHoverDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_O = ColorDataLists._097.cyclic();
   private static final ColorDataIndexed COLOR_DATA_INDEXED_T = COLOR_DATA_INDEXED_O.deriveWithAlpha(128);
-  private Classification argMaxClassification;
+  private Classification classification;
 
   @Override
   void shuffle(int n) {
     super.shuffle(n);
+    // assignment of random labels to points
     Tensor vector = RandomVariate.of(DiscreteUniformDistribution.of(0, 3), RANDOM, n);
-    argMaxClassification = new Classification(vector);
+    classification = new Classification(vector);
   }
 
   @Override // from RenderInterface
@@ -35,13 +36,13 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     leverRender.renderLevers();
     // ---
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.4));
-    for (int label = 0; label < argMaxClassification.size(); ++label) {
-      Tensor sequence = Tensor.of(argMaxClassification.labelIndices(label).mapToObj(controlPoints::get));
+    for (int label = 0; label < classification.size(); ++label) {
+      Tensor sequence = Tensor.of(classification.labelIndices(label).mapToObj(controlPoints::get));
       PointsRender pointsRender = new PointsRender( //
           COLOR_DATA_INDEXED_T.getColor(label), //
           COLOR_DATA_INDEXED_O.getColor(label));
       pointsRender.show(geodesicDisplay::matrixLift, shape, sequence).render(geometricLayer, graphics);
-      int bestLabel = argMaxClassification.getArgMax(leverRender.getWeights());
+      int bestLabel = classification.getArgMax(leverRender.getWeights());
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicMouse));
       Path2D path2d = geometricLayer.toPath2D(shape, true);
       graphics.setColor(COLOR_DATA_INDEXED_T.getColor(bestLabel));

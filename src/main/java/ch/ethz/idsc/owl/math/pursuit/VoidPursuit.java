@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.Tensors;
 public enum VoidPursuit implements PursuitInterface {
   INSTANCE;
 
-  @Override // from GeodesicPursuitInterface
+  @Override // from PursuitInterface
   public Optional<Scalar> firstRatio() {
     return Optional.empty();
   }
 
-  @Override // from GeodesicPursuitInterface
+  @Override // from PursuitInterface
   public Tensor ratios() {
     return Tensors.empty();
   }

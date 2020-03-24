@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     Curvature curvature = clothoid.new Curvature();
     if (isCompliant.test(curvature.head()) && //
         isCompliant.test(curvature.tail()))
-      return clothoid.legendre3().length();
+      return clothoid.length();
     // TODO GJOEL filter out via collision check, units
     if (xya.Get(0) instanceof Quantity)
       return Quantity.of(DoubleScalar.POSITIVE_INFINITY, ((Quantity) xya.Get(0)).unit());

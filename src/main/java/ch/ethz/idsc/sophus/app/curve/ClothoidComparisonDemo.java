@@ -10,27 +10,28 @@ import java.awt.geom.Rectangle2D;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PolarClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.ErfClothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.red.Nest;
 
 /** demo compares conventional clothoid approximation with extended winding
  * number clothoid approximation to generate figures in report:
@@ -45,6 +46,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    AxesRender.INSTANCE.render(geometricLayer, graphics);
     GraphicsUtil.setQualityHigh(graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
@@ -64,25 +66,44 @@ import ch.ethz.idsc.tensor.red.Nest;
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.drawString("extended", 0, 34);
     }
+    GeodesicDisplay geodesicDisplay = PolarClothoidDisplay.INSTANCE;
+    // {
+    // CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, 3);
+    // Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
+    // new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
+    // .setCurve(points, false).render(geometricLayer, graphics);
+    //
+    // Tensor tensor = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
+    // CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
+    // curveVisualSet.addCurvature();
+    // VisualSet visualSet = curveVisualSet.visualSet();
+    // JFreeChart jFreeChart = ListPlot.of(visualSet);
+    // Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+    // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+    // }
     {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, 3);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
-      new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-          .setCurve(points, false).render(geometricLayer, graphics);
-      GeodesicDisplay geodesicDisplay = PolarClothoidDisplay.INSTANCE;
+      Curvature curvature = new Clothoid(START, mouse).new Curvature();
+      Tensor points = ClothoidTransition.of(START, mouse).linearized(RealScalar.of(0.1));
+      new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
+          .setCurve(points, false) //
+          .render(geometricLayer, graphics);
       Tensor tensor = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature();
       VisualSet visualSet = curveVisualSet.visualSet();
+      {
+        Tensor domain = curveVisualSet.getArcLength1();
+        visualSet.add(domain, ConstantArray.of(curvature.head(), domain.length()));
+        visualSet.add(domain, ConstantArray.of(curvature.tail(), domain.length()));
+      }
+      {
+        Tensor domain = curveVisualSet.getArcLength1();
+        Scalar head = curvature.head();
+        visualSet.add(domain, domain.map(s -> head));
+      }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
       jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
-    }
-    {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ErfClothoids.INSTANCE, 3);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
-      new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
-          .setCurve(points, false).render(geometricLayer, graphics);
     }
   }
 

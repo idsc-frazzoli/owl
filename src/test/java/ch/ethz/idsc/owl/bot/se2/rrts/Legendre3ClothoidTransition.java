@@ -1,38 +1,37 @@
-// code by gjoel, jph
+// code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.math.Distances;
 import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Drop;
-import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class ClothoidTransition extends AbstractTransition {
-  private static final Scalar _0 = RealScalar.of(0.0);
-  private static final Scalar _1 = RealScalar.of(1.0);
-
+/** gjoel used a transition based on subdivision
+ * 
+ * DECOMMISSIONED */
+/* package */ class Legendre3ClothoidTransition extends AbstractTransition {
   /** @param start of the form {px, py, p_angle}
    * @param end of the form {qx, qy, q_angle}
    * @return */
-  public static ClothoidTransition of(Tensor start, Tensor end) {
-    return new ClothoidTransition(start, end, new Clothoid(start, end));
+  public static Legendre3ClothoidTransition of(Tensor start, Tensor end) {
+    return new Legendre3ClothoidTransition(start, end, new Clothoid(start, end));
   }
 
   /***************************************************/
-  private final Clothoid clothoid;
-
-  private ClothoidTransition(Tensor start, Tensor end, Clothoid clothoid) {
-    super(start, end, clothoid.length());
-    this.clothoid = clothoid;
+  private Legendre3ClothoidTransition(Tensor start, Tensor end, Clothoid curve) {
+    super(start, end, curve.length());
   }
 
   @Override // from Transition
@@ -52,10 +51,12 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return Subdivide.of(_0, _1, 1 + Floor.FUNCTION.apply(length().divide(minResolution)).number().intValue()).map(clothoid);
+    /* investigation has shown that midpoint splits result in clothoid segments of approximately equal length */
+    return Nest.of(Clothoids.CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
+        IntegerLog2.ceiling(Math.max(1, Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue())));
   }
 
   public HeadTailInterface terminalRatios() {
-    return clothoid.new Curvature();
+    return new Clothoid(start(), end()).new Curvature();
   }
 }

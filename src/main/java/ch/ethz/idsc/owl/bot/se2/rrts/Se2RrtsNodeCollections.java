@@ -16,7 +16,7 @@ public enum Se2RrtsNodeCollections {
   private static final Scalar ZERO = RealScalar.of(0.0);
 
   /** Hint:
-   * functionality for {@link ClothoidTransitionSpace} and {@link DubinsTransitionSpace}
+   * functionality for {@link Legendre3ClothoidTransitionSpace} and {@link DubinsTransitionSpace}
    * 
    * @param transitionSpace
    * @param lbounds vector of length 2
