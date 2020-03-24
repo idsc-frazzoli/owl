@@ -21,7 +21,7 @@ public class ClothoidCurvatureQuery implements TransitionRegionQuery, Serializab
   @Override // from TransitionRegionQuery
   public boolean isDisjoint(Transition transition) {
     ClothoidTransition clothoidTransition = (ClothoidTransition) transition;
-    HeadTailInterface headTailInterface = clothoidTransition.terminalRatios();
+    HeadTailInterface headTailInterface = clothoidTransition.curvature();
     return clip.isInside(headTailInterface.head()) //
         && clip.isInside(headTailInterface.tail());
   }

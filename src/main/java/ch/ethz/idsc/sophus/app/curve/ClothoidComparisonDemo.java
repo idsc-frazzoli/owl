@@ -19,7 +19,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PolarClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -82,8 +81,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     // }
     {
-      Curvature curvature = new Clothoid(START, mouse).new Curvature();
-      Tensor points = ClothoidTransition.of(START, mouse).linearized(RealScalar.of(0.1));
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse);
+      Curvature curvature = clothoidTransition.curvature();
+      Tensor points = clothoidTransition.linearized(RealScalar.of(geometricLayer.pixel2modelWidth(5)));
       new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
           .setCurve(points, false) //
           .render(geometricLayer, graphics);

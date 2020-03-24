@@ -4,16 +4,15 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.math.Distances;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
@@ -52,10 +51,16 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return Subdivide.of(_0, _1, 1 + Floor.FUNCTION.apply(length().divide(minResolution)).number().intValue()).map(clothoid);
+    Sign.requirePositive(minResolution);
+    return Subdivide.of(_0, _1, //
+        Math.max(1, Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue())).map(clothoid);
   }
 
-  public HeadTailInterface terminalRatios() {
+  public Clothoid clothoid() {
+    return clothoid;
+  }
+
+  public Curvature curvature() {
     return clothoid.new Curvature();
   }
 }

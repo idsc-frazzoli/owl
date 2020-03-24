@@ -20,7 +20,7 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = Serialization.copy(ClothoidTransition.of(start, end));
-    HeadTailInterface clothoidTerminalRatio = clothoidTransition.terminalRatios();
+    HeadTailInterface clothoidTerminalRatio = clothoidTransition.curvature();
     Scalar head = clothoidTerminalRatio.head();
     Clips.interval(2.5, 2.6).requireInside(head);
   }
@@ -45,18 +45,18 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor end = Tensors.vector(4, 0, 0);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     Chop._12.requireClose(clothoidTransition.length(), RealScalar.of(4));
-    assertEquals(clothoidTransition.sampled(RealScalar.of(2)).length(), 2);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(1.9)).length(), 4);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(2.1)).length(), 2);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(1.9)).length(), 3);
   }
 
   public void testSamplesSteps() {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 32);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 64);
-    assertEquals(clothoidTransition.linearized(RealScalar.of(.2)).length(), 33);
-    assertEquals(clothoidTransition.linearized(RealScalar.of(.1)).length(), 65);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 25);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 50);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(.2)).length(), 26);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(.1)).length(), 51);
   }
 
   public void testFails() {

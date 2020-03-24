@@ -35,7 +35,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
     {
       Scalar res = Quantity.of(.5, "m");
       Tensor samples = transition.sampled(res);
-      assertEquals(16, samples.length());
+      assertEquals(10, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
       assertNotSame(start, samples.get(0));
@@ -56,12 +56,12 @@ public class ClothoidTransitionSpaceTest extends TestCase {
     {
       Scalar res = Quantity.of(.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
-      assertEquals(16, wrap.samples().length());
-      assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
-      assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
+      assertEquals(10, wrap.samples().length());
+      assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(9))));
+      assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(10)), res));
       assertNotSame(start, wrap.samples().get(0));
       assertEquals(end, Last.of(wrap.samples()));
-      assertTrue(wrap.spacing().extract(0, 16).stream().map(Tensor::Get) //
+      assertTrue(wrap.spacing().extract(0, 10).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //
           .allMatch(s -> Scalars.lessEquals(s, res)));
     }

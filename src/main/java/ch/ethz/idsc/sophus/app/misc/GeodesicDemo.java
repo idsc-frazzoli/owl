@@ -43,6 +43,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
     }
+    jToggleButton.setSelected(true);
     timerFrame.jToolBar.add(jToggleButton);
   }
 

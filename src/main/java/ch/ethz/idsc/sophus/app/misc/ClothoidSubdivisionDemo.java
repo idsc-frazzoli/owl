@@ -15,19 +15,15 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.red.Nest;
 
 /** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, degree)
  * in order to connect two points p and q, then the (odd) degree has little influence on the
@@ -54,45 +50,20 @@ import ch.ethz.idsc.tensor.red.Nest;
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
     }
-    // {
-    // Tensor points = DOMAIN.map(Clothoids.INSTANCE.curve(START, mouse));
-    // new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-    // .setCurve(points, false).render(geometricLayer, graphics);
-    // }
-    int count = 0;
-    for (int degree = 1; degree <= 5; degree += 7) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, degree);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
-      new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
-          .setCurve(points, false).render(geometricLayer, graphics);
-      ++count;
-    }
-    for (int degree = 1; degree <= 5; degree += 7) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, degree);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
-      new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
-          .setCurve(points, false).render(geometricLayer, graphics);
-      ++count;
-    }
     { // polar clothoid
-      ScalarTensorFunction curve = //
-          PolarClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
-      {
-        Tensor points = DOMAIN.map(curve);
-        new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
-            .setCurve(points, false).render(geometricLayer, graphics);
-      }
+      ScalarTensorFunction curve = PolarClothoids.INSTANCE.curve(START, mouse);
+      new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+          .setCurve(DOMAIN.map(curve), false) //
+          .render(geometricLayer, graphics);
       POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
     { // common clothoid
       ScalarTensorFunction curve = //
           Clothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
-      {
-        Tensor points = DOMAIN.map(curve);
-        new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
-            .setCurve(points, false).render(geometricLayer, graphics);
-      }
+      new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
+          .setCurve(DOMAIN.map(curve), false) //
+          .render(geometricLayer, graphics);
       POINTS_RENDER_C.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
