@@ -10,8 +10,8 @@ import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.itp.ThinPlateSplineNorm;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantCoordinates;
+import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
 import ch.ethz.idsc.sophus.lie.rn.RnNorm;
@@ -24,12 +24,12 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
-  BIINVARIANT1(RnBiinvariantCoordinate.INSTANCE), //
-  BIINVARIANT2(RnBiinvariantCoordinate.SQUARED), //
-  BIINVARIANTD1(RnBiinvariantCoordinate.DIAGONAL), //
-  BIINVARIANTD2(RnBiinvariantCoordinate.DIAGONAL_SQUARED), //
-  INVERSE_DISTANCE1(RnInverseDistanceCoordinate.INSTANCE), //
-  INVERSE_DISTANCE2(RnInverseDistanceCoordinate.SQUARED), //
+  BIINVARIANT1(RnBiinvariantCoordinates.LINEAR), //
+  BIINVARIANT2(RnBiinvariantCoordinates.SMOOTH), //
+  BIINVARIANTD1(RnBiinvariantCoordinates.DIAGONAL), //
+  BIINVARIANTD2(RnBiinvariantCoordinates.DIAGONAL_SQUARED), //
+  INVERSE_DISTANCE1(RnInverseDistanceCoordinates.LINEAR), //
+  INVERSE_DISTANCE2(RnInverseDistanceCoordinates.SMOOTH), //
   AFFINE(AffineCoordinate.INSTANCE), //
   SHEPARD1(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
@@ -37,7 +37,7 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   RBF_INV_MULTI(new RadialBasisFunctionWeighting(new InverseMultiquadricNorm(RealScalar.of(5)))), //
   RBF_TPS(new RadialBasisFunctionWeighting(new ThinPlateSplineNorm(RealScalar.of(5)))), //
   RBF_GAUSS(new RadialBasisFunctionWeighting(new GaussianRadialBasisFunction(RealScalar.of(5)))), //
-  KRIGING(new KrigingWeighting(RnNorm.INSTANCE)), //
+  KRIGING(new KrigingWeighting(s -> s)), // TODO variogram
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //

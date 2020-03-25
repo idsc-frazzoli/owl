@@ -6,7 +6,7 @@ import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.lie.st.StBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.lie.st.StBiinvariantCoordinates;
 import ch.ethz.idsc.sophus.lie.st.StBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.st.StExponential;
 import ch.ethz.idsc.sophus.lie.st.StGeodesic;
@@ -81,7 +81,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BarycentricCoordinate barycentricCoordinate() {
-    return StBiinvariantCoordinate.SQUARED;
+    return StBiinvariantCoordinates.SMOOTH;
   }
 
   @Override // from Object

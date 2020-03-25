@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -48,7 +48,7 @@ public class BarycentricExtrapolationDemo extends ControlPointsDemo {
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       Tensor curve = Tensor.of(samples.stream() //
-          .map(point -> RnInverseDistanceCoordinate.SQUARED.weights(domain, point)) //
+          .map(point -> RnInverseDistanceCoordinates.SMOOTH.weights(domain, point)) //
           .map(weights -> Se2CoveringBiinvariantMean.INSTANCE.mean(controlPointsSe2, weights)));
       new PathRender(Color.BLUE, 1.5f).setCurve(curve, false).render(geometricLayer, graphics);
     }

@@ -5,17 +5,17 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.sophus.hs.sn.SnAffineCoordinate;
 import ch.ethz.idsc.sophus.hs.sn.SnBiinvariantCoordinate;
-import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnMetricSquared;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
 
 public enum SnBarycentricCoordinates implements Supplier<BarycentricCoordinate> {
-  BIINVARIANT(SnBiinvariantCoordinate.INSTANCE), //
-  BIINVARIANT2(SnBiinvariantCoordinate.SQUARED), //
-  INVERSE_DISTANCE(SnInverseDistanceCoordinate.INSTANCE), //
-  INVERSE_DISTANCE2(SnInverseDistanceCoordinate.SQUARED), //
+  BIINVARIANT(SnBiinvariantCoordinate.LINEAR), //
+  BIINVARIANT2(SnBiinvariantCoordinate.SMOOTH), //
+  INVERSE_DISTANCE(SnInverseDistanceCoordinates.LINEAR), //
+  INVERSE_DISTANCE2(SnInverseDistanceCoordinates.SMOOTH), //
   AFFINE(SnAffineCoordinate.INSTANCE), //
   SHEPARD(InverseDistanceWeighting.of(SnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(SnMetricSquared.INSTANCE)), //

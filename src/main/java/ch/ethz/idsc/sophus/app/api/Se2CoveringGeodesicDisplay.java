@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantCoordinates;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -80,7 +80,7 @@ public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public BarycentricCoordinate barycentricCoordinate() {
-    return Se2CoveringBiinvariantCoordinate.SQUARED;
+    return Se2CoveringBiinvariantCoordinates.SMOOTH;
   }
 
   @Override // from Object

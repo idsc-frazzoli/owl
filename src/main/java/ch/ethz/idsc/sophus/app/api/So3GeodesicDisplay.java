@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
-import ch.ethz.idsc.sophus.lie.so3.So3InverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.lie.so3.So3InverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
@@ -91,7 +91,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return So3InverseDistanceCoordinate.SQUARED;
+    return So3InverseDistanceCoordinates.SMOOTH;
   }
 
   @Override

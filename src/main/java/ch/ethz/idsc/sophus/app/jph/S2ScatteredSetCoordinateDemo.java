@@ -24,7 +24,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.sn.SnBiinvariantCoordinate;
-import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -138,7 +138,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    BarycentricCoordinate[] bc = { SnInverseDistanceCoordinate.SQUARED, SnBiinvariantCoordinate.SQUARED };
+    BarycentricCoordinate[] bc = { SnInverseDistanceCoordinates.SMOOTH, SnBiinvariantCoordinate.SMOOTH };
     for (BarycentricCoordinate barycentricCoordinate : bc) {
       System.out.print("computing...");
       Tensor wgs = compute(barycentricCoordinate, 120);

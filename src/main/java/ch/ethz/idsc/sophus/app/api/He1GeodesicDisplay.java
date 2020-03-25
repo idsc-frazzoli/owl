@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.he.HeBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.lie.he.HeBiinvariantCoordinates;
 import ch.ethz.idsc.sophus.lie.he.HeBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.he.HeExponential;
 import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
@@ -78,7 +78,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return HeBiinvariantCoordinate.SQUARED;
+    return HeBiinvariantCoordinates.SMOOTH;
   }
 
   @Override

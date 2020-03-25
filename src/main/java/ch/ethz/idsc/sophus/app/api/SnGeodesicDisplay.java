@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
-import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.hs.sn.SnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -63,7 +63,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final BarycentricCoordinate barycentricCoordinate() {
-    return SnInverseDistanceCoordinate.SQUARED;
+    return SnInverseDistanceCoordinates.SMOOTH;
   }
 
   @Override

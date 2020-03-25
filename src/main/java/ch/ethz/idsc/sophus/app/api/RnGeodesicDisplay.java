@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinates;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.Scalar;
@@ -61,7 +61,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final BarycentricCoordinate barycentricCoordinate() {
-    return RnInverseDistanceCoordinate.SQUARED;
+    return RnInverseDistanceCoordinates.SMOOTH;
   }
 
   @Override // from Object
