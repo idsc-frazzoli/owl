@@ -5,7 +5,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,10 +23,10 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override
   public Scalar apply(Tensor xya) {
-    Clothoid clothoid = new Clothoid(xya.map(Scalar::zero), xya);
-    Curvature curvature = clothoid.new Curvature();
-    if (isCompliant.test(curvature.head()) && //
-        isCompliant.test(curvature.tail()))
+    Clothoid clothoid = Se2Clothoids.INSTANCE.curve(xya.map(Scalar::zero), xya);
+    HeadTailInterface headTailInterface = clothoid.curvature();
+    if (isCompliant.test(headTailInterface.head()) && //
+        isCompliant.test(headTailInterface.tail()))
       return clothoid.length();
     // TODO GJOEL filter out via collision check, units
     if (xya.Get(0) instanceof Quantity)

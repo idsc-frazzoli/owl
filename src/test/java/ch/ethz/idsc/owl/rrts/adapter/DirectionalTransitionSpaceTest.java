@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -52,7 +53,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
       assertNotSame(start, samples.get(0));
-      assertEquals(end, Last.of(samples));
+      Tolerance.CHOP.requireClose(end, Last.of(samples));
     }
     // {
     // Tensor samples = transition.sampled(8);
@@ -79,7 +80,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
       assertNotSame(start, wrap.samples().get(0));
-      assertEquals(end, Last.of(wrap.samples()));
+      Tolerance.CHOP.requireClose(end, Last.of(wrap.samples()));
       assertTrue(wrap.spacing().extract(0, 10).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //
           .allMatch(s -> Scalars.lessEquals(s, res)));

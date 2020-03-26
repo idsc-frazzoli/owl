@@ -20,8 +20,8 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = Serialization.copy(ClothoidTransition.of(start, end));
-    HeadTailInterface clothoidTerminalRatio = clothoidTransition.curvature();
-    Scalar head = clothoidTerminalRatio.head();
+    HeadTailInterface headTailInterface = clothoidTransition.clothoid().curvature();
+    Scalar head = headTailInterface.head();
     Clips.interval(2.5, 2.6).requireInside(head);
   }
 

@@ -15,8 +15,8 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
@@ -38,6 +38,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
   private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 255, 128, 64));
+  // ---
   private final JToggleButton jToggleButton = new JToggleButton("all");
 
   public ClothoidDemo() {
@@ -58,7 +59,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       geometricLayer.popMatrix();
     }
     {
-      ScalarTensorFunction curve = Clothoids.INSTANCE.curve(START, mouse);
+      ScalarTensorFunction curve = Se2Clothoids.INSTANCE.curve(START, mouse);
       Tensor points = DOMAIN.map(curve);
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
@@ -66,7 +67,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           .render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
-      ScalarTensorFunction curve = PolarClothoids.INSTANCE.curve(START, mouse);
+      ScalarTensorFunction curve = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
       Tensor points = DOMAIN.map(curve);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

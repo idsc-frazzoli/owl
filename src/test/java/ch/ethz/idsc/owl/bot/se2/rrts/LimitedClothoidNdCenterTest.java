@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,7 +17,7 @@ public class LimitedClothoidNdCenterTest extends TestCase {
         new LimitedClothoidNdCenter(center, Clips.absolute(1)) {
           @Override
           protected Clothoid clothoid(Tensor other) {
-            return new Clothoid(other, center);
+            return Se2Clothoids.INSTANCE.curve(other, center);
           }
         };
     Scalar scalar = limitedClothoidNdCenter.ofVector(Tensors.vector(0, 1, 0));

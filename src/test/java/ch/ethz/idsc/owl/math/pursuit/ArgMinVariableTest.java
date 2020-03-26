@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -41,7 +41,7 @@ public class ArgMinVariableTest extends TestCase {
 
   public void testGeodesic() {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
-    TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(Clothoids.INSTANCE);
+    TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(Se2Clothoids.INSTANCE);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));

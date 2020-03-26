@@ -13,8 +13,8 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       geometricLayer.popMatrix();
     }
     { // polar clothoid
-      ScalarTensorFunction curve = PolarClothoids.INSTANCE.curve(START, mouse);
+      ScalarTensorFunction curve = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(DOMAIN.map(curve), false) //
           .render(geometricLayer, graphics);
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     }
     { // common clothoid
       ScalarTensorFunction curve = //
-          Clothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+          Se2Clothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
           .setCurve(DOMAIN.map(curve), false) //
           .render(geometricLayer, graphics);

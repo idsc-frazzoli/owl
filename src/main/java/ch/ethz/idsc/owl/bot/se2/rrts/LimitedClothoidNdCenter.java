@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,11 +29,11 @@ import ch.ethz.idsc.tensor.sca.Clip;
   @Override // from ClothoidNdCenter
   public Scalar ofVector(Tensor p) {
     Clothoid clothoid = clothoid(p);
-    Scalar cost = ClothoidParametricDistance.distance(clothoid);
-    Curvature curvature = clothoid.new Curvature();
+    Scalar cost = clothoid.length();
+    HeadTailInterface headTailInterface = clothoid.curvature();
     try {
-      if (clip.isInside(curvature.head()) && //
-          clip.isInside(curvature.tail()))
+      if (clip.isInside(headTailInterface.head()) && //
+          clip.isInside(headTailInterface.tail()))
         return cost;
     } catch (Exception exception) {
       // ---

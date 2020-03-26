@@ -4,12 +4,11 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
-import ch.ethz.idsc.sophus.math.Distances;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.Ceiling;
@@ -23,7 +22,7 @@ public class ClothoidTransition extends AbstractTransition {
    * @param end of the form {qx, qy, q_angle}
    * @return */
   public static ClothoidTransition of(Tensor start, Tensor end) {
-    return new ClothoidTransition(start, end, new Clothoid(start, end));
+    return new ClothoidTransition(start, end, Se2Clothoids.INSTANCE.curve(start, end));
   }
 
   /***************************************************/
@@ -46,7 +45,7 @@ public class ClothoidTransition extends AbstractTransition {
     Tensor samples = linearized(length().divide(RealScalar.of(steps)));
     return new TransitionWrap( //
         Drop.head(samples, 1), //
-        Distances.of(ClothoidParametricDistance.INSTANCE, samples));
+        ConstantArray.of(length().divide(RealScalar.of(samples.length())), samples.length() - 1));
   }
 
   @Override // from Transition
@@ -58,9 +57,5 @@ public class ClothoidTransition extends AbstractTransition {
 
   public Clothoid clothoid() {
     return clothoid;
-  }
-
-  public Curvature curvature() {
-    return clothoid.new Curvature();
   }
 }

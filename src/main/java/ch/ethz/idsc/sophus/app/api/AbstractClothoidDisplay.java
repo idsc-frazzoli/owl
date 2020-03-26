@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -13,7 +12,6 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
@@ -52,11 +50,6 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   @Override // from GeodesicDisplay
   public final LieExponential lieExponential() {
     return Se2CoveringExponential.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return ClothoidParametricDistance.INSTANCE.distance(p, q);
   }
 
   @Override // from GeodesicDisplay

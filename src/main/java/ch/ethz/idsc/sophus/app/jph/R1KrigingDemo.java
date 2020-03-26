@@ -17,11 +17,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.itp.BiinvariantKriging;
 import ch.ethz.idsc.sophus.itp.Kriging;
-import ch.ethz.idsc.sophus.itp.LinearKriging;
+import ch.ethz.idsc.sophus.itp.MetricKriging;
 import ch.ethz.idsc.sophus.itp.PowerVariogram;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantCoordinates;
+import ch.ethz.idsc.sophus.itp.ProjectedKriging;
+import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -86,8 +86,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       ScalarUnaryOperator variogram = PowerVariogram.fit(sequence, funceva, spinnerBeta.getValue());
       Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), support.length()));
       Kriging kriging = jToggleButton.isSelected() //
-          ? BiinvariantKriging.regression(variogram, RnBiinvariantCoordinates.LINEAR, sequence, funceva, covariance)
-          : LinearKriging.regression(variogram, support.map(Tensors::of), funceva, covariance);
+          ? ProjectedKriging.regression(RnManifold.INSTANCE, variogram, sequence, funceva, covariance)
+          : MetricKriging.regression(RnManifold.INSTANCE, variogram, support.map(Tensors::of), funceva, covariance);
       Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));
       new PathRender(Color.BLUE, 1.25f) //
           .setCurve(Transpose.of(Tensors.of(domain, result)), false) //

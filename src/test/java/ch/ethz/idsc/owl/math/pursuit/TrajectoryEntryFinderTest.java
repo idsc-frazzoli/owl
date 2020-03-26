@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -35,7 +35,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testGeodesic() {
-    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(Clothoids.INSTANCE);
+    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(Se2Clothoids.INSTANCE);
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point();
     assertTrue(waypoint.isPresent());

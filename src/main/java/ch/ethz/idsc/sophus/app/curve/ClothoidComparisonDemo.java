@@ -19,14 +19,16 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.PolarClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -81,12 +83,22 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     // }
     {
+      Clothoid clothoid = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
+      // LagrangeQuadraticD curvature = clothoid.curvature();
+      Tensor points = Subdivide.of(0.0, 1.0, 20).map(clothoid);
+      new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
+          .setCurve(points, false) //
+          .render(geometricLayer, graphics);
+    }
+    {
       ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse);
-      Curvature curvature = clothoidTransition.curvature();
+      Clothoid clothoid = clothoidTransition.clothoid();
+      LagrangeQuadraticD curvature = clothoid.curvature();
       Tensor points = clothoidTransition.linearized(RealScalar.of(geometricLayer.pixel2modelWidth(5)));
       new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
           .setCurve(points, false) //
           .render(geometricLayer, graphics);
+      // ---
       Tensor tensor = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature();
@@ -95,11 +107,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
         Tensor domain = curveVisualSet.getArcLength1();
         visualSet.add(domain, ConstantArray.of(curvature.head(), domain.length()));
         visualSet.add(domain, ConstantArray.of(curvature.tail(), domain.length()));
-      }
-      {
-        Tensor domain = curveVisualSet.getArcLength1();
-        Scalar head = curvature.head();
-        visualSet.add(domain, domain.map(s -> head));
+        visualSet.add(domain, Subdivide.of(0.0, 1.0, domain.length() - 1).map(curvature));
       }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();

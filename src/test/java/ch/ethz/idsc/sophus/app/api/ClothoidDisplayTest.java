@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,6 +25,6 @@ public class ClothoidDisplayTest extends TestCase {
   }
 
   public void testInstance() {
-    assertEquals(ClothoidDisplay.INSTANCE.geodesicInterface(), Clothoids.INSTANCE);
+    assertEquals(ClothoidDisplay.INSTANCE.geodesicInterface(), Se2Clothoids.INSTANCE);
   }
 }

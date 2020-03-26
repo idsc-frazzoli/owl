@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.Serializable;
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +21,7 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
   private final HeadTailInterface headTailInterface;
 
   private ClothoidPursuit(Tensor lookAhead) {
-    headTailInterface = new Clothoid(lookAhead.map(Scalar::zero), lookAhead).new Curvature();
+    headTailInterface = Se2Clothoids.INSTANCE.curve(lookAhead.map(Scalar::zero), lookAhead).curvature();
   }
 
   @Override // from PursuitInterface
