@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public enum QuadShading {
+/* package */ enum QuadShading {
   ANGLE() {
     @Override
     public Scalar map(Tensor po, Tensor p0, Tensor p1, Tensor pd) {

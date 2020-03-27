@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.filter;
 
+import ch.ethz.idsc.sophus.app.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import junit.framework.TestCase;

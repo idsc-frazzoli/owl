@@ -13,7 +13,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.Curvature2DRender;
+import ch.ethz.idsc.sophus.app.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;

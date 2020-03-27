@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.se3;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.UzhSe3TxtFormat;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;

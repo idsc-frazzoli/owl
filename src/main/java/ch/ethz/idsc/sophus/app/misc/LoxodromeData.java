@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.hs.sn.Loxodrome;

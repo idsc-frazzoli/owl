@@ -18,13 +18,13 @@ public class ClothoidDisplayTest extends TestCase {
     // 4 2.564420707620397
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor q = Tensors.vector(0, 2, 0);
-    Scalar scalar = ClothoidDisplay.INSTANCE.parametricDistance(p, q);
+    Scalar scalar = Se2ClothoidDisplay.INSTANCE.parametricDistance(p, q);
     Clips.interval(2.545, 2.55).requireInside(scalar);
     Scalar result = Se2ParametricDistance.INSTANCE.distance(p, q);
     assertEquals(result, RealScalar.of(2));
   }
 
   public void testInstance() {
-    assertEquals(ClothoidDisplay.INSTANCE.geodesicInterface(), Se2Clothoids.INSTANCE);
+    assertEquals(Se2ClothoidDisplay.INSTANCE.geodesicInterface(), Se2Clothoids.INSTANCE);
   }
 }

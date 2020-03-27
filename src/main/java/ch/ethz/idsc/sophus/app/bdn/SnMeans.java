@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.function.Supplier;
 
@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** RMF(p,t,w)[x] == w.t for w = IDC(p,x) */
-public enum SnMeans implements Supplier<BiinvariantMean> {
+/* package */ enum SnMeans implements Supplier<BiinvariantMean> {
   EXACT(new SnMean(Chop._05)), //
   FAST(SnFastMean.INSTANCE), //
   PHONG(SnPhongMean.INSTANCE), //

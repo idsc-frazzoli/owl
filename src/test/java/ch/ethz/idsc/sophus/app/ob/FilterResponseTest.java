@@ -1,7 +1,6 @@
 // code by jph, ob
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.app.api.FilterResponse;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.Distribution;

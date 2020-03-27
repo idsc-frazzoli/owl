@@ -9,9 +9,9 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;

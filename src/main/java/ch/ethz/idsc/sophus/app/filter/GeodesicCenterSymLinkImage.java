@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;

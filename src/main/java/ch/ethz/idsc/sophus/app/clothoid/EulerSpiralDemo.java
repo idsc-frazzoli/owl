@@ -8,11 +8,11 @@ import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
+import ch.ethz.idsc.sophus.app.PathRender;
+import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.app.api.PointsRender;
+import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.crv.clothoid.FresnelCurve;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     renderInterface.render(geometricLayer, graphics);
     {
       Tensor points = Subdivide.of(-3., 3., 50).map(FresnelCurve.FUNCTION);
-      POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
+      POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
           .render(geometricLayer, graphics);
     }
   }

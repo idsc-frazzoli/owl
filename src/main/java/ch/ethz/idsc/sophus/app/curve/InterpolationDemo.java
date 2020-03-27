@@ -5,10 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.crv.spline.BSplineLimitMatrix;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;

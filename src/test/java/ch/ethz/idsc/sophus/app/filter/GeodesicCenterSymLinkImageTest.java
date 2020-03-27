@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.filter;
 
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import junit.framework.TestCase;
 
 public class GeodesicCenterSymLinkImageTest extends TestCase {

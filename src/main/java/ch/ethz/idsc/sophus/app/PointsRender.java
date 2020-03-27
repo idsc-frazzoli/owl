@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

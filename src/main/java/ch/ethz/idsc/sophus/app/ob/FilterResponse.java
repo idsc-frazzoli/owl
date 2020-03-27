@@ -1,5 +1,5 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public enum FilterResponse {
+/* package */ enum FilterResponse {
   ;
   /** filters out division by zero or near-zero */
   private static final Scalar THRESHOLD = RealScalar.of(10.0);

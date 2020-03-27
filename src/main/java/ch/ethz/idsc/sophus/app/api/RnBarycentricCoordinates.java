@@ -25,15 +25,15 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
-  BIINVARIANT1(HsBiinvariantCoordinate.linear(RnManifold.INSTANCE)), //
-  BIINVARIANT2(HsBiinvariantCoordinate.smooth(RnManifold.INSTANCE)), //
+  BI_LINEAR(HsBiinvariantCoordinate.linear(RnManifold.INSTANCE)), //
+  BI_SMOOTH(HsBiinvariantCoordinate.smooth(RnManifold.INSTANCE)), //
   BIINVARIANTD1(HsBiinvariantCoordinate.diagonal_linear(RnManifold.INSTANCE)), //
   BIINVARIANTD2(HsBiinvariantCoordinate.diagonal_smooth(RnManifold.INSTANCE)), //
-  INVERSE_DISTANCE1(HsBarycentricCoordinate.linear(RnManifold.INSTANCE)), //
-  INVERSE_DISTANCE2(HsBarycentricCoordinate.smooth(RnManifold.INSTANCE)), //
+  ID_LINEAR(HsBarycentricCoordinate.linear(RnManifold.INSTANCE)), //
+  ID_SMOOTH(HsBarycentricCoordinate.smooth(RnManifold.INSTANCE)), //
   AFFINE(AffineCoordinate.INSTANCE), //
-  SHEPARD1(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
-  SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
+  IW_LINEAR(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
+  IW_SMOOTH(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
   RBF(new RadialBasisFunctionWeighting(RnNorm.INSTANCE)), //
   RBF_INV_MULTI(new RadialBasisFunctionWeighting(new InverseMultiquadricNorm(RealScalar.of(5)))), //
   RBF_TPS(new RadialBasisFunctionWeighting(new ThinPlateSplineNorm(RealScalar.of(5)))), //
@@ -42,10 +42,10 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
-      BIINVARIANT1, BIINVARIANT2, //
+      BI_LINEAR, BI_SMOOTH, //
       BIINVARIANTD1, BIINVARIANTD2, //
-      INVERSE_DISTANCE1, INVERSE_DISTANCE2, //
-      AFFINE, SHEPARD1, SHEPARD2, //
+      ID_LINEAR, ID_SMOOTH, //
+      AFFINE, IW_LINEAR, IW_SMOOTH, //
       RBF, //
       RBF_INV_MULTI, RBF_TPS, RBF_GAUSS, //
       KRIGING };
@@ -53,7 +53,6 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
 
   private RnBarycentricCoordinates(WeightingInterface weightingInterface) {
     this.weightingInterface = weightingInterface;
-    // KrigingInterpolation.barycentric(RnNorm.INSTANCE, sequence);
   }
 
   @Override

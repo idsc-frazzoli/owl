@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * page 2: Fourier Spectra & p6: Frequency Response of LTI systems
  * 
  * "H=Y/U is the frequency response of the system" */
-public enum FrequencyResponse implements TensorUnaryOperator {
+/* package */ enum FrequencyResponse implements TensorUnaryOperator {
   MAGNITUDE(Scalar::abs), //
   PHASE(Arg.FUNCTION);
 

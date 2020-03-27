@@ -1,6 +1,7 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app;
 
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;

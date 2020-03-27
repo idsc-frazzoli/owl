@@ -7,8 +7,8 @@ import java.util.List;
 public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
-      ClothoidDisplay.INSTANCE, //
-      PolarClothoidDisplay.INSTANCE, //
+      Se2ClothoidDisplay.INSTANCE, //
+      Se2CoveringClothoidDisplay.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       Spd2GeodesicDisplay.INSTANCE, //
@@ -22,8 +22,8 @@ public enum GeodesicDisplays {
       St1GeodesicDisplay.INSTANCE);
   // ---
   public static final List<GeodesicDisplay> WITHOUT_Sn_SO3 = Arrays.asList( //
-      ClothoidDisplay.INSTANCE, //
-      PolarClothoidDisplay.INSTANCE, //
+      Se2ClothoidDisplay.INSTANCE, //
+      Se2CoveringClothoidDisplay.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       Spd2GeodesicDisplay.INSTANCE, //
@@ -80,7 +80,7 @@ public enum GeodesicDisplays {
       Se2GeodesicDisplay.INSTANCE);
   // ---
   public static final List<GeodesicDisplay> CLOTH_SE2_R2 = Arrays.asList( //
-      ClothoidDisplay.INSTANCE, //
+      Se2ClothoidDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE);
   // ---

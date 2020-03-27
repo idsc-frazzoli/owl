@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 
 /* package */ abstract class KernelSplitsDemo extends GeodesicSplitsDemo {
   final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();

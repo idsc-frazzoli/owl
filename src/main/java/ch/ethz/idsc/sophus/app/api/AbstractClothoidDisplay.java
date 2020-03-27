@@ -3,16 +3,21 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidInterface;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
+
+  @Override
+  public abstract ClothoidInterface geodesicInterface();
 
   @Override
   public final int dimensions() {
@@ -57,6 +62,11 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   @Override
   public final FlattenLogManifold flattenLogManifold() {
     return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final Scalar parametricDistance(Tensor p, Tensor q) {
+    return geodesicInterface().curve(p, q).length();
   }
 
   @Override

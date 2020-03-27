@@ -5,10 +5,10 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.ethz.idsc.sophus.app.LieGroupFilters;
+import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;

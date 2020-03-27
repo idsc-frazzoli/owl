@@ -15,11 +15,11 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.CurveVisualSet;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.app.api.PolarClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2CoveringClothoidDisplay;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.drawString("extended", 0, 34);
     }
-    GeodesicDisplay geodesicDisplay = PolarClothoidDisplay.INSTANCE;
+    GeodesicDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
     // {
     // CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, 3);
     // Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
