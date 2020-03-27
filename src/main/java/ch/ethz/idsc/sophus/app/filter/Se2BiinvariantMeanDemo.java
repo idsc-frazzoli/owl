@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.red.Nest;
  * {@link So2LinearBiinvariantMean}
  * {@link So2FilterBiinvariantMean}
  * {@link So2PhongBiinvariantMean} */
-public class Se2BiinvariantMeanDemo extends DatasetKernelDemo {
+/* package */ class Se2BiinvariantMeanDemo extends AbstractDatasetKernelDemo {
   private final SpinnerLabel<Se2BiinvariantMean> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 

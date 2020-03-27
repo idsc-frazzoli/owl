@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
+/** use of tensor lib {@link BSplineFunction} */
 /* package */ class R2BSplineFunctionDemo extends CurvatureDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---

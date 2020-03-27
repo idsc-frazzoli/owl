@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
+/* package */ abstract class UniformDatasetFilterDemo extends AbstractDatasetFilterDemo {
   private static final ScalarUnaryOperator MAGNITUDE_PER_SECONDS = QuantityMagnitude.SI().in("s^-1");
   // ---
   private final GokartPoseData gokartPoseData;

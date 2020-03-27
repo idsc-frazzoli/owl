@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-/* package */ abstract class NavigableMapDatasetFilterDemo extends DatasetFilterDemo {
+/* package */ abstract class NavigableMapDatasetFilterDemo extends AbstractDatasetFilterDemo {
   private final JSlider jSlider = new JSlider(1, 999, 200);
   // ---
   protected Tensor _time = null;

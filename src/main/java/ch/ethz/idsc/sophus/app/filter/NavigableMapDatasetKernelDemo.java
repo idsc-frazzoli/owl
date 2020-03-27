@@ -29,7 +29,7 @@ import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
   }
 
   @Override // from DatasetFilterDemo
-  protected String plotLabel() {
+  protected final String plotLabel() {
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     int radius = spinnerRadius.getValue();
     return smoothingKernel + " [" + radius + "]";

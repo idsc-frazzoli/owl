@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 // TODO JPH demo does not seem correct
-public class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
+/* package */ class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
   public GeodesicDeBoorDemo() {

@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class GeodesicExtrapolationDemo extends DatasetKernelDemo implements BufferedImageSupplier {
+/* package */ class GeodesicExtrapolationDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
   private Tensor refined = Tensors.empty();
 
   public GeodesicExtrapolationDemo() {

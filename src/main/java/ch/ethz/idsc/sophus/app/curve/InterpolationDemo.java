@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.red.Nest;
 
+// TODO functionality/purpose is not clear
 /* package */ class InterpolationDemo extends ControlPointsDemo {
   public InterpolationDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
