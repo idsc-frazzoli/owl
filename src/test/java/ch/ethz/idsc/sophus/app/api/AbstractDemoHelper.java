@@ -16,12 +16,19 @@ public enum AbstractDemoHelper {
         abstractDemo.timerFrame.geometricComponent.getMouseSe2CState());
     BufferedImage bufferedImage = new BufferedImage(1280, 960, BufferedImage.TYPE_INT_ARGB);
     abstractDemo.render(geometricLayer, bufferedImage.createGraphics());
+    boolean success = true;
     if (abstractDemo instanceof GeodesicDisplayDemo) {
       GeodesicDisplayDemo geodesicDisplayDemo = (GeodesicDisplayDemo) abstractDemo;
-      for (GeodesicDisplay geodesicDisplay : geodesicDisplayDemo.getGeodesicDisplays()) {
-        geodesicDisplayDemo.setGeodesicDisplay(geodesicDisplay);
-        geodesicDisplayDemo.render(geometricLayer, bufferedImage.createGraphics());
-      }
+      for (GeodesicDisplay geodesicDisplay : geodesicDisplayDemo.getGeodesicDisplays())
+        try {
+          geodesicDisplayDemo.setGeodesicDisplay(geodesicDisplay);
+          geodesicDisplayDemo.render(geometricLayer, bufferedImage.createGraphics());
+        } catch (Exception exception) {
+          System.err.println(geodesicDisplay);
+          success = false;
+        }
     }
+    if (!success)
+      throw new RuntimeException();
   }
 }

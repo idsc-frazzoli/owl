@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -12,7 +13,6 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
-import ch.ethz.idsc.sophus.app.jph.ArrayPlotRender;
 import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
@@ -31,6 +31,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class LeverRender {
+  public static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
   private static final Tensor RGBA = Tensors.fromString("{{0, 0, 0, 16}, {0, 0, 0, 255}}");
   private static final ColorDataGradient COLOR_DATA_GRADIENT = LinearColorDataGradient.of(RGBA);
   private static final PointsRender POINTS_RENDER_0 = //
@@ -82,7 +83,7 @@ public class LeverRender {
   }
 
   public void renderWeights() {
-    graphics.setFont(ArrayPlotRender.FONT);
+    graphics.setFont(FONT);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
     int index = 0;
