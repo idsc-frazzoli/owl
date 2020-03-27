@@ -17,11 +17,11 @@ import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
 import ch.ethz.idsc.sophus.lie.rn.RnNorm;
 import ch.ethz.idsc.sophus.math.win.AffineCoordinate;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 
-public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> {
+public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
@@ -49,15 +49,15 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
       RBF, //
       RBF_INV_MULTI, RBF_TPS, RBF_GAUSS, //
       KRIGING };
-  private final BarycentricCoordinate barycentricCoordinate;
+  private final WeightingInterface weightingInterface;
 
-  private RnBarycentricCoordinates(BarycentricCoordinate barycentricCoordinate) {
-    this.barycentricCoordinate = barycentricCoordinate;
+  private RnBarycentricCoordinates(WeightingInterface weightingInterface) {
+    this.weightingInterface = weightingInterface;
     // KrigingInterpolation.barycentric(RnNorm.INSTANCE, sequence);
   }
 
   @Override
-  public BarycentricCoordinate get() {
-    return barycentricCoordinate;
+  public WeightingInterface get() {
+    return weightingInterface;
   }
 }

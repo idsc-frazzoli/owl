@@ -4,13 +4,13 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.h2.H2Geodesic;
 import ch.ethz.idsc.sophus.hs.h2.H2ParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitParametricCurve;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -58,12 +58,17 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    throw new UnsupportedOperationException();
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public LieExponential lieExponential() {
-    throw new UnsupportedOperationException();
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public FlattenLogManifold flattenLogManifold() {
+    return null;
   }
 
   @Override // from GeodesicDisplay
@@ -73,12 +78,7 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public BarycentricCoordinate barycentricCoordinate() {
-    throw new UnsupportedOperationException();
+    return null;
   }
 
   @Override // from Object

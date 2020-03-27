@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,9 +23,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
 
-  public A1BarycentricCoordinateDemo(Supplier<BarycentricCoordinate>[] array) {
+  public A1BarycentricCoordinateDemo(Supplier<WeightingInterface>[] array) {
     super(true, GeodesicDisplays.R2_ONLY);
     {
       spinnerBarycentric.setArray(array);
@@ -49,10 +49,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       // ---
       Tensor domain = domain(support);
       // ---
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().get();
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().get();
       Tensor sequence = support.map(this::lift);
       ScalarTensorFunction scalarTensorFunction = //
-          point -> barycentricCoordinate.weights(sequence, lift(point));
+          point -> weightingInterface.weights(sequence, lift(point));
       Tensor basis = domain.map(scalarTensorFunction);
       {
         Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));

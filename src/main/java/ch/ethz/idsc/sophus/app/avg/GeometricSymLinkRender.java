@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new GeometricSymLinkRender(geodesicDisplay).new Link(symLink);
   }
 
-  // ---
+  /***************************************************/
   private final GeodesicDisplay geodesicDisplay;
   private final GeodesicInterface geodesicInterface;
 

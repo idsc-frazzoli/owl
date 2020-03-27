@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.lie.st.StGeodesic;
 import ch.ethz.idsc.sophus.lie.st.StGroup;
 import ch.ethz.idsc.sophus.lie.st.StManifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +32,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
     return StGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public int dimensions() {
     return 2;
   }
@@ -71,6 +70,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public FlattenLogManifold flattenLogManifold() {
+    return StManifold.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     throw new UnsupportedOperationException();
   }
@@ -78,11 +82,6 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return StBiinvariantMean.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public BarycentricCoordinate barycentricCoordinate() {
-    return HsBiinvariantCoordinate.smooth(StManifold.INSTANCE);
   }
 
   @Override // from Object

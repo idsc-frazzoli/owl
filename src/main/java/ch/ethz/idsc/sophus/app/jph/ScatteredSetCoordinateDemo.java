@@ -11,12 +11,12 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
+  final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
-  public ScatteredSetCoordinateDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
+  public ScatteredSetCoordinateDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, Supplier<WeightingInterface>[] array) {
     super(addRemoveControlPoints, list);
     {
       spinnerBarycentric.setArray(array);
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     return spinnerColorData.getValue();
   }
 
-  final BarycentricCoordinate barycentricCoordinate() {
+  final WeightingInterface weightingInterface() {
     return spinnerBarycentric.getValue().get();
   }
 }

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.RigidMotionFit;
@@ -13,8 +13,8 @@ import ch.ethz.idsc.tensor.opt.RigidMotionFit;
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
 class LSMovingDomain2D extends MovingDomain2D {
-  public LSMovingDomain2D(Tensor origin, BarycentricCoordinate barycentricCoordinate, Tensor domain) {
-    super(origin, barycentricCoordinate, domain);
+  public LSMovingDomain2D(Tensor origin, WeightingInterface weightingInterface, Tensor domain) {
+    super(origin, weightingInterface, domain);
   }
 
   @Override

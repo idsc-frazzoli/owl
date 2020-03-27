@@ -2,10 +2,10 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -32,13 +32,14 @@ public interface GeodesicDisplay {
    * @return matrix with dimensions 3 x 3 */
   Tensor matrixLift(Tensor p);
 
-  /** @return lie group if the space is a lie group
-   * @throws Exception if function is not applicable */
+  /** @return lie group if the space is a lie group, or null if function is not applicable */
   LieGroup lieGroup();
 
-  /** @return lie exponential if the space is a lie group
-   * @throws Exception if mapping is not available */
+  /** @return lie exponential if the space is a lie group, or null if function is not applicable */
   LieExponential lieExponential();
+
+  /** @return flattenLogManifold, or null if not applicable */
+  FlattenLogManifold flattenLogManifold();
 
   /** @param p control point
    * @param q control point
@@ -46,13 +47,8 @@ public interface GeodesicDisplay {
    * @throws Exception if functionality is not supported */
   Scalar parametricDistance(Tensor p, Tensor q);
 
-  /** @return biinvariantMean
-   * @throws Exception if geodesic space does not support the computation of an biinvariant mean */
+  /** @return biinvariantMean, or null, if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();
-
-  /** @return */
-  // TODO probably obsolete because not unique!
-  BarycentricCoordinate barycentricCoordinate();
 
   @Override // from Object
   String toString();

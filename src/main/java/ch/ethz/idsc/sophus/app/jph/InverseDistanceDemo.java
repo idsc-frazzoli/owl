@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
@@ -30,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor domain = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    BarycentricCoordinate barycentricCoordinate = geodesicDisplay.barycentricCoordinate();
+    BarycentricCoordinate barycentricCoordinate = HsBarycentricCoordinate.smooth(geodesicDisplay.flattenLogManifold());
     Tensor point = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     if (geodesicDisplay.dimensions() < domain.length()) {
       Tensor weights = barycentricCoordinate.weights(domain, point);

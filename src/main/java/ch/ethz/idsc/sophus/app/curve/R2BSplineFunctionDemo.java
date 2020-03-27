@@ -20,12 +20,13 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class BSplineFunctionDemo extends CurvatureDemo {
+/* package */ class R2BSplineFunctionDemo extends CurvatureDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+  // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("cyclic");
 
-  public BSplineFunctionDemo() {
+  public R2BSplineFunctionDemo() {
     super(GeodesicDisplays.R2_ONLY);
     // ---
     spinnerDegree.setList(DEGREES);
@@ -56,6 +57,6 @@ public class BSplineFunctionDemo extends CurvatureDemo {
   }
 
   public static void main(String[] args) {
-    new BSplineFunctionDemo().setVisible(1200, 600);
+    new R2BSplineFunctionDemo().setVisible(1200, 600);
   }
 }

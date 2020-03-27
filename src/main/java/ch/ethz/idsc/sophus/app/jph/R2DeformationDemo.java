@@ -65,8 +65,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dy = Subdivide.of(0, EXTENT, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
     return jToggleRigidMotionFit.isSelected() //
-        ? new LSMovingDomain2D(movingOrigin, barycentricCoordinate(), domain)
-        : new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
+        ? new LSMovingDomain2D(movingOrigin, weightingInterface(), domain)
+        : new MovingDomain2D(movingOrigin, weightingInterface(), domain);
   }
 
   @Override

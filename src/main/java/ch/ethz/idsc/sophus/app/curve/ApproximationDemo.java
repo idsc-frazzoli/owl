@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     }
   }
 
-  // ---
+  /***************************************************/
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   private final GokartPoseData gokartPoseData;

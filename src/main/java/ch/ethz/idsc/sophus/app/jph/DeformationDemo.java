@@ -22,7 +22,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Tensor movingOrigin;
   private MovingDomain2D movingDomain2D;
 
-  DeformationDemo(List<GeodesicDisplay> list, Supplier<BarycentricCoordinate>[] array) {
+  DeformationDemo(List<GeodesicDisplay> list, Supplier<WeightingInterface>[] array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---

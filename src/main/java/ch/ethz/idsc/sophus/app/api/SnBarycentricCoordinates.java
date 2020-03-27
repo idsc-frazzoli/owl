@@ -9,28 +9,28 @@ import ch.ethz.idsc.sophus.hs.sn.SnAffineCoordinate;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnMetricSquared;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 
-public enum SnBarycentricCoordinates implements Supplier<BarycentricCoordinate> {
+public enum SnBarycentricCoordinates implements Supplier<WeightingInterface> {
   BI_LINEAR(HsBiinvariantCoordinate.linear(SnManifold.INSTANCE)), //
   BI_SMOOTH(HsBiinvariantCoordinate.smooth(SnManifold.INSTANCE)), //
   ID_LINEAR(HsBarycentricCoordinate.linear(SnManifold.INSTANCE)), //
   ID_SMOOTH(HsBarycentricCoordinate.smooth(SnManifold.INSTANCE)), //
   AFFINE1(SnAffineCoordinate.INSTANCE), //
-  AFFINE2(HsBarycentricCoordinate.affine(SnManifold.INSTANCE)), //
+  AFFINE2(HsBiinvariantCoordinate.affine(SnManifold.INSTANCE)), //
   IW_LINEAR(InverseDistanceWeighting.of(SnMetric.INSTANCE)), //
   IW_SMOOTH(InverseDistanceWeighting.of(SnMetricSquared.INSTANCE)), //
   ;
 
-  private final BarycentricCoordinate barycentricCoordinate;
+  private final WeightingInterface weightingInterface;
 
-  private SnBarycentricCoordinates(BarycentricCoordinate barycentricCoordinate) {
-    this.barycentricCoordinate = barycentricCoordinate;
+  private SnBarycentricCoordinates(WeightingInterface weightingInterface) {
+    this.weightingInterface = weightingInterface;
   }
 
   @Override
-  public BarycentricCoordinate get() {
-    return barycentricCoordinate;
+  public WeightingInterface get() {
+    return weightingInterface;
   }
 }

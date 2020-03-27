@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ abstract class GeodesicSplitsDemo extends ControlPointsDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 13);
-  // ---
 
   public GeodesicSplitsDemo() {
     super(true, GeodesicDisplays.ALL);

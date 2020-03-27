@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -22,7 +22,7 @@ class MovingDomain2D {
   final Tensor[][] weights;
   private final Tensor _wgs;
 
-  public MovingDomain2D(Tensor origin, BarycentricCoordinate barycentricCoordinate, Tensor domain) {
+  public MovingDomain2D(Tensor origin, WeightingInterface weightingInterface, Tensor domain) {
     this.origin = origin;
     this.domain = domain;
     int rows = domain.length();
@@ -31,7 +31,7 @@ class MovingDomain2D {
     for (int cx = 0; cx < rows; ++cx) {
       for (int cy = 0; cy < cols; ++cy) {
         Tensor point = domain.get(cx, cy);
-        weights[cx][cy] = barycentricCoordinate.weights(origin, point);
+        weights[cx][cy] = weightingInterface.weights(origin, point);
       }
     }
     {

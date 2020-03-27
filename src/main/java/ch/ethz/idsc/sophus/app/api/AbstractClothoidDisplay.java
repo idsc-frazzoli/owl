@@ -4,13 +4,10 @@ package ch.ethz.idsc.sophus.app.api;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -44,22 +41,22 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
 
   @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
-    return Se2Group.INSTANCE;
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public final LieExponential lieExponential() {
-    return Se2CoveringExponential.INSTANCE;
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return Se2BiinvariantMean.LINEAR;
+    return null;
   }
 
   @Override
-  public final BarycentricCoordinate barycentricCoordinate() {
-    throw new UnsupportedOperationException();
+  public final FlattenLogManifold flattenLogManifold() {
+    return null;
   }
 
   @Override

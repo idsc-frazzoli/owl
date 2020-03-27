@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      BarycentricCoordinate barycentricCoordinate = barycentricCoordinate();
+      WeightingInterface weightingInterface = weightingInterface();
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = refinement();
@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
           if (jToggleEntire.isSelected() || Polygons.isInside(domain, px)) {
-            Tensor weights = barycentricCoordinate.weights(domain, px);
+            Tensor weights = weightingInterface.weights(domain, px);
             wgs.set(weights, n - c1 - 1, c0);
             boolean anyNegative = weights.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
             neg.set(Boole.of(anyNegative), n - c1 - 1, c0);

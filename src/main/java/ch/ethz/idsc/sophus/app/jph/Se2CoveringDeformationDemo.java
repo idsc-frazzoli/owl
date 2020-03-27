@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    return new MovingDomain2D(movingOrigin, barycentricCoordinate(), domain);
+    return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
   }
 
   @Override

@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.jph.ArrayPlotRender;
+import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -53,7 +54,7 @@ public class LeverRender {
     this.origin = origin;
     shape = geodesicDisplay.shape();
     if (geodesicDisplay.dimensions() < sequence.length()) {
-      BarycentricCoordinate barycentricCoordinate = geodesicDisplay.barycentricCoordinate();
+      BarycentricCoordinate barycentricCoordinate = HsBarycentricCoordinate.smooth(geodesicDisplay.flattenLogManifold());
       weights = barycentricCoordinate.weights(sequence, origin);
     } else
       weights = Array.zeros(sequence.length());

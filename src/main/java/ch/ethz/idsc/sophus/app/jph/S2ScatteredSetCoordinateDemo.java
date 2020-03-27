@@ -27,6 +27,7 @@ import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -98,7 +99,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     }
     // ---
     if (s2GeodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
-      Tensor wgs = compute(barycentricCoordinate(), refinement());
+      Tensor wgs = compute(weightingInterface(), refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       GraphicsUtil.setQualityHigh(graphics);
@@ -111,7 +112,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     System.out.println("RELEASED");
   }
 
-  public Tensor compute(BarycentricCoordinate barycentricCoordinate, int refinement) {
+  public Tensor compute(WeightingInterface weightingInterface, int refinement) {
     Tensor sX = Subdivide.of(-1.0, +1.0, refinement);
     Tensor sY = Subdivide.of(-1.0, +1.0, refinement);
     int n = sX.length();
@@ -125,10 +126,10 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         Optional<Tensor> optionalP = S2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
         if (optionalP.isPresent()) {
           Tensor point = optionalP.get();
-          wgs.set(barycentricCoordinate.weights(origin, point), n - c1 - 1, c0);
+          wgs.set(weightingInterface.weights(origin, point), n - c1 - 1, c0);
           if (lower) {
             point.set(Scalar::negate, 2);
-            wgs.set(barycentricCoordinate.weights(origin, point), n + n - c1 - 1, c0);
+            wgs.set(weightingInterface.weights(origin, point), n + n - c1 - 1, c0);
           }
         }
         ++c1;

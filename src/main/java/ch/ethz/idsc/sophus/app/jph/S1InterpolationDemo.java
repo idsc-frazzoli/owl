@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.math.win.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class S1InterpolationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<Supplier<BarycentricCoordinate>> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
   private static final Tensor CIRCLE = CirclePoints.of(61).map(N.DOUBLE);
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -85,10 +85,10 @@ import ch.ethz.idsc.tensor.sca.N;
       Tensor domain = Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 511);
       Tensor spherics = domain.map(AngleVector::of);
       // ---
-      BarycentricCoordinate barycentricCoordinate = spinnerBarycentric.getValue().get();
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().get();
       try {
         ScalarTensorFunction scalarTensorFunction = //
-            point -> barycentricCoordinate.weights(sequence, AngleVector.of(point));
+            point -> weightingInterface.weights(sequence, AngleVector.of(point));
         Tensor basis = Tensor.of(domain.stream().parallel().map(Scalar.class::cast).map(scalarTensorFunction));
         Tensor curve = basis.dot(values).pmul(spherics);
         new PathRender(Color.BLUE, 1.25f).setCurve(curve, true).render(geometricLayer, graphics);
