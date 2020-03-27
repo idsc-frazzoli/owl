@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.subdiv;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
+public class BiinvariantMeanSubdivisionDemo extends AbstractCurveSubdivisionDemo {
   public BiinvariantMeanSubdivisionDemo() {
     super(GeodesicDisplays.SE2C_SE2_R2);
   }

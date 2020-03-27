@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.subdiv;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -20,6 +20,7 @@ import ch.ethz.idsc.java.awt.StandardMenu;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.curve.CurvatureDemo;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Mean;
 
 /** base class for split interface and biinvariant mean based curve subdivision */
-/* package */ abstract class CurveSubdivisionDemo extends CurvatureDemo {
+/* package */ abstract class AbstractCurveSubdivisionDemo extends CurvatureDemo {
   final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
@@ -39,7 +40,7 @@ import ch.ethz.idsc.tensor.red.Mean;
   final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleHelp = new JToggleButton("help");
 
-  public CurveSubdivisionDemo(List<GeodesicDisplay> _list) {
+  public AbstractCurveSubdivisionDemo(List<GeodesicDisplay> _list) {
     super(_list);
     Tensor control = null;
     {

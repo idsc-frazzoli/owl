@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;
@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class CurveVisualSet {
-  static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
+public class CurveVisualSet {
+  private static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
   // ---
   private final VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
   private final Tensor differences;

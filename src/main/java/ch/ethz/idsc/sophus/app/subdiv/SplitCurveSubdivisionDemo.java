@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.subdiv;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** {@link SplitInterface} */
-public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
+public class SplitCurveSubdivisionDemo extends AbstractCurveSubdivisionDemo {
   private final PathRender pathRender = new PathRender(new Color(0, 255, 0, 128));
 
   public SplitCurveSubdivisionDemo() {
