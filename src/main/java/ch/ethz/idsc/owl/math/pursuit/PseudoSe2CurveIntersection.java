@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.pursuit;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2ClothoidDistance;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,6 +16,6 @@ public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
 
   @Override // from SimpleCurveIntersection
   protected Scalar distance(Tensor tensor) {
-    return ClothoidParametricDistance.INSTANCE.norm(tensor);
+    return Se2ClothoidDistance.INSTANCE.norm(tensor);
   }
 }

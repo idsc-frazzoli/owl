@@ -1,14 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.he.HeBiinvariantCoordinates;
 import ch.ethz.idsc.sophus.lie.he.HeBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.he.HeExponential;
 import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
 import ch.ethz.idsc.sophus.lie.he.HeGroup;
+import ch.ethz.idsc.sophus.lie.he.HeManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -78,7 +79,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return HeBiinvariantCoordinates.SMOOTH;
+    return HsBiinvariantCoordinate.smooth(HeManifold.INSTANCE);
   }
 
   @Override

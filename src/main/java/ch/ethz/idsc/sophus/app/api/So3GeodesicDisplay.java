@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -12,7 +13,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
-import ch.ethz.idsc.sophus.lie.so3.So3InverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
@@ -91,7 +92,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override
   public BarycentricCoordinate barycentricCoordinate() {
-    return So3InverseDistanceCoordinates.SMOOTH;
+    return HsBarycentricCoordinate.smooth(So3Manifold.INSTANCE);
   }
 
   @Override

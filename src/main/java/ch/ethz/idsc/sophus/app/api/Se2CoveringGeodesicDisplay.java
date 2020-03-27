@@ -3,16 +3,17 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantCoordinates;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -80,7 +81,7 @@ public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public BarycentricCoordinate barycentricCoordinate() {
-    return Se2CoveringBiinvariantCoordinates.SMOOTH;
+    return HsBiinvariantCoordinate.smooth(Se2CoveringManifold.INSTANCE);
   }
 
   @Override // from Object

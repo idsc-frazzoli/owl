@@ -108,6 +108,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
         visualSet.add(domain, ConstantArray.of(curvature.head(), domain.length()));
         visualSet.add(domain, ConstantArray.of(curvature.tail(), domain.length()));
         visualSet.add(domain, Subdivide.of(0.0, 1.0, domain.length() - 1).map(curvature));
+        visualSet.add(domain, Subdivide.of(0.0, 1.0, domain.length() - 1).map(clothoid::addAngle));
       }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();

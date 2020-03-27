@@ -21,7 +21,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.Se2ClothoidDistance;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
@@ -98,7 +98,7 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
         return;
       }
       {
-        Tensor distances = Distances.of(ClothoidParametricDistance.INSTANCE, tensor);
+        Tensor distances = Distances.of(Se2ClothoidDistance.INSTANCE, tensor);
         // Distances.of(geodesicDisplay::parametricDistance, control.get(Tensor.ALL, 0));
         if (0 < distances.length()) {
           Tensor scaling = Array.zeros(control.length());

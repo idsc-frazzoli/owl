@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.function.Supplier;
 
+import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
+import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.itp.GaussianRadialBasisFunction;
 import ch.ethz.idsc.sophus.itp.InverseMultiquadricNorm;
 import ch.ethz.idsc.sophus.itp.KrigingWeighting;
@@ -10,8 +12,7 @@ import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.itp.ThinPlateSplineNorm;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantCoordinates;
-import ch.ethz.idsc.sophus.lie.rn.RnInverseDistanceCoordinates;
+import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
 import ch.ethz.idsc.sophus.lie.rn.RnNorm;
@@ -24,12 +25,12 @@ public enum RnBarycentricCoordinates implements Supplier<BarycentricCoordinate> 
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
-  BIINVARIANT1(RnBiinvariantCoordinates.LINEAR), //
-  BIINVARIANT2(RnBiinvariantCoordinates.SMOOTH), //
-  BIINVARIANTD1(RnBiinvariantCoordinates.DIAGONAL), //
-  BIINVARIANTD2(RnBiinvariantCoordinates.DIAGONAL_SQUARED), //
-  INVERSE_DISTANCE1(RnInverseDistanceCoordinates.LINEAR), //
-  INVERSE_DISTANCE2(RnInverseDistanceCoordinates.SMOOTH), //
+  BIINVARIANT1(HsBiinvariantCoordinate.linear(RnManifold.INSTANCE)), //
+  BIINVARIANT2(HsBiinvariantCoordinate.smooth(RnManifold.INSTANCE)), //
+  BIINVARIANTD1(HsBiinvariantCoordinate.diagonal_linear(RnManifold.INSTANCE)), //
+  BIINVARIANTD2(HsBiinvariantCoordinate.diagonal_smooth(RnManifold.INSTANCE)), //
+  INVERSE_DISTANCE1(HsBarycentricCoordinate.linear(RnManifold.INSTANCE)), //
+  INVERSE_DISTANCE2(HsBarycentricCoordinate.smooth(RnManifold.INSTANCE)), //
   AFFINE(AffineCoordinate.INSTANCE), //
   SHEPARD1(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
   SHEPARD2(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
