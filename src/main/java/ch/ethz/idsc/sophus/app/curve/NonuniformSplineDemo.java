@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -14,6 +14,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;

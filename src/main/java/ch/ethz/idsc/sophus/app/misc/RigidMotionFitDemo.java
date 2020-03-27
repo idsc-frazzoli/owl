@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private Tensor points;
 
-  RigidMotionFitDemo() {
+  public RigidMotionFitDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
     setMidpointIndicated(false);
     shufflePoints(5);

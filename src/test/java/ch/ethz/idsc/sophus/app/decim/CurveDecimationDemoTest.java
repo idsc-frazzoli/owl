@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.decim;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;

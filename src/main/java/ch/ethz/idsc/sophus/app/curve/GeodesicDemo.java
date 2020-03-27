@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;

@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
   SphereFitDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
+    super(false, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterface(pathRenderBall);
     timerFrame.geometricComponent.addRenderInterface(pathRenderHull);

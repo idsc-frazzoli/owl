@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.srf;
 
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** Hint:
  * implementation exists only for evaluation purposes
  * class may be removed in future releases */
-public enum SurfaceMeshExamples {
+/* package */ enum SurfaceMeshExamples {
   ;
   public static SurfaceMesh unitQuad() {
     SurfaceMesh surfaceMesh = new SurfaceMesh();

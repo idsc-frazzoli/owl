@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.io.File;
 import java.io.IOException;

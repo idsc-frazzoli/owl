@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.decim;
 
 import java.awt.Color;
 import java.awt.Dimension;

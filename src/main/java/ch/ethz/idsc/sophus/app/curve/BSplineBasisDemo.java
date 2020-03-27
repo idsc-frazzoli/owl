@@ -1,7 +1,8 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
@@ -22,11 +24,15 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 
 /* package */ class BSplineBasisDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  private static final Color TICKS_COLOR = new Color(0, 0, 0, 128);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -69,9 +75,9 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
             Tensor domain = Subdivide.of(0, length - 1, 100);
             Tensor values = domain.map(bSplineFunction);
             Tensor tensor = Transpose.of(Tensors.of(domain, values));
-            graphics.setColor(StaticHelper.COLOR_DATA_INDEXED.getColor(k_th));
+            graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
             graphics.draw(geometricLayer.toPath2D(tensor));
-            graphics.setColor(StaticHelper.TICKS_COLOR);
+            graphics.setColor(TICKS_COLOR);
             graphics.draw(geometricLayer.toPath2D(Tensors.matrix(new Number[][] { { k_th, 0 }, { k_th, .1 } })));
           }
           geometricLayer.popMatrix();

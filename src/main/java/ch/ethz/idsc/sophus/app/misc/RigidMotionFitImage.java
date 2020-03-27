@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-class RigidMotionFitImage {
+/* package */ class RigidMotionFitImage {
   private static Tensor shufflePoints(int n) {
     Distribution distribution = NormalDistribution.standard();
     Tensor random = RandomVariate.of(distribution, n, 2);

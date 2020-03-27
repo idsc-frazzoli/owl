@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
   // ---
   private final JTextField jTextField = new JTextField(30);
 
-  DeBoorCustomDemo() {
+  public DeBoorCustomDemo() {
     jTextField.setPreferredSize(new Dimension(200, 28));
     jTextField.setText("{0, 1}");
     timerFrame.jToolBar.add(jTextField);

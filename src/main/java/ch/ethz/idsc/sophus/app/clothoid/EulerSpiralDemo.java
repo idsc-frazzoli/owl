@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.clothoid;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -17,7 +17,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.FresnelCurve;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.Pretty;
 
 /* package */ class EulerSpiralDemo extends ControlPointsDemo {
   private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 128));
@@ -37,7 +36,6 @@ import ch.ethz.idsc.tensor.io.Pretty;
     renderInterface.render(geometricLayer, graphics);
     {
       Tensor points = Subdivide.of(-3., 3., 50).map(FresnelCurve.FUNCTION);
-      System.out.println(Pretty.of(points));
       POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
           .render(geometricLayer, graphics);
     }

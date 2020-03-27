@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -20,16 +20,20 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import ch.ethz.idsc.tensor.opt.DeBoor;
 
 /* package */ class DeBoorDemo extends AbstractDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  private static final Color TICKS_COLOR = new Color(0, 0, 0, 128);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
 
-  DeBoorDemo() {
+  public DeBoorDemo() {
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(1);
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
@@ -52,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           Tensor domain = Subdivide.of(0, length - 1, (length - 1) * 20);
           {
             for (int k_th = 0; k_th < length; ++k_th) {
-              graphics.setColor(StaticHelper.COLOR_DATA_INDEXED.getColor(k_th));
+              graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
               BSplineFunction bSplineFunction = (BSplineFunction) BSplineFunction.string(degree, UnitVector.of(length, k_th));
               DeBoor deBoor = bSplineFunction.deBoor(k_th);
               Tensor knots = deBoor.knots();
@@ -63,7 +67,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
               Tensor values = domain.map(bSplineFunction);
               Tensor tensor = Transpose.of(Tensors.of(domain, values));
               graphics.draw(geometricLayer.toPath2D(tensor));
-              graphics.setColor(StaticHelper.TICKS_COLOR);
+              graphics.setColor(TICKS_COLOR);
               graphics.draw(geometricLayer.toPath2D(Tensors.matrix(new Number[][] { { k_th, 0 }, { k_th, .1 } })));
             }
           }
