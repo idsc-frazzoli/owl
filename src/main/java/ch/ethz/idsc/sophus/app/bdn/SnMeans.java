@@ -3,10 +3,10 @@ package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.function.Supplier;
 
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnMean;
 import ch.ethz.idsc.sophus.hs.sn.SnPhongMean;
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** RMF(p,t,w)[x] == w.t for w = IDC(p,x) */

@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /* package */ class EulerSpiralDemo extends ControlPointsDemo {
   private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 128));
+  private static final Tensor SEPARATORS = Subdivide.of(-3., 3., 50);
   private final RenderInterface renderInterface;
 
   public EulerSpiralDemo() {
@@ -35,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderInterface.render(geometricLayer, graphics);
     {
-      Tensor points = Subdivide.of(-3., 3., 50).map(EulerSpiral.FUNCTION);
+      Tensor points = SEPARATORS.map(EulerSpiral.FUNCTION);
       POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
           .render(geometricLayer, graphics);
     }

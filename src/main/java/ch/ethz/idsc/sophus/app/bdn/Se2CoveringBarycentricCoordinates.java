@@ -8,8 +8,8 @@ import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnNormSquared;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTarget;
-import ch.ethz.idsc.sophus.math.win.InverseNorm;
-import ch.ethz.idsc.sophus.math.win.WeightingInterface;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.sophus.math.id.InverseNorm;
 import ch.ethz.idsc.tensor.RealScalar;
 
 public enum Se2CoveringBarycentricCoordinates implements Supplier<WeightingInterface> {

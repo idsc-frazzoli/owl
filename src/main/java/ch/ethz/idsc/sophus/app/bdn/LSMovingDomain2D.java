@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.WeightingInterface;
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.RigidMotionFit;

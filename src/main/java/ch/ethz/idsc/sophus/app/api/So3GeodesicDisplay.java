@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

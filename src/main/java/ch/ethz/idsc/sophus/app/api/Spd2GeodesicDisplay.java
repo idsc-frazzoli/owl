@@ -1,13 +1,13 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
 import ch.ethz.idsc.sophus.hs.spd.SpdMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

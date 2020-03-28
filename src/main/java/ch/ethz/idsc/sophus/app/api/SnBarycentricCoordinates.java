@@ -9,8 +9,8 @@ import ch.ethz.idsc.sophus.hs.sn.SnAffineCoordinate;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnMetricSquared;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
-import ch.ethz.idsc.sophus.math.win.WeightingInterface;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.sophus.math.id.InverseDistanceWeighting;
 
 public enum SnBarycentricCoordinates implements Supplier<WeightingInterface> {
   BI_LINEAR(HsBiinvariantCoordinate.linear(SnManifold.INSTANCE)), //

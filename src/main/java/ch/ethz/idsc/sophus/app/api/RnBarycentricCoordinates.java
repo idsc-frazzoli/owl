@@ -12,13 +12,13 @@ import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.itp.ThinPlateSplineNorm;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
 import ch.ethz.idsc.sophus.lie.rn.RnNorm;
-import ch.ethz.idsc.sophus.math.win.AffineCoordinate;
-import ch.ethz.idsc.sophus.math.win.InverseDistanceWeighting;
-import ch.ethz.idsc.sophus.math.win.WeightingInterface;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.sophus.math.id.InverseDistanceWeighting;
 import ch.ethz.idsc.tensor.RealScalar;
 
 public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
