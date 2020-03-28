@@ -56,7 +56,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       timerFrame.jToolBar.add(jToggleArrows);
     }
     timerFrame.jToolBar.addSeparator();
-    setMidpointIndicated(false);
   }
 
   final int refinement() {

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -38,6 +39,13 @@ public class ClothoidTransitionTest extends TestCase {
     TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
     assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
+  }
+
+  public void testSingularPoint() {
+    Tensor start = Tensors.vector(0, 0, 0);
+    Tensor end = Tensors.vector(0, 0, 0);
+    ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(0.1)), Array.zeros(2, 3));
   }
 
   public void testSamples2() {

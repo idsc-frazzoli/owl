@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /** moving least squares */
-/* package */ class R2DeformationDemo extends DeformationDemo {
+/* package */ class R2DeformationDemo extends AbstractDeformationDemo {
   private static final int EXTENT = 5;
   private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.1));
   private final JToggleButton jToggleRigidMotionFit = new JToggleButton("MLS");

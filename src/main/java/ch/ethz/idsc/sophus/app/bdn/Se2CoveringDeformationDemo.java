@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-/* package */ class Se2CoveringDeformationDemo extends DeformationDemo {
+/* package */ class Se2CoveringDeformationDemo extends AbstractDeformationDemo {
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
   Se2CoveringDeformationDemo() {

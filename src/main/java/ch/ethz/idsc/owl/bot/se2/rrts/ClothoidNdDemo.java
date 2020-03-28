@@ -100,7 +100,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
         : rrtsNodeCollection1;
     int value = spinnerValue.getValue();
     graphics.setColor(new Color(255, 0, 0, 128));
-    Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(5));
+    Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(10));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
       Tensor other = rrtsNode.state();
       Transition transition = ClothoidTransition.of(other, mouse);

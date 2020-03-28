@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class S2DeformationDemo extends DeformationDemo {
+/* package */ class S2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
   // ---
   private final SpinnerLabel<SnMeans> spinnerSnMeans = new SpinnerLabel<>();

@@ -4,13 +4,19 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.pdf.EqualizingDistribution;
+import ch.ethz.idsc.tensor.pdf.InverseCDF;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -35,7 +41,10 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
-    return Drop.head(linearized(minResolution), 1);
+    Sign.requirePositive(minResolution);
+    Tensor uniform = Subdivide.of(_0, _1, //
+        Math.max(1, Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue()));
+    return Tensor.of(uniform.stream().skip(1).map(Scalar.class::cast).map(clothoid));
   }
 
   @Override // from Transition
@@ -51,8 +60,16 @@ public class ClothoidTransition extends AbstractTransition {
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
     Sign.requirePositive(minResolution);
-    return Subdivide.of(_0, _1, //
-        Math.max(1, Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue())).map(clothoid);
+    LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
+    if (Scalars.isZero(lagrangeQuadraticD.head()) && //
+        Scalars.isZero(lagrangeQuadraticD.tail()))
+      return Tensors.of(start(), end());
+    Tensor uniform = Subdivide.of(_0, _1, //
+        Math.max(1, Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue()));
+    InverseCDF inverseCDF = //
+        (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Scalar::abs));
+    Tensor inverse = uniform.map(inverseCDF::quantile).divide(DoubleScalar.of(uniform.length()));
+    return inverse.map(clothoid);
   }
 
   public Clothoid clothoid() {
