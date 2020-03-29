@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ enum EugocData {
   ;
-  // private static final LieDifferences LIE_DIFFERENCES = //
-  // new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
   public static void main(String[] args) throws IOException {
     System.out.println("here");
     Tensor tensor = ResourceData.of("/dubilab/app/pose/2r/20180820T165637_2.csv");

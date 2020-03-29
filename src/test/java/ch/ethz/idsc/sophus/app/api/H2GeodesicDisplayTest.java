@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 public class H2GeodesicDisplayTest extends TestCase {
   public void testFail() {
     assertNull(H2GeodesicDisplay.INSTANCE.lieGroup());
-    assertNull(H2GeodesicDisplay.INSTANCE.lieExponential());
+    assertNull(H2GeodesicDisplay.INSTANCE.exponential());
   }
 }

@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
@@ -20,6 +19,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -85,41 +85,41 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   private void processAll() throws IOException {
     LieGroup lieGroup = Se2CoveringGroup.INSTANCE;
-    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
+    Exponential exponential = Se2CoveringExponential.INSTANCE;
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H1STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H1STANDARD.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h1standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H2STANDARD.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h2standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2MANIFOLD.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H2MANIFOLD.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h2manifold");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H3STANDARD.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3A1.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H3A1.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3a1");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3A2.supply(lieGroup, lieExponential, biinvariantMean);
+          HermiteSubdivisions.H3A2.supply(lieGroup, exponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3a2");
     }

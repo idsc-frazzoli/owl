@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.lie.BiinvariantMeans;
+import ch.ethz.idsc.sophus.hs.BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.RealScalar;

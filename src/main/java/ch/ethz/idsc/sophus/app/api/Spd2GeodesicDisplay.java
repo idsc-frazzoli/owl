@@ -3,15 +3,16 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
+import ch.ethz.idsc.sophus.hs.spd.SpdMatrixExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -59,12 +60,12 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     Tensor sim = xya2sim(xya);
-    return SpdExponential.INSTANCE.exp(sim);
+    return SpdMatrixExponential.INSTANCE.exp(sim);
   }
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor sym) {
-    Tensor sim = SpdExponential.INSTANCE.log(sym);
+    Tensor sim = SpdMatrixExponential.INSTANCE.log(sym);
     return sim2xya(sim).extract(0, 2);
   }
 
@@ -81,8 +82,13 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
+  public Exponential exponential() {
     return null;
+  }
+
+  @Override
+  public HsExponential hsExponential() {
+    return SpdManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

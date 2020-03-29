@@ -4,11 +4,12 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineInterpolation;
-import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
@@ -25,8 +26,9 @@ import ch.ethz.idsc.tensor.sca.Round;
     File folder = HomeDirectory.Documents("s2");
     folder.mkdir();
     Export.of(new File(folder, "target.csv"), target.map(Round._6));
+    GeodesicInterface geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
     AbstractBSplineInterpolation abstractBSplineInterpolation = //
-        new GeodesicBSplineInterpolation(SnGeodesic.INSTANCE, 2, target);
+        new GeodesicBSplineInterpolation(geodesicInterface, 2, target);
     Iteration iteration = abstractBSplineInterpolation.untilClose(Chop._08, 100);
     Tensor control = iteration.control();
     Chop._12.requireClose(control.get(0), target.get(0));
@@ -34,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     MatrixQ.require(control);
     Export.of(new File(folder, "control.csv"), control.map(Round._6));
     GeodesicBSplineFunction geodesicBSplineFunction = //
-        GeodesicBSplineFunction.of(SnGeodesic.INSTANCE, 2, control);
+        GeodesicBSplineFunction.of(geodesicInterface, 2, control);
     Tensor curve = Subdivide.of(0, control.length() - 1, 200).map(geodesicBSplineFunction);
     Export.of(new File(folder, "curve.csv"), curve.map(Round._6));
   }

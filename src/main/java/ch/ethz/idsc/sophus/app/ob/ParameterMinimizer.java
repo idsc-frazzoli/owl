@@ -8,8 +8,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,7 +20,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class ParameterMinimizer {
   private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
-      new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+      new GeodesicErrorEvaluation(Se2Manifold.HS_EXP);
 
   // ---
   public Tensor minimizer(String data) {

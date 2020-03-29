@@ -195,7 +195,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
         geodesicDisplay.lieGroup(), //
-        geodesicDisplay.lieExponential(), //
+        geodesicDisplay.exponential(), //
         geodesicDisplay.biinvariantMean());
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
     int levels = spinnerLabelLevel.getValue();

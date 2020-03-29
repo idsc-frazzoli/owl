@@ -14,9 +14,9 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.So2;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,13 +34,13 @@ public class LieGroupFiltersTest extends TestCase {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
-    LieExponential lieExponential = geodesicDisplay.lieExponential();
+    Exponential exponential = geodesicDisplay.exponential();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     int radius = 7;
     Map<LieGroupFilters, Tensor> map = new EnumMap<>(LieGroupFilters.class);
     for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, lieExponential, biinvariantMean);
+          lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, exponential, biinvariantMean);
       Tensor filtered = CenterFilter.of(tensorUnaryOperator, radius).apply(control);
       map.put(lieGroupFilters, filtered);
     }
@@ -64,12 +64,12 @@ public class LieGroupFiltersTest extends TestCase {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
-    LieExponential lieExponential = geodesicDisplay.lieExponential();
+    Exponential exponential = geodesicDisplay.exponential();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     for (int radius : new int[] { 0, 10 }) {
       for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
         TensorUnaryOperator tensorUnaryOperator = //
-            lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, lieExponential, biinvariantMean);
+            lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, exponential, biinvariantMean);
         Timing timing = Timing.started();
         CenterFilter.of(tensorUnaryOperator, radius).apply(control);
         timing.stop();

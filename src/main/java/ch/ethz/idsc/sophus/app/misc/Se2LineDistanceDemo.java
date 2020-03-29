@@ -16,9 +16,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.decim.LieGroupLineDistance;
 import ch.ethz.idsc.sophus.crv.decim.LieGroupLineDistance.NormImpl;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (sequence.length() == 2) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      LieExponential lieExponential = geodesicDisplay.lieExponential();
+      Exponential exponential = geodesicDisplay.exponential();
       // ---
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       Tensor beg = sequence.get(0);
@@ -72,7 +72,7 @@ import ch.ethz.idsc.tensor.sca.Round;
         Tensor mouse = geometricLayer.getMouseSe2State();
         {
           Tensor project = normImpl.project(mouse);
-          Tensor exp = lieExponential.exp(project);
+          Tensor exp = exponential.exp(project);
           Tensor glb = lieGroup.element(beg).combine(exp);
           {
             geometricLayer.pushMatrix(geodesicDisplay.matrixLift(glb));
@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.Round;
         }
         {
           Tensor orthogonal = normImpl.orthogonal(mouse);
-          Tensor exp = lieExponential.exp(orthogonal);
+          Tensor exp = exponential.exp(orthogonal);
           Tensor glb = lieGroup.element(beg).combine(exp);
           {
             graphics.setColor(Color.DARK_GRAY);

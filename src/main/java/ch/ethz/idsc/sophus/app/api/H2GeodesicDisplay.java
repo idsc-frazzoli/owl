@@ -3,12 +3,13 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.h2.H2Geodesic;
 import ch.ethz.idsc.sophus.hs.h2.H2ParametricDistance;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitParametricCurve;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -62,7 +63,12 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
+  public Exponential exponential() {
+    return null;
+  }
+
+  @Override
+  public HsExponential hsExponential() {
     return null;
   }
 

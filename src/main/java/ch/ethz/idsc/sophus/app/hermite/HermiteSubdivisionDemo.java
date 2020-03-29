@@ -114,7 +114,7 @@ import ch.ethz.idsc.tensor.red.Mean;
         }
       }
       HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-          geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), geodesicDisplay.biinvariantMean());
+          geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), geodesicDisplay.biinvariantMean());
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
       int levels = spinnerRefine.getValue();
       Tensor iterate = Do.of(tensorIteration::iterate, levels);

@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       }
     }
     CurveDecimation curveDecimation = //
-        LieGroupCurveDecimation.STANDARD.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), RealScalar.ONE);
+        LieGroupCurveDecimation.STANDARD.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), RealScalar.ONE);
     Tensor decimate = curveDecimation.apply(sequence);
     {
       PathRender pathRender = new PathRender(COLOR_DATA_INDEXED_DRAW.getColor(1));

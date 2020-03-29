@@ -5,26 +5,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieIntegrator;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class EulerLieIntegrator implements Integrator, LieIntegrator, Serializable {
-  public static Integrator of(LieGroup lieGroup, LieExponential lieExponential) {
+  public static Integrator of(LieGroup lieGroup, Exponential exponential) {
     return new EulerLieIntegrator( //
         Objects.requireNonNull(lieGroup), //
-        Objects.requireNonNull(lieExponential));
+        Objects.requireNonNull(exponential));
   }
 
   // ---
   private final LieGroup lieGroup;
-  private final LieExponential lieExponential;
+  private final Exponential exponential;
 
-  private EulerLieIntegrator(LieGroup lieGroup, LieExponential lieExponential) {
+  private EulerLieIntegrator(LieGroup lieGroup, Exponential exponential) {
     this.lieGroup = lieGroup;
-    this.lieExponential = lieExponential;
+    this.exponential = exponential;
   }
 
   @Override // from Integrator
@@ -34,6 +34,6 @@ public class EulerLieIntegrator implements Integrator, LieIntegrator, Serializab
 
   @Override // from LieIntegrator
   public Tensor spin(Tensor g, Tensor v) {
-    return lieGroup.element(g).combine(lieExponential.exp(v));
+    return lieGroup.element(g).combine(exponential.exp(v));
   }
 }

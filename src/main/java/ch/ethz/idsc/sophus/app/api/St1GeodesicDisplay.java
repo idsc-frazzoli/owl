@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -12,6 +13,7 @@ import ch.ethz.idsc.sophus.lie.st.StExponential;
 import ch.ethz.idsc.sophus.lie.st.StGeodesic;
 import ch.ethz.idsc.sophus.lie.st.StGroup;
 import ch.ethz.idsc.sophus.lie.st.StManifold;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -65,8 +67,13 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
+  public Exponential exponential() {
     return StExponential.INSTANCE;
+  }
+
+  @Override
+  public HsExponential hsExponential() {
+    return LieExponential.of(lieGroup(), exponential());
   }
 
   @Override // from GeodesicDisplay

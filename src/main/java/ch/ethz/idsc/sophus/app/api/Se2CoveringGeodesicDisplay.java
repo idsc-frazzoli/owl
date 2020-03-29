@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -14,6 +15,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
@@ -64,8 +66,13 @@ public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final LieExponential lieExponential() {
+  public final Exponential exponential() {
     return Se2CoveringExponential.INSTANCE;
+  }
+
+  @Override
+  public HsExponential hsExponential() {
+    return LieExponential.of(lieGroup(), exponential());
   }
 
   @Override // from GeodesicDisplay

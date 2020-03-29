@@ -8,12 +8,12 @@ import java.util.function.Function;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 
 /* package */ abstract class ProxyHermite {
   static final LieGroup LIE_GROUP = Se2CoveringGroup.INSTANCE;
-  static final LieExponential LIE_EXPONENTIAL = Se2CoveringExponential.INSTANCE;
+  static final Exponential LIE_EXPONENTIAL = Se2CoveringExponential.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;
   private static final int ROWS = 135 * 1;

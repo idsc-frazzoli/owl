@@ -3,9 +3,8 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 
-import ch.ethz.idsc.sophus.lie.LieDifferences;
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.hs.HsDifferences;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -16,10 +15,10 @@ import ch.ethz.idsc.tensor.red.Total;
 /* package */ class GeodesicErrorEvaluation {
   public static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
   // ---
-  private final LieDifferences lieDifferences;
+  private final HsDifferences lieDifferences;
 
-  public GeodesicErrorEvaluation(LieGroup lieGroup, LieExponential lieExponential) {
-    this.lieDifferences = new LieDifferences(lieGroup, lieExponential);
+  public GeodesicErrorEvaluation(HsExponential hsExponential) {
+    this.lieDifferences = new HsDifferences(hsExponential);
   }
 
   public Tensor evaluate0ErrorSeperated(Tensor causal, Tensor center) {

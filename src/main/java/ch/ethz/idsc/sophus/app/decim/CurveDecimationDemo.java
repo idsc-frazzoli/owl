@@ -130,7 +130,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
     LieGroupCurveDecimation lieGroupCurveDecimation = spinnerType.getValue();
     CurveDecimation curveDecimation = //
-        lieGroupCurveDecimation.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), epsilon);
+        lieGroupCurveDecimation.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Result result = curveDecimation.evaluate(control);
     Tensor simplified = result.result();

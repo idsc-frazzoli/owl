@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -15,6 +16,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -75,8 +77,13 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
+  public Exponential exponential() {
     return So3Exponential.INSTANCE;
+  }
+
+  @Override
+  public HsExponential hsExponential() {
+    return LieExponential.of(lieGroup(), exponential());
   }
 
   @Override // from GeodesicDisplay

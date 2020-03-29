@@ -6,9 +6,10 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidInterface;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -50,7 +51,12 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   }
 
   @Override // from GeodesicDisplay
-  public final LieExponential lieExponential() {
+  public final Exponential exponential() {
+    return null;
+  }
+
+  @Override
+  public final HsExponential hsExponential() {
     return null;
   }
 

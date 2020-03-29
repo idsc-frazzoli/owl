@@ -6,8 +6,8 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -18,7 +18,7 @@ public enum LieGroupFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
-        LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+        LieGroup lieGroup, Exponential exponential, BiinvariantMean biinvariantMean) {
       return GeodesicCenter.of(geodesicInterface, smoothingKernel);
     }
   }, //
@@ -26,7 +26,7 @@ public enum LieGroupFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
-        LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+        LieGroup lieGroup, Exponential exponential, BiinvariantMean biinvariantMean) {
       return GeodesicCenterMidSeeded.of(geodesicInterface, smoothingKernel);
     }
   }, //
@@ -34,7 +34,7 @@ public enum LieGroupFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
-        LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+        LieGroup lieGroup, Exponential exponential, BiinvariantMean biinvariantMean) {
       return BiinvariantMeanCenter.of(biinvariantMean, smoothingKernel);
     }
   };
@@ -42,21 +42,21 @@ public enum LieGroupFilters {
   /** @param geodesicInterface
    * @param smoothingKernel
    * @param lieGroup
-   * @param lieExponential
+   * @param exponential
    * @param biinvariantMean
    * @return */
   public abstract TensorUnaryOperator supply( //
       GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
-      LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean);
+      LieGroup lieGroup, Exponential exponential, BiinvariantMean biinvariantMean);
 
   /** @param geodesicDisplay
    * @param smoothingKernel
    * @return */
-  public TensorUnaryOperator from(GeodesicDisplay geodesicDisplay, SmoothingKernel smoothingKernel) {
+  public TensorUnaryOperator from(GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel) {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
-    LieExponential lieExponential = geodesicDisplay.lieExponential();
+    Exponential exponential = geodesicDisplay.exponential();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    return supply(geodesicInterface, smoothingKernel, lieGroup, lieExponential, biinvariantMean);
+    return supply(geodesicInterface, smoothingKernel, lieGroup, exponential, biinvariantMean);
   }
 }

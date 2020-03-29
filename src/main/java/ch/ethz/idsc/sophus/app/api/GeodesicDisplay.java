@@ -3,8 +3,9 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +37,9 @@ public interface GeodesicDisplay {
   LieGroup lieGroup();
 
   /** @return lie exponential if the space is a lie group, or null if function is not applicable */
-  LieExponential lieExponential();
+  Exponential exponential();
+
+  HsExponential hsExponential();
 
   /** @return flattenLogManifold, or null if not applicable */
   FlattenLogManifold flattenLogManifold();

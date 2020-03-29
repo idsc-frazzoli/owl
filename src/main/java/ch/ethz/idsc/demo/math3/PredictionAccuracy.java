@@ -3,7 +3,7 @@ package ch.ethz.idsc.demo.math3;
 
 import org.apache.commons.math3.analysis.MultivariateFunction;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMeans;
+import ch.ethz.idsc.sophus.hs.BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
