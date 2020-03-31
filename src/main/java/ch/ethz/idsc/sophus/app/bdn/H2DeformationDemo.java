@@ -13,9 +13,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.pdf.Distribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /* package */ class H2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
@@ -30,25 +27,22 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       spinnerMeans.setValue(HnMeans.EXACT);
       spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");
     }
-    // Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
-    // timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
-    // timerFrame.configCoordinateOffset(400, 400);
-    // ---
     shuffleSnap();
   }
 
   @Override
   synchronized Tensor shufflePointsSe2(int n) {
-    Distribution distribution = UniformDistribution.of(-1.5, 1.5);
-    return Tensor.of(RandomVariate.of(distribution, n, 2).stream() //
-        .map(Tensor::copy) //
-        .map(row -> row.append(RealScalar.ZERO)));
+    // Distribution distribution = UniformDistribution.of(-1.5, 1.5);
+    // return Tensor.of(RandomVariate.of(distribution, n, 2).stream() //
+    // .map(Tensor::copy) //
+    // .map(row -> row.append(RealScalar.ZERO)));
+    return Tensor.of(CirclePoints.of(n).multiply(RealScalar.of(3)).stream().map(row -> row.append(RealScalar.ZERO)));
   }
 
   @Override
   MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
-    double rad = 1.3;
+    double rad = 1.0;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
@@ -57,11 +51,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   BiinvariantMean biinvariantMean() {
-    // return HnPhongMean.INSTANCE;
-    return geodesicDisplay().biinvariantMean();
-    // BiinvariantMean biinvariantMean = spinnerMeans.getValue().get();
-    // System.out.println(biinvariantMean.getClass().getSimpleName());
-    // return biinvariantMean;
+    return spinnerMeans.getValue().get();
   }
 
   @Override

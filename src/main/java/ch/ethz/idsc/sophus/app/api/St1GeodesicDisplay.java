@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.lie.st.StGroup;
 import ch.ethz.idsc.sophus.lie.st.StManifold;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Max;
@@ -81,7 +81,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDistance(Tensor p, Tensor q) {
+  public TensorMetric parametricDistance() {
     throw new UnsupportedOperationException();
   }
 

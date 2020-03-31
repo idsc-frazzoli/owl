@@ -11,15 +11,19 @@ import java.awt.geom.Point2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.sca.Power;
 
 public abstract class GeodesicDisplayRender implements RenderInterface {
   private static final Tensor CIRCLE = CirclePoints.of(61);
   private static final Color CENTER = new Color(255, 255, 255, 128);
   private static final Color BORDER = new Color(192, 192, 192, 128);
+  private static final Tensor H1_DOMAIN = Subdivide.of(-2.0, 2.0, 20).map(Power.function(3));
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -45,6 +49,13 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       Tensor box = Tensors.fromString("{{-20, 0}, {+20, 0}, {+20, 5}, {-20, 5}}");
       graphics.fill(geometricLayer.toPath2D(box));
     } else //
+    if (geodesicDisplay instanceof H1GeodesicDisplay) {
+      Tensor points = //
+          Tensor.of(H1_DOMAIN.map(Tensors::of).stream().map(HnWeierstrassCoordinate::toPoint));
+      // ---
+      graphics.setColor(BORDER);
+      graphics.draw(geometricLayer.toPath2D(points));
+    } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       double modelWidth = 5;
       Point2D center = geometricLayer.toPoint2D(0, 0);
@@ -57,7 +68,7 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       // ---
       graphics.setColor(BORDER);
       graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
-    }
+    } else //
     if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
       Point2D point2d = geometricLayer.toPoint2D(0, 0);
       graphics.setColor(Color.DARK_GRAY);

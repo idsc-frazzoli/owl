@@ -10,8 +10,8 @@ import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Exponential;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
@@ -71,8 +71,8 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   }
 
   @Override // from GeodesicDisplay
-  public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return geodesicInterface().curve(p, q).length();
+  public final TensorMetric parametricDistance() {
+    return (p, q) -> geodesicInterface().curve(p, q).length();
   }
 
   @Override

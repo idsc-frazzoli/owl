@@ -17,8 +17,8 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -81,8 +81,8 @@ public class Se2CoveringGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDistance(Tensor p, Tensor q) {
-    return Se2CoveringParametricDistance.INSTANCE.distance(p, q);
+  public TensorMetric parametricDistance() {
+    return Se2CoveringParametricDistance.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

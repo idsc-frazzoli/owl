@@ -17,6 +17,7 @@ public enum GeodesicDisplays {
       S1GeodesicDisplay.INSTANCE, //
       S2GeodesicDisplay.INSTANCE, //
       HP2GeodesicDisplay.INSTANCE, //
+      H1GeodesicDisplay.INSTANCE, //
       H2GeodesicDisplay.INSTANCE, //
       So3GeodesicDisplay.INSTANCE, //
       He1GeodesicDisplay.INSTANCE, //

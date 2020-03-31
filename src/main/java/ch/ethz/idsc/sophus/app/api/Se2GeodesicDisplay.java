@@ -8,8 +8,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 
 public class Se2GeodesicDisplay extends Se2CoveringGeodesicDisplay {
   public static final GeodesicDisplay INSTANCE = new Se2GeodesicDisplay();
@@ -30,8 +29,8 @@ public class Se2GeodesicDisplay extends Se2CoveringGeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDistance(Tensor p, Tensor q) {
-    return Se2ParametricDistance.INSTANCE.distance(p, q);
+  public TensorMetric parametricDistance() {
+    return Se2ParametricDistance.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

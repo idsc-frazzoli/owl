@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
+        KnotSpacing.centripetal(geodesicDisplay().parametricDistance(), 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
@@ -110,7 +110,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
+        KnotSpacing.centripetal(geodesicDisplay().parametricDistance(), 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);

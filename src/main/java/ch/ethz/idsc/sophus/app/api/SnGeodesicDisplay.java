@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** symmetric positive definite 2 x 2 matrices */
@@ -59,8 +59,8 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return SnMetric.INSTANCE.distance(p, q);
+  public final TensorMetric parametricDistance() {
+    return SnMetric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

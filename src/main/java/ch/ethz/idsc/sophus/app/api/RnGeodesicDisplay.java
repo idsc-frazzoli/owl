@@ -13,11 +13,11 @@ import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
+import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable {
   private final int dimensions;
@@ -62,8 +62,8 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return Norm._2.between(p, q);
+  public final TensorMetric parametricDistance() {
+    return RnMetric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

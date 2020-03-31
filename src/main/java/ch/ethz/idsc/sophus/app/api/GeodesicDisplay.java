@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Hint: the interface GeodesicDisplay is intended for use in the demo layer
@@ -48,7 +48,7 @@ public interface GeodesicDisplay {
    * @param q control point
    * @return (pseudo-) distance between given control points p and q
    * @throws Exception if functionality is not supported */
-  Scalar parametricDistance(Tensor p, Tensor q);
+  TensorMetric parametricDistance();
 
   /** @return biinvariantMean, or null, if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();

@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -87,8 +88,8 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDistance(Tensor p, Tensor q) {
-    return So3Metric.INSTANCE.distance(p, q);
+  public TensorMetric parametricDistance() {
+    return So3Metric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

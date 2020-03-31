@@ -7,14 +7,14 @@ import ch.ethz.idsc.owl.bot.r2.StarPoints;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.IterativeBiinvariantMean;
+import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
 import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnMetric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** symmetric positive definite 2 x 2 matrices */
@@ -58,13 +58,13 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return HnMetric.INSTANCE.distance(p, q);
+  public final TensorMetric parametricDistance() {
+    return HnMetric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return IterativeBiinvariantMean.of(hsExponential());
+    return HnBiinvariantMean.INSTANCE; // phong is too imprecise
   }
 
   @Override // from GeodesicDisplay

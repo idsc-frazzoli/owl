@@ -72,7 +72,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       Scalar exponent = RationalScalar.of(2 * jSliderExponent.getValue(), jSliderExponent.getMaximum());
       TensorUnaryOperator centripetalKnotSpacing = //
-          KnotSpacing.centripetal(geodesicDisplay::parametricDistance, exponent);
+          KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), exponent);
       Tensor knots = centripetalKnotSpacing.apply(control);
       Scalar lo = knots.Get(1);
       Scalar hi = knots.Get(knots.length() - 2);

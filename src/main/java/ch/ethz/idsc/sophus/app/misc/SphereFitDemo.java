@@ -10,12 +10,14 @@ import java.util.Optional;
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.owl.bot.r2.StarPoints;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -29,6 +31,7 @@ import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
@@ -56,6 +59,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
+    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = getGeodesicControlPoints();
     Optional<SphereFit> optional = SphereFit.of(control);
     if (optional.isPresent()) {
@@ -80,10 +84,22 @@ import ch.ethz.idsc.tensor.red.Norm;
         }
     }
     {
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
-      Tensor weiszfeld = SpatialMedian.with(1e-4).uniform(control).get();
+      Tensor weiszfeld = SpatialMedian.with(Chop._04).uniform(control).get();
       geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
+      path2d.closePath();
+      graphics.setColor(new Color(128, 128, 255, 64));
+      graphics.fill(path2d);
+      graphics.setColor(new Color(128, 128, 255, 255));
+      graphics.draw(path2d);
+      geometricLayer.popMatrix();
+    }
+    {
+      SpatialMedian spatialMedian = //
+          HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), geodesicDisplay.parametricDistance(), Chop._06);
+      Tensor weiszfeld = spatialMedian.uniform(control).get();
+      geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
+      Path2D path2d = geometricLayer.toPath2D(StarPoints.of(5, 0.2, 0.05));
       path2d.closePath();
       graphics.setColor(new Color(128, 128, 255, 64));
       graphics.fill(path2d);
