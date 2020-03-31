@@ -3,34 +3,33 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.bot.r2.StarPoints;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
-import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
-import ch.ethz.idsc.sophus.hs.sn.SnManifold;
-import ch.ethz.idsc.sophus.hs.sn.SnMetric;
+import ch.ethz.idsc.sophus.hs.IterativeBiinvariantMean;
+import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
+import ch.ethz.idsc.sophus.hs.hn.HnManifold;
+import ch.ethz.idsc.sophus.hs.hn.HnMetric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** symmetric positive definite 2 x 2 matrices */
-public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
+public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
+  private static final Tensor STAR_POINTS = StarPoints.of(6, 0.15, 0.05).unmodifiable();
   // ---
   private final int dimensions;
 
-  protected SnGeodesicDisplay(int dimensions) {
+  protected HnGeodesicDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 
   @Override // from GeodesicDisplay
   public final GeodesicInterface geodesicInterface() {
-    return SnGeodesic.INSTANCE;
+    return HnGeodesic.INSTANCE;
   }
 
   @Override
@@ -40,7 +39,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final Tensor shape() {
-    return CIRCLE;
+    return STAR_POINTS;
   }
 
   @Override // from GeodesicDisplay
@@ -55,26 +54,26 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final HsExponential hsExponential() {
-    return SnManifold.INSTANCE;
+    return HnManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return SnMetric.INSTANCE.distance(p, q);
+    return HnMetric.INSTANCE.distance(p, q);
   }
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return SnFastMean.INSTANCE;
+    return IterativeBiinvariantMean.of(hsExponential());
   }
 
   @Override // from GeodesicDisplay
   public final FlattenLogManifold flattenLogManifold() {
-    return SnManifold.INSTANCE;
+    return HnManifold.INSTANCE;
   }
 
   @Override
   public final String toString() {
-    return "S" + dimensions();
+    return "H" + dimensions();
   }
 }

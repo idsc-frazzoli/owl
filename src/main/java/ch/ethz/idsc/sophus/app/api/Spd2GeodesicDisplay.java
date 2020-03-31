@@ -27,7 +27,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
   private static final Scalar SCALE = RealScalar.of(0.2);
-  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43).multiply(SCALE);
+  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43).multiply(SCALE).unmodifiable();
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
 
   @Override // from GeodesicDisplay
@@ -35,7 +35,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
     return SpdGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public int dimensions() {
     return 3;
   }
@@ -86,7 +86,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
     return null;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return SpdManifold.INSTANCE;
   }
@@ -94,7 +94,6 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
     return SpdManifold.INSTANCE;
-    // , InverseDistanceWeighting.of(SpdMetricSquared.INSTANCE));
   }
 
   @Override // from GeodesicDisplay
@@ -107,7 +106,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
     return SpdMean.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public String toString() {
     return "Spd2";
   }

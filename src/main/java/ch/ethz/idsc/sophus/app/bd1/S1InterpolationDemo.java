@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.N;
     super(true, GeodesicDisplays.R2_ONLY);
     setMidpointIndicated(false);
     {
-      spinnerBarycentric.setArray(SnBarycentricCoordinates.values());
+      spinnerBarycentric.setArray(SnWeightingInterfaces.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }

@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
 import ch.ethz.idsc.sophus.hs.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   private final JButton jButtonExport = new JButton("export");
 
   public S2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, SnBarycentricCoordinates.values());
+    super(true, GeodesicDisplays.S2_ONLY, SnWeightingInterfaces.values());
     {
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);

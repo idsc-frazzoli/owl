@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private final JButton jButtonShuffle = new JButton("shuffle");
 
   public AbstractHoverDemo() {
-    super(false, GeodesicDisplays.SE2C_S2_R2);
+    super(false, GeodesicDisplays.SE2C_S2_H2_R2);
     setMidpointIndicated(false);
     setPositioningEnabled(false);
     {

@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.HnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.HnWeightingInterfaces;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private final SpinnerLabel<HnMeans> spinnerMeans = new SpinnerLabel<>();
 
   H2DeformationDemo() {
-    super(GeodesicDisplays.H2_ONLY, HnBarycentricCoordinates.values());
+    super(GeodesicDisplays.H2_ONLY, HnWeightingInterfaces.values());
     // ---
     {
       spinnerMeans.setArray(HnMeans.values());
@@ -48,8 +48,9 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override
   MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
-    Tensor dx = Subdivide.of(-1.0, 1.0, res - 1);
-    Tensor dy = Subdivide.of(-1.0, 1.0, res - 1);
+    double rad = 1.3;
+    Tensor dx = Subdivide.of(-rad, rad, res - 1);
+    Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
     return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
   }

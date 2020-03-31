@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class R2GeodesicDisplay extends RnGeodesicDisplay {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.1));
+  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.1)).unmodifiable();
+  // ---
   public static final R2GeodesicDisplay INSTANCE = new R2GeodesicDisplay();
 
   private R2GeodesicDisplay() {
@@ -20,7 +21,7 @@ public class R2GeodesicDisplay extends RnGeodesicDisplay {
     return CIRCLE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
     return VectorQ.requireLength(p, 2);
   }

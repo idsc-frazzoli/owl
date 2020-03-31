@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
-import ch.ethz.idsc.sophus.app.api.SnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ class S1BarycentricCoordinateDemo extends A1BarycentricCoordinateDemo {
   public S1BarycentricCoordinateDemo() {
-    super(SnBarycentricCoordinates.values());
+    super(SnWeightingInterfaces.values());
   }
 
   @Override

@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 /* package */ class ClassificationDemo extends AbstractHoverDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_O = ColorDataLists._097.cyclic();
   private static final ColorDataIndexed COLOR_DATA_INDEXED_T = COLOR_DATA_INDEXED_O.deriveWithAlpha(128);
+  // ---
   private Classification classification;
 
   @Override

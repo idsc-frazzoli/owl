@@ -24,14 +24,14 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 public enum He1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
-  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2));
+  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2)).unmodifiable();
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
     return HeGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public int dimensions() {
     return 3;
   }
@@ -68,7 +68,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
     return HeExponential.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), exponential());
   }
@@ -83,12 +83,12 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
     return HeBiinvariantMean.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
     return HeManifold.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public String toString() {
     return "He1";
   }

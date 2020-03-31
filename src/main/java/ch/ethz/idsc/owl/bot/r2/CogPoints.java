@@ -5,6 +5,8 @@ import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.alg.Flatten;
 
 public enum CogPoints {
   ;
@@ -12,16 +14,10 @@ public enum CogPoints {
    * the orientation of the points is counter-clockwise.
    * 
    * @param n
-   * @param s_hi
-   * @param s_lo
-   * @return 2 * n x 2 matrix */
-  public static Tensor of(int n, Scalar s_hi, Scalar s_lo) {
-    int n4 = n * 4;
-    Scalar[] radius = new Scalar[] { s_hi, s_hi, s_lo, s_lo };
-    int count = 0;
-    Tensor polygon = Tensors.reserve(n4);
-    for (Tensor u : CirclePoints.of(n4))
-      polygon.append(u.multiply(radius[count++ % 4]));
-    return polygon;
+   * @param hi
+   * @param lo
+   * @return (n * 4) x 2 matrix */
+  public static Tensor of(int n, Scalar hi, Scalar lo) {
+    return Flatten.of(ConstantArray.of(Tensors.of(hi, hi, lo, lo), n)).pmul(CirclePoints.of(n * 4));
   }
 }

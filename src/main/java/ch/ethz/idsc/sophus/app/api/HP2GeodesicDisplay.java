@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum HP2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
-  private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.2));
+  private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.2)).unmodifiable();
   private static final ScalarUnaryOperator MAX_Y = Max.function(RealScalar.of(0.01));
 
   @Override // from GeodesicDisplay
@@ -30,7 +30,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
     return new SplitParametricCurve(H2Geodesic.INSTANCE);
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public int dimensions() {
     return 2;
   }
@@ -47,7 +47,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
     return point;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
     return VectorQ.requireLength(p, 2);
   }
@@ -67,7 +67,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
     return null;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return null;
   }

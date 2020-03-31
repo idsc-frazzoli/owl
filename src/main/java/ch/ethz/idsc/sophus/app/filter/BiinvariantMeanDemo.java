@@ -16,15 +16,13 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
-import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
@@ -42,7 +40,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private final JToggleButton axes = new JToggleButton("axes");
 
   public BiinvariantMeanDemo() {
-    super(true, GeodesicDisplays.SE2C_S2_R2);
+    super(true, GeodesicDisplays.SE2C_S2_H2_R2);
     timerFrame.jToolBar.add(axes);
     Distribution dX = UniformDistribution.of(-3, 3);
     Distribution dY = NormalDistribution.of(0, .3);
@@ -58,18 +56,19 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (axes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    Tensor sequence = getControlPointsSe2();
+    Tensor sequence = getGeodesicControlPoints();
     int length = sequence.length();
     if (0 == length)
       return;
-    Scalar scalar = RationalScalar.of(1, length);
-    Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, Array.of(l -> scalar, length));
+    Tensor weights = ConstantArray.of(RationalScalar.of(1, length), length);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    Tensor mean = geodesicDisplay.biinvariantMean().mean(sequence, weights);
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);
     GraphicsUtil.setQualityHigh(graphics);
+    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     for (Tensor point : sequence) {
-      Tensor curve = Subdivide.of(0, 1, 20).map(Se2CoveringGeodesic.INSTANCE.curve(point, mean));
+      Tensor curve = Subdivide.of(0, 1, 20).map(geodesicInterface.curve(point, mean));
       Path2D path2d = geometricLayer.toPath2D(curve);
       graphics.draw(path2d);
     }
@@ -77,7 +76,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     renderControlPoints(geometricLayer, graphics);
     {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
-      Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.5));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(COLOR_DATA_INDEXED_FILL.getColor(0));
       graphics.fill(path2d);

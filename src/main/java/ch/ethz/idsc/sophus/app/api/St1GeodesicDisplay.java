@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -25,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum St1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
-  private static final Tensor PENTAGON = CirclePoints.of(5).multiply(RealScalar.of(0.2));
+  private static final Tensor PENTAGON = CirclePoints.of(5).multiply(RealScalar.of(0.2)).unmodifiable();
   // Fehlerhaft, aber zurzeit Probleme mit Ausnahme bei lambda = 0
   private static final ScalarUnaryOperator MAX_X = Max.function(RealScalar.of(0.001));
 
@@ -71,9 +70,9 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
     return StExponential.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), exponential());
+    return StManifold.HS_EXP;
   }
 
   @Override // from GeodesicDisplay

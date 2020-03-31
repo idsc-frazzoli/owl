@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.hs.sn.SnMetricSquared;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.math.id.InverseDistanceWeighting;
 
-public enum SnBarycentricCoordinates implements Supplier<WeightingInterface> {
+public enum SnWeightingInterfaces implements Supplier<WeightingInterface> {
   BI_LINEAR(HsBiinvariantCoordinate.linear(SnManifold.INSTANCE)), //
   BI_SMOOTH(HsBiinvariantCoordinate.smooth(SnManifold.INSTANCE)), //
   ID_LINEAR(HsBarycentricCoordinate.linear(SnManifold.INSTANCE)), //
@@ -25,7 +25,7 @@ public enum SnBarycentricCoordinates implements Supplier<WeightingInterface> {
 
   private final WeightingInterface weightingInterface;
 
-  private SnBarycentricCoordinates(WeightingInterface weightingInterface) {
+  private SnWeightingInterfaces(WeightingInterface weightingInterface) {
     this.weightingInterface = weightingInterface;
   }
 

@@ -26,9 +26,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.4));
-  // private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
+  private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.4)).unmodifiable();
   private static final Scalar RADIUS = RealScalar.of(7);
+  // ---
   public static final GeodesicDisplay INSTANCE = new So3GeodesicDisplay(RADIUS);
   /***************************************************/
   private final Scalar radius;
@@ -37,7 +37,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     this.radius = radius;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public int dimensions() {
     return 3;
   }
@@ -81,7 +81,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     return So3Exponential.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), exponential());
   }
@@ -101,7 +101,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     return So3Manifold.INSTANCE;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return "SO3";
   }
