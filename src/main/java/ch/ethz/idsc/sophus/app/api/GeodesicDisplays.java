@@ -16,6 +16,7 @@ public enum GeodesicDisplays {
       R3GeodesicDisplay.INSTANCE, //
       S1GeodesicDisplay.INSTANCE, //
       S2GeodesicDisplay.INSTANCE, //
+      HP2GeodesicDisplay.INSTANCE, //
       H2GeodesicDisplay.INSTANCE, //
       So3GeodesicDisplay.INSTANCE, //
       He1GeodesicDisplay.INSTANCE, //
@@ -29,7 +30,7 @@ public enum GeodesicDisplays {
       Spd2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE, //
       R3GeodesicDisplay.INSTANCE, //
-      H2GeodesicDisplay.INSTANCE, //
+      HP2GeodesicDisplay.INSTANCE, //
       He1GeodesicDisplay.INSTANCE, //
       St1GeodesicDisplay.INSTANCE);
   // ---
@@ -89,4 +90,6 @@ public enum GeodesicDisplays {
   // ---
   public static final List<GeodesicDisplay> S2_ONLY = Arrays.asList( //
       S2GeodesicDisplay.INSTANCE);
+  public static final List<GeodesicDisplay> H2_ONLY = Arrays.asList( //
+      H2GeodesicDisplay.INSTANCE);
 }

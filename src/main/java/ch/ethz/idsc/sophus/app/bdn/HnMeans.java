@@ -4,21 +4,21 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.sn.SnBiinvariantMean;
-import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
-import ch.ethz.idsc.sophus.hs.sn.SnPhongMean;
+import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
+import ch.ethz.idsc.sophus.hs.hn.HnFastMean;
+import ch.ethz.idsc.sophus.hs.hn.HnPhongMean;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** RMF(p,t,w)[x] == w.t for w = IDC(p,x) */
-/* package */ enum SnMeans implements Supplier<BiinvariantMean> {
-  EXACT(new SnBiinvariantMean(Chop._05)), //
-  FAST(SnFastMean.INSTANCE), //
-  PHONG(SnPhongMean.INSTANCE), //
+/* package */ enum HnMeans implements Supplier<BiinvariantMean> {
+  EXACT(new HnBiinvariantMean(Chop._05)), //
+  FAST(HnFastMean.INSTANCE), //
+  PHONG(HnPhongMean.INSTANCE), //
   ;
 
   private final BiinvariantMean biinvariantMean;
 
-  private SnMeans(BiinvariantMean biinvariantMean) {
+  private HnMeans(BiinvariantMean biinvariantMean) {
     this.biinvariantMean = biinvariantMean;
   }
 

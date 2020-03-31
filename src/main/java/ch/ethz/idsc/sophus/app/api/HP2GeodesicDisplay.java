@@ -4,28 +4,30 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.IterativeBiinvariantMean;
-import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
-import ch.ethz.idsc.sophus.hs.hn.HnManifold;
-import ch.ethz.idsc.sophus.hs.hn.HnMetric;
-import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
+import ch.ethz.idsc.sophus.hs.h2.H2Geodesic;
+import ch.ethz.idsc.sophus.hs.h2.H2Metric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitParametricCurve;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public enum H2GeodesicDisplay implements GeodesicDisplay {
+public enum HP2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
 
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.2));
+  private static final ScalarUnaryOperator MAX_Y = Max.function(RealScalar.of(0.01));
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return HnGeodesic.INSTANCE;
+    return new SplitParametricCurve(H2Geodesic.INSTANCE);
   }
 
   @Override
@@ -40,12 +42,14 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    return HnWeierstrassCoordinate.toPoint(xya.extract(0, 2));
+    Tensor point = xya.extract(0, 2);
+    point.set(MAX_Y, 1);
+    return point;
   }
 
   @Override
   public Tensor toPoint(Tensor p) {
-    return p.extract(0, 2);
+    return VectorQ.requireLength(p, 2);
   }
 
   @Override // from GeodesicDisplay
@@ -65,26 +69,26 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public HsExponential hsExponential() {
-    return HnManifold.INSTANCE;
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
-    return HnManifold.INSTANCE;
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
-    return HnMetric.INSTANCE.distance(p, q);
+    return H2Metric.INSTANCE.distance(p, q);
   }
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return IterativeBiinvariantMean.of(hsExponential());
+    return null;
   }
 
   @Override // from Object
   public String toString() {
-    return "H2";
+    return "HP2";
   }
 }

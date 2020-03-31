@@ -12,6 +12,7 @@ import java.awt.geom.Point2D;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -25,7 +26,7 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
     GeodesicDisplay geodesicDisplay = getGeodesicDisplay();
     if (geodesicDisplay instanceof S1GeodesicDisplay) {
       graphics.setColor(BORDER);
-      graphics.draw(geometricLayer.toPath2D(CIRCLE));
+      graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
     } else //
     if (geodesicDisplay instanceof S2GeodesicDisplay) {
       Point2D center = geometricLayer.toPoint2D(0, 0);
@@ -36,7 +37,7 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       graphics.setPaint(paint);
       graphics.fill(geometricLayer.toPath2D(CIRCLE));
     } else //
-    if (geodesicDisplay instanceof H2GeodesicDisplay) {
+    if (geodesicDisplay instanceof HP2GeodesicDisplay) {
       Paint paint = new GradientPaint( //
           geometricLayer.toPoint2D(0, 0), BORDER, //
           geometricLayer.toPoint2D(0, 5), CENTER);
@@ -44,6 +45,19 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       Tensor box = Tensors.fromString("{{-20, 0}, {+20, 0}, {+20, 5}, {-20, 5}}");
       graphics.fill(geometricLayer.toPath2D(box));
     } else //
+    if (geodesicDisplay instanceof H2GeodesicDisplay) {
+      double modelWidth = 5;
+      Point2D center = geometricLayer.toPoint2D(0, 0);
+      float fradius = geometricLayer.model2pixelWidth(modelWidth);
+      float[] dist = { 0.0f, 0.30f, 1.0f };
+      Color[] colors = { BORDER, new Color(224, 224, 224, 128), CENTER };
+      Paint paint = new RadialGradientPaint(center, fradius, dist, colors);
+      graphics.setPaint(paint);
+      graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(RealScalar.of(modelWidth))));
+      // ---
+      graphics.setColor(BORDER);
+      graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
+    }
     if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
       Point2D point2d = geometricLayer.toPoint2D(0, 0);
       graphics.setColor(Color.DARK_GRAY);
