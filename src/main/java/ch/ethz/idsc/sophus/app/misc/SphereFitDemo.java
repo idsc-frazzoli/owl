@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
+import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -84,7 +85,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
         }
     }
     {
-      Tensor weiszfeld = SpatialMedian.with(Chop._04).uniform(control).get();
+      Tensor weiszfeld = WeiszfeldMethod.with(Chop._04).uniform(control).get();
       geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();

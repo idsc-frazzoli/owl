@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.opt.SpatialMedian;
+import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static Tensor image(int seed) {
     Random random = new Random(seed);
     Tensor points = RandomVariate.of(UniformDistribution.unit(), random, 15, 2);
-    Optional<Tensor> optional = SpatialMedian.with(Chop._10).uniform(points);
+    Optional<Tensor> optional = WeiszfeldMethod.with(Chop._10).uniform(points);
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
     BufferedImage bufferedImage = StaticHelper.createWhite();
     if (optional.isPresent()) {

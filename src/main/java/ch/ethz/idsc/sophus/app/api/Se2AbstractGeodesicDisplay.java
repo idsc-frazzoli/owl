@@ -3,22 +3,18 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidInterface;
-import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieFlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
-
-  @Override
-  public abstract ClothoidInterface geodesicInterface();
+public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Serializable {
+  private static final Tensor ARROWHEAD = Arrowhead.of(0.4).unmodifiable();
 
   @Override // from GeodesicDisplay
   public final int dimensions() {
@@ -41,33 +37,18 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   }
 
   @Override // from GeodesicDisplay
-  public final LieGroup lieGroup() {
-    return null;
-  }
-
-  @Override // from GeodesicDisplay
   public final Exponential exponential() {
-    return null;
+    return Se2CoveringExponential.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public final HsExponential hsExponential() {
-    return null;
-  }
-
-  @Override // from GeodesicDisplay
-  public final BiinvariantMean biinvariantMean() {
-    return null;
+    return LieExponential.of(lieGroup(), exponential());
   }
 
   @Override // from GeodesicDisplay
   public final FlattenLogManifold flattenLogManifold() {
-    return null;
-  }
-
-  @Override // from GeodesicDisplay
-  public final TensorMetric parametricDistance() {
-    return (p, q) -> geodesicInterface().curve(p, q).length();
+    return LieFlattenLogManifold.of(lieGroup(), Se2CoveringExponential.INSTANCE::log);
   }
 
   @Override // from Object

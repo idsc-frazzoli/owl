@@ -7,10 +7,12 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.tensor.Tensor;
 
-public class Se2GeodesicDisplay extends Se2CoveringGeodesicDisplay {
+public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
   public static final GeodesicDisplay INSTANCE = new Se2GeodesicDisplay();
 
   /***************************************************/
@@ -21,6 +23,13 @@ public class Se2GeodesicDisplay extends Se2CoveringGeodesicDisplay {
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
     return Se2Geodesic.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor project(Tensor xya) {
+    Tensor xym = xya.copy();
+    xym.set(So2.MOD, 2);
+    return xym;
   }
 
   @Override // from GeodesicDisplay

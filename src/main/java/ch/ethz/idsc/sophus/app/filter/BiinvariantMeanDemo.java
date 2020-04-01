@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JToggleButton median = new JToggleButton("median");
 
   public BiinvariantMeanDemo() {
-    super(true, GeodesicDisplays.SE2C_S2_H2_R2);
+    super(true, GeodesicDisplays.SE2C_SE2_S2_H2_R2);
     timerFrame.jToolBar.add(axes);
     {
       median.setSelected(true);
@@ -95,19 +95,22 @@ import ch.ethz.idsc.tensor.sca.Chop;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    if (median.isSelected()) {
-      SpatialMedian spatialMedian = //
-          HsWeiszfeldMethod.of(biinvariantMean, geodesicDisplay.parametricDistance(), Chop._05);
-      mean = spatialMedian.uniform(sequence).get();
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.7)));
-      path2d.closePath();
-      graphics.setColor(COLOR_DATA_INDEXED_FILL.getColor(1));
-      graphics.fill(path2d);
-      graphics.setColor(COLOR_DATA_INDEXED_DRAW.getColor(1));
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
-    }
+    if (median.isSelected())
+      try {
+        SpatialMedian spatialMedian = //
+            HsWeiszfeldMethod.of(biinvariantMean, geodesicDisplay.parametricDistance(), Chop._05);
+        mean = spatialMedian.uniform(sequence).get();
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
+        Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.7)));
+        path2d.closePath();
+        graphics.setColor(COLOR_DATA_INDEXED_FILL.getColor(1));
+        graphics.fill(path2d);
+        graphics.setColor(COLOR_DATA_INDEXED_DRAW.getColor(1));
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      } catch (Exception exception) {
+        System.err.println("no median");
+      }
   }
 
   public static void main(String[] args) {
