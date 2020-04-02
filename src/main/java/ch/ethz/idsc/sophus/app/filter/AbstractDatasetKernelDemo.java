@@ -34,7 +34,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseData;
   }
 
   protected AbstractDatasetKernelDemo(GokartPoseData gokartPoseData) {
-    this(GeodesicDisplays.CLOTH_SE2_R2, gokartPoseData);
+    this(GeodesicDisplays.CL_SE2_R2, gokartPoseData);
   }
 
   @Override // from DatasetFilterDemo

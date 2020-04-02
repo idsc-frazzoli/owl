@@ -6,9 +6,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class ArrowheadTest extends TestCase {
+  public void testOriented() {
+    Sign.requirePositive(PolygonArea.FUNCTION.apply(Arrowhead.of(1)));
+  }
+
   public void testExact() {
     ExactTensorQ.require(Arrowhead.of(RealScalar.ONE));
   }

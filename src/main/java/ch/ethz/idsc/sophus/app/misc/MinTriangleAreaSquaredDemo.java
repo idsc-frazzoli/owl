@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -24,13 +25,12 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class MinTriangleAreaSquaredDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
-  private final PathRender pathRenderBall = new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f);
   private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
   MinTriangleAreaSquaredDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     // ---
-    timerFrame.geometricComponent.addRenderInterface(pathRenderBall);
+    timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
     timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
     // ---
     JTextField jTextField = new JTextField(10);
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     timerFrame.jToolBar.add(jTextField);
     // ---
     Tensor blub = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {2, 0, 2.5708}, {1, 0, 2.1}}");
-    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
         Tensor.of(blub.stream().map(Tensors.vector(2, 1, 1)::pmul))));
   }
 

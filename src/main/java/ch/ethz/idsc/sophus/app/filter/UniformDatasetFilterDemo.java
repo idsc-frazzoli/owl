@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   // protected final SpinnerLabel<ColorDataGradients> spinnerLabelCDG = new SpinnerLabel<>();
 
   protected UniformDatasetFilterDemo(GokartPoseData gokartPoseData) {
-    this(GeodesicDisplays.CLOTH_SE2_R2, gokartPoseData);
+    this(GeodesicDisplays.CL_SE2_R2, gokartPoseData);
   }
 
   protected UniformDatasetFilterDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {

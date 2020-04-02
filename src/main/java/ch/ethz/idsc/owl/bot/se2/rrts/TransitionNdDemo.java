@@ -31,7 +31,7 @@ public class TransitionNdDemo extends ControlPointsDemo {
   private TransitionNdContainer transitionNdContainer;
 
   public TransitionNdDemo() {
-    super(false, GeodesicDisplays.CLOTH_SE2_R2);
+    super(false, GeodesicDisplays.CL_SE2_R2);
     setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---

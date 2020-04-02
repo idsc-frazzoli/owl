@@ -3,13 +3,13 @@ package ch.ethz.idsc.sophus.ply;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
-public class StarPointsTest extends TestCase {
+public class SpearheadTest extends TestCase {
   public void testSimple() {
-    Tensor polygon = StarPoints.of(4, RealScalar.ONE, RealScalar.of(0.3));
-    assertEquals(polygon.length(), 8);
+    Tensor polygon = Spearhead.of(Tensors.vector(-0.806, -0.250, -0.524), RealScalar.of(0.1));
     Sign.requirePositive(PolygonArea.FUNCTION.apply(polygon));
   }
 }

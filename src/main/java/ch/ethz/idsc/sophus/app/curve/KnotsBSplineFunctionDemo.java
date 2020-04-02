@@ -38,7 +38,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
   public KnotsBSplineFunctionDemo() {
-    super(GeodesicDisplays.CLOTH_SE2_R2);
+    super(GeodesicDisplays.CL_SE2_R2);
     // ---
     jSliderExponent.setPreferredSize(new Dimension(200, 28));
     jSliderExponent.setToolTipText("centripetal exponent");

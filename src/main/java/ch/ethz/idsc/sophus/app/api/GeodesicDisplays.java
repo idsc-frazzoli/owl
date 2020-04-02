@@ -83,7 +83,7 @@ public enum GeodesicDisplays {
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE);
   // ---
-  public static final List<GeodesicDisplay> CLOTH_SE2_R2 = Arrays.asList( //
+  public static final List<GeodesicDisplay> CL_SE2_R2 = Arrays.asList( //
       Se2ClothoidDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE);
@@ -95,4 +95,6 @@ public enum GeodesicDisplays {
       S2GeodesicDisplay.INSTANCE);
   public static final List<GeodesicDisplay> H2_ONLY = Arrays.asList( //
       H2GeodesicDisplay.INSTANCE);
+  public static final List<GeodesicDisplay> CL_ONLY = Arrays.asList( //
+      Se2ClothoidDisplay.INSTANCE);
 }

@@ -24,7 +24,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -42,7 +41,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class ClothoidComparisonDemo extends AbstractDemo implements DemoInterface {
   private static final int WIDTH = 480;
   private static final int HEIGHT = 360;
-  private static final Tensor ARROWHEAD = Arrowhead.of(0.3);
+  // private static final
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
 
@@ -52,13 +51,15 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     GraphicsUtil.setQualityHigh(graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
+    GeodesicDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
     {
+      Tensor shape = geodesicDisplay.shape();
       graphics.setColor(new Color(255, 0, 0, 255));
       geometricLayer.pushMatrix(Se2Matrix.of(Array.zeros(3)));
-      graphics.draw(geometricLayer.toPath2D(ARROWHEAD, true));
+      graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
       geometricLayer.pushMatrix(Se2Matrix.of(mouse));
-      graphics.draw(geometricLayer.toPath2D(ARROWHEAD, true));
+      graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
     }
     {
@@ -68,7 +69,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.drawString("extended", 0, 34);
     }
-    GeodesicDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
     // {
     // CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, 3);
     // Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);

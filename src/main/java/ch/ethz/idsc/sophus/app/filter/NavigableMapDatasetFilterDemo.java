@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public NavigableMapDatasetFilterDemo() {
-    super(GeodesicDisplays.CLOTH_SE2_R2);
+    super(GeodesicDisplays.CL_SE2_R2);
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     //

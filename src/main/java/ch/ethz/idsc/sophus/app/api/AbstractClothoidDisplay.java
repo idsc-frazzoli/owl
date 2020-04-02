@@ -12,10 +12,14 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.Spearhead;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor SPEARHEAD = Spearhead.of(0.4).unmodifiable();
+  private static final Tensor SPEARHEAD = //
+      // Spearhead.of(Tensors.vector(-0.806, -0.250, -0.524), RealScalar.of(0.1)).multiply(RealScalar.of(0.4));
+      Spearhead.of(Tensors.vector(-0.842, -0.342, -0.524), RealScalar.of(0.1)).multiply(RealScalar.of(0.35));
 
   @Override
   public abstract ClothoidInterface geodesicInterface();

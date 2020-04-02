@@ -50,7 +50,7 @@ public class TransitionNdContainer {
         lbounds.copy().append(Pi.VALUE.negate()), //
         ubounds.copy().append(Pi.VALUE));
     tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
-    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CLOTH_SE2_R2) {
+    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
       Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
           ? new RnRrtsNodeCollection(lbounds, ubounds)
