@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
   Se2CoveringDeformationDemo() {
-    super(GeodesicDisplays.SE2C_ONLY, Se2CoveringBarycentricCoordinates.values());
+    super(GeodesicDisplays.SE2C_SE2, Se2CoveringBarycentricCoordinates.values());
     // ---
     timerFrame.configCoordinateOffset(300, 500);
     shuffleSnap();

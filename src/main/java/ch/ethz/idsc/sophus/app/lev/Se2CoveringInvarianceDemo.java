@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JTextField jTextField = new JTextField();
 
   public Se2CoveringInvarianceDemo() {
-    super(true, GeodesicDisplays.SE2C_ONLY);
+    super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleAxes);
@@ -48,8 +48,9 @@ import ch.ethz.idsc.tensor.Tensors;
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
       {
-        LeverRender leverRender = new LeverRender(geodesicDisplay, controlPointsAll.extract(1, controlPointsAll.length()), controlPointsAll.get(0),
-            geometricLayer, graphics);
+        LeverRender leverRender = LeverRender.of(geodesicDisplay, //
+            controlPointsAll.extract(1, controlPointsAll.length()), //
+            controlPointsAll.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();
         leverRender.renderWeights();
@@ -59,7 +60,8 @@ import ch.ethz.idsc.tensor.Tensors;
         geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
         Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
-        LeverRender leverRender = new LeverRender(geodesicDisplay, result.extract(1, result.length()), result.get(0), geometricLayer, graphics);
+        LeverRender leverRender = LeverRender.of(geodesicDisplay, //
+            result.extract(1, result.length()), result.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();
         leverRender.renderWeights();

@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
+import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,7 +40,19 @@ public class LeverRender {
       new PointsRender(new Color(64, 128, 64, 128), new Color(64, 128, 64, 255));
   private static final Stroke STROKE = //
       new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  // ---
+
+  public static LeverRender of(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, GeometricLayer geometricLayer, Graphics2D graphics) {
+    Tensor weights;
+    if (geodesicDisplay.dimensions() < sequence.length()) {
+      // TODO prefer outside coordinate supplier
+      BarycentricCoordinate barycentricCoordinate = HsBiinvariantCoordinate.smooth(geodesicDisplay.flattenLogManifold());
+      weights = barycentricCoordinate.weights(sequence, origin);
+    } else
+      weights = Array.zeros(sequence.length());
+    return new LeverRender(geodesicDisplay, sequence, origin, weights, geometricLayer, graphics);
+  }
+
+  /***************************************************/
   private final GeodesicDisplay geodesicDisplay;
   private final Tensor weights;
   private final Tensor sequence;
@@ -49,16 +61,12 @@ public class LeverRender {
   private final GeometricLayer geometricLayer;
   private final Graphics2D graphics;
 
-  public LeverRender(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, GeometricLayer geometricLayer, Graphics2D graphics) {
+  public LeverRender(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, Tensor weights, GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
     this.origin = origin;
     shape = geodesicDisplay.shape();
-    if (geodesicDisplay.dimensions() < sequence.length()) {
-      BarycentricCoordinate barycentricCoordinate = HsBarycentricCoordinate.smooth(geodesicDisplay.flattenLogManifold());
-      weights = barycentricCoordinate.weights(sequence, origin);
-    } else
-      weights = Array.zeros(sequence.length());
+    this.weights = weights;
     this.geometricLayer = geometricLayer;
     this.graphics = graphics;
   }
@@ -93,7 +101,7 @@ public class LeverRender {
       Path2D path2d = geometricLayer.toPath2D(shape, true);
       graphics.setColor(Color.BLACK);
       Rectangle rectangle = path2d.getBounds();
-      Scalar rounded = Round._2.apply(getWeights().Get(index));
+      Scalar rounded = Round._2.apply(weights.Get(index));
       String string = " " + rounded.toString();
       graphics.drawString(string, //
           rectangle.x + rectangle.width, //

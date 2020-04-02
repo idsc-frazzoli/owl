@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    render(geometricLayer, graphics, new LeverRender( //
+    render(geometricLayer, graphics, LeverRender.of( //
         geodesicDisplay, //
         getGeodesicControlPoints(), //
         geodesicDisplay.project(geometricLayer.getMouseSe2State()), //

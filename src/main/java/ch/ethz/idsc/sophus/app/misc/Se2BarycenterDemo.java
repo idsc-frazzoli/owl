@@ -14,7 +14,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.red.Total;
   private final JToggleButton axes = new JToggleButton("axes");
 
   public Se2BarycenterDemo() {
-    super(false, GeodesicDisplays.SE2C_ONLY);
+    super(false, GeodesicDisplays.SE2C_SE2);
     timerFrame.jToolBar.add(axes);
     Tensor tensor = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString("{{5, 0, -1}}")) //
         .append(Tensors.vector(0, -1, 0)) //
@@ -64,6 +64,7 @@ import ch.ethz.idsc.tensor.red.Total;
           graphics.draw(path2d);
         }
         // ---
+        BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
         Tensor tX = Subdivide.of(-1, 1, 20);
         Tensor tY = Subdivide.of(-1, 1, 8);
         int n = tY.length();
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.red.Total;
               Tensor weights = Tensors.of(w, x, y);
               weights.append(RealScalar.ONE.subtract(Total.ofVector(weights)));
               weights = RotateRight.of(weights, 1);
-              Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, weights);
+              Tensor mean = biinvariantMean.mean(sequence, weights);
               array[c0][c1] = mean;
               ++c1;
             }

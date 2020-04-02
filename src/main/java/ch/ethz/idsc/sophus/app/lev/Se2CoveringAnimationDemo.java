@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.io.Timing;
   private Tensor snapshot;
 
   public Se2CoveringAnimationDemo() {
-    super(true, GeodesicDisplays.SE2C_ONLY);
+    super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleAxes);
@@ -72,8 +72,9 @@ import ch.ethz.idsc.tensor.io.Timing;
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       GraphicsUtil.setQualityHigh(graphics);
-      LeverRender leverRender = new LeverRender( //
-          geodesicDisplay, controlPoints.extract(1, controlPoints.length()), controlPoints.get(0), geometricLayer, graphics);
+      LeverRender leverRender = LeverRender.of( //
+          geodesicDisplay, controlPoints.extract(1, controlPoints.length()), //
+          controlPoints.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
       leverRender.renderWeights();
       leverRender.renderSequence();
