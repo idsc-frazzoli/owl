@@ -2,8 +2,11 @@
 package ch.ethz.idsc.sophus.ply;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -11,7 +14,13 @@ import junit.framework.TestCase;
 
 public class ArrowheadTest extends TestCase {
   public void testOriented() {
-    Sign.requirePositive(PolygonArea.FUNCTION.apply(Arrowhead.of(1)));
+    Tensor polygon = Arrowhead.of(1);
+    Scalar scalar = PolygonArea.FUNCTION.apply(polygon);
+    assertEquals(scalar, RationalScalar.HALF);
+    Sign.requirePositive(scalar);
+    Tensor centroid = PolygonCentroid.FUNCTION.apply(polygon);
+    ExactTensorQ.require(centroid);
+    assertEquals(centroid, Array.zeros(2));
   }
 
   public void testExact() {

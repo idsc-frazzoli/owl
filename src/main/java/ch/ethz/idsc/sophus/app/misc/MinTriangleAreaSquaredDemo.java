@@ -1,10 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.misc;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-
-import javax.swing.JTextField;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
@@ -32,10 +29,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // ---
     timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
     timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
-    // ---
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    timerFrame.jToolBar.add(jTextField);
     // ---
     Tensor blub = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {2, 0, 2.5708}, {1, 0, 2.1}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
