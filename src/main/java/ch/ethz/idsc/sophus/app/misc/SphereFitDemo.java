@@ -2,12 +2,9 @@
 package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Optional;
-
-import javax.swing.JTextField;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -41,15 +38,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final PathRender pathRenderBall = new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f);
   private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
-  SphereFitDemo() {
+  public SphereFitDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterface(pathRenderBall);
     timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
-    // ---
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    timerFrame.jToolBar.add(jTextField);
     // ---
     Tensor blub = Tensors.fromString(
         "{{1, 0, 0}, {1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}, {1.5, 0, 0}, {4, 0, 3.14159}, {2, 0, 3.14159}, {2, 0, 0}}");

@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   // ---
   private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
-  MinTriangleAreaSquaredDemo() {
+  public MinTriangleAreaSquaredDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);

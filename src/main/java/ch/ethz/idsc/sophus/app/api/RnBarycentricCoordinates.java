@@ -7,9 +7,9 @@ import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
 import ch.ethz.idsc.sophus.itp.GaussianRadialBasisFunction;
 import ch.ethz.idsc.sophus.itp.InverseMultiquadricNorm;
-import ch.ethz.idsc.sophus.itp.KrigingWeighting;
 import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.itp.ThinPlateSplineNorm;
+import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
@@ -38,7 +38,8 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   RBF_INV_MULTI(new RadialBasisFunctionWeighting(new InverseMultiquadricNorm(RealScalar.of(5)))), //
   RBF_TPS(new RadialBasisFunctionWeighting(new ThinPlateSplineNorm(RealScalar.of(5)))), //
   RBF_GAUSS(new RadialBasisFunctionWeighting(new GaussianRadialBasisFunction(RealScalar.of(5)))), //
-  KRIGING(new KrigingWeighting(s -> s)), // TODO variogram
+  KR_LOGNORM(Krigings.LOGNORM.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
+  KR_PROJECT(Krigings.PROJECT.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
@@ -48,7 +49,7 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
       AFFINE, IW_LINEAR, IW_SMOOTH, //
       RBF, //
       RBF_INV_MULTI, RBF_TPS, RBF_GAUSS, //
-      KRIGING };
+      KR_LOGNORM, KR_PROJECT };
   private final WeightingInterface weightingInterface;
 
   private RnBarycentricCoordinates(WeightingInterface weightingInterface) {

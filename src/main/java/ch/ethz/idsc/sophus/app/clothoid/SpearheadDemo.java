@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class SpearheadDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(128);
 
-  SpearheadDemo() {
+  public SpearheadDemo() {
     super(false, GeodesicDisplays.SE2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
