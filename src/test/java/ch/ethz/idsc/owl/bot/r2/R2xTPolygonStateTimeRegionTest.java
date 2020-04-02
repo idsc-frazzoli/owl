@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.So2Family;
 import ch.ethz.idsc.sophus.math.BijectionFamily;
+import ch.ethz.idsc.sophus.ply.CogPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

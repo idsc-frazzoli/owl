@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
@@ -25,6 +24,7 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.sophus.hs.r2.SimpleR2TranslationFamily;
 import ch.ethz.idsc.sophus.hs.r2.So2Family;
 import ch.ethz.idsc.sophus.math.BijectionFamily;
+import ch.ethz.idsc.sophus.ply.CogPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

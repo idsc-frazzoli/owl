@@ -10,7 +10,6 @@ import java.util.Optional;
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.java.awt.GraphicsUtil;
-import ch.ethz.idsc.owl.bot.r2.StarPoints;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -21,6 +20,7 @@ import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

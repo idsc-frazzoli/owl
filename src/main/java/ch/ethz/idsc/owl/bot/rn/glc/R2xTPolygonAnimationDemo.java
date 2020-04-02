@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
-import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -23,6 +22,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.Se2Family;
 import ch.ethz.idsc.sophus.math.BijectionFamily;
+import ch.ethz.idsc.sophus.ply.CogPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.r2;
+package ch.ethz.idsc.sophus.ply;
 
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;

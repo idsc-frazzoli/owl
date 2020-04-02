@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.bot.r2.StarPoints;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -15,6 +14,7 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** symmetric positive definite 2 x 2 matrices */

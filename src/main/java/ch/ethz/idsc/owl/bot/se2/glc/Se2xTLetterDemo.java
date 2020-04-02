@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
@@ -28,6 +27,7 @@ import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.sophus.hs.r2.Se2Family;
 import ch.ethz.idsc.sophus.hs.r2.SimpleR2TranslationFamily;
 import ch.ethz.idsc.sophus.math.BijectionFamily;
+import ch.ethz.idsc.sophus.ply.CogPoints;
 import ch.ethz.idsc.subare.core.td.SarsaType;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

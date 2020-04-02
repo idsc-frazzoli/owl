@@ -11,11 +11,11 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.TensorMetric;
-import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.sophus.ply.Spearhead;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
+  private static final Tensor SPEARHEAD = Spearhead.of(0.4).unmodifiable();
 
   @Override
   public abstract ClothoidInterface geodesicInterface();
@@ -27,7 +27,7 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
 
   @Override // from GeodesicDisplay
   public final Tensor shape() {
-    return ARROWHEAD;
+    return SPEARHEAD;
   }
 
   @Override // from GeodesicDisplay
