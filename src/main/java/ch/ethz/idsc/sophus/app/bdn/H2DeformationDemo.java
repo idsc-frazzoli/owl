@@ -30,16 +30,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     shuffleSnap();
   }
 
-  @Override
+  @Override // from AbstractDeformationDemo
   synchronized Tensor shufflePointsSe2(int n) {
-    // Distribution distribution = UniformDistribution.of(-1.5, 1.5);
-    // return Tensor.of(RandomVariate.of(distribution, n, 2).stream() //
-    // .map(Tensor::copy) //
-    // .map(row -> row.append(RealScalar.ZERO)));
     return Tensor.of(CirclePoints.of(n).multiply(RealScalar.of(3)).stream().map(row -> row.append(RealScalar.ZERO)));
   }
 
-  @Override
+  @Override // from AbstractDeformationDemo
   MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     double rad = 1.0;
@@ -49,12 +45,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
   }
 
-  @Override
+  @Override // from AbstractDeformationDemo
   BiinvariantMean biinvariantMean() {
     return spinnerMeans.getValue().get();
   }
 
-  @Override
+  @Override // from AbstractDeformationDemo
   Tensor shapeOrigin() {
     return TRIANGLE;
   }

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
-class MovingDomain2D {
+/* package */ class MovingDomain2D {
   final Tensor origin;
   final Tensor domain;
   final Tensor[][] weights;
@@ -41,7 +41,7 @@ class MovingDomain2D {
     }
   }
 
-  public Tensor origin() {
+  public final Tensor origin() {
     return origin;
   }
 
@@ -56,7 +56,7 @@ class MovingDomain2D {
     return array;
   }
 
-  public Tensor weights() {
+  public final Tensor weights() {
     return _wgs;
   }
 }

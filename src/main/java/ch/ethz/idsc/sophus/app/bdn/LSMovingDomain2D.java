@@ -12,12 +12,12 @@ import ch.ethz.idsc.tensor.opt.RigidMotionFit;
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
-class LSMovingDomain2D extends MovingDomain2D {
+/* package */ class LSMovingDomain2D extends MovingDomain2D {
   public LSMovingDomain2D(Tensor origin, WeightingInterface weightingInterface, Tensor domain) {
     super(origin, weightingInterface, domain);
   }
 
-  @Override
+  @Override // from MovingDomain2D
   public Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean) {
     System.out.println("here");
     int rows = domain.length();
