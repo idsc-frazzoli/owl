@@ -13,8 +13,8 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -45,7 +45,7 @@ public class LeverRender {
     Tensor weights;
     if (geodesicDisplay.dimensions() < sequence.length()) {
       // TODO prefer outside coordinate supplier
-      BarycentricCoordinate barycentricCoordinate = HsBiinvariantCoordinate.smooth(geodesicDisplay.flattenLogManifold());
+      BarycentricCoordinate barycentricCoordinate = RelativeCoordinate.smooth(geodesicDisplay.flattenLogManifold());
       weights = barycentricCoordinate.weights(sequence, origin);
     } else
       weights = Array.zeros(sequence.length());

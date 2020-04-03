@@ -23,9 +23,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
-import ch.ethz.idsc.sophus.hs.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
-import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
+import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -141,8 +141,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   @Override
   public void actionPerformed(ActionEvent e) {
     BarycentricCoordinate[] bc = { //
-        HsBarycentricCoordinate.smooth(SnManifold.INSTANCE), //
-        HsBiinvariantCoordinate.smooth(SnManifold.INSTANCE) };
+        AbsoluteCoordinate.smooth(SnManifold.INSTANCE), //
+        RelativeCoordinate.smooth(SnManifold.INSTANCE) };
     for (BarycentricCoordinate barycentricCoordinate : bc) {
       System.out.print("computing...");
       Tensor wgs = compute(barycentricCoordinate, 120);

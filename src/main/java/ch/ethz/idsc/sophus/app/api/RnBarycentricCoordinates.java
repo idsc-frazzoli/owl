@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.sophus.hs.HsBarycentricCoordinate;
-import ch.ethz.idsc.sophus.hs.HsBiinvariantCoordinate;
+import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
+import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.itp.GaussianRadialBasisFunction;
 import ch.ethz.idsc.sophus.itp.InverseMultiquadricNorm;
 import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
@@ -25,12 +25,12 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   WACHSPRESS(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS)), //
   MEAN_VALUE(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE)), //
   DISCRETE_HARMONIC(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
-  BI_LINEAR(HsBiinvariantCoordinate.linear(RnManifold.INSTANCE)), //
-  BI_SMOOTH(HsBiinvariantCoordinate.smooth(RnManifold.INSTANCE)), //
-  BIINVARIANTD1(HsBiinvariantCoordinate.diagonal_linear(RnManifold.INSTANCE)), //
-  BIINVARIANTD2(HsBiinvariantCoordinate.diagonal_smooth(RnManifold.INSTANCE)), //
-  ID_LINEAR(HsBarycentricCoordinate.linear(RnManifold.INSTANCE)), //
-  ID_SMOOTH(HsBarycentricCoordinate.smooth(RnManifold.INSTANCE)), //
+  BI_LINEAR(RelativeCoordinate.linear(RnManifold.INSTANCE)), //
+  BI_SMOOTH(RelativeCoordinate.smooth(RnManifold.INSTANCE)), //
+  BIINVARIANTD1(RelativeCoordinate.diagonal_linear(RnManifold.INSTANCE)), //
+  BIINVARIANTD2(RelativeCoordinate.diagonal_smooth(RnManifold.INSTANCE)), //
+  ID_LINEAR(AbsoluteCoordinate.linear(RnManifold.INSTANCE)), //
+  ID_SMOOTH(AbsoluteCoordinate.smooth(RnManifold.INSTANCE)), //
   AFFINE(AffineCoordinate.INSTANCE), //
   IW_LINEAR(InverseDistanceWeighting.of(RnMetric.INSTANCE)), //
   IW_SMOOTH(InverseDistanceWeighting.of(RnMetricSquared.INSTANCE)), //
@@ -38,8 +38,8 @@ public enum RnBarycentricCoordinates implements Supplier<WeightingInterface> {
   RBF_INV_MULTI(new RadialBasisFunctionWeighting(new InverseMultiquadricNorm(RealScalar.of(5)))), //
   RBF_TPS(new RadialBasisFunctionWeighting(new ThinPlateSplineNorm(RealScalar.of(5)))), //
   RBF_GAUSS(new RadialBasisFunctionWeighting(new GaussianRadialBasisFunction(RealScalar.of(5)))), //
-  KR_LOGNORM(Krigings.LOGNORM.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
-  KR_PROJECT(Krigings.PROJECT.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
+  KR_LOGNORM(Krigings.ABSOLUTE.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
+  KR_PROJECT(Krigings.RELATIVE.weighting(RnManifold.INSTANCE, s -> s)), // TODO variogram
   ;
 
   public static final RnBarycentricCoordinates[] SCATTERED = { //
