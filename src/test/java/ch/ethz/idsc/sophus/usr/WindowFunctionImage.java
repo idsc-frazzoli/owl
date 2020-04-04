@@ -9,7 +9,7 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
     GeometricLayer geometricLayer = GeometricLayer.of(SE2);
     BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setColor(Color.RED);
     Tensor domain = Subdivide.of(-0.5, 0.5, 180);
     graphics.setStroke(new BasicStroke(1.5f));

@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -37,9 +37,9 @@ import ch.ethz.idsc.tensor.Tensors;
       // ---
       symLink = SymLinkBuilder.of(control, symScalar);
       // ---
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       GeometricSymLinkRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
-      GraphicsUtil.setQualityDefault(graphics);
+      RenderQuality.setDefault(graphics);
     }
     renderControlPoints(geometricLayer, graphics);
     // ---

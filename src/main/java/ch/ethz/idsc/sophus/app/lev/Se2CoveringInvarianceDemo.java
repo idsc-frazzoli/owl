@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     Tensor controlPointsAll = getGeodesicControlPoints();

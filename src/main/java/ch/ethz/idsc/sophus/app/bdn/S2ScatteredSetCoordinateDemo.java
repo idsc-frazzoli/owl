@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     renderControlPoints(geometricLayer, graphics);
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
-    graphics.drawString("" + spinnerBarycentric.getValue(), 0, 10 + 17);
+    graphics.drawString("" + spinnerWeighting.getValue(), 0, 10 + 17);
     final Tensor controlPoints = getGeodesicControlPoints();
     S2GeodesicDisplay s2GeodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
     int index = 0;
@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       Tensor wgs = compute(weightingInterface(), refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, magnification()).render(geometricLayer, graphics);
     }
   }

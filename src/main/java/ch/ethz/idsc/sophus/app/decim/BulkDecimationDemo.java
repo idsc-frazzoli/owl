@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setStroke(new BasicStroke(1));
     renderControlPoints(geometricLayer, graphics);
     Tensor domain = Subdivide.of(0, 1, 10);

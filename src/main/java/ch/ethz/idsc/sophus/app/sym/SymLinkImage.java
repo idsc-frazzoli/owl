@@ -11,7 +11,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
@@ -56,7 +56,7 @@ public class SymLinkImage {
     bufferedImage = new BufferedImage((int) (100 + Math.round(WIDTH * max)), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
     // ---
     Graphics2D graphics = bufferedImage.createGraphics();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setFont(font);
     final FontMetrics fontMetrics = graphics.getFontMetrics(font);
     if (Objects.nonNull(background)) {
@@ -94,7 +94,7 @@ public class SymLinkImage {
 
   public void title(String string) {
     Graphics2D graphics = bufferedImage.createGraphics();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     Font font = new Font(Font.SANS_SERIF, Font.BOLD, 15);
     FontMetrics fontMetrics = graphics.getFontMetrics(font);
     int stringWidth = fontMetrics.stringWidth(string);
@@ -113,7 +113,7 @@ public class SymLinkImage {
     BufferedImage image = ImageFormat.of(tensor);
     if (line) {
       Graphics2D graphics = image.createGraphics();
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 7 }, 0));
       graphics.setColor(Color.GRAY);
       int piy = 22;

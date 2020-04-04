@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
+  final SpinnerLabel<Supplier<WeightingInterface>> spinnerWeighting = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -27,9 +27,9 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   public ScatteredSetCoordinateDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, Supplier<WeightingInterface>[] array) {
     super(addRemoveControlPoints, list);
     {
-      spinnerBarycentric.setArray(array);
-      spinnerBarycentric.setIndex(0);
-      spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
+      spinnerWeighting.setArray(array);
+      spinnerWeighting.setIndex(0);
+      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
@@ -71,6 +71,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   }
 
   final WeightingInterface weightingInterface() {
-    return spinnerBarycentric.getValue().get();
+    return spinnerWeighting.getValue().get();
   }
 }

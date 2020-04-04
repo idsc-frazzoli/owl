@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -134,7 +134,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     Container container = _container;
     if (Objects.isNull(container))
       return;
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = container.geodesicDisplay;
     {
       Tensor tracked = container.tracked;
@@ -170,7 +170,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
         geometricLayer.popMatrix();
       }
     }
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
   }
 
   public Scalar markerScale() {

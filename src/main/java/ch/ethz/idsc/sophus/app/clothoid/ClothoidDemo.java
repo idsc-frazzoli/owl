@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---

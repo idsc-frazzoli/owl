@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor matrix = Tensors.matrix((i, j) -> Norm._2.between(points1.get(i), points2.get(j)), points1.length(), points2.length());
     HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2_2);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setColor(new Color(128 * 0, 128 * 0, 255));
     if (lines) {
       int[] m = hungarianAlgorithm.matching();

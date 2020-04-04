@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
     BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     {
       graphics.setColor(Color.BLUE);
       geometricLayer.pushMatrix(Se2Matrix.translation(center));

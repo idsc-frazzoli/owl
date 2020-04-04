@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -43,7 +43,7 @@ public class SplitCurveSubdivisionDemo extends AbstractCurveSubdivisionDemo {
         graphics.drawImage(image1, image0.getWidth() + 1, 0, null);
       }
     }
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = getGeodesicControlPoints();

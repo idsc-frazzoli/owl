@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     int degree = spinnerDegree.getValue();
     int levels = spinnerRefine.getValue();
     Tensor control = getGeodesicControlPoints();

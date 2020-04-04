@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.clothoid;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderInterface.render(geometricLayer, graphics);
     {

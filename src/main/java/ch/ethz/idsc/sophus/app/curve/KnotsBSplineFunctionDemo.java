@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
@@ -66,7 +66,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
       bufferedImage = symLinkImage.bufferedImage();
     }
     // ---
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     Tensor refined = Subdivide.of(RealScalar.ZERO, upper, Math.max(1, control.length() * (1 << levels))).map(scalarTensorFunction);
     {

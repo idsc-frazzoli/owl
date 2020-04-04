@@ -10,7 +10,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -68,7 +68,7 @@ public class TransitionNdContainer {
       GeometricLayer geometricLayer, //
       Graphics2D graphics, //
       Tensor mouse) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
     RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
     Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));

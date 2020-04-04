@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       WeightingInterface weightingInterface = weightingInterface();
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();

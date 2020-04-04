@@ -61,6 +61,12 @@ public class LeverRender {
   private final GeometricLayer geometricLayer;
   private final Graphics2D graphics;
 
+  /** @param geodesicDisplay
+   * @param sequence
+   * @param origin may be null
+   * @param weights
+   * @param geometricLayer
+   * @param graphics */
   public LeverRender(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, Tensor weights, GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
@@ -99,36 +105,43 @@ public class LeverRender {
       Tensor matrix = geodesicDisplay.matrixLift(q);
       geometricLayer.pushMatrix(matrix);
       Path2D path2d = geometricLayer.toPath2D(shape, true);
-      graphics.setColor(Color.BLACK);
       Rectangle rectangle = path2d.getBounds();
       Scalar rounded = Round._2.apply(weights.Get(index));
       String string = " " + rounded.toString();
-      graphics.drawString(string, //
-          rectangle.x + rectangle.width, //
-          rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2);
+      int pix = rectangle.x + rectangle.width;
+      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
+      graphics.setColor(Color.WHITE);
+      graphics.drawString(string, pix - 1, piy - 1);
+      graphics.drawString(string, pix + 1, piy - 1);
+      graphics.drawString(string, pix - 1, piy + 1);
+      graphics.drawString(string, pix + 1, piy + 1);
+      graphics.setColor(Color.BLACK);
+      graphics.drawString(string, pix, piy);
       geometricLayer.popMatrix();
       ++index;
     }
   }
 
+  /** render control points */
   public void renderSequence() {
     POINTS_RENDER_0.show(geodesicDisplay::matrixLift, shape, sequence).render(geometricLayer, graphics);
   }
 
+  /** render point of coordinate evaluation */
   public void renderOrigin() {
     ORIGIN_RENDER_0.show(geodesicDisplay::matrixLift, shape.multiply(RealScalar.of(1.2)), Tensors.of(origin)) //
         .render(geometricLayer, graphics);
   }
 
   public Tensor getWeights() {
-    return weights;
+    return weights.unmodifiable();
   }
 
   public Tensor getSequence() {
-    return sequence;
+    return sequence.unmodifiable();
   }
 
   public Tensor getOrigin() {
-    return origin;
+    return origin.unmodifiable();
   }
 }

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -21,11 +21,11 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
     Path2D path2d = geometricLayer.toPath2D(BOX, true);
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.draw(path2d);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
   }

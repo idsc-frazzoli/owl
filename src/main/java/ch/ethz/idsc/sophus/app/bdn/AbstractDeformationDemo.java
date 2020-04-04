@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.N;
     super(false, list, array);
     setMidpointIndicated(false);
     // ---
-    spinnerBarycentric.addSpinnerListener(v -> recomputeMD2D());
+    spinnerWeighting.addSpinnerListener(v -> recomputeMD2D());
     spinnerRefine.addSpinnerListener(v -> recomputeMD2D());
     // ---
     {
@@ -92,7 +92,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from RenderInterface
   public final synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

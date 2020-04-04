@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
@@ -50,7 +50,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     // AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplaySpinner.getValue();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
@@ -90,7 +90,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
         geometricLayer.popMatrix();
       }
     }
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
   }
 
   @Override // from DemoInterface

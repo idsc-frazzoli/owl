@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   @Override
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
     if (jToggleData.isSelected()) {
@@ -100,7 +100,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         geometricLayer.popMatrix();
       }
     }
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
     if (jToggleDiff.isSelected())
       differences_render(graphics, geodesicDisplay(), refined, jToggleSpec.isSelected());
   }

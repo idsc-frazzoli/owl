@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -39,9 +39,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
   @Override
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
     Tensor control = getGeodesicControlPoints();
     Tensor refined = Tensors.empty();
     if (0 < control.length()) {

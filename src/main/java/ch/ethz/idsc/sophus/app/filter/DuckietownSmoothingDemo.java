@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -85,7 +85,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     Tensor refined = Subdivide.of(RealScalar.ZERO, upper, Math.max(1, control.length() * (1 << levels))).map(scalarTensorFunction);
     {
       Tensor selected = scalarTensorFunction.apply(parameter);

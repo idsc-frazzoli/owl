@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f).setCurve(CIRCLE, true).render(geometricLayer, graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     graphics.setColor(new Color(128, 255, 128, 128));
     graphics.fill(geometricLayer.toPath2D(result));
     new PathRender(COLOR_DATA_INDEXED.getColor(1), 2.5f).setCurve(result, true).render(geometricLayer, graphics);
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
   }
 
   public static void main(String[] args) {

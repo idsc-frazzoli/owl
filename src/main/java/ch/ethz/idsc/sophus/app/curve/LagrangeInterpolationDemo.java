@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
@@ -72,7 +72,7 @@ import ch.ethz.idsc.tensor.sca.N;
       graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
     }
     // ---
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---
     int levels = spinnerRefine.getValue();

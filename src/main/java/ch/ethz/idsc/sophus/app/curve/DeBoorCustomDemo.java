@@ -10,7 +10,7 @@ import java.awt.geom.Path2D;
 
 import javax.swing.JTextField;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     graphics.setStroke(new BasicStroke(1.25f));
     {
       graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));

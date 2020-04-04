@@ -17,17 +17,13 @@ import ch.ethz.idsc.tensor.Tensors;
   static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
-  final SpinnerLabel<Krigings> spinnerKriging = new SpinnerLabel<>();
+  final SpinnerLabel<Krigings> spinnerKriging = SpinnerLabel.of(Krigings.values());
   final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
   final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
   public A1KrigingDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
-    {
-      spinnerKriging.setArray(Krigings.values());
-      spinnerKriging.setIndex(0);
-      spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
-    }
+    spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerCvar.setIndex(0);

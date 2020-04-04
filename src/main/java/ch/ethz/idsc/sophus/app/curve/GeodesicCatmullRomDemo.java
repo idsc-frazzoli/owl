@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import javax.swing.JSlider;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
@@ -65,7 +65,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int levels = spinnerRefine.getValue();
     final Tensor control = getGeodesicControlPoints();
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();

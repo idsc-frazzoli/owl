@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -72,7 +72,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       Tensor hull = ConvexHull.of(domain);
       {
         graphics.setColor(Color.LIGHT_GRAY);

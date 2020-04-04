@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     Tensor knots = Range.of(0, 2 * upper);
     bufferedImage = symLinkImage(knots, control.length(), parameter).bufferedImage();
     // ---
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

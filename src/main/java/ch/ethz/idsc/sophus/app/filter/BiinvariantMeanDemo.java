@@ -9,7 +9,7 @@ import java.awt.geom.Path2D;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Tensor mean = biinvariantMean.mean(sequence, weights);
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     for (Tensor point : sequence) {
       Tensor curve = Subdivide.of(0, 1, 20).map(geodesicInterface.curve(point, mean));

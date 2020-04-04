@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.clothoid;
 
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     Tensor control = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     Tensor curve = Spearhead.of(control.get(0), RealScalar.of(geometricLayer.pixel2modelWidth(10)));

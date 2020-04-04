@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = getGeodesicControlPoints();
     pathRenderHull.setCurve(control, true);

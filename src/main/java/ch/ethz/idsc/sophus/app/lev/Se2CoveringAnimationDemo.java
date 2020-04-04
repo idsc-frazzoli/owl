@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     if (0 < controlPoints.length()) {
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, controlPoints.extract(1, controlPoints.length()), //
           controlPoints.get(0), geometricLayer, graphics);

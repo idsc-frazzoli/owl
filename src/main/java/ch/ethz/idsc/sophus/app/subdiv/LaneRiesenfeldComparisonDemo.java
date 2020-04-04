@@ -13,7 +13,7 @@ import javax.swing.JToggleButton;
 
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
 
   @Override // from RenderInterface
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
+    RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     VisualSet visualSet1 = new VisualSet();
     visualSet1.setPlotLabel("Curvature");
@@ -128,7 +128,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
       }
       jFreeChart2.draw(graphics, new Rectangle2D.Double(dimension.width * .5, dimension.height * .5, dimension.width * .5, dimension.height * .5));
     }
-    GraphicsUtil.setQualityDefault(graphics);
+    RenderQuality.setDefault(graphics);
   }
 
   public Tensor curve(GeometricLayer geometricLayer, Graphics2D graphics, int index) {

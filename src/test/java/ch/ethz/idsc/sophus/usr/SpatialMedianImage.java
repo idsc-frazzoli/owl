@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       BufferedImage background = ImageFormat.of(ArrayPlot.of(image, ColorDataGradients.DENSITY));
       Graphics2D graphics = bufferedImage.createGraphics();
       graphics.drawImage(background, 0, 0, null);
-      GraphicsUtil.setQualityHigh(graphics);
+      RenderQuality.setQuality(graphics);
       {
         graphics.setColor(new Color(128, 128, 255));
         for (Tensor point : points) {
