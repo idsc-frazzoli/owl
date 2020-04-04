@@ -17,16 +17,14 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 /* package */ class H2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
   // ---
-  private final SpinnerLabel<HnMeans> spinnerMeans = new SpinnerLabel<>();
+  private final SpinnerLabel<HnMeans> spinnerMeans = SpinnerLabel.of(HnMeans.values());
 
   H2DeformationDemo() {
     super(GeodesicDisplays.H2_ONLY, HnWeightingInterfaces.values());
     // ---
-    {
-      spinnerMeans.setArray(HnMeans.values());
-      spinnerMeans.setValue(HnMeans.EXACT);
-      spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");
-    }
+    spinnerMeans.setValue(HnMeans.EXACT);
+    spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");
+    // ---
     shuffleSnap();
   }
 

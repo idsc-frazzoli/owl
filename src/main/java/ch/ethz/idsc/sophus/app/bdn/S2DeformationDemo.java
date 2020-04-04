@@ -22,16 +22,14 @@ import ch.ethz.idsc.tensor.red.Norm;
 /* package */ class S2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
   // ---
-  private final SpinnerLabel<SnMeans> spinnerSnMeans = new SpinnerLabel<>();
+  private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
   S2DeformationDemo() {
     super(GeodesicDisplays.S2_ONLY, SnWeightingInterfaces.values());
     // ---
-    {
-      spinnerSnMeans.setArray(SnMeans.values());
-      spinnerSnMeans.setValue(SnMeans.FAST);
-      spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
-    }
+    spinnerSnMeans.setValue(SnMeans.FAST);
+    spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
+    // ---
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(400, 400);

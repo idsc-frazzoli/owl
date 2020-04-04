@@ -39,6 +39,9 @@ public class PathRender implements RenderInterface {
     this(color, DEFAULT);
   }
 
+  /** @param points {{p1x, p1y, [...]}, {p2x, p2y, [...]}, ..., {pNx, pNy, [...]}}
+   * @param cyclic
+   * @return */
   public RenderInterface setCurve(Tensor points, boolean cyclic) {
     return renderInterface = Objects.isNull(points) || Tensors.isEmpty(points) //
         ? EmptyRender.INSTANCE

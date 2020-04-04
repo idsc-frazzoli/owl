@@ -41,7 +41,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class ClothoidComparisonDemo extends AbstractDemo implements DemoInterface {
   private static final int WIDTH = 480;
   private static final int HEIGHT = 360;
-  // private static final
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
 

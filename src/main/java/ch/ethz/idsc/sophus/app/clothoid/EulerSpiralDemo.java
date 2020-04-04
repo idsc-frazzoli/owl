@@ -19,15 +19,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /* package */ class EulerSpiralDemo extends ControlPointsDemo {
-  private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 128));
-  private static final Tensor SEPARATORS = Subdivide.of(-3., 3., 50);
+  private static final PointsRender POINTS_RENDER = //
+      new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 128));
+  private static final Tensor SEPARATORS = Subdivide.of(-3.0, 3.0, 50);
+  // ---
   private final RenderInterface renderInterface;
 
   public EulerSpiralDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
-    Tensor points = Subdivide.of(-10., 10., 10000).map(EulerSpiral.FUNCTION);
-    renderInterface = new PathRender(Color.BLUE, 1f) //
-        .setCurve(points, false);
+    Tensor points = Subdivide.of(-10.0, 10.0, 10000).map(EulerSpiral.FUNCTION);
+    renderInterface = new PathRender(Color.BLUE, 1f).setCurve(points, false);
   }
 
   @Override
@@ -35,11 +36,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderInterface.render(geometricLayer, graphics);
-    {
-      Tensor points = SEPARATORS.map(EulerSpiral.FUNCTION);
-      POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
-          .render(geometricLayer, graphics);
-    }
+    Tensor points = SEPARATORS.map(EulerSpiral.FUNCTION);
+    POINTS_RENDER.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
+        .render(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {
