@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -27,6 +28,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class R1KrigingDemo extends A1KrigingDemo {
   public R1KrigingDemo() {
+    super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 2, 0}}"));
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);

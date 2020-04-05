@@ -8,6 +8,7 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
@@ -26,6 +27,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final Tensor DOMAIN = CirclePoints.of(161).map(N.DOUBLE);
 
   public S1KrigingDemo() {
+    super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
     timerFrame.configCoordinateOffset(500, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(S1FrameRender.INSTANCE);

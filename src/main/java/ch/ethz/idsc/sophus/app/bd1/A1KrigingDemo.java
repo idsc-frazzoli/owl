@@ -4,11 +4,12 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Stroke;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -21,8 +22,8 @@ import ch.ethz.idsc.tensor.Tensors;
   final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
   final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
-  public A1KrigingDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
+  public A1KrigingDemo(GeodesicDisplay geodesicDisplay) {
+    super(true, Arrays.asList(geodesicDisplay));
     spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
