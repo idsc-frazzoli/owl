@@ -14,8 +14,12 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ class CustomClothoids extends Clothoids implements Serializable {
   private static final Scalar HALF = RealScalar.of(0.5);
 
+  public static CustomClothoids of(Scalar lambda) {
+    return new CustomClothoids((s1, s2) -> lambda);
+  }
+
   public static Clothoid of(Scalar lambda, Tensor p, Tensor q) {
-    return new CustomClothoids((s1, s2) -> lambda).curve(p, q);
+    return of(lambda).curve(p, q);
   }
 
   /***************************************************/
@@ -27,12 +31,11 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from Clothoids
-  protected LagrangeQuadratic lagrangeQuadratic(Scalar b0, Scalar b1) {
+  public LagrangeQuadratic lagrangeQuadratic(Scalar b0, Scalar b1) {
     Scalar s1 = b0.add(b1).multiply(HALF);
     Scalar s2 = b0.subtract(b1).multiply(HALF);
     Scalar lambda = scalarBinaryOperator.apply(s1, s2);
     Scalar bm = lambda.add(s1);
-    // System.out.println(Tensors.of(s1, s2, lambda).map(Round._4));
     return LagrangeQuadratic.interp(b0, bm, b1);
   }
 }
