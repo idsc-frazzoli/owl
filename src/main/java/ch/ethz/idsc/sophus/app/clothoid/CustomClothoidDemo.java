@@ -166,7 +166,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       plotLayer.popMatrix();
       // ---
       Scalar s1 = clothoidContext.b0().add(clothoidContext.b1()).multiply(RationalScalar.HALF);
-      Scalar reifs = MidpointTangentApproximation.LOCAL.apply(clothoidContext.b0(), clothoidContext.b1()).subtract(s1);
+      Scalar reifs = MidpointTangentApproximation.ORDER2.apply(clothoidContext.b0(), clothoidContext.b1()).subtract(s1);
       graphics.setColor(Color.CYAN);
       graphics.draw(plotLayer.toLine2D(Tensors.of(reifs, RealScalar.ZERO), Tensors.of(reifs, RealScalar.ONE.negate())));
       graphics.setStroke(new BasicStroke(1f));

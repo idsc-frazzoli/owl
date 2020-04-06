@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "color scheme");
     }
     {
-      spinnerRes.setArray(20, 30, 50);
+      spinnerRes.setArray(20, 30, 50, 75, 100);
       spinnerRes.setIndex(0);
       spinnerRes.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "resolution");
     }

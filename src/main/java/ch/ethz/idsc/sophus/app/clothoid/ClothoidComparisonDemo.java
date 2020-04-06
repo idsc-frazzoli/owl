@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 
 import org.jfree.chart.JFreeChart;
@@ -53,10 +54,14 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     GeodesicDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
     {
       Tensor shape = geodesicDisplay.shape();
-      graphics.setColor(new Color(255, 0, 0, 255));
       geometricLayer.pushMatrix(Se2Matrix.of(Array.zeros(3)));
-      graphics.draw(geometricLayer.toPath2D(shape, true));
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      graphics.setColor(new Color(255, 0, 0, 64));
+      graphics.fill(path2d);
+      graphics.setColor(new Color(255, 0, 0, 255));
+      graphics.draw(path2d);
       geometricLayer.popMatrix();
+      // ---
       geometricLayer.pushMatrix(Se2Matrix.of(mouse));
       graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
@@ -85,7 +90,8 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     {
       Clothoid clothoid = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
       // LagrangeQuadraticD curvature = clothoid.curvature();
-      Tensor points = Subdivide.of(0.0, 1.0, 20).map(clothoid);
+      Tensor points = ClothoidTransition.linearized(clothoid, RealScalar.of(0.1));
+      // Subdivide.of(0.0, 1.0, 20).map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false) //
           .render(geometricLayer, graphics);
