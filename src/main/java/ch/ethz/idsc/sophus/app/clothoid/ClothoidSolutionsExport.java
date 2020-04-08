@@ -95,7 +95,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
   public static void main(String[] args) throws IOException {
     ClothoidSolutionsExport clothoidSolutionsExport = //
-        new ClothoidSolutionsExport(20, 120, Pi.TWO.multiply(RealScalar.of(3)));
+        new ClothoidSolutionsExport(40, 40, Pi.VALUE);
+    // new ClothoidSolutionsExport(20, 120, Pi.TWO.multiply(RealScalar.of(3)));
     // ---
     Export.of(HomeDirectory.file("clothoidsol.csv"), clothoidSolutionsExport.tableBuilder.getTable());
     Export.of(HomeDirectory.file("clothoidsht.csv"), clothoidSolutionsExport.tableShortes.getTable());
