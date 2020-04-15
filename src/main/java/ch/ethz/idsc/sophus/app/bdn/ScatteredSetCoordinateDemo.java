@@ -29,12 +29,12 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   public ScatteredSetCoordinateDemo( //
       boolean addRemoveControlPoints, //
       List<GeodesicDisplay> list, //
-      LogMetricWeighting[] array) {
+      List<LogMetricWeighting> array) {
     super(addRemoveControlPoints, list);
     {
-      spinnerWeighting.setArray(array);
+      spinnerWeighting.setList(array);
       spinnerWeighting.setIndex(0);
-      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
+      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "barycentric");
     }
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));

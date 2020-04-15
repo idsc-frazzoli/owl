@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   private Tensor snapshot;
 
   public R2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2, RnBarycentricCoordinates.SCATTERED);
+    super(true, GeodesicDisplays.SE2C_SE2, RnBarycentricCoordinates.scattered());
     {
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);
@@ -94,8 +94,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       RenderQuality.setQuality(graphics);
-      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE, tensorMetric);
+      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE, RnMetric.INSTANCE);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);

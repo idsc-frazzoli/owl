@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final SpinnerLabel<HnMeans> spinnerMeans = SpinnerLabel.of(HnMeans.values());
 
   H2DeformationDemo() {
-    super(GeodesicDisplays.H2_ONLY, LogMetricWeightings.values());
+    super(GeodesicDisplays.H2_ONLY, LogMetricWeightings.list());
     // ---
     spinnerMeans.setValue(HnMeans.EXACT);
     spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");

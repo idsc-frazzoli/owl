@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final Scalar MARGIN = RealScalar.of(2);
 
   public R1BarycentricCoordinateDemo() {
-    super(RnBarycentricCoordinates.SCATTERED);
+    super(RnBarycentricCoordinates.scattered());
   }
 
   @Override

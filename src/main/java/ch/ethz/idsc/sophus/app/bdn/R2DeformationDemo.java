@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   };
 
   R2DeformationDemo() {
-    super(GeodesicDisplays.R2_ONLY, RnBarycentricCoordinates.SCATTERED);
+    super(GeodesicDisplays.R2_ONLY, RnBarycentricCoordinates.scattered());
     // ---
     {
       jToggleRigidMotionFit.addActionListener(l -> recomputeMD2D());

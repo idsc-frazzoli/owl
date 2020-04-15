@@ -1,8 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
-import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.itp.GaussianRadialBasisFunction;
 import ch.ethz.idsc.sophus.itp.InverseMultiquadricNorm;
@@ -12,11 +14,9 @@ import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnMetricSquared;
 import ch.ethz.idsc.sophus.lie.rn.RnNorm;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
-import ch.ethz.idsc.sophus.math.id.InverseDistanceWeighting;
 import ch.ethz.idsc.tensor.RealScalar;
 
 public enum RnBarycentricCoordinates implements LogMetricWeighting {
@@ -38,59 +38,10 @@ public enum RnBarycentricCoordinates implements LogMetricWeighting {
       return R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC);
     }
   }, //
-  BI_LINEAR() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return RelativeCoordinate.linear(flattenLogManifold);
-    }
-  }, //
-  BI_SMOOTH() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return RelativeCoordinate.smooth(flattenLogManifold);
-    }
-  }, //
-  BIINVARIANTD1() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return RelativeCoordinate.diagonal_linear(flattenLogManifold);
-    }
-  }, //
-  BIINVARIANTD2() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return RelativeCoordinate.diagonal_smooth(flattenLogManifold);
-    }
-  }, //
-  ID_LINEAR() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return AbsoluteCoordinate.linear(flattenLogManifold);
-    }
-  }, //
-  ID_SMOOTH() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return AbsoluteCoordinate.smooth(flattenLogManifold);
-    }
-  }, //
   AFFINE() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
       return AffineCoordinate.INSTANCE;
-    }
-  }, //
-  IW_LINEAR() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return InverseDistanceWeighting.of(tensorMetric);
-    }
-  }, //
-  IW_SMOOTH() {
-    @Override
-    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      // TODO
-      return InverseDistanceWeighting.of(RnMetricSquared.INSTANCE);
     }
   }, //
   RBF() {
@@ -109,12 +60,14 @@ public enum RnBarycentricCoordinates implements LogMetricWeighting {
   RBF_TPS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
+      // TODO
       return new RadialBasisFunctionWeighting(new ThinPlateSplineNorm(RealScalar.of(5)));
     }
   }, //
   RBF_GAUSS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
+      // TODO
       return new RadialBasisFunctionWeighting(new GaussianRadialBasisFunction(RealScalar.of(5)));
     }
   }, //
@@ -132,12 +85,23 @@ public enum RnBarycentricCoordinates implements LogMetricWeighting {
   }, // TODO variogram
   ;
 
-  public static final RnBarycentricCoordinates[] SCATTERED = { //
-      BI_LINEAR, BI_SMOOTH, //
-      BIINVARIANTD1, BIINVARIANTD2, //
-      ID_LINEAR, ID_SMOOTH, //
-      AFFINE, IW_LINEAR, IW_SMOOTH, //
-      RBF, //
-      RBF_INV_MULTI, RBF_TPS, RBF_GAUSS, //
-      KR_LOGNORM, KR_PROJECT };
+  public static List<LogMetricWeighting> list() {
+    List<LogMetricWeighting> list = new ArrayList<>();
+    list.addAll(LogMetricWeightings.list());
+    list.addAll(Arrays.asList(values()));
+    return list;
+  }
+
+  public static List<LogMetricWeighting> scattered() { //
+    List<LogMetricWeighting> list = new ArrayList<>();
+    list.addAll(LogMetricWeightings.list());
+    list.add(AFFINE);
+    list.add(RBF);
+    list.add(RBF_INV_MULTI);
+    list.add(RBF_TPS);
+    list.add(RBF_GAUSS);
+    list.add(KR_LOGNORM);
+    list.add(KR_PROJECT);
+    return list;
+  }
 }

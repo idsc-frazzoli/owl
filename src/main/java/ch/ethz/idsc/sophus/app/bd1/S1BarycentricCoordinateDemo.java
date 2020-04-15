@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ class S1BarycentricCoordinateDemo extends A1BarycentricCoordinateDemo {
   public S1BarycentricCoordinateDemo() {
-    super(LogMetricWeightings.values());
+    super(LogMetricWeightings.list());
   }
 
   @Override

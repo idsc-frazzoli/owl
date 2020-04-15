@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Tensor movingOrigin;
   private MovingDomain2D movingDomain2D;
 
-  AbstractDeformationDemo(List<GeodesicDisplay> list, LogMetricWeighting[] array) {
+  AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogMetricWeighting> array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---

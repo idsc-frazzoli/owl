@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
 import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
@@ -59,4 +62,8 @@ public enum LogMetricWeightings implements LogMetricWeighting {
     }
   }, //
   ;
+
+  public static List<LogMetricWeighting> list() {
+    return Arrays.asList(values());
+  }
 }

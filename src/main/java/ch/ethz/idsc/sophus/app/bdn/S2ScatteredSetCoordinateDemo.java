@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   private final JButton jButtonExport = new JButton("export");
 
   public S2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, LogMetricWeightings.values());
+    super(true, GeodesicDisplays.S2_ONLY, LogMetricWeightings.list());
     {
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);

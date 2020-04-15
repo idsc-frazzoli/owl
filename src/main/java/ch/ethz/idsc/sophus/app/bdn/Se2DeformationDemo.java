@@ -17,11 +17,11 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-/* package */ class Se2CoveringDeformationDemo extends AbstractDeformationDemo {
+/* package */ class Se2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
-  Se2CoveringDeformationDemo() {
-    super(GeodesicDisplays.SE2C_SE2, LogMetricWeightings.values());
+  Se2DeformationDemo() {
+    super(GeodesicDisplays.SE2C_SE2, LogMetricWeightings.list());
     // ---
     timerFrame.configCoordinateOffset(300, 500);
     shuffleSnap();
@@ -59,6 +59,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   public static void main(String[] args) {
-    new Se2CoveringDeformationDemo().setVisible(1000, 800);
+    new Se2DeformationDemo().setVisible(1000, 800);
   }
 }

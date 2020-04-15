@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.List;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -27,10 +28,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
   private final SpinnerLabel<LogMetricWeighting> spinnerBarycentric = new SpinnerLabel<>();
 
-  public A1BarycentricCoordinateDemo(LogMetricWeighting[] array) {
+  public A1BarycentricCoordinateDemo(List<LogMetricWeighting> array) {
     super(true, GeodesicDisplays.R2_ONLY);
     {
-      spinnerBarycentric.setArray(array);
+      spinnerBarycentric.setList(array);
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
