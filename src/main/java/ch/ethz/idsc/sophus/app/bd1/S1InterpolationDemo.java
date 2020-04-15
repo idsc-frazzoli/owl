@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.util.function.Supplier;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -13,8 +12,11 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,13 +29,13 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S1InterpolationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<LogMetricWeighting> spinnerBarycentric = new SpinnerLabel<>();
 
   public S1InterpolationDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     setMidpointIndicated(false);
     {
-      spinnerBarycentric.setArray(SnWeightingInterfaces.values());
+      spinnerBarycentric.setArray(LogMetricWeightings.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -64,7 +66,9 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor domain = Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 511);
       Tensor spherics = domain.map(AngleVector::of);
       // ---
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().get();
+      FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, tensorMetric);
       try {
         ScalarTensorFunction scalarTensorFunction = //
             point -> weightingInterface.weights(sequence, AngleVector.of(point));

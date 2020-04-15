@@ -5,10 +5,12 @@ import java.awt.Dimension;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.HnWeightingInterfaces;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final SpinnerLabel<HnMeans> spinnerMeans = SpinnerLabel.of(HnMeans.values());
 
   H2DeformationDemo() {
-    super(GeodesicDisplays.H2_ONLY, HnWeightingInterfaces.values());
+    super(GeodesicDisplays.H2_ONLY, LogMetricWeightings.values());
     // ---
     spinnerMeans.setValue(HnMeans.EXACT);
     spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");
@@ -40,7 +42,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
-    return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
+    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, tensorMetric), domain);
   }
 
   @Override // from AbstractDeformationDemo

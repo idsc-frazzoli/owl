@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class InverseDistanceDemo extends ControlPointsDemo {
   public InverseDistanceDemo() {
-    super(true, GeodesicDisplays.SE2C_SPD2_S2_Rn);
+    super(true, GeodesicDisplays.SE2C_SE2_SPD2_S2_Rn);
     setControlPointsSe2(Tensors.fromString("{{-1, 0, 0}, {3, 0, 0}, {2, 3, 1}, {5, -1, 2}}"));
   }
 

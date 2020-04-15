@@ -4,19 +4,21 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  final SpinnerLabel<Supplier<WeightingInterface>> spinnerWeighting = new SpinnerLabel<>();
+  final SpinnerLabel<LogMetricWeighting> spinnerWeighting = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -24,7 +26,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
-  public ScatteredSetCoordinateDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, Supplier<WeightingInterface>[] array) {
+  public ScatteredSetCoordinateDemo( //
+      boolean addRemoveControlPoints, //
+      List<GeodesicDisplay> list, //
+      LogMetricWeighting[] array) {
     super(addRemoveControlPoints, list);
     {
       spinnerWeighting.setArray(array);
@@ -70,7 +75,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     return spinnerColorData.getValue();
   }
 
-  final WeightingInterface weightingInterface() {
-    return spinnerWeighting.getValue().get();
+  final WeightingInterface weightingInterface(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
+    return spinnerWeighting.getValue().from(flattenLogManifold, tensorMetric);
   }
 }

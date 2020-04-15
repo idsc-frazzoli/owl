@@ -1,8 +1,13 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,7 +21,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
   Se2CoveringDeformationDemo() {
-    super(GeodesicDisplays.SE2C_SE2, Se2CoveringWeightingInterfaces.values());
+    super(GeodesicDisplays.SE2C_SE2, LogMetricWeightings.values());
     // ---
     timerFrame.configCoordinateOffset(300, 500);
     shuffleSnap();
@@ -24,9 +29,11 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   synchronized Tensor shufflePointsSe2(int n) {
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Distribution distributionp = UniformDistribution.of(-1, 7);
     Distribution distributiona = UniformDistribution.of(-1, 1);
-    return Tensors.vector(i -> RandomVariate.of(distributionp, 2).append(RandomVariate.of(distributiona)), n);
+    return Tensors.vector(i -> geodesicDisplay.project( //
+        RandomVariate.of(distributionp, 2).append(RandomVariate.of(distributiona))), n);
   }
 
   @Override
@@ -35,7 +42,10 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
+    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+    return new MovingDomain2D(movingOrigin, weightingInterface, domain);
   }
 
   @Override

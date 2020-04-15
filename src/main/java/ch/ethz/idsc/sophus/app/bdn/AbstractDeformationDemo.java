@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
@@ -20,9 +19,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -44,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Tensor movingOrigin;
   private MovingDomain2D movingDomain2D;
 
-  AbstractDeformationDemo(List<GeodesicDisplay> list, Supplier<WeightingInterface>[] array) {
+  AbstractDeformationDemo(List<GeodesicDisplay> list, LogMetricWeighting[] array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---

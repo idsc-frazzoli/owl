@@ -5,9 +5,12 @@ import java.awt.Dimension;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,7 +28,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
   S2DeformationDemo() {
-    super(GeodesicDisplays.S2_ONLY, SnWeightingInterfaces.values());
+    super(GeodesicDisplays.S2_ONLY, LogMetricWeightings.values());
     // ---
     spinnerSnMeans.setValue(SnMeans.FAST);
     spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
@@ -51,7 +54,10 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
-    return new MovingDomain2D(movingOrigin, weightingInterface(), domain);
+    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+    return new MovingDomain2D(movingOrigin, weightingInterface, domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);

@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.util.function.Supplier;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -13,6 +12,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,9 +25,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<Supplier<WeightingInterface>> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<LogMetricWeighting> spinnerBarycentric = new SpinnerLabel<>();
 
-  public A1BarycentricCoordinateDemo(Supplier<WeightingInterface>[] array) {
+  public A1BarycentricCoordinateDemo(LogMetricWeighting[] array) {
     super(true, GeodesicDisplays.R2_ONLY);
     {
       spinnerBarycentric.setArray(array);
@@ -49,7 +51,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       // ---
       Tensor domain = domain(support);
       // ---
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().get();
+      FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, tensorMetric);
       Tensor sequence = support.map(this::lift);
       ScalarTensorFunction scalarTensorFunction = //
           point -> weightingInterface.weights(sequence, lift(point));

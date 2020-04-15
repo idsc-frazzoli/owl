@@ -21,12 +21,14 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.SnWeightingInterfaces;
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
+import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -49,7 +51,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   private final JButton jButtonExport = new JButton("export");
 
   public S2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, SnWeightingInterfaces.values());
+    super(true, GeodesicDisplays.S2_ONLY, LogMetricWeightings.values());
     {
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);
@@ -99,7 +101,10 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     }
     // ---
     if (s2GeodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
-      Tensor wgs = compute(weightingInterface(), refinement());
+      FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
+      WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+      Tensor wgs = compute(weightingInterface, refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       RenderQuality.setQuality(graphics);
