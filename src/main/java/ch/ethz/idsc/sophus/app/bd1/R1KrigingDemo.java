@@ -69,6 +69,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       Tensor domain = domain(support);
       Tensor sequence = support.map(Tensors::of);
       ScalarUnaryOperator variogram = PowerVariogram.fit(sequence, funceva, spinnerBeta.getValue());
+      // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
+      // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       Kriging kriging = spinnerKriging.getValue().regression( //
           geodesicDisplay.flattenLogManifold(), variogram, sequence, funceva, covariance);

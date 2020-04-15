@@ -83,6 +83,7 @@ import ch.ethz.idsc.tensor.sca.N;
     movingDomain2D = updateMovingDomain2D(movingOrigin);
   }
 
+  /** @return method to compute mean (for instance approximation instead of exact mean) */
   abstract BiinvariantMean biinvariantMean();
 
   abstract MovingDomain2D updateMovingDomain2D(Tensor movingOrigin);
@@ -97,9 +98,11 @@ import ch.ethz.idsc.tensor.sca.N;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();
-    Tensor[][] array = movingDomain2D.forward(target, biinvariantMean());
-    new ArrayRender(array, colorDataGradient().deriveWithOpacity(RationalScalar.HALF)) //
-        .render(geometricLayer, graphics);
+    // ---
+    new ArrayRender( //
+        movingDomain2D.forward(target, biinvariantMean()), //
+        colorDataGradient().deriveWithOpacity(RationalScalar.HALF)) //
+            .render(geometricLayer, graphics);
     { // connect origin and target pairs with lines/geodesics
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       graphics.setColor(new Color(128, 128, 128, 255));

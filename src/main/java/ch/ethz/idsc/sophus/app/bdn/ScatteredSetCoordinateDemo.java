@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     {
       spinnerWeighting.setList(array);
       spinnerWeighting.setIndex(0);
-      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "barycentric");
+      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
     }
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));

@@ -35,7 +35,6 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
   }
 
   public static void main(String[] args) throws IOException {
-    System.out.println("here");
     Tensor tensor = ResourceData.of("/3rdparty/app/pose/euroc/MH_04_difficult.csv");
     System.out.println(Dimensions.of(tensor));
     Export.of(HomeDirectory.file("MH_04_difficult_time.csv"), tensor.get(Tensor.ALL, 0));

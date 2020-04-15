@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /* package */ enum EugocData {
   ;
   public static void main(String[] args) throws IOException {
-    System.out.println("here");
     Tensor tensor = ResourceData.of("/dubilab/app/pose/2r/20180820T165637_2.csv");
     // System.out.println(Dimensions.of(tensor));
     Tensor poses = Tensor.of(tensor.stream() //

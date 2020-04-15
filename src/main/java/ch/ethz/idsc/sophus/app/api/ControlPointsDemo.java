@@ -158,7 +158,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             }
           } else {
             min_index = null;
-            released();
+            // released();
           }
           break;
         case MouseEvent.BUTTON3: // remove point
@@ -182,11 +182,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
-
   /** function is called when mouse is released */
-  public void released() {
-    // TODO API needs comments and better naming
-  }
+  // public void released() {
+  // API needs comments and better naming
+  // }
 
   /** when positioning is disabled, the mouse position is not indicated graphically
    * 

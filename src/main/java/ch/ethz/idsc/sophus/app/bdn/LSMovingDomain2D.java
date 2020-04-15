@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.opt.RigidMotionFit;
 
   @Override // from MovingDomain2D
   public Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean) {
-    System.out.println("here");
     int rows = domain.length();
     int cols = Unprotect.dimension1(domain);
     Tensor[][] array = new Tensor[rows][cols];
