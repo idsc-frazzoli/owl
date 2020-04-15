@@ -16,10 +16,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
+import ch.ethz.idsc.java.lang.ClassDiscovery;
+import ch.ethz.idsc.java.lang.ClassPaths;
+import ch.ethz.idsc.java.lang.ClassVisitor;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
-import lcm.util.ClassDiscovery;
-import lcm.util.ClassPaths;
-import lcm.util.ClassVisitor;
 
 /** scans repository for classes that implement {@link DemoInterface}
  * DemoLauncher creates a gui that allows to start these classes. */

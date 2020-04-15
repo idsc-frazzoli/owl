@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.math.region;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.ethz.idsc.java.lang.ClassDiscovery;
+import ch.ethz.idsc.java.lang.ClassPaths;
+import ch.ethz.idsc.java.lang.ClassVisitor;
 import junit.framework.TestCase;
-import lcm.util.ClassDiscovery;
-import lcm.util.ClassPaths;
-import lcm.util.ClassVisitor;
 
 public class RegionTest extends TestCase {
   public void testSimple() {

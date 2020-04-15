@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.data.DisjointSets;
+import ch.ethz.idsc.java.util.DisjointSets;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

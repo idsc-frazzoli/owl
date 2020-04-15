@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>java</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
@@ -36,11 +36,6 @@
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>ephemeral</artifactId>
 			<version>0.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.ethz.idsc</groupId>
-			<artifactId>lcm-java</artifactId>
-			<version>0.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -95,14 +90,6 @@
 		<repository>
 			<id>ephemeral-mvn-repo</id>
 			<url>https://raw.github.com/idsc-frazzoli/ephemeral/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>lcm-java-mvn-repo</id>
-			<url>https://raw.github.com/idsc-frazzoli/lcm-java/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
