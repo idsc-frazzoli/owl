@@ -4,13 +4,13 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override
-  Scalar[][] array(int resolution, Kriging kriging) {
+  Scalar[][] array(int resolution, TensorScalarFunction tensorScalarFunction) {
     double rad = rad();
     Tensor dx = Subdivide.of(-rad, +rad, resolution);
     Tensor dy = Subdivide.of(+rad, -rad, resolution);
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         Scalar z2 = RealScalar.ONE.subtract(Norm2Squared.ofVector(point));
         if (Sign.isPositive(z2)) {
           Scalar z = Sqrt.FUNCTION.apply(z2);
-          array[cy][cx] = clip.apply((Scalar) kriging.estimate(point.append(z)));
+          array[cy][cx] = clip.apply(tensorScalarFunction.apply(point.append(z)));
         } else
           array[cy][cx] = DoubleScalar.INDETERMINATE;
       }

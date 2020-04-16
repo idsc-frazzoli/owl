@@ -30,12 +30,14 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends A1KrigingDemo {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
+  private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleButton = new JToggleButton("thres");
 
   public A2KrigingDemo(GeodesicDisplay geodesicDisplay) {
@@ -51,6 +53,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       spinnerRes.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "resolution");
     }
     {
+      timerFrame.jToolBar.add(jToggleVarian);
       timerFrame.jToolBar.add(jToggleButton);
     }
     {
@@ -90,7 +93,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     Kriging kriging = //
         spinnerKriging.getValue().regression(flattenLogManifold, variogram, sequence, values, covariance);
     // ---
-    Tensor matrix = Tensors.matrix(array(spinnerRes.getValue(), kriging));
+    TensorScalarFunction tsf = jToggleVarian.isSelected() //
+        ? kriging::variance
+        : point -> (Scalar) kriging.estimate(point);
+    Tensor matrix = Tensors.matrix(array(spinnerRes.getValue(), tsf));
     // ---
     if (jToggleButton.isSelected())
       matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
@@ -114,7 +120,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   /** @param resolution
    * @param kriging
    * @return array of scalar values clipped to interval [0, 1] or DoubleScalar.INDETERMINATE */
-  abstract Scalar[][] array(int resolution, Kriging kriging);
+  abstract Scalar[][] array(int resolution, TensorScalarFunction tensorScalarFunction);
 
   abstract double rad();
 }
