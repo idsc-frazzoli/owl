@@ -8,24 +8,34 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class Se2CoveringInvarianceDemo extends ControlPointsDemo {
+  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JTextField jTextField = new JTextField();
 
   public Se2CoveringInvarianceDemo() {
     super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
+    {
+      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setIndex(0);
+      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
+    }
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }
@@ -47,8 +57,10 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
       {
         LeverRender leverRender = LeverRender.of(geodesicDisplay, //
+            weightingInterface, //
             controlPointsAll.extract(1, controlPointsAll.length()), //
             controlPointsAll.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
@@ -61,6 +73,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
         Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
         LeverRender leverRender = LeverRender.of(geodesicDisplay, //
+            weightingInterface, //
             result.extract(1, result.length()), result.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();

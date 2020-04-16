@@ -37,6 +37,12 @@ public enum LogMetricWeightings implements LogMetricWeighting {
       return RelativeCoordinate.diagonal_smooth(flattenLogManifold);
     }
   },
+  BI_AFFINE() {
+    @Override
+    public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
+      return RelativeCoordinate.affine(flattenLogManifold);
+    }
+  },
   /***************************************************/
   ID_LINEAR() {
     @Override
@@ -70,7 +76,8 @@ public enum LogMetricWeightings implements LogMetricWeighting {
         BI_LINEAR, //
         BI_SMOOTH, //
         BI_DIAGONAL_LINEAR, //
-        BI_DIAGONAL_SMOOTH);
+        BI_DIAGONAL_SMOOTH, //
+        BI_AFFINE);
   }
 
   public static List<LogMetricWeighting> barycentric() {
@@ -79,6 +86,7 @@ public enum LogMetricWeightings implements LogMetricWeighting {
         BI_SMOOTH, //
         BI_DIAGONAL_LINEAR, //
         BI_DIAGONAL_SMOOTH, //
+        BI_AFFINE, //
         ID_LINEAR, //
         ID_SMOOTH);
   }

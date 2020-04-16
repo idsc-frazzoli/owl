@@ -1,24 +1,30 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 
 /* package */ class Se2CoveringAnimationDemo extends ControlPointsDemo {
+  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -29,6 +35,11 @@ import ch.ethz.idsc.tensor.io.Timing;
   public Se2CoveringAnimationDemo() {
     super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
+    {
+      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setIndex(0);
+      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
+    }
     {
       timerFrame.jToolBar.add(jToggleAxes);
       jToggleAxes.setSelected(true);
@@ -72,8 +83,11 @@ import ch.ethz.idsc.tensor.io.Timing;
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       RenderQuality.setQuality(graphics);
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
       LeverRender leverRender = LeverRender.of( //
-          geodesicDisplay, controlPoints.extract(1, controlPoints.length()), //
+          geodesicDisplay, //
+          weightingInterface, //
+          controlPoints.extract(1, controlPoints.length()), //
           controlPoints.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
       leverRender.renderWeights();

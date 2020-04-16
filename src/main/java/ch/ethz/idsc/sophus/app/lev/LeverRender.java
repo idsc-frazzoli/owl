@@ -13,9 +13,8 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -41,15 +40,16 @@ public class LeverRender {
   private static final Stroke STROKE = //
       new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 
-  public static LeverRender of(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor weights;
-    if (geodesicDisplay.dimensions() < sequence.length()) {
-      // TODO prefer outside coordinate supplier
-      BarycentricCoordinate barycentricCoordinate = RelativeCoordinate.smooth(geodesicDisplay.flattenLogManifold());
-      weights = barycentricCoordinate.weights(sequence, origin);
-    } else
-      weights = Array.zeros(sequence.length());
-    return new LeverRender(geodesicDisplay, sequence, origin, weights, geometricLayer, graphics);
+  public static LeverRender of( //
+      GeodesicDisplay geodesicDisplay, WeightingInterface weightingInterface, //
+      Tensor sequence, Tensor origin, //
+      GeometricLayer geometricLayer, Graphics2D graphics) {
+    Tensor weights = geodesicDisplay.dimensions() < sequence.length() //
+        ? weightingInterface.weights(sequence, origin)
+        : Array.zeros(sequence.length());
+    return new LeverRender( //
+        geodesicDisplay, sequence, origin, //
+        weights, geometricLayer, graphics);
   }
 
   /***************************************************/

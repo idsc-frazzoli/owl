@@ -1,26 +1,37 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class BarycentricLeversDemo extends ControlPointsDemo {
+  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleMean = new JToggleButton("mean");
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
   public BarycentricLeversDemo() {
     super(true, GeodesicDisplays.ALL);
     setMidpointIndicated(false);
+    {
+      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setIndex(0);
+      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
+    }
     {
       timerFrame.jToolBar.add(jToggleMean);
       timerFrame.jToolBar.add(jToggleLevers);
@@ -36,8 +47,11 @@ import ch.ethz.idsc.tensor.Tensors;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
       LeverRender leverRender = LeverRender.of( //
-          geodesicDisplay, controlPointsAll.extract(1, controlPointsAll.length()), //
+          geodesicDisplay, //
+          weightingInterface, //
+          controlPointsAll.extract(1, controlPointsAll.length()), //
           controlPointsAll.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
       leverRender.renderWeights();

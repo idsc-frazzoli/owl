@@ -16,8 +16,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,6 +31,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /* package */ abstract class AbstractHoverDemo extends ControlPointsDemo {
   static final Random RANDOM = new Random();
+  // ---
+  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
   final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
   private final JButton jButtonShuffle = new JButton("shuffle");
@@ -36,6 +41,11 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     super(false, GeodesicDisplays.SE2C_SE2_S2_H2_R2);
     setMidpointIndicated(false);
     setPositioningEnabled(false);
+    {
+      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setIndex(0);
+      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
+    }
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }
@@ -71,8 +81,10 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
     render(geometricLayer, graphics, LeverRender.of( //
         geodesicDisplay, //
+        weightingInterface, //
         getGeodesicControlPoints(), //
         geodesicDisplay.project(geometricLayer.getMouseSe2State()), //
         geometricLayer, graphics));

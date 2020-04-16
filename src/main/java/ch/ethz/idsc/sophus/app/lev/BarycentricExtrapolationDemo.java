@@ -16,9 +16,11 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gbc.ProjectedCoordinate;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -28,12 +30,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 /* package */ class BarycentricExtrapolationDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private final SpinnerLabel<ProjectedCoordinates> spinnerProjectedCoordinates = new SpinnerLabel<>();
+  private final SpinnerLabel<LogMetricWeighting> spinnerProjectedCoordinates = new SpinnerLabel<>();
 
   public BarycentricExtrapolationDemo() {
     super(true, GeodesicDisplays.SE2C_R2);
     {
-      spinnerProjectedCoordinates.setArray(ProjectedCoordinates.values());
+      spinnerProjectedCoordinates.setList(LogMetricWeightings.barycentric());
       spinnerProjectedCoordinates.setIndex(0);
       spinnerProjectedCoordinates.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "projected coordinate");
     }
@@ -59,9 +61,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      ProjectedCoordinate projectedCoordinate = spinnerProjectedCoordinates.getValue().provide(RnManifold.INSTANCE);
+      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, null);
       Tensor curve = Tensor.of(samples.stream() //
-          .map(point -> projectedCoordinate.weights(domain, point)) //
+          .map(point -> weightingInterface.weights(domain, point)) //
           .map(weights -> biinvariantMean.mean(control, weights)));
       new PathRender(Color.BLUE, 1.5f) //
           .setCurve(curve, false) //

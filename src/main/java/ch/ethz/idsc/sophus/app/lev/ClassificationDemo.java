@@ -25,10 +25,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   private Tensor vector;
 
   public ClassificationDemo() {
-    {
-      spinnerLabels.setValue(Labels.ARG_MAX);
-      spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
-    }
+    spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
   }
 
   @Override
