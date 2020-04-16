@@ -94,13 +94,14 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     if (2 < controlPoints.length()) {
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       RenderQuality.setQuality(graphics);
+      // ---
       WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE, RnMetric.INSTANCE);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);
       max = Tensors.vector(+5, +5);
       Tensor sX = Subdivide.of(min.Get(0), max.Get(0), refinement());
-      Tensor sY = Subdivide.of(min.Get(1), max.Get(1), refinement());
+      Tensor sY = Subdivide.of(max.Get(1), min.Get(1), refinement());
       int n = sX.length();
       Tensor[][] array = new Tensor[n][n];
       Tensor[][] point = new Tensor[n][n];
@@ -111,7 +112,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
           Tensor weights = weightingInterface.weights(domain, px);
-          wgs.set(weights, n - c1 - 1, c0);
+          wgs.set(weights, c1, c0);
           Tensor mean = biinvariantMean.mean(controlPoints, weights);
           array[c0][c1] = mean;
           point[c0][c1] = geodesicDisplay.toPoint(mean);
@@ -119,6 +120,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         }
         ++c0;
       });
+      // ---
       new ArrayRender(point, colorDataGradient.deriveWithOpacity(RationalScalar.HALF)).render(geometricLayer, graphics);
       // ---
       if (jToggleHeatmap.isSelected()) { // render basis functions
