@@ -12,14 +12,18 @@ import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -41,20 +45,33 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     if (1 < control.length()) {
       // TODO check for zero norm below
       Tensor sequence = Tensor.of(control.stream().map(Normalize.with(Norm._2)));
-      Tensor target = sequence;
+      Tensor funceva = Tensor.of(control.stream().map(Norm._2::ofVector));
+      Tensor cvarian = getControlPointsSe2().get(Tensor.ALL, 2).map(Abs.FUNCTION);
+      // ---
+      graphics.setColor(new Color(0, 128, 128));
+      Scalar IND = RealScalar.of(0.1);
+      for (int index = 0; index < sequence.length(); ++index) {
+        Tensor xy = control.get(index).copy();
+        xy.append(ArcTan2D.of(xy).add(Pi.HALF));
+        geometricLayer.pushMatrix(Se2Matrix.of(xy));
+        Scalar v = cvarian.Get(index);
+        graphics.draw(geometricLayer.toLine2D(Tensors.of(v.zero(), v), Tensors.of(v.zero(), v.negate())));
+        graphics.draw(geometricLayer.toLine2D(Tensors.of(IND, v), Tensors.of(IND.negate(), v)));
+        graphics.draw(geometricLayer.toLine2D(Tensors.of(IND, v.negate()), Tensors.of(IND.negate(), v.negate())));
+        geometricLayer.popMatrix();
+      }
+      // ---
       graphics.setColor(Color.GREEN);
-      for (int index = 0; index < target.length(); ++index)
-        graphics.draw(geometricLayer.toLine2D(control.get(index), target.get(index)));
+      for (int index = 0; index < sequence.length(); ++index)
+        graphics.draw(geometricLayer.toLine2D(control.get(index), sequence.get(index)));
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255)) //
-          .show(geodesicDisplay()::matrixLift, shape, target) //
+          .show(geodesicDisplay()::matrixLift, shape, sequence) //
           .render(geometricLayer, graphics);
       // ---
-      Tensor values = Tensor.of(control.stream().map(Norm._2::ofVector));
-      // ---
-      ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
-      Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
+      ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta());
+      Tensor covariance = DiagonalMatrix.with(cvarian);
       Kriging kriging = spinnerKriging.getValue().regression( //
-          SnManifold.INSTANCE, variogram, sequence, values, covariance);
+          SnManifold.INSTANCE, variogram, sequence, funceva, covariance);
       Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
       Tensor curve = estimate.pmul(DOMAIN);
       new PathRender(Color.BLUE, 1.25f).setCurve(curve, true).render(geometricLayer, graphics);

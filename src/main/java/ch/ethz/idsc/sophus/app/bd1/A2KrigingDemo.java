@@ -1,9 +1,13 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
@@ -13,35 +17,55 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.PowerVariogram;
+import ch.ethz.idsc.sophus.itp.CrossWeighting;
+import ch.ethz.idsc.sophus.krg.Krigings;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ abstract class A2KrigingDemo extends A1KrigingDemo {
+/* package */ abstract class A2KrigingDemo extends ControlPointsDemo {
+  static final Stroke STROKE = //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  // ---
+  final SpinnerLabel<Krigings> spinnerKriging = SpinnerLabel.of(Krigings.values());
+  final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
+  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleButton = new JToggleButton("thres");
 
   public A2KrigingDemo(GeodesicDisplay geodesicDisplay) {
-    super(geodesicDisplay);
+    super(true, Arrays.asList(geodesicDisplay));
+    spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
+    {
+      spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerCvar.setIndex(0);
+      spinnerCvar.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "error");
+    }
+    {
+      spinnerBeta.setList(Tensors.fromString("{1, 9/8, 5/4, 3/2, 1.75, 1.99}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setIndex(0);
+      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
+    }
     {
       spinnerColorData.setArray(ColorDataGradients.values());
       spinnerColorData.setValue(ColorDataGradients.PARULA);
@@ -88,14 +112,17 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
     // ---
     FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
-    Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
-    Kriging kriging = //
-        spinnerKriging.getValue().regression(flattenLogManifold, variogram, sequence, values, covariance);
-    // ---
-    TensorScalarFunction tsf = jToggleVarian.isSelected() //
-        ? kriging::variance
-        : point -> (Scalar) kriging.estimate(point);
+    // ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
+    // Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
+    // Kriging kriging = //
+    // spinnerKriging.getValue().regression(flattenLogManifold, variogram, sequence, values, covariance);
+    // // ---
+    // TensorScalarFunction tsf = jToggleVarian.isSelected() //
+    // ? kriging::variance
+    // : point -> (Scalar) kriging.estimate(point);
+    WeightingInterface weightingInterface = LogMetricWeightings.BI_SMOOTH.from(flattenLogManifold, null);
+    TensorUnaryOperator tuo = CrossWeighting.of(weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
+    TensorScalarFunction tsf = t -> (Scalar) tuo.apply(t);
     Tensor matrix = Tensors.matrix(array(spinnerRes.getValue(), tsf));
     // ---
     if (jToggleButton.isSelected())

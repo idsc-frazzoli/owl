@@ -31,7 +31,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public R1KrigingDemo() {
     super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 1}, {2, 2, 0}}"));
-    spinnerCvar.setEnabled(false);
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
@@ -47,7 +46,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     Tensor control = Sort.of(getControlPointsSe2());
@@ -55,6 +53,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       Tensor support = control.get(Tensor.ALL, 0);
       Tensor funceva = control.get(Tensor.ALL, 1);
       Tensor cvarian = control.get(Tensor.ALL, 2).map(Abs.FUNCTION);
+      // ---
       graphics.setColor(new Color(0, 128, 128));
       Scalar IND = RealScalar.of(0.1);
       for (int index = 0; index < support.length(); ++index) {
@@ -66,14 +65,15 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         geometricLayer.popMatrix();
       }
       // ---
-      Tensor domain = domain(support);
       Tensor sequence = support.map(Tensors::of);
-      ScalarUnaryOperator variogram = PowerVariogram.fit(sequence, funceva, spinnerBeta.getValue());
+      ScalarUnaryOperator variogram = PowerVariogram.fit(sequence, funceva, beta());
       // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       Kriging kriging = spinnerKriging.getValue().regression( //
           geodesicDisplay.flattenLogManifold(), variogram, sequence, funceva, covariance);
+      // ---
+      Tensor domain = domain(support);
       Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));
       new PathRender(Color.BLUE, 1.25f) //
           .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
@@ -87,6 +87,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           .setCurve(Transpose.of(Tensors.of(domain, result.subtract(errors))), false) //
           .render(geometricLayer, graphics);
     }
+    renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

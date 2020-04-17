@@ -19,21 +19,19 @@ import ch.ethz.idsc.tensor.Tensors;
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
   final SpinnerLabel<Krigings> spinnerKriging = SpinnerLabel.of(Krigings.values());
-  final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
-  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
   public A1KrigingDemo(GeodesicDisplay geodesicDisplay) {
     super(true, Arrays.asList(geodesicDisplay));
     spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
     {
-      spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
-      spinnerCvar.setIndex(0);
-      spinnerCvar.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "error");
-    }
-    {
       spinnerBeta.setList(Tensors.fromString("{1, 9/8, 5/4, 3/2, 1.75, 1.99}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerBeta.setIndex(0);
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }
+  }
+
+  Scalar beta() {
+    return spinnerBeta.getValue();
   }
 }
