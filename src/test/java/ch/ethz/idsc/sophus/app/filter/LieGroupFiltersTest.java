@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.ethz.idsc.sophus.app.LieGroupFilters;
+import ch.ethz.idsc.sophus.app.GeodesicFilters;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
@@ -14,9 +14,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.So2;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,19 +31,17 @@ public class LieGroupFiltersTest extends TestCase {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    LieGroup lieGroup = geodesicDisplay.lieGroup();
-    Exponential exponential = geodesicDisplay.exponential();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     int radius = 7;
-    Map<LieGroupFilters, Tensor> map = new EnumMap<>(LieGroupFilters.class);
-    for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
+    Map<GeodesicFilters, Tensor> map = new EnumMap<>(GeodesicFilters.class);
+    for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, exponential, biinvariantMean);
+          geodesicFilters.supply(geodesicInterface, smoothingKernel, biinvariantMean);
       Tensor filtered = CenterFilter.of(tensorUnaryOperator, radius).apply(control);
-      map.put(lieGroupFilters, filtered);
+      map.put(geodesicFilters, filtered);
     }
-    for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
-      Tensor diff = map.get(lieGroupFilters).subtract(map.get(LieGroupFilters.BIINVARIANT_MEAN));
+    for (GeodesicFilters lieGroupFilters : GeodesicFilters.values()) {
+      Tensor diff = map.get(lieGroupFilters).subtract(map.get(GeodesicFilters.BIINVARIANT_MEAN));
       diff.set(So2.MOD, Tensor.ALL, 2);
       Scalar norm = Norm.INFINITY.ofMatrix(diff);
       assertTrue(Chop._02.allZero(norm));
@@ -63,13 +59,13 @@ public class LieGroupFiltersTest extends TestCase {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    LieGroup lieGroup = geodesicDisplay.lieGroup();
-    Exponential exponential = geodesicDisplay.exponential();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     for (int radius : new int[] { 0, 10 }) {
-      for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
+      for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {
         TensorUnaryOperator tensorUnaryOperator = //
-            lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, exponential, biinvariantMean);
+            geodesicFilters.supply(geodesicInterface, smoothingKernel,
+                // lieGroup, exponential,
+                biinvariantMean);
         Timing timing = Timing.started();
         CenterFilter.of(tensorUnaryOperator, radius).apply(control);
         timing.stop();

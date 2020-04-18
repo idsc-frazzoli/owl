@@ -27,7 +27,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return new SplitParametricCurve(H2Geodesic.INSTANCE);
+    return SplitParametricCurve.of(H2Geodesic.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

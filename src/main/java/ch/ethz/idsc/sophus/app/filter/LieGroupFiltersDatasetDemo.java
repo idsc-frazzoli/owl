@@ -9,7 +9,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.LieGroupFilters;
+import ch.ethz.idsc.sophus.app.GeodesicFilters;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -20,13 +20,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
 public class LieGroupFiltersDatasetDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
-  private final SpinnerLabel<LieGroupFilters> spinnerFilters = new SpinnerLabel<>();
+  private final SpinnerLabel<GeodesicFilters> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   public LieGroupFiltersDatasetDemo() {
     super(GeodesicDisplays.SE2_R2, GokartPoseDataV1.INSTANCE);
     {
-      spinnerFilters.setArray(LieGroupFilters.values());
+      spinnerFilters.setArray(GeodesicFilters.values());
       spinnerFilters.setIndex(0);
       spinnerFilters.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "filter type");
       spinnerFilters.addSpinnerListener(type -> updateState());
@@ -50,8 +50,8 @@ public class LieGroupFiltersDatasetDemo extends AbstractDatasetKernelDemo implem
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
-    LieGroupFilters lieGroupFilters = spinnerFilters.getValue();
-    TensorUnaryOperator tensorUnaryOperator = lieGroupFilters.from(geodesicDisplay, smoothingKernel);
+    GeodesicFilters geodesicFilters = spinnerFilters.getValue();
+    TensorUnaryOperator tensorUnaryOperator = geodesicFilters.from(geodesicDisplay, smoothingKernel);
     return Nest.of( //
         CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());
@@ -59,8 +59,8 @@ public class LieGroupFiltersDatasetDemo extends AbstractDatasetKernelDemo implem
 
   @Override // from BufferedImageSupplier
   public BufferedImage bufferedImage() {
-    LieGroupFilters lieGroupFilters = spinnerFilters.getValue();
-    switch (lieGroupFilters) {
+    GeodesicFilters geodesicFilters = spinnerFilters.getValue();
+    switch (geodesicFilters) {
     case GEODESIC:
       return GeodesicCenterSymLinkImage.of(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
     default:

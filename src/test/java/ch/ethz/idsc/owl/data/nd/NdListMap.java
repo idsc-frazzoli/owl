@@ -21,8 +21,8 @@ public class NdListMap<V> implements NdMap<V> {
   }
 
   @Override // from NdMap
-  public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    return new NdCluster<>(list, ndCenter, limit);
+  public NdCluster<V> buildCluster(NdCenterInterface ndCenterInterface, int limit) {
+    return new NdCluster<>(list, ndCenterInterface, limit);
   }
 
   @Override // from NdMap

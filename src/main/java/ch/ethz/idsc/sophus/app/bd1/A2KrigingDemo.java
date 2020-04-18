@@ -1,14 +1,16 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
-import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
@@ -22,8 +24,10 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.itp.CrossWeighting;
+import ch.ethz.idsc.sophus.itp.CrossAveraging;
+import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.Krigings;
+import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -32,30 +36,41 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends ControlPointsDemo {
-  static final Stroke STROKE = //
-      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  private static final List<Object> LIST = new ArrayList<>();
+  static {
+    LIST.addAll(Arrays.asList(Krigings.values()));
+    LIST.addAll(Arrays.asList(LogMetricWeightings.values()));
+  }
   // ---
-  final SpinnerLabel<Krigings> spinnerKriging = SpinnerLabel.of(Krigings.values());
-  final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
-  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  private final SpinnerLabel<Object> spinnerKriging = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleButton = new JToggleButton("thres");
+  private final JButton jButtonExport = new JButton("export");
 
   public A2KrigingDemo(GeodesicDisplay geodesicDisplay) {
     super(true, Arrays.asList(geodesicDisplay));
-    spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
+    {
+      spinnerKriging.setList(LIST);
+      spinnerKriging.setIndex(0);
+      spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "function type");
+    }
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerCvar.setIndex(0);
@@ -89,6 +104,10 @@ import ch.ethz.idsc.tensor.sca.Round;
       });
       timerFrame.jToolBar.add(jButton);
     }
+    {
+      jButtonExport.addActionListener(e -> export());
+      timerFrame.jToolBar.add(jButtonExport);
+    }
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
@@ -107,29 +126,10 @@ import ch.ethz.idsc.tensor.sca.Round;
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     prepare();
-    // general
+    // ---
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    // ---
-    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    // ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
-    // Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
-    // Kriging kriging = //
-    // spinnerKriging.getValue().regression(flattenLogManifold, variogram, sequence, values, covariance);
-    // // ---
-    // TensorScalarFunction tsf = jToggleVarian.isSelected() //
-    // ? kriging::variance
-    // : point -> (Scalar) kriging.estimate(point);
-    WeightingInterface weightingInterface = LogMetricWeightings.BI_SMOOTH.from(flattenLogManifold, null);
-    TensorUnaryOperator tuo = CrossWeighting.of(weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
-    TensorScalarFunction tsf = t -> (Scalar) tuo.apply(t);
-    Tensor matrix = Tensors.matrix(array(spinnerRes.getValue(), tsf));
-    // ---
-    if (jToggleButton.isSelected())
-      matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
-    // ---
-    Tensor colorData = matrix.map(spinnerColorData.getValue());
-    BufferedImage bufferedImage = ImageFormat.of(colorData);
+    BufferedImage bufferedImage = bufferedImage(spinnerRes.getValue(), spinnerKriging.getValue(), sequence, values);
     RenderQuality.setDefault(graphics);
     ImageRender.of(bufferedImage, pixel2model(bufferedImage)) //
         .render(geometricLayer, graphics);
@@ -140,12 +140,58 @@ import ch.ethz.idsc.tensor.sca.Round;
     leverRender.renderWeights();
   }
 
+  private BufferedImage bufferedImage(int resolution, Object object, Tensor sequence, Tensor values) {
+    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+    TensorScalarFunction tsf = null;
+    if (object instanceof Krigings) {
+      Krigings krigings = (Krigings) object;
+      ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
+      Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
+      Kriging kriging = //
+          krigings.regression(flattenLogManifold, variogram, sequence, values, covariance);
+      // ---
+      tsf = jToggleVarian.isSelected() //
+          ? kriging::variance
+          : point -> (Scalar) kriging.estimate(point);
+    } else //
+    if (object instanceof LogMetricWeightings) {
+      LogMetricWeightings logMetricWeightings = (LogMetricWeightings) object;
+      WeightingInterface weightingInterface = logMetricWeightings.from(flattenLogManifold, geodesicDisplay().parametricDistance());
+      TensorUnaryOperator tuo = CrossAveraging.of(weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
+      tsf = t -> (Scalar) tuo.apply(t);
+    }
+    Tensor matrix = Tensors.matrix(array(resolution, tsf));
+    // ---
+    if (jToggleButton.isSelected())
+      matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
+    // ---
+    Tensor colorData = matrix.map(spinnerColorData.getValue());
+    return ImageFormat.of(colorData);
+  }
+
+  private void export() {
+    Tensor sequence = getGeodesicControlPoints();
+    Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
+    File folder = HomeDirectory.Pictures(getClass().getSimpleName(), spinnerColorData.getValue().toString());
+    folder.mkdirs();
+    System.out.println("exporting");
+    for (Object object : LIST) {
+      System.out.println(object);
+      BufferedImage bufferedImage = bufferedImage(256, object, sequence, values);
+      try {
+        ImageIO.write(bufferedImage, "png", new File(folder, object.toString() + ".png"));
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
+    }
+  }
+
   void prepare() {
     // ---
   }
 
   /** @param resolution
-   * @param kriging
+   * @param tensorScalarFunction
    * @return array of scalar values clipped to interval [0, 1] or DoubleScalar.INDETERMINATE */
   abstract Scalar[][] array(int resolution, TensorScalarFunction tensorScalarFunction);
 

@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
     super(true, Arrays.asList(geodesicDisplay));
     spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "krigings");
     {
-      spinnerBeta.setList(Tensors.fromString("{1, 9/8, 5/4, 3/2, 1.75, 1.99}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setList(Tensors.fromString("{1, 17/16, 9/8, 5/4, 3/2, 1.75, 1.99}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerBeta.setIndex(0);
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }

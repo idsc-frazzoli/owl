@@ -1,9 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.math.noise;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
-public class LayeredContinuousNoise implements NativeContinuousNoise {
+public class LayeredContinuousNoise implements NativeContinuousNoise, Serializable {
   /** WARNING: values are not copied but used by reference
    *
    * @param nativeContinuousNoise
@@ -14,7 +15,7 @@ public class LayeredContinuousNoise implements NativeContinuousNoise {
     return new LayeredContinuousNoise(nativeContinuousNoise, magnitude, frequency);
   }
 
-  // ---
+  /***************************************************/
   private final NativeContinuousNoise nativeContinuousNoise;
   private final double[] magnitude;
   private final double[] frequency;
@@ -27,12 +28,12 @@ public class LayeredContinuousNoise implements NativeContinuousNoise {
     this.frequency = frequency;
   }
 
-  @Override
+  @Override // from NativeContinuousNoise
   public double at(double x) {
     return at(x, 0);
   }
 
-  @Override
+  @Override // from NativeContinuousNoise
   public double at(double x, double y) {
     return IntStream.range(0, magnitude.length) //
         .mapToDouble(index -> magnitude[index] * nativeContinuousNoise.at( //
@@ -41,7 +42,7 @@ public class LayeredContinuousNoise implements NativeContinuousNoise {
         .sum();
   }
 
-  @Override
+  @Override // from NativeContinuousNoise
   public double at(double x, double y, double z) {
     return IntStream.range(0, magnitude.length) //
         .mapToDouble(index -> magnitude[index] * nativeContinuousNoise.at( //

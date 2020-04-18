@@ -12,7 +12,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.LieGroupFilters;
+import ch.ethz.idsc.sophus.app.GeodesicFilters;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       VisualRow visualRow = visualSet.add( //
           xAxis, //
           Join.of(yAxis, yAxis).extract(xAxis.length() / 2, xAxis.length() * 3 / 2));
-      visualRow.setLabel(LieGroupFilters.values()[index].toString());
+      visualRow.setLabel(GeodesicFilters.values()[index].toString());
       ++index;
     }
     VisualRow visualRow = visualSet.add(//
@@ -114,7 +114,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       VisualRow visualRow = visualSet.add( //
           xAxis, //
           Decibel.of(temp));
-      visualRow.setLabel(LieGroupFilters.values()[index].toString());
+      visualRow.setLabel(GeodesicFilters.values()[index].toString());
       ++index;
     }
     Tensor reference = Decibel.of(Abs.of(Join.of( //
@@ -147,7 +147,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   }
 
   private static void process( //
-      GokartPoseData gokartPoseData, Map<LieGroupFilters, TensorUnaryOperator> map, //
+      GokartPoseData gokartPoseData, Map<GeodesicFilters, TensorUnaryOperator> map, //
       int radius, int limit, SmoothingKernel smoothingKernel) throws IOException {
     int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
     int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
@@ -185,10 +185,10 @@ import ch.ethz.idsc.tensor.sca.Round;
   public static void main(String[] args) throws IOException {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    Map<LieGroupFilters, TensorUnaryOperator> map = new EnumMap<>(LieGroupFilters.class);
-    map.put(LieGroupFilters.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
-    map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
-    map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
+    Map<GeodesicFilters, TensorUnaryOperator> map = new EnumMap<>(GeodesicFilters.class);
+    map.put(GeodesicFilters.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
+    map.put(GeodesicFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
+    map.put(GeodesicFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
     int limit = 5;
     int rad = 24;
     process(GokartPoseDataV2.INSTANCE, map, rad, limit, smoothingKernel);

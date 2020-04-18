@@ -47,28 +47,28 @@ public enum RnBarycentricCoordinates implements LogMetricWeighting {
   RBF() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
-      return new RadialBasisFunctionWeighting(RnNorm.INSTANCE);
+      return RadialBasisFunctionWeighting.of(RnNorm.INSTANCE);
     }
   }, //
   RBF_INV_MULTI() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
       // TODO non generic
-      return new RadialBasisFunctionWeighting(new InverseMultiquadricNorm(RealScalar.of(5)));
+      return RadialBasisFunctionWeighting.of(new InverseMultiquadricNorm(RealScalar.of(5)));
     }
   }, //
   RBF_TPS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
       // TODO non generic
-      return new RadialBasisFunctionWeighting(ThinPlateSplineNorm.of(RealScalar.of(5)));
+      return RadialBasisFunctionWeighting.of(ThinPlateSplineNorm.of(RealScalar.of(5)));
     }
   }, //
   RBF_GAUSS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
       // TODO
-      return new RadialBasisFunctionWeighting(GaussianRadialBasisFunction.of(RealScalar.of(5)));
+      return RadialBasisFunctionWeighting.of(GaussianRadialBasisFunction.of(RealScalar.of(5)));
     }
   }, //
   KR_LOGNORM() {
