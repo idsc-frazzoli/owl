@@ -9,7 +9,7 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.app.GeodesicCausalFilters;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
@@ -28,15 +28,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class GeodesicCausalFilterDemo extends AbstractDatasetKernelDemo {
-  protected final SpinnerLabel<LieGroupCausalFilters> spinnerCausalFilter = new SpinnerLabel<>();
+  protected final SpinnerLabel<GeodesicCausalFilters> spinnerCausalFilter = new SpinnerLabel<>();
   /** parameter to blend extrapolation with measurement */
   private final JSlider jSlider = new JSlider(1, 999, 500);
 
   public GeodesicCausalFilterDemo() {
     super(GeodesicDisplays.SE2_ONLY, GokartPoseDataV2.INSTANCE);
     {
-      spinnerCausalFilter.setList(Arrays.asList(LieGroupCausalFilters.values()));
-      spinnerCausalFilter.setValue(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR);
+      spinnerCausalFilter.setList(Arrays.asList(GeodesicCausalFilters.values()));
+      spinnerCausalFilter.setValue(GeodesicCausalFilters.BIINVARIANT_MEAN_IIR);
       spinnerCausalFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "smoothing kernel");
       spinnerCausalFilter.addSpinnerListener(value -> updateState());
     }
@@ -56,9 +56,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // ---
-      LieGroupCausalFilters lieGroupCausalFilters = spinnerCausalFilter.getValue();
+      GeodesicCausalFilters geodesicCausalFilters = spinnerCausalFilter.getValue();
       TensorUnaryOperator tensorUnaryOperator = null;
-      switch (lieGroupCausalFilters) {
+      switch (geodesicCausalFilters) {
       case GEODESIC_FIR:
         tensorUnaryOperator = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;

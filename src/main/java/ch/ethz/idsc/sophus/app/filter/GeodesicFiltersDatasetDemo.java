@@ -19,11 +19,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class LieGroupFiltersDatasetDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
+public class GeodesicFiltersDatasetDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
   private final SpinnerLabel<GeodesicFilters> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
-  public LieGroupFiltersDatasetDemo() {
+  public GeodesicFiltersDatasetDemo() {
     super(GeodesicDisplays.SE2_R2, GokartPoseDataV1.INSTANCE);
     {
       spinnerFilters.setArray(GeodesicFilters.values());
@@ -69,6 +69,6 @@ public class LieGroupFiltersDatasetDemo extends AbstractDatasetKernelDemo implem
   }
 
   public static void main(String[] args) {
-    new LieGroupFiltersDatasetDemo().setVisible(1000, 800);
+    new GeodesicFiltersDatasetDemo().setVisible(1000, 800);
   }
 }

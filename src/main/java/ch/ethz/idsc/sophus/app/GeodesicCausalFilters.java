@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public enum LieGroupCausalFilters {
+public enum GeodesicCausalFilters {
   GEODESIC_FIR {
     @Override
     public TensorUnaryOperator supply( //

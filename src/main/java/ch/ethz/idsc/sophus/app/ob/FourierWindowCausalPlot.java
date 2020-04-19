@@ -10,7 +10,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.app.GeodesicCausalFilters;
 import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
@@ -71,9 +71,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       Tensor tempX = Tensors.empty();
       Tensor tempY = Tensors.empty();
       Tensor tempA = Tensors.empty();
-      for (LieGroupCausalFilters lgcf : LieGroupCausalFilters.values()) {
+      for (GeodesicCausalFilters gcf : GeodesicCausalFilters.values()) {
         Tensor smoothd = Tensors.empty();
-        switch (lgcf) {
+        switch (gcf) {
         case GEODESIC_FIR:
           smoothd = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
           break;
@@ -131,7 +131,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       VisualRow visualRow = visualSet.add( //
           xAxis, //
           Decibel.of(temp));
-      visualRow.setLabel(LieGroupCausalFilters.values()[index].toString());
+      visualRow.setLabel(GeodesicCausalFilters.values()[index].toString());
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);

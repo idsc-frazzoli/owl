@@ -24,13 +24,13 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 
-/* package */ class LieGroupFiltersDemo extends ControlPointsDemo {
+/* package */ class GeodesicFiltersDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DRAW = ColorDataLists._001.strict();
   private static final ColorDataIndexed COLOR_FILL = COLOR_DRAW.deriveWithAlpha(64);
   // ---
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
 
-  LieGroupFiltersDemo() {
+  GeodesicFiltersDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
     // ---
     timerFrame.jToolBar.addSeparator();
@@ -63,6 +63,6 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
   }
 
   public static void main(String[] args) {
-    new LieGroupFiltersDemo().setVisible(1000, 600);
+    new GeodesicFiltersDemo().setVisible(1000, 600);
   }
 }

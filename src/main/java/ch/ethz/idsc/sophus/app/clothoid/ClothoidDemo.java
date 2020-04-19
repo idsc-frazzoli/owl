@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -67,12 +68,17 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           .render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
-      ScalarTensorFunction curve = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
-      Tensor points = DOMAIN.map(curve);
+      Clothoid clothoid = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
+      Tensor points = DOMAIN.map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
           .render(geometricLayer, graphics);
+      {
+        // Scalar addAngle = clothoid.addAngle(RealScalar.ZERO);
+        // graphics.setColor(Color.BLACK);
+        // graphics.drawString("" + addAngle, 0, 10);
+      }
     }
   }
 

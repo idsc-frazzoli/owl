@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.filter;
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;
 
-public class LieGroupFiltersDemoTest extends TestCase {
+public class GeodesicFiltersDatasetDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.offscreen(new LieGroupFiltersDemo());
+    AbstractDemoHelper.offscreen(new GeodesicFiltersDatasetDemo());
   }
 }

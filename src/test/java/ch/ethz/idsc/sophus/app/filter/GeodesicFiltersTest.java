@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class LieGroupFiltersTest extends TestCase {
+public class GeodesicFiltersTest extends TestCase {
   private static void _check(GokartPoseData gokartPoseData) {
     List<String> lines = gokartPoseData.list();
     Tensor control = gokartPoseData.getPose(lines.get(0), 250);

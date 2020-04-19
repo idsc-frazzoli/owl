@@ -1,7 +1,13 @@
 // code adapted by ob
 package ch.ethz.idsc.owl.math.noise;
 
+import java.security.SecureRandom;
 import java.util.Random;
+
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariateInterface;
 
 /*
  * Adapted version of 'PinkNoise.java' to 'ColoredNoise.java'
@@ -39,15 +45,16 @@ import java.util.Random;
  * Proceedings of the IEEE, Vol. 83, No. 5, May 1995, p. 822.
  * 
  * @author Sampo Niskanen <sampo.niskanen@iki.fi> */
-public class ColoredNoise {
+public class ColoredNoise implements Distribution, RandomVariateInterface {
+  private static final Random RANDOM = new SecureRandom();
+  // ---
   private final int poles;
   private final double[] multipliers;
   private final double[] values;
-  private final Random random;
 
   /** Generate White noise by choosing the color alpha, using a five-pole IIR. */
   public ColoredNoise() {
-    this(0.0, 5, new Random());
+    this(0.0);
   }
 
   /** Generate a specific colored noise using a five-pole IIR.
@@ -60,7 +67,7 @@ public class ColoredNoise {
    * @param alpha = 2: Brownian Noise
    * @throws IllegalArgumentException: if <code>alpha < 0</code> or <code>alpha > 2</code>. */
   public ColoredNoise(double alpha) {
-    this(alpha, 5, new Random());
+    this(alpha, 5);
   }
 
   /** Generate colored noise specifying alpha and the number of poles. The larger
@@ -77,24 +84,6 @@ public class ColoredNoise {
    * @param poles: the number of poles to use.
    * @throws IllegalArgumentException: if <code>alpha < 0</code> or <code>alpha > 2</code>. */
   public ColoredNoise(double alpha, int poles) {
-    this(alpha, poles, new Random());
-  }
-
-  /** Generate colored noise from a specific randomness source specifying alpha
-   * and the number of poles. The larger the number of poles, the lower are
-   * the lowest frequency components that are amplified.
-   * 
-   * @param alpha: the exponent of the colored noise, 1/f^alpha.
-   * @param alpha = -2: Violet Noise
-   * @param alpha = -1: Blue Noise
-   * @param alpha = 0: White Noise
-   * @param alpha = 1: Pink Noise
-   * @param alpha = 2: Brownian Noise
-   * @param poles: the number of poles to use.
-   * @param random: the randomness source.
-   * @throws IllegalArgumentException: if <code>alpha < 0</code> or <code>alpha > 2</code>. */
-  public ColoredNoise(double alpha, int poles, Random random) {
-    this.random = random;
     this.poles = poles;
     this.multipliers = new double[poles];
     this.values = new double[poles];
@@ -105,11 +94,11 @@ public class ColoredNoise {
     }
     // Fill the history with random values
     for (int i = 0; i < 5 * poles; ++i)
-      nextValue();
+      nextValue(RANDOM);
   }
 
   /** @return the next pink noise sample. */
-  public double nextValue() {
+  public double nextValue(Random random) {
     /* The following may be changed to rnd.nextDouble()-0.5 if strict
      * Gaussian distribution of resulting values is not required. */
     double x = random.nextGaussian();
@@ -118,5 +107,14 @@ public class ColoredNoise {
     System.arraycopy(values, 0, values, 1, values.length - 1);
     values[0] = x;
     return x;
+  }
+
+  public double nextValue() {
+    return nextValue(RANDOM);
+  }
+
+  @Override
+  public Scalar randomVariate(Random random) {
+    return DoubleScalar.of(nextValue(random));
   }
 }

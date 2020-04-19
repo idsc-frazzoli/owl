@@ -43,6 +43,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Round;
@@ -104,6 +105,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       });
       timerFrame.jToolBar.add(jButton);
     }
+    timerFrame.jToolBar.addSeparator();
     {
       jButtonExport.addActionListener(e -> export());
       timerFrame.jToolBar.add(jButtonExport);
@@ -175,11 +177,17 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     File folder = HomeDirectory.Pictures(getClass().getSimpleName(), spinnerColorData.getValue().toString());
     folder.mkdirs();
     System.out.println("exporting");
+    int index = 0;
     for (Object object : LIST) {
-      System.out.println(object);
+      String format = String.format("%02d%s.png", index, object);
+      System.out.println(format);
       BufferedImage bufferedImage = bufferedImage(256, object, sequence, values);
+      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(pixel2model(bufferedImage)));
+      Graphics2D graphics = bufferedImage.createGraphics();
+      RenderQuality.setQuality(graphics);
+      renderControlPoints(geometricLayer, graphics);
       try {
-        ImageIO.write(bufferedImage, "png", new File(folder, object.toString() + ".png"));
+        ImageIO.write(bufferedImage, "png", new File(folder, format));
       } catch (Exception exception) {
         exception.printStackTrace();
       }
