@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.io.Timing;
       return sarsa.qsa();
     }
     Timing timing = Timing.started();
-    DiscreteQsa optimalQsa = ActionValueIterations.solve((StandardModel) monteCarloInterface, DecimalScalar.of(.0001));
+    DiscreteQsa optimalQsa = ActionValueIterations.solve((StandardModel) monteCarloInterface, DecimalScalar.of(0.0001));
     System.out.println("Time for AVI: " + timing.seconds() + "s");
     return optimalQsa;
   }

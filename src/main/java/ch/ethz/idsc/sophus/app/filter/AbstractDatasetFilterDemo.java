@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   public Scalar markerScale() {
-    return RealScalar.of(.03);
+    return RealScalar.of(0.03);
   }
 
   protected abstract Tensor control();

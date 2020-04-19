@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     {
       Tensor selected = scalarTensorFunction.apply(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.02)));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.02)));
       graphics.setColor(Color.DARK_GRAY);
       graphics.fill(path2d);
       geometricLayer.popMatrix();

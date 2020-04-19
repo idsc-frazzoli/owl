@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.fill(path2d);
     }
     graphics.setColor(new Color(192, 192, 192, 192));
-    Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.5));
+    Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
     for (Tensor mean : refine.vrt) {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
       graphics.fill(geometricLayer.toPath2D(shape));

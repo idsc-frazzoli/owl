@@ -111,7 +111,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(10));
     Collection<Tensor> controls = carFlows.getFlows(6);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion( //
-        new BallRegion(Tensors.vector(-0.5, 0), RealScalar.of(.3)), //
+        new BallRegion(Tensors.vector(-0.5, 0), RealScalar.of(0.3)), //
         So2Region.covering(RealScalar.of(2), RealScalar.ONE));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     //

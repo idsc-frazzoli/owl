@@ -31,7 +31,7 @@ public class RnTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       Tensor samples = transition.sampled(res);
       ExactTensorQ.require(samples);
       assertEquals(8, samples.length());
@@ -51,7 +51,7 @@ public class RnTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
       assertEquals(8, wrap.samples().length());
       assertNotSame(start, wrap.samples().get(0));

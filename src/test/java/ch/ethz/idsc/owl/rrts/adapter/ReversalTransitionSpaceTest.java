@@ -34,7 +34,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}").add(Tensors.vector(0, 0, Math.PI));
     Transition transition = ReversalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       Tensor samples = transition.sampled(res);
       assertEquals(10, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
@@ -55,7 +55,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}").add(Tensors.vector(0, 0, Math.PI));
     Transition transition = ReversalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
       assertEquals(10, wrap.samples().length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));

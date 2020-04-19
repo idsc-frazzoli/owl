@@ -160,7 +160,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
           }
         }
       if (jToggleArrows.isSelected()) {
-        Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.5));
+        Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
         for (int i0 = 0; i0 < n; ++i0)
           for (int i1 = 0; i1 < n; ++i1) {
             Tensor mean = array[i0][i1];

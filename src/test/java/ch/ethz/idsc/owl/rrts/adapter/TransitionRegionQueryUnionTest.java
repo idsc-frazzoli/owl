@@ -15,9 +15,9 @@ import junit.framework.TestCase;
 public class TransitionRegionQueryUnionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     TransitionRegionQuery trq1 = //
-        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(0, 0), RealScalar.ONE), RealScalar.of(.1));
+        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(0, 0), RealScalar.ONE), RealScalar.of(0.1));
     TransitionRegionQuery trq2 = //
-        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(2, 0), RealScalar.ONE), RealScalar.of(.1));
+        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(2, 0), RealScalar.ONE), RealScalar.of(0.1));
     TransitionRegionQuery transitionRegionQuery = Serialization.copy(TransitionRegionQueryUnion.wrap(trq1, trq2));
     {
       Transition transition = RnTransitionSpace.INSTANCE.connect( //

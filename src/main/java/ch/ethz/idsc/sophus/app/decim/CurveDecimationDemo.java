@@ -25,7 +25,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.crv.decim.CurveDecimation;
 import ch.ethz.idsc.sophus.crv.decim.CurveDecimation.Result;
-import ch.ethz.idsc.sophus.crv.decim.LieGroupCurveDecimation;
+import ch.ethz.idsc.sophus.crv.decim.HsCurveDecimation;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
-  private final SpinnerLabel<LieGroupCurveDecimation> spinnerType = new SpinnerLabel<>();
+  private final SpinnerLabel<HsCurveDecimation> spinnerType = new SpinnerLabel<>();
   // private final JSlider jSlider = new JSlider(1, 1000, 500);
   private final JToggleButton jToggleButton = new JToggleButton("error");
   protected Tensor _control = Tensors.empty();
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelDegre.addSpinnerListener(type -> updateState());
     }
     {
-      spinnerType.setArray(LieGroupCurveDecimation.values());
+      spinnerType.setArray(HsCurveDecimation.values());
       spinnerType.setIndex(0);
       spinnerType.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "type");
       // spinnerType.addSpinnerListener(type -> updateState());
@@ -128,7 +128,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
     // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
-    LieGroupCurveDecimation lieGroupCurveDecimation = spinnerType.getValue();
+    HsCurveDecimation lieGroupCurveDecimation = spinnerType.getValue();
     CurveDecimation curveDecimation = //
         lieGroupCurveDecimation.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));

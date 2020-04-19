@@ -84,7 +84,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), exponential());
+    return LieExponential.of(lieGroup(), So3Exponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

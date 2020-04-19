@@ -14,7 +14,7 @@ public class SymWeightsToSplitsTest extends TestCase {
 
   public void testTerminal() {
     Tensor tree = Tensors.vector(0, 1);
-    Tensor weights = Tensors.vector(.5, .5);
+    Tensor weights = Tensors.vector(0.5, 0.5);
     SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(tree, weights);
     Tensor expected = Tensors.vector(0, 1, 0.5, 1);
     Tensor actual = symWeightsToSplits.splits();

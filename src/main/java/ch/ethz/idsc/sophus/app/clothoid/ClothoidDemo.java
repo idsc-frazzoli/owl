@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     {
       graphics.setColor(new Color(255, 0, 0, 128));
       geometricLayer.pushMatrix(Se2Matrix.of(mouse));
-      graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
+      graphics.fill(geometricLayer.toPath2D(Arrowhead.of(0.3)));
       geometricLayer.popMatrix();
     }
     {

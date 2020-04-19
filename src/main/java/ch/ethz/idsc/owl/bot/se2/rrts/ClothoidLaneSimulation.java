@@ -74,8 +74,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static final File DIRECTORY = HomeDirectory.Pictures("LaneSim");
   private static final int WIDTH = 900;
   private static final int HEIGHT = 600;
-  private static final Scalar OVERHEAD = RealScalar.of(.5);
-  private static final Scalar MIN_RESOLUTION = RealScalar.of(.1);
+  private static final Scalar OVERHEAD = RealScalar.of(0.5);
+  private static final Scalar MIN_RESOLUTION = RealScalar.of(0.1);
   // ---
   private static final GeodesicDisplay GEODESIC_DISPLAY = Se2ClothoidDisplay.INSTANCE;
   private static final int DEGREE = 3;

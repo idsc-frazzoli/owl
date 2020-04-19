@@ -121,7 +121,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       Curvature2DRender.of(curve, false, geometricLayer, graphics);
       {
-        Scalar scale = RealScalar.of(.3);
+        Scalar scale = RealScalar.of(0.3);
         switch (geodesicDisplay.toString()) {
         case "SE2C":
         case "SE2":

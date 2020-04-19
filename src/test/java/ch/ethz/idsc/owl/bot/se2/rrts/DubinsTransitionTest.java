@@ -21,7 +21,7 @@ public class DubinsTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(3, -8, 1);
     Transition transition = transitionSpace.connect(start, end);
-    TransitionWrap transitionWrap = transition.wrapped(RealScalar.of(.3));
+    TransitionWrap transitionWrap = transition.wrapped(RealScalar.of(0.3));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
     assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
   }

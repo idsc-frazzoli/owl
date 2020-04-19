@@ -53,7 +53,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), exponential());
+    return LieExponential.of(lieGroup(), RnExponential.INSTANCE);
   }
 
   @Override

@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     visualSet.add(domain2, values2);
     Tensor domain3 = RandomVariate.of(UniformDistribution.unit(), values3.length());
     visualSet.add(domain3, values3);
-    Tensor domain4 = Tensors.vector(1, 3, 2, 5, 4).multiply(RealScalar.of(.2));
+    Tensor domain4 = Tensors.vector(1, 3, 2, 5, 4).multiply(RealScalar.of(0.2));
     visualSet.add(domain4, domain4);
     /* amodeus specific */
     // ChartFactory.setChartTheme(ChartTheme.STANDARD);

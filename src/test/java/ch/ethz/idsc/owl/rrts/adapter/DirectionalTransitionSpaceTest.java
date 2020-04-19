@@ -47,7 +47,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
     Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
         .connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       Tensor samples = transition.sampled(res);
       assertEquals(10, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
@@ -74,7 +74,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
     Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
         .connect(start, end);
     {
-      Scalar res = Quantity.of(.5, "m");
+      Scalar res = Quantity.of(0.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
       assertEquals(10, wrap.samples().length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));

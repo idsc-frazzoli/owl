@@ -92,7 +92,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       Tensor p = symLink.getPosition(geodesicInterface);
       graphics.setColor(new Color(0, 0, 255, 192));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.7)));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.7)));
       path2d.closePath();
       graphics.fill(path2d);
       geometricLayer.popMatrix();

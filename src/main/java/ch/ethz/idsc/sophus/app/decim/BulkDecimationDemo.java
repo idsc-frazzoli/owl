@@ -14,7 +14,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.decim.CurveDecimation;
-import ch.ethz.idsc.sophus.crv.decim.LieGroupCurveDecimation;
+import ch.ethz.idsc.sophus.crv.decim.HsCurveDecimation;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       }
     }
     CurveDecimation curveDecimation = //
-        LieGroupCurveDecimation.STANDARD.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), RealScalar.ONE);
+        HsCurveDecimation.STANDARD.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), RealScalar.ONE);
     Tensor decimate = curveDecimation.apply(sequence);
     {
       PathRender pathRender = new PathRender(COLOR_DATA_INDEXED_DRAW.getColor(1));

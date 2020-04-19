@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 /* package */ class RigidMotionFitDemo extends ControlPointsDemo {
-  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(.2));
+  private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.2));
   private static final PointsRender POINTS_RENDER_RESULT = //
       new PointsRender(new Color(128, 128, 255, 64), new Color(128, 128, 255, 255));
   private static final PointsRender POINTS_RENDER_POINTS = //

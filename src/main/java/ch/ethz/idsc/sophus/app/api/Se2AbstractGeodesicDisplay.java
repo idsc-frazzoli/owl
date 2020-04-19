@@ -43,7 +43,7 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
 
   @Override // from GeodesicDisplay
   public final HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), exponential());
+    return LieExponential.of(lieGroup(), Se2CoveringExponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     Tensor XYsarsa = Tensors.empty();
     Tensor XYtoSarsa = Tensors.empty();
     Airport airport = new Airport();
-    DiscreteQsa optimalQsa = ActionValueIterations.solve(airport, DecimalScalar.of(.0001));
+    DiscreteQsa optimalQsa = ActionValueIterations.solve(airport, DecimalScalar.of(0.0001));
     // DiscreteUtils.print(optimalQsa);
     // Policies.print(policyQsa, airport.states());
     final int batches = 10;

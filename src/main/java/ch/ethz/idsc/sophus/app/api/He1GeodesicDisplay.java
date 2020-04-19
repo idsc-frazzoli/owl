@@ -70,7 +70,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), exponential());
+    return LieExponential.of(lieGroup(), HeExponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

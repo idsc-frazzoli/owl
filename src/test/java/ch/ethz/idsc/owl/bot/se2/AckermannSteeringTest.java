@@ -16,7 +16,7 @@ public class AckermannSteeringTest extends TestCase {
   public void testSimple() {
     AckermannSteering asL = new AckermannSteering(Quantity.of(1, "m"), Quantity.of(+0.4, "m"));
     AckermannSteering asR = new AckermannSteering(Quantity.of(1, "m"), Quantity.of(-0.4, "m"));
-    Scalar delta = RealScalar.of(.2);
+    Scalar delta = RealScalar.of(0.2);
     Scalar aL = asL.angle(delta);
     assertTrue(Scalars.lessThan(delta, aL));
     Scalar aR = asR.angle(delta);
@@ -25,13 +25,13 @@ public class AckermannSteeringTest extends TestCase {
 
   public void testId() {
     AckermannSteering asL = new AckermannSteering(Quantity.of(1, "m"), Quantity.of(+0, "m"));
-    Scalar delta = RealScalar.of(.2);
+    Scalar delta = RealScalar.of(0.2);
     assertEquals(asL.angle(delta), delta);
   }
 
   public void testPair() {
     AckermannSteering asL = new AckermannSteering(Quantity.of(1, "m"), Quantity.of(+0.4, "m"));
-    Scalar delta = RealScalar.of(.2);
+    Scalar delta = RealScalar.of(0.2);
     Tensor pair = asL.pair(delta);
     assertEquals(pair.Get(0), asL.angle(delta));
     AckermannSteering asR = new AckermannSteering(Quantity.of(1, "m"), Quantity.of(-0.4, "m"));
@@ -41,7 +41,7 @@ public class AckermannSteeringTest extends TestCase {
   public void testUnits() {
     ScalarUnaryOperator suo = UnitSystem.SI();
     AckermannSteering asL = new AckermannSteering(suo.apply(Quantity.of(1, "m")), suo.apply(Quantity.of(+40, "cm")));
-    Scalar delta = RealScalar.of(.2);
+    Scalar delta = RealScalar.of(0.2);
     Tensor pair = asL.pair(delta);
     assertTrue(Chop._12.close(pair, Tensors.vector(0.21711959572073944, 0.1853540110207382)));
   }

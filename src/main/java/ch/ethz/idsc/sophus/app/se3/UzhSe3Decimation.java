@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     System.out.println(Dimensions.of(poses));
     Put.of(new File(root, "poses.file"), poses);
     {
-      CurveDecimation curveDecimation = Se3CurveDecimation.of(RealScalar.of(.02));
+      CurveDecimation curveDecimation = Se3CurveDecimation.of(RealScalar.of(0.02));
       Timing timing = Timing.started();
       Result result = curveDecimation.evaluate(poses);
       Tensor decimated = result.result();

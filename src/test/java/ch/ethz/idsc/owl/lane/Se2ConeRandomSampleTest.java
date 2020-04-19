@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 public class Se2ConeRandomSampleTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor apex = Tensors.vector(-10, -92, -3);
-    Scalar semi = RealScalar.of(.3);
+    Scalar semi = RealScalar.of(0.3);
     Scalar heading = RealScalar.ONE;
     Scalar depth = RationalScalar.HALF;
     RandomSampleInterface randomSampleInterface = Serialization.copy(Se2ConeRandomSample.of(apex, semi, heading, depth));

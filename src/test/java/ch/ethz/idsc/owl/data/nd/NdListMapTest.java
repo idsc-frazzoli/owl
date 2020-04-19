@@ -50,7 +50,7 @@ public class NdListMapTest extends TestCase {
     NdMap<String> m1 = new NdListMap<>();
     NdMap<String> m2 = new NdTreeMap<>(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim, dep);
     int index = 0;
-    Distribution b = BernoulliDistribution.of(RealScalar.of(.25));
+    Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
     Distribution uy = UniformDistribution.of(-1, 10);
     for (int c = 0; c < 20; ++c) {
@@ -77,8 +77,8 @@ public class NdListMapTest extends TestCase {
 
   public void testOne() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3), 1, dim, 6);
-      _checkCenter(Tensors.vector(.1, .3), 1, dim, 6);
+      _checkCenter(Tensors.vector(0.3, .3), 1, dim, 6);
+      _checkCenter(Tensors.vector(0.1, .3), 1, dim, 6);
       _checkCenter(Tensors.vector(5, 4.3), 1, dim, 10);
       _checkCenter(Tensors.vector(5, -3.3), 1, dim, 10);
     }
@@ -86,8 +86,8 @@ public class NdListMapTest extends TestCase {
 
   public void testFew() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3), 3, dim, 7);
-      _checkCenter(Tensors.vector(.1, .3), 3, dim, 7);
+      _checkCenter(Tensors.vector(0.3, .3), 3, dim, 7);
+      _checkCenter(Tensors.vector(0.1, .3), 3, dim, 7);
       _checkCenter(Tensors.vector(5, 4.3), 3, dim, 11);
       _checkCenter(Tensors.vector(5, -3.3), 3, dim, 11);
     }
@@ -95,8 +95,8 @@ public class NdListMapTest extends TestCase {
 
   public void testMany() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3), 20, dim, 8);
-      _checkCenter(Tensors.vector(.1, .3), 20, dim, 8);
+      _checkCenter(Tensors.vector(0.3, .3), 20, dim, 8);
+      _checkCenter(Tensors.vector(0.1, .3), 20, dim, 8);
       _checkCenter(Tensors.vector(5, 4.3), 20, dim, 12);
       _checkCenter(Tensors.vector(5, -3.3), 20, dim, 12);
     }
@@ -104,8 +104,8 @@ public class NdListMapTest extends TestCase {
 
   public void testMost() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3), 60, dim, 9);
-      _checkCenter(Tensors.vector(.1, .3), 60, dim, 9);
+      _checkCenter(Tensors.vector(0.3, .3), 60, dim, 9);
+      _checkCenter(Tensors.vector(0.1, .3), 60, dim, 9);
       _checkCenter(Tensors.vector(5, 4.3), 60, dim, 13);
       _checkCenter(Tensors.vector(5, -3.3), 60, dim, 13);
     }
@@ -113,8 +113,8 @@ public class NdListMapTest extends TestCase {
 
   public void testAll() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3), 160, dim, 10);
-      _checkCenter(Tensors.vector(.1, .3), 160, dim, 10);
+      _checkCenter(Tensors.vector(0.3, .3), 160, dim, 10);
+      _checkCenter(Tensors.vector(0.1, .3), 160, dim, 10);
       _checkCenter(Tensors.vector(5, 4.3), 160, dim, 14);
       _checkCenter(Tensors.vector(5, -3.3), 160, dim, 14);
     }

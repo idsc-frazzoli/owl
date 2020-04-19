@@ -86,7 +86,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
       graphics.setColor(new Color(255, 128, 128));
       for (Tensor split : Subdivide.of(1, 1.5, SPLITS).map(scalarTensorFunction)) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(split));
-        graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.3))));
+        graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.3))));
         geometricLayer.popMatrix();
       }
     }

@@ -14,10 +14,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.crv.decim.LieGroupLineDistance;
-import ch.ethz.idsc.sophus.crv.decim.LieGroupLineDistance.NormImpl;
+import ch.ethz.idsc.sophus.crv.decim.HsLineDistance;
+import ch.ethz.idsc.sophus.crv.decim.HsLineDistance.NormImpl;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -66,9 +65,8 @@ import ch.ethz.idsc.tensor.sca.Round;
         graphics.draw(path2d);
       }
       {
-        LieGroupLineDistance lieGroupLineDistance = //
-            new LieGroupLineDistance(lieGroup, Se2CoveringExponential.INSTANCE::log);
-        NormImpl normImpl = lieGroupLineDistance.tensorNorm(beg, end);
+        HsLineDistance hsLineDistance = new HsLineDistance(geodesicDisplay.flattenLogManifold());
+        NormImpl normImpl = hsLineDistance.tensorNorm(beg, end);
         Tensor mouse = geometricLayer.getMouseSe2State();
         {
           Tensor project = normImpl.project(mouse);

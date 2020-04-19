@@ -71,7 +71,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       }
       // ---
       Tensor sequence = support.map(Tensors::of);
-      ScalarUnaryOperator variogram = PowerVariogram.fit(sequence, funceva, beta());
+      ScalarUnaryOperator variogram = //
+          PowerVariogram.fit(geodesicDisplay.parametricDistance(), sequence, funceva, beta());
       // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);

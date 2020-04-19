@@ -36,7 +36,7 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(2, 3, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
-    TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
+    TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(0.2));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
     assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
   }
@@ -61,10 +61,10 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 25);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 50);
-    assertEquals(clothoidTransition.linearized(RealScalar.of(.2)).length(), 26);
-    assertEquals(clothoidTransition.linearized(RealScalar.of(.1)).length(), 51);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(0.2)).length(), 25);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(0.1)).length(), 50);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(0.2)).length(), 26);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(0.1)).length(), 51);
   }
 
   public void testFails() {

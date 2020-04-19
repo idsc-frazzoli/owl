@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class Se2WrapDemoTest extends TestCase {
   public void testSe2Wrap() {
     TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap( //
-        Se2WrapDemo.createPlanner(Se2Wrap.INSTANCE, So2Region.periodic(RealScalar.ZERO, RealScalar.of(.3))));
+        Se2WrapDemo.createPlanner(Se2Wrap.INSTANCE, So2Region.periodic(RealScalar.ZERO, RealScalar.of(0.3))));
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(20);
@@ -29,7 +29,7 @@ public class Se2WrapDemoTest extends TestCase {
 
   public void testSe2CoveringWrap() {
     TrajectoryPlanner trajectoryPlanner = //
-        CheckedTrajectoryPlanner.wrap(Se2WrapDemo.createPlanner(Se2CoveringWrap.INSTANCE, So2Region.covering(RealScalar.ZERO, RealScalar.of(.3))));
+        CheckedTrajectoryPlanner.wrap(Se2WrapDemo.createPlanner(Se2CoveringWrap.INSTANCE, So2Region.covering(RealScalar.ZERO, RealScalar.of(0.3))));
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(20);

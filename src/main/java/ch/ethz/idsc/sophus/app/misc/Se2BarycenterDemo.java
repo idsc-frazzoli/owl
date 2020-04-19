@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.red.Total;
           for (int c1 = 0; c1 < n; ++c1) {
             Tensor mean = array[c0][c1];
             geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
-            Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(.1));
+            Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.1));
             path2d.closePath();
             graphics.fill(path2d);
             geometricLayer.popMatrix();

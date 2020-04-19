@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class DifferentialSpeedTest extends TestCase {
   public void testSimple() {
-    DifferentialSpeed ds = DifferentialSpeed.fromSI(RealScalar.of(1.2), RealScalar.of(.5));
+    DifferentialSpeed ds = DifferentialSpeed.fromSI(RealScalar.of(1.2), RealScalar.of(0.5));
     Scalar speed = RealScalar.of(+4.0);
     Scalar angle = RealScalar.of(+0.3);
     // confirmed with mathematica
@@ -144,7 +144,7 @@ public class DifferentialSpeedTest extends TestCase {
 
   public void testFail() {
     try {
-      DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(.5));
+      DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(0.5));
       fail();
     } catch (Exception exception) {
       // ---
