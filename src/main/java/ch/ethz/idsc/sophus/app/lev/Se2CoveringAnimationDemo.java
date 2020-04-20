@@ -14,8 +14,8 @@ import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 
 /* package */ class Se2CoveringAnimationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
     {
-      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setList(LogWeightings.list());
       spinnerWeights.setIndex(0);
       spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
     }
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.io.Timing;
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       RenderQuality.setQuality(graphics);
-      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold());
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           weightingInterface, //

@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   public ExportCoordinateDemo( //
       boolean addRemoveControlPoints, //
       List<GeodesicDisplay> list, //
-      List<LogMetricWeighting> array) {
+      List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     {
       jButtonExport.addActionListener(this);
@@ -38,8 +38,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   public final void actionPerformed(ActionEvent actionEvent) {
     File root = HomeDirectory.Pictures(getClass().getSimpleName(), geodesicDisplay().toString());
     root.mkdirs();
-    for (LogMetricWeighting logMetricWeighting : LogMetricWeightings.barycentric()) {
-      WeightingInterface weightingInterface = logMetricWeighting.from(geodesicDisplay().flattenLogManifold(), geodesicDisplay().parametricDistance());
+    for (LogWeighting logWeighting : LogWeightings.list()) {
+      WeightingInterface weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold());
       System.out.print("computing...");
       Tensor wgs = compute(weightingInterface, 120);
       List<Integer> dims = Dimensions.of(wgs);
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       ArrayPlotRender arrayPlotRender = new ArrayPlotRender(_wgp, colorDataGradient(), 0, 0, 1);
       BufferedImage bufferedImage = arrayPlotRender.export();
       try {
-        ImageIO.write(bufferedImage, "png", new File(root, logMetricWeighting.toString() + ".png"));
+        ImageIO.write(bufferedImage, "png", new File(root, logWeighting.toString() + ".png"));
       } catch (Exception exception) {
         exception.printStackTrace();
       }

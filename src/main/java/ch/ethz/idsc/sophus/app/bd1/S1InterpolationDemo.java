@@ -12,8 +12,8 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -29,13 +29,13 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S1InterpolationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogMetricWeighting> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerBarycentric = new SpinnerLabel<>();
 
   public S1InterpolationDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     setMidpointIndicated(false);
     {
-      spinnerBarycentric.setArray(LogMetricWeightings.values());
+      spinnerBarycentric.setArray(LogWeightings.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       // ---
       FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
       TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, tensorMetric);
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold);
       try {
         ScalarTensorFunction scalarTensorFunction = //
             point -> weightingInterface.weights(sequence, AngleVector.of(point));

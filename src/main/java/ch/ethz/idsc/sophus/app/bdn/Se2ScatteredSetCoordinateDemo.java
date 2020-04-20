@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public Se2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2, LogMetricWeightings.barycentric());
+    super(true, GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     spinnerRefine.setValueSafe(15);
     {
       jToggleAxes.setSelected(true);

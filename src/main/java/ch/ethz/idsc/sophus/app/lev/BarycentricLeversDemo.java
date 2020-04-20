@@ -12,15 +12,15 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class BarycentricLeversDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleMean = new JToggleButton("mean");
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
     super(true, GeodesicDisplays.ALL);
     setMidpointIndicated(false);
     {
-      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setList(LogWeightings.list());
       spinnerWeights.setIndex(0);
       spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
     }
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.Tensors;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
-      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold());
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           weightingInterface, //

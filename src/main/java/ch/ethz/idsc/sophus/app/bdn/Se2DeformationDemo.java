@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.bdn;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
   Se2DeformationDemo() {
-    super(GeodesicDisplays.SE2C_SE2, LogMetricWeightings.list());
+    super(GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     // ---
     timerFrame.configCoordinateOffset(300, 500);
     shuffleSnap();

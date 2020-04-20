@@ -14,8 +14,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class Se2CoveringInvarianceDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogMetricWeighting> spinnerWeights = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JTextField jTextField = new JTextField();
 
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensors;
     super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
     {
-      spinnerWeights.setList(LogMetricWeightings.barycentric());
+      spinnerWeights.setList(LogWeightings.list());
       spinnerWeights.setIndex(0);
       spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
     }
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
-      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), null);
+      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold());
       {
         LeverRender leverRender = LeverRender.of(geodesicDisplay, //
             weightingInterface, //

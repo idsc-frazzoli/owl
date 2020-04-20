@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Tensor movingOrigin;
   private MovingDomain2D movingDomain2D;
 
-  AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogMetricWeighting> array) {
+  AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(false, list, array);
     setMidpointIndicated(false);
     // ---

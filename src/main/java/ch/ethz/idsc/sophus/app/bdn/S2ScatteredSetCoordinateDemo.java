@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public S2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, LogMetricWeightings.list());
+    super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
     {
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);

@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
   S2DeformationDemo() {
-    super(GeodesicDisplays.S2_ONLY, LogMetricWeightings.list());
+    super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
     // ---
     spinnerSnMeans.setValue(SnMeans.FAST);
     spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");

@@ -16,8 +16,8 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -30,12 +30,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 /* package */ class BarycentricExtrapolationDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private final SpinnerLabel<LogMetricWeighting> spinnerProjectedCoordinates = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerProjectedCoordinates = new SpinnerLabel<>();
 
   public BarycentricExtrapolationDemo() {
     super(true, GeodesicDisplays.SE2C_R2);
     {
-      spinnerProjectedCoordinates.setList(LogMetricWeightings.barycentric());
+      spinnerProjectedCoordinates.setList(LogWeightings.list());
       spinnerProjectedCoordinates.setIndex(0);
       spinnerProjectedCoordinates.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "projected coordinate");
     }
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, null);
+      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE);
       Tensor curve = Tensor.of(samples.stream() //
           .map(point -> weightingInterface.weights(domain, point)) //
           .map(weights -> biinvariantMean.mean(control, weights)));

@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -26,9 +26,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogMetricWeighting> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerBarycentric = new SpinnerLabel<>();
 
-  public A1BarycentricCoordinateDemo(List<LogMetricWeighting> array) {
+  public A1BarycentricCoordinateDemo(List<LogWeighting> array) {
     super(true, GeodesicDisplays.R2_ONLY);
     {
       spinnerBarycentric.setList(array);
@@ -54,7 +54,14 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       // ---
       FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
       TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, tensorMetric);
+      Object object = spinnerBarycentric.getValue();
+      final WeightingInterface weightingInterface;
+      if (object instanceof LogWeighting) {
+        LogWeighting logWeighting = (LogWeighting) object;
+        weightingInterface = logWeighting.from(flattenLogManifold);
+      } else {
+        weightingInterface = null;
+      }
       Tensor sequence = support.map(this::lift);
       ScalarTensorFunction scalarTensorFunction = //
           point -> weightingInterface.weights(sequence, lift(point));

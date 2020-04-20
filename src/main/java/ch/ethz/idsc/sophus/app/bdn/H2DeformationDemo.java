@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final SpinnerLabel<HnMeans> spinnerMeans = SpinnerLabel.of(HnMeans.values());
 
   H2DeformationDemo() {
-    super(GeodesicDisplays.H2_ONLY, LogMetricWeightings.list());
+    super(GeodesicDisplays.H2_ONLY, LogWeightings.list());
     // ---
     spinnerMeans.setValue(HnMeans.EXACT);
     spinnerMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "hn means");

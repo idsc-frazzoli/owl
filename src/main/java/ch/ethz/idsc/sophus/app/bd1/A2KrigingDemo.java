@@ -21,7 +21,8 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogMetricWeightings;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
@@ -53,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final List<Object> LIST = new ArrayList<>();
   static {
     LIST.addAll(Arrays.asList(Krigings.values()));
-    LIST.addAll(Arrays.asList(LogMetricWeightings.values()));
+    LIST.addAll(Arrays.asList(LogWeightings.values()));
   }
   // ---
   private final SpinnerLabel<Object> spinnerKriging = new SpinnerLabel<>();
@@ -156,9 +157,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           ? kriging::variance
           : point -> (Scalar) kriging.estimate(point);
     } else //
-    if (object instanceof LogMetricWeightings) {
-      LogMetricWeightings logMetricWeightings = (LogMetricWeightings) object;
-      WeightingInterface weightingInterface = logMetricWeightings.from(flattenLogManifold, geodesicDisplay().parametricDistance());
+    if (object instanceof LogWeighting) {
+      LogWeighting logMetricWeightings = (LogWeighting) object;
+      WeightingInterface weightingInterface = logMetricWeightings.from(flattenLogManifold);
       TensorUnaryOperator tuo = CrossAveraging.of(weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
       tsf = t -> (Scalar) tuo.apply(t);
     }
