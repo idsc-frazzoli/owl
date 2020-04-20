@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Log;
   }
 
   private Scalar h2(Scalar lambda, Scalar mu) {
-    return process(Hermite2Subdivisions.of(LIE_GROUP, LIE_EXPONENTIAL, lambda, mu));
+    return process(Hermite2Subdivisions.of(HS_EXPONENTIAL, HS_TRANSPORT, lambda, mu));
   }
 
   @Override // from HermiteArray

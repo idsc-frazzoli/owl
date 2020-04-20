@@ -3,12 +3,16 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.s2.S2Transport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -33,12 +37,15 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     super(2);
   }
 
+  @Override
+  public HsTransport hsTransport() {
+    return S2Transport.INSTANCE;
+  }
+
   /** @param xyz normalized vector
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
   /* package */ static Tensor tangentSpace(Tensor xyz) {
-    Tensor frame = Tensors.of(xyz);
-    IdentityMatrix.of(3).stream().forEach(frame::append);
-    return Orthogonalize.of(frame).extract(1, 3);
+    return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
   }
 
   @Override // from GeodesicDisplay
@@ -50,6 +57,15 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     xyz.set(RealScalar.ZERO, 2);
     // intersection of front and back hemisphere
     return Normalize.with(Norm._2).apply(xyz);
+  }
+
+  public Tensor projectTangent(Tensor xya) {
+    return projectTangent(xya, xya.Get(2));
+  }
+
+  public Tensor projectTangent(Tensor xya, Scalar angle) {
+    Tensor xyz = project(xya);
+    return AngleVector.of(angle).dot(tangentSpace(xyz));
   }
 
   public static Optional<Tensor> optionalZ(Tensor xya) {

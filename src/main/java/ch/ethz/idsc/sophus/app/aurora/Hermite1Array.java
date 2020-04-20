@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   private Scalar h1(Scalar lambda, Scalar mu) {
-    return process(Hermite1Subdivisions.of(LIE_GROUP, LIE_EXPONENTIAL, lambda, mu));
+    return process(Hermite1Subdivisions.of(HS_EXPONENTIAL, HS_TRANSPORT, lambda, mu));
   }
 
   @Override // from HermiteArray

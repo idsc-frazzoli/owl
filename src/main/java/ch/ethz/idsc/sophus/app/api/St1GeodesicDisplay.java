@@ -4,7 +4,9 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.lie.st.StBiinvariantMean;
@@ -73,6 +75,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return StManifold.HS_EXP;
+  }
+
+  @Override // from GeodesicDisplay
+  public final HsTransport hsTransport() {
+    return RnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

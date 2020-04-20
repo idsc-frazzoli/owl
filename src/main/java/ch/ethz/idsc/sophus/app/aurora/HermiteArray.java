@@ -8,12 +8,12 @@ import java.util.function.Function;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
-import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ abstract class HermiteArray {
-  static final LieGroup LIE_GROUP = Se2CoveringGroup.INSTANCE;
-  static final Exponential LIE_EXPONENTIAL = Se2CoveringExponential.INSTANCE;
+  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.HS_EXP;
+  static final HsTransport HS_TRANSPORT = RnTransport.INSTANCE; // FIXME
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;
   private static final int ROWS = 135 * 8;

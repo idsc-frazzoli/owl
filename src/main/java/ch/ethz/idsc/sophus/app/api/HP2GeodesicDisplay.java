@@ -4,9 +4,11 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.h2.H2Geodesic;
 import ch.ethz.idsc.sophus.hs.h2.H2Metric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
@@ -70,6 +72,11 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public HsTransport hsTransport() {
+    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

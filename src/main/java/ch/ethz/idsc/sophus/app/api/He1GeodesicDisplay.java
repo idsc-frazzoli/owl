@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.he.HeBiinvariantMean;
@@ -11,6 +12,7 @@ import ch.ethz.idsc.sophus.lie.he.HeExponential;
 import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
 import ch.ethz.idsc.sophus.lie.he.HeGroup;
 import ch.ethz.idsc.sophus.lie.he.HeManifold;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
@@ -71,6 +73,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), HeExponential.INSTANCE);
+  }
+
+  @Override // from GeodesicDisplay
+  public HsTransport hsTransport() {
+    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

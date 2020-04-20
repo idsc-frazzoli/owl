@@ -18,12 +18,10 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.rn.RnExponential;
-import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.TensorIteration;
@@ -86,8 +84,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderControlPoints(geometricLayer, graphics);
     if (1 < _control.length()) {
+      GeodesicDisplay geodesicDisplay = geodesicDisplay();
       HermiteSubdivision hermiteSubdivision = //
-          spinnerLabelScheme.getValue().supply(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE);
+          spinnerLabelScheme.getValue().supply( //
+              geodesicDisplay.hsExponential(), //
+              geodesicDisplay.hsTransport(), //
+              geodesicDisplay.biinvariantMean());
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, N.DOUBLE.of(_control));
       int levels = spinnerRefine.getValue();
       Tensor iterate = Do.of(tensorIteration::iterate, levels);

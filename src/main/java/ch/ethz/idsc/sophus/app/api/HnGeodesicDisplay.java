@@ -6,11 +6,13 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
 import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnMetric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -55,6 +57,11 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override
   public final HsExponential hsExponential() {
     return HnManifold.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public final HsTransport hsTransport() {
+    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

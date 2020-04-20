@@ -2,8 +2,10 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
@@ -32,6 +34,11 @@ public class Se2CoveringGeodesicDisplay extends Se2AbstractGeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return Se2CoveringGroup.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public final HsTransport hsTransport() {
+    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

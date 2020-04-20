@@ -228,7 +228,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   /** @return control points as matrix of dimensions N x 3 */
   public final Tensor getControlPointsSe2() {
-    return control.unmodifiable();
+    return control.unmodifiable(); // TODO should return copy!?
   }
 
   /** @return control points for selected {@link GeodesicDisplay} */
