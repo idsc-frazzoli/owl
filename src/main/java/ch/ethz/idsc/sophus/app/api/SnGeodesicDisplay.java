@@ -6,13 +6,14 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
+import ch.ethz.idsc.sophus.hs.sn.SnTransport;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -48,14 +49,14 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
     return null;
   }
 
-  @Override // from GeodesicDisplay
-  public final Exponential exponential() {
-    return null;
-  }
-
   @Override
   public final HsExponential hsExponential() {
     return SnManifold.INSTANCE;
+  }
+
+  @Override
+  public final HsTransport hsTransport() {
+    return SnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

@@ -6,7 +6,6 @@ import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,9 +35,6 @@ public interface GeodesicDisplay {
 
   /** @return lie group if the space is a lie group, or null if function is not applicable */
   LieGroup lieGroup();
-
-  /** @return lie exponential if the space is a lie group, or null if function is not applicable */
-  Exponential exponential();
 
   HsExponential hsExponential();
 

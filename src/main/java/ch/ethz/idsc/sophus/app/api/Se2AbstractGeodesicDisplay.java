@@ -5,11 +5,12 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieFlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.math.Exponential;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -37,13 +38,13 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   }
 
   @Override // from GeodesicDisplay
-  public final Exponential exponential() {
-    return Se2CoveringExponential.INSTANCE;
+  public final HsExponential hsExponential() {
+    return LieExponential.of(lieGroup(), Se2CoveringExponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay
-  public final HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), Se2CoveringExponential.INSTANCE);
+  public final HsTransport hsTransport() {
+    return Se2CoveringTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

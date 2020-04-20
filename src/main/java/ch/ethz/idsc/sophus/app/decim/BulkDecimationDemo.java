@@ -68,8 +68,10 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
         pathRender.render(geometricLayer, graphics);
       }
     }
-    CurveDecimation curveDecimation = //
-        HsCurveDecimation.STANDARD.of(geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), RealScalar.ONE);
+    CurveDecimation curveDecimation = HsCurveDecimation.STANDARD.of( //
+        geodesicDisplay.flattenLogManifold(), //
+        geodesicDisplay.hsExponential(), //
+        RealScalar.ONE);
     Tensor decimate = curveDecimation.apply(sequence);
     {
       PathRender pathRender = new PathRender(COLOR_DATA_INDEXED_DRAW.getColor(1));

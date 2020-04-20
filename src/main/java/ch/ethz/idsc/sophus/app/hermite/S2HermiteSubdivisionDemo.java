@@ -21,8 +21,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
-import ch.ethz.idsc.sophus.hs.s2.S2Transport;
 import ch.ethz.idsc.sophus.hs.sn.SnExponential;
+import ch.ethz.idsc.sophus.hs.sn.SnTransport;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorIteration;
@@ -103,8 +103,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       graphics.draw(geometricLayer.toPath2D(ms));
     }
     HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-        geodesicDisplay.hsExponential(), S2Transport.INSTANCE, geodesicDisplay.biinvariantMean());
-    // Hermite2Subdivisions.standard(geodesicDisplay.hsExponential(), S2Transport.INSTANCE);
+        geodesicDisplay.hsExponential(), SnTransport.INSTANCE, geodesicDisplay.biinvariantMean());
     if (1 < control.length()) {
       TensorIteration tensorIteration = jToggleCyclic.isSelected() //
           ? hermiteSubdivision.cyclic(RealScalar.ONE, control)
@@ -114,70 +113,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           ? Do.of(tensorIteration::iterate, n)
           : control;
       Tensor points = result.get(Tensor.ALL, 0);
-      // POINTS_RENDER_0.show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), points).render(geometricLayer, graphics);
       new PathRender(Color.BLUE).setCurve(points, jToggleCyclic.isSelected()).render(geometricLayer, graphics);
     }
-    // if (1 < tensor.length()) {
-    //
-    // Tensor control;
-    // switch (geodesicDisplay.toString()) {
-    // case "SE2C":
-    // case "SE2":
-    // // TODO use various options: unit vector, scaled by parametric distance, ...
-    // control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya, UnitVector.of(3, 0))));
-    // break;
-    // case "R2":
-    // // TODO use various options: unit vector, scaled by parametric distance, ...
-    // control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya.extract(0, 2), AngleVector.of(xya.Get(2)))));
-    // break;
-    // default:
-    // return;
-    // }
-    // {
-    // Tensor distances = Distances.of(Se2ClothoidDistance.INSTANCE, tensor);
-    // // Distances.of(geodesicDisplay::parametricDistance, control.get(Tensor.ALL, 0));
-    // if (0 < distances.length()) {
-    // Tensor scaling = Array.zeros(control.length());
-    // scaling.set(distances.get(0), 0);
-    // for (int index = 1; index < distances.length(); ++index)
-    // scaling.set(Mean.of(distances.extract(index - 1, index + 1)), index);
-    // scaling.set(Last.of(distances).Get(), control.length() - 1);
-    // // ---
-    // for (int index = 0; index < control.length(); ++index) {
-    // int fi = index;
-    // control.set(t -> t.multiply(scaling.Get(fi)), index, 1);
-    // }
-    // }
-    // }
-    // HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-    // geodesicDisplay.lieGroup(), geodesicDisplay.exponential(), geodesicDisplay.biinvariantMean());
-    // TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
-    // int levels = spinnerRefine.getValue();
-    // Tensor iterate = Do.of(tensorIteration::iterate, levels);
-    // Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
-    // Curvature2DRender.of(curve, false, geometricLayer, graphics);
-    // {
-    // Scalar scale = RealScalar.of(0.3);
-    // switch (geodesicDisplay.toString()) {
-    // case "SE2C":
-    // case "SE2":
-    // new Se2HermitePlot(iterate, scale).render(geometricLayer, graphics);
-    // break;
-    // case "R2":
-    // new R2HermitePlot(iterate, scale).render(geometricLayer, graphics);
-    // break;
-    // }
-    // }
-    // // ---
-    // if (jToggleButton.isSelected()) {
-    // Tensor deltas = iterate.get(Tensor.ALL, 1);
-    // if (0 < deltas.length()) {
-    // JFreeChart jFreeChart = StaticHelper.listPlot(deltas);
-    // Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-    // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
-    // }
-    // }
-    // }
   }
 
   public static void main(String[] args) {

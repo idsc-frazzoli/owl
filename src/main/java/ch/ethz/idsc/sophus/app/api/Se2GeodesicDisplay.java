@@ -2,10 +2,8 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
@@ -20,11 +18,6 @@ public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
   /***************************************************/
   private Se2GeodesicDisplay() {
     // ---
-  }
-
-  @Override // from GeodesicDisplay
-  public HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

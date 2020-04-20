@@ -17,6 +17,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.decim.HsLineDistance;
 import ch.ethz.idsc.sophus.crv.decim.HsLineDistance.NormImpl;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -52,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (sequence.length() == 2) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      Exponential exponential = geodesicDisplay.exponential();
+      Exponential exponential = Se2CoveringExponential.INSTANCE;
       // ---
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       Tensor beg = sequence.get(0);

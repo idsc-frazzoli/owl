@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
@@ -46,11 +45,6 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
     return RnGroup.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public final Exponential exponential() {
-    return RnExponential.INSTANCE;
   }
 
   @Override

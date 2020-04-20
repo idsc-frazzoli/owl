@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -17,11 +15,6 @@ public class S1GeodesicDisplay extends SnGeodesicDisplay {
   /***************************************************/
   private S1GeodesicDisplay() {
     super(1);
-  }
-
-  @Override // from GeodesicDisplay
-  public HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // FIXME
   }
 
   @Override // from GeodesicDisplay

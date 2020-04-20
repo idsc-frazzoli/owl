@@ -3,8 +3,6 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.s2.S2Transport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -35,11 +33,6 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
   /***************************************************/
   private S2GeodesicDisplay() {
     super(2);
-  }
-
-  @Override
-  public HsTransport hsTransport() {
-    return S2Transport.INSTANCE;
   }
 
   /** @param xyz normalized vector

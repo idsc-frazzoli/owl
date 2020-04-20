@@ -18,7 +18,6 @@ import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -77,11 +76,6 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return So3Group.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public Exponential exponential() {
-    return So3Exponential.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
