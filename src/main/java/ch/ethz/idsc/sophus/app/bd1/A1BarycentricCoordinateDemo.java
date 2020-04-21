@@ -15,7 +15,6 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -53,7 +52,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       Tensor domain = domain(support);
       // ---
       FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
       Object object = spinnerBarycentric.getValue();
       final WeightingInterface weightingInterface;
       if (object instanceof LogWeighting) {

@@ -6,7 +6,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -43,8 +42,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
     FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold);
     return new MovingDomain2D(movingOrigin, weightingInterface, domain);
   }
 

@@ -20,7 +20,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -95,7 +94,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       RenderQuality.setQuality(graphics);
       // ---
-      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE, RnMetric.INSTANCE);
+      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);

@@ -1,13 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -21,23 +20,14 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.itp.CrossAveraging;
-import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.Krigings;
-import ch.ethz.idsc.sophus.krg.PowerVariogram;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -46,18 +36,11 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends ControlPointsDemo {
-  private static final List<Object> LIST = new ArrayList<>();
-  static {
-    LIST.addAll(Arrays.asList(Krigings.values()));
-    LIST.addAll(Arrays.asList(LogWeightings.values()));
-  }
   // ---
-  private final SpinnerLabel<Object> spinnerKriging = new SpinnerLabel<>();
+  private final SpinnerLabel<HsScalarFunctions> spinnerKriging = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -69,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public A2KrigingDemo(GeodesicDisplay geodesicDisplay) {
     super(true, Arrays.asList(geodesicDisplay));
     {
-      spinnerKriging.setList(LIST);
+      spinnerKriging.setArray(HsScalarFunctions.values());
       spinnerKriging.setIndex(0);
       spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "function type");
     }
@@ -132,7 +115,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     // ---
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    BufferedImage bufferedImage = bufferedImage(spinnerRes.getValue(), spinnerKriging.getValue(), sequence, values);
+    BufferedImage bufferedImage = bufferedImage( //
+        spinnerRes.getValue(), geodesicDisplay().flattenLogManifold(), spinnerKriging.getValue(), sequence, values);
     RenderQuality.setDefault(graphics);
     ImageRender.of(bufferedImage, pixel2model(bufferedImage)) //
         .render(geometricLayer, graphics);
@@ -143,26 +127,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     leverRender.renderWeights();
   }
 
-  private BufferedImage bufferedImage(int resolution, Object object, Tensor sequence, Tensor values) {
-    FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorScalarFunction tsf = null;
-    if (object instanceof Krigings) {
-      Krigings krigings = (Krigings) object;
-      ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, spinnerBeta.getValue());
-      Tensor covariance = DiagonalMatrix.with(ConstantArray.of(spinnerCvar.getValue(), sequence.length()));
-      Kriging kriging = //
-          krigings.regression(flattenLogManifold, variogram, sequence, values, covariance);
-      // ---
-      tsf = jToggleVarian.isSelected() //
-          ? kriging::variance
-          : point -> (Scalar) kriging.estimate(point);
-    } else //
-    if (object instanceof LogWeighting) {
-      LogWeighting logMetricWeightings = (LogWeighting) object;
-      WeightingInterface weightingInterface = logMetricWeightings.from(flattenLogManifold);
-      TensorUnaryOperator tuo = CrossAveraging.of(weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
-      tsf = t -> (Scalar) tuo.apply(t);
-    }
+  private BufferedImage bufferedImage(int resolution, //
+      FlattenLogManifold flattenLogManifold, HsScalarFunction hsScalarFunction, Tensor sequence, Tensor values) {
+    TensorScalarFunction tsf = hsScalarFunction.build(flattenLogManifold, sequence, values);
     Tensor matrix = Tensors.matrix(array(resolution, tsf));
     // ---
     if (jToggleButton.isSelected())
@@ -179,14 +146,19 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     folder.mkdirs();
     System.out.println("exporting");
     int index = 0;
-    for (Object object : LIST) {
-      String format = String.format("%02d%s.png", index, object);
+    for (HsScalarFunction hsScalarFunction : HsScalarFunctions.values()) {
+      String format = String.format("%02d%s.png", index, hsScalarFunction);
       System.out.println(format);
-      BufferedImage bufferedImage = bufferedImage(256, object, sequence, values);
+      BufferedImage bufferedImage = bufferedImage(256, //
+          geodesicDisplay().flattenLogManifold(), hsScalarFunction, sequence, values);
       GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(pixel2model(bufferedImage)));
       Graphics2D graphics = bufferedImage.createGraphics();
       RenderQuality.setQuality(graphics);
       renderControlPoints(geometricLayer, graphics);
+      {
+        graphics.setColor(Color.WHITE);
+        graphics.drawString(hsScalarFunction.toString(), 0, 10);
+      }
       try {
         ImageIO.write(bufferedImage, "png", new File(folder, format));
       } catch (Exception exception) {

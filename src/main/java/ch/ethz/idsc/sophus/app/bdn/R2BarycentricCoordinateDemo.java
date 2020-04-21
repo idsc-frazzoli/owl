@@ -24,7 +24,6 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -84,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE, RnMetric.INSTANCE);
+      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE);
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = refinement();

@@ -10,6 +10,19 @@ import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 
 public enum LogWeightings implements LogWeighting {
+  ID_LINEAR() {
+    @Override
+    public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
+      return AbsoluteCoordinate.linear(flattenLogManifold);
+    }
+  },
+  ID_SMOOTH() {
+    @Override
+    public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
+      return AbsoluteCoordinate.smooth(flattenLogManifold);
+    }
+  },
+  /***************************************************/
   BI_LINEAR() {
     @Override
     public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
@@ -38,19 +51,6 @@ public enum LogWeightings implements LogWeighting {
     @Override
     public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
       return RelativeCoordinate.affine(flattenLogManifold);
-    }
-  },
-  /***************************************************/
-  ID_LINEAR() {
-    @Override
-    public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
-      return AbsoluteCoordinate.linear(flattenLogManifold);
-    }
-  },
-  ID_SMOOTH() {
-    @Override
-    public ProjectedCoordinate from(FlattenLogManifold flattenLogManifold) {
-      return AbsoluteCoordinate.smooth(flattenLogManifold);
     }
   }, //
   ;

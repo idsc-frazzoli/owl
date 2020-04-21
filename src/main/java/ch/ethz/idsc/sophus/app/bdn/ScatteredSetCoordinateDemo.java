@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -75,7 +74,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     return spinnerColorData.getValue();
   }
 
-  final WeightingInterface weightingInterface(FlattenLogManifold flattenLogManifold, TensorMetric tensorMetric) {
+  final WeightingInterface weightingInterface(FlattenLogManifold flattenLogManifold) {
     return spinnerWeighting.getValue().from(flattenLogManifold);
   }
 }

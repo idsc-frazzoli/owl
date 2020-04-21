@@ -14,7 +14,6 @@ import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -68,8 +67,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dy = Subdivide.of(0, EXTENT, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
     FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold);
     return jToggleRigidMotionFit.isSelected() //
         ? new LSMovingDomain2D(movingOrigin, weightingInterface, domain)
         : new MovingDomain2D(movingOrigin, weightingInterface, domain);

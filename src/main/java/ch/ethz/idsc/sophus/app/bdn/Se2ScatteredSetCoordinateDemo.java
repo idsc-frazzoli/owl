@@ -17,7 +17,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -80,8 +79,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     // ---
     if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
       FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-      WeightingInterface weightingInterface = weightingInterface(flattenLogManifold, tensorMetric);
+      WeightingInterface weightingInterface = weightingInterface(flattenLogManifold);
       Tensor wgs = compute(weightingInterface, refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));

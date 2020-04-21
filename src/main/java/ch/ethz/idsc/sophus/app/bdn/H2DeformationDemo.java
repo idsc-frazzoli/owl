@@ -10,7 +10,6 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -43,8 +42,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
     FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
-    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, tensorMetric), domain);
+    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold), domain);
   }
 
   @Override // from AbstractDeformationDemo

@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -67,7 +66,6 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor spherics = domain.map(AngleVector::of);
       // ---
       FlattenLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      TensorMetric tensorMetric = geodesicDisplay().parametricDistance();
       WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold);
       try {
         ScalarTensorFunction scalarTensorFunction = //
