@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JToggleButton;
 
@@ -13,16 +15,23 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.sophus.srf.subdiv.CatmullClarkRefinement;
 import ch.ethz.idsc.sophus.srf.subdiv.SurfaceMeshRefinement;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.io.Primitives;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ class SurfaceMeshDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
@@ -35,7 +44,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
   public SurfaceMeshDemo() {
     super(false, GeodesicDisplays.SE2C_R2);
+    ctrl.setSelected(true);
     timerFrame.jToolBar.add(ctrl);
+    // ---
     timerFrame.jToolBar.add(axes);
     setControlPointsSe2(surfaceMesh.vrt);
     // ---
@@ -72,8 +83,25 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.fill(geometricLayer.toPath2D(shape));
       geometricLayer.popMatrix();
     }
-    if (ctrl.isSelected())
+    if (ctrl.isSelected()) {
+      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Tensor domain = Subdivide.of(0.0, 1.0, 10);
+      Set<Tensor> set = new HashSet<>();
+      for (Tensor ind : surfaceMesh.ind) {
+        int[] array = Primitives.toIntArray(ind);
+        for (int index = 0; index < array.length; ++index) {
+          int beg = array[index];
+          int end = array[(index + 1) % array.length];
+          if (set.add(Sort.of(Tensors.vector(beg, end)))) {
+            ScalarTensorFunction scalarTensorFunction = //
+                geodesicInterface.curve(surfaceMesh.vrt.get(beg), surfaceMesh.vrt.get(end));
+            Tensor points = domain.map(scalarTensorFunction);
+            new PathRender(new Color(0, 0, 255, 128), 1.5f).setCurve(points, false).render(geometricLayer, graphics);
+          }
+        }
+      }
       renderControlPoints(geometricLayer, graphics);
+    }
   }
 
   public static void main(String[] args) {

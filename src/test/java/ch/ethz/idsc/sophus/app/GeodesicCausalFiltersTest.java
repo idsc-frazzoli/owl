@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app;
 
-import ch.ethz.idsc.sophus.app.GeodesicCausalFilters;
-import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.RationalScalar;

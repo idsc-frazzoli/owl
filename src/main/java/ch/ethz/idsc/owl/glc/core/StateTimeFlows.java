@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.owl.glc.core;
 
 import java.util.Collection;

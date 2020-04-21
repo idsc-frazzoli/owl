@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
   public BarycentricLeversDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, GeodesicDisplays.MANIFOLDS);
     setMidpointIndicated(false);
     {
       spinnerWeights.setList(LogWeightings.list());

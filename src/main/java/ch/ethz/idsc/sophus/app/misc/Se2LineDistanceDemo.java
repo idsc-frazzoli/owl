@@ -16,6 +16,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.decim.HsLineDistance;
 import ch.ethz.idsc.sophus.crv.decim.HsLineDistance.NormImpl;
+import ch.ethz.idsc.sophus.crv.decim.HsLineProjection;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
@@ -65,10 +66,10 @@ import ch.ethz.idsc.tensor.sca.Round;
         graphics.setColor(Color.BLUE);
         graphics.draw(path2d);
       }
+      final Tensor mouse = geometricLayer.getMouseSe2State();
       {
         HsLineDistance hsLineDistance = new HsLineDistance(geodesicDisplay.flattenLogManifold());
         NormImpl normImpl = hsLineDistance.tensorNorm(beg, end);
-        Tensor mouse = geometricLayer.getMouseSe2State();
         {
           Tensor project = normImpl.project(mouse);
           Tensor exp = exponential.exp(project);
@@ -103,6 +104,20 @@ import ch.ethz.idsc.tensor.sca.Round;
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
+        }
+      }
+      {
+        HsLineProjection hsLineProjection = new HsLineProjection(geodesicDisplay.hsExponential());
+        Tensor onto = hsLineProjection.onto(beg, end, mouse);
+        {
+          geometricLayer.pushMatrix(geodesicDisplay.matrixLift(onto));
+          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.4));
+          path2d.closePath();
+          graphics.setColor(COLOR_DATA_INDEXED_FILL.getColor(4));
+          graphics.fill(path2d);
+          graphics.setColor(COLOR_DATA_INDEXED_DRAW.getColor(4));
+          graphics.draw(path2d);
+          geometricLayer.popMatrix();
         }
       }
       // ---

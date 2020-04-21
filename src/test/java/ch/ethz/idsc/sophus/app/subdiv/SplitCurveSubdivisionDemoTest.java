@@ -1,8 +1,7 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.subdiv;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
-import ch.ethz.idsc.sophus.app.subdiv.SplitCurveSubdivisionDemo;
 import junit.framework.TestCase;
 
 public class SplitCurveSubdivisionDemoTest extends TestCase {

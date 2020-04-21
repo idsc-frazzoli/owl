@@ -43,7 +43,7 @@ public class RootScalarTest extends TestCase {
   }
 
   public void testEquations() {
-    Distribution distribution = DiscreteUniformDistribution.of(-100, 100);
+    Distribution distribution = DiscreteUniformDistribution.of(-3000, 3000);
     Scalar ba = RealScalar.of(2);
     Tensor matrix = //
         Tensors.matrix((i, j) -> new RootScalar(RandomVariate.of(distribution), RandomVariate.of(distribution), ba), 7, 7);
@@ -54,7 +54,7 @@ public class RootScalarTest extends TestCase {
   }
 
   public void testInverse() {
-    Distribution distribution = DiscreteUniformDistribution.of(-100, 100);
+    Distribution distribution = DiscreteUniformDistribution.of(-3000, 3000);
     Scalar ba = RealScalar.of(2);
     Tensor matrix = //
         Tensors.matrix((i, j) -> new RootScalar(RandomVariate.of(distribution), RandomVariate.of(distribution), ba), 5, 5);

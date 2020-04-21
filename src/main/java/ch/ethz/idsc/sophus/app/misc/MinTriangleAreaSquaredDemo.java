@@ -19,6 +19,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
+/** Reference:
+ * "Polygon Laplacian Made Simple"
+ * by Astrid Bunge, Philipp Herholz, Misha Kazhdan, Mario Botsch, 2020 */
 /* package */ class MinTriangleAreaSquaredDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---

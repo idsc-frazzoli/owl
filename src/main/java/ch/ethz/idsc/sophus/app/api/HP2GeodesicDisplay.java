@@ -75,6 +75,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
+    // FIXME
     return null;
   }
 

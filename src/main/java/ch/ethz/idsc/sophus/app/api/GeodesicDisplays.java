@@ -23,6 +23,20 @@ public enum GeodesicDisplays {
       He1GeodesicDisplay.INSTANCE, //
       St1GeodesicDisplay.INSTANCE);
   // ---
+  public static final List<GeodesicDisplay> MANIFOLDS = Arrays.asList( //
+      Se2CoveringGeodesicDisplay.INSTANCE, //
+      Se2GeodesicDisplay.INSTANCE, //
+      Spd2GeodesicDisplay.INSTANCE, //
+      R2GeodesicDisplay.INSTANCE, //
+      R3GeodesicDisplay.INSTANCE, //
+      S1GeodesicDisplay.INSTANCE, //
+      S2GeodesicDisplay.INSTANCE, //
+      H1GeodesicDisplay.INSTANCE, //
+      H2GeodesicDisplay.INSTANCE, //
+      So3GeodesicDisplay.INSTANCE, //
+      He1GeodesicDisplay.INSTANCE, //
+      St1GeodesicDisplay.INSTANCE);
+  // ---
   public static final List<GeodesicDisplay> WITHOUT_Sn_SO3 = Arrays.asList( //
       Se2ClothoidDisplay.INSTANCE, //
       Se2CoveringClothoidDisplay.INSTANCE, //

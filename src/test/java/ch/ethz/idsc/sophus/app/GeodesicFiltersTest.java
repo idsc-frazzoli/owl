@@ -1,12 +1,10 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.ethz.idsc.sophus.app.GeodesicFilters;
-import ch.ethz.idsc.sophus.app.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
