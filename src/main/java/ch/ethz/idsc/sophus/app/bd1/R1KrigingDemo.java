@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -76,9 +77,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      Krigings krigings = spinnerKriging.getValue();
-      Kriging kriging = krigings.regression( //
-          geodesicDisplay.flattenLogManifold(), variogram, sequence, funceva, covariance);
+      WeightingInterface weightingInterface = spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram);
+      Kriging kriging = Krigings.regression(weightingInterface, sequence, funceva, covariance);
       // ---
       Tensor domain = domain(support);
       Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));

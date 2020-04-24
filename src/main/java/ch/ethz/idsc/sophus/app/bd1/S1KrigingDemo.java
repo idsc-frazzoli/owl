@@ -13,9 +13,11 @@ import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.krg.Kriging;
+import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -33,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class S1KrigingDemo extends A1KrigingDemo {
+  private Object object;
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
   public S1KrigingDemo() {
@@ -76,8 +79,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       // ---
       ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta());
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      Kriging kriging = spinnerKriging.getValue().regression( //
-          SnManifold.INSTANCE, variogram, sequence, funceva, covariance);
+      WeightingInterface weightingInterface = spinnerDistances.getValue().of(SnManifold.INSTANCE, variogram);
+      Kriging kriging = Krigings.regression( //
+          weightingInterface, sequence, funceva, covariance);
       Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
       Tensor curve = estimate.pmul(DOMAIN);
       new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);

@@ -8,7 +8,9 @@ import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
+import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,31 +18,34 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ enum HsScalarFunctions implements HsScalarFunction {
   KR_AB_10_0() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
-      return kriging(Krigings.ABSOLUTE, RealScalar.of(1.0), RealScalar.of(0), flattenLogManifold, sequence, values);
+      return kriging(PseudoDistances.ABSOLUTE.of(flattenLogManifold, PowerVariogram.of(RealScalar.ONE, RealScalar.of(1.0))), //
+          RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
   KR_AB_15_0() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
-      return kriging(Krigings.ABSOLUTE, RealScalar.of(1.5), RealScalar.of(0), flattenLogManifold, sequence, values);
+      return kriging(PseudoDistances.ABSOLUTE.of(flattenLogManifold, PowerVariogram.of(RealScalar.ONE, RealScalar.of(1.5))), //
+          RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
   KR_RL_10_0() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
-      return kriging(Krigings.RELATIVE, RealScalar.of(1.0), RealScalar.of(0), flattenLogManifold, sequence, values);
+      return kriging(PseudoDistances.RELATIVE.of(flattenLogManifold, PowerVariogram.of(RealScalar.ONE, RealScalar.of(1.0))), //
+          RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
   KR_RL_15_0() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
-      return kriging(Krigings.RELATIVE, RealScalar.of(1.5), RealScalar.of(0), flattenLogManifold, sequence, values);
+      return kriging(PseudoDistances.RELATIVE.of(flattenLogManifold, PowerVariogram.of(RealScalar.ONE, RealScalar.of(1.5))), //
+          RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
   LW_ID_LINEAR() {
@@ -76,11 +81,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ;
 
   private static TensorScalarFunction kriging( //
-      Krigings krigings, Scalar beta, Scalar cvar, //
+      WeightingInterface pseudoDistances, Scalar cvar, //
       FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
-    ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta);
+    // ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta);
     Tensor covariance = DiagonalMatrix.with(ConstantArray.of(cvar, sequence.length()));
-    Kriging kriging = krigings.regression(flattenLogManifold, variogram, sequence, values, covariance);
+    Kriging kriging = Krigings.regression(pseudoDistances, sequence, values, covariance);
     return point -> (Scalar) kriging.estimate(point);
   }
 
