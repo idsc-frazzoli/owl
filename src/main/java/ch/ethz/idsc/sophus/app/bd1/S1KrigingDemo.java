@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -35,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
   public S1KrigingDemo() {
-    super(R2GeodesicDisplay.INSTANCE);
+    super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
     timerFrame.configCoordinateOffset(500, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(S1FrameRender.INSTANCE);

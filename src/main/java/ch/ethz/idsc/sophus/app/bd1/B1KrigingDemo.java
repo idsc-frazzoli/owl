@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
+import java.util.Arrays;
+
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -15,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final Scalar MARGIN = RealScalar.of(2);
 
   public B1KrigingDemo(GeodesicDisplay geodesicDisplay) {
-    super(geodesicDisplay);
+    super(Arrays.asList(geodesicDisplay));
   }
 
   final Tensor domain() {

@@ -47,6 +47,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   public static void main(String[] args) {
-    new R2KrigingDemo().setVisible(1000, 800);
+    new R2KrigingDemo().setVisible(1300, 800);
   }
 }

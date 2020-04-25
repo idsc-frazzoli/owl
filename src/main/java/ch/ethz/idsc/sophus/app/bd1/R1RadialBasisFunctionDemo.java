@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
@@ -16,7 +17,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class R1RadialBasisFunctionDemo extends B1KrigingDemo {
   public R1RadialBasisFunctionDemo() {
@@ -27,14 +27,15 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public void protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
+    RenderQuality.setQuality(graphics);
     Tensor control = Sort.of(getControlPointsSe2());
     if (1 < control.length()) {
       Tensor support = control.get(Tensor.ALL, 0);
       Tensor funceva = control.get(Tensor.ALL, 1);
       // ---
       Tensor sequence = support.map(Tensors::of);
-      ScalarUnaryOperator variogram = variogram();
-      WeightingInterface weightingInterface = spinnerDistances.getValue().of(geodesicDisplay().flattenLogManifold(), variogram);
+      WeightingInterface weightingInterface = //
+          spinnerDistances.getValue().of(geodesicDisplay().flattenLogManifold(), variogram());
       Tensor domain = domain();
       try {
         TensorUnaryOperator tensorUnaryOperator = //

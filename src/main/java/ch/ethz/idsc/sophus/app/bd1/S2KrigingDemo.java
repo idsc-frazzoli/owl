@@ -65,6 +65,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   public static void main(String[] args) {
-    new S2KrigingDemo().setVisible(1000, 800);
+    new S2KrigingDemo().setVisible(1300, 800);
   }
 }

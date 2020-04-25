@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class R1KrigingDemo extends B1KrigingDemo {
   public R1KrigingDemo() {
@@ -56,12 +55,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       }
       // ---
       Tensor sequence = support.map(Tensors::of);
-      ScalarUnaryOperator variogram = variogram();
-      // PowerVariogram.fit(geodesicDisplay.parametricDistance(), sequence, funceva, beta());
-      // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
-      // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      WeightingInterface weightingInterface = spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram);
+      WeightingInterface weightingInterface = //
+          spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram());
       Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
       // ---
       Tensor domain = domain();
