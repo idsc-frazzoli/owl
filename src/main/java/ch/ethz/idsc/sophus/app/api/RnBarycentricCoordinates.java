@@ -7,11 +7,11 @@ import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
-import ch.ethz.idsc.sophus.krg.GaussianRadialBasisFunction;
-import ch.ethz.idsc.sophus.krg.InverseMultiquadricNorm;
+import ch.ethz.idsc.sophus.krg.GaussianVariogram;
+import ch.ethz.idsc.sophus.krg.InverseMultiquadricVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
-import ch.ethz.idsc.sophus.krg.ThinPlateSplineNorm;
+import ch.ethz.idsc.sophus.krg.ThinPlateSplineVariogram;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
@@ -54,7 +54,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
       return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
-          flattenLogManifold, new InverseMultiquadricNorm(RealScalar.of(5))) //
+          flattenLogManifold, new InverseMultiquadricVariogram(RealScalar.of(5))) //
       );
     }
   }, //
@@ -62,14 +62,14 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
       return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
-          flattenLogManifold, ThinPlateSplineNorm.of(RealScalar.of(5))));
+          flattenLogManifold, ThinPlateSplineVariogram.of(RealScalar.of(5))));
     }
   }, //
   RBF_GAUSS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
       return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
-          flattenLogManifold, GaussianRadialBasisFunction.of(RealScalar.of(5))));
+          flattenLogManifold, GaussianVariogram.of(RealScalar.of(5))));
     }
   }, //
   KR_ABSOLUTE() {

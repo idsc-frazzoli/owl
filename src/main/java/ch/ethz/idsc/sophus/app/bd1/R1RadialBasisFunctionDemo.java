@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.Color;
@@ -8,7 +9,6 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
@@ -35,7 +35,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     Tensor control = Sort.of(getControlPointsSe2());
     if (1 < control.length()) {

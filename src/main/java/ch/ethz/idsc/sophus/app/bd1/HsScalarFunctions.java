@@ -6,7 +6,6 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
@@ -85,7 +84,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       FlattenLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
     // ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta);
     Tensor covariance = DiagonalMatrix.with(ConstantArray.of(cvar, sequence.length()));
-    Kriging kriging = Krigings.regression(pseudoDistances, sequence, values, covariance);
+    Kriging kriging = Kriging.regression(pseudoDistances, sequence, values, covariance);
     return point -> (Scalar) kriging.estimate(point);
   }
 

@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -49,8 +49,8 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JToggleButton jToggleButton = new JToggleButton("thres");
   private final JButton jButtonExport = new JButton("export");
 
-  public A2KrigingDemo(GeodesicDisplay geodesicDisplay) {
-    super(true, Arrays.asList(geodesicDisplay));
+  public A2KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
+    super(true, geodesicDisplays);
     {
       spinnerKriging.setArray(HsScalarFunctions.values());
       spinnerKriging.setIndex(0);

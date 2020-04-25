@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.bd1;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class S2KrigingDemo extends A2KrigingDemo {
   public S2KrigingDemo() {
-    super(S2GeodesicDisplay.INSTANCE);
+    super(GeodesicDisplays.S2_RP2);
     setControlPointsSe2(Tensors.fromString("{{0.01, 0, 1}, {0.2, 0, 0}, {0.21, 0.2, 0}, {0, 0.2, 0}}"));
     // ---
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();

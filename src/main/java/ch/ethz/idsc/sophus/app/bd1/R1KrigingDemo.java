@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.Krigings;
 import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -78,7 +77,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       WeightingInterface weightingInterface = spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram);
-      Kriging kriging = Krigings.regression(weightingInterface, sequence, funceva, covariance);
+      Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
       // ---
       Tensor domain = domain(support);
       Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));

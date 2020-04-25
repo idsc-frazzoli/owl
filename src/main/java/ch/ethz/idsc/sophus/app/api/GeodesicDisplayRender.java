@@ -32,7 +32,8 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       graphics.setColor(BORDER);
       graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
     } else //
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+    if (geodesicDisplay instanceof S2GeodesicDisplay || //
+        geodesicDisplay instanceof Rp2GeodesicDisplay) {
       Point2D center = geometricLayer.toPoint2D(0, 0);
       float fradius = geometricLayer.model2pixelWidth(1);
       float[] dist = { 0.0f, 0.70f, 1.0f };
