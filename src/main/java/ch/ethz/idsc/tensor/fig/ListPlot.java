@@ -12,7 +12,10 @@ import org.jfree.data.xy.XYSeriesCollection;
  * <a href="https://reference.wolfram.com/language/ref/ListPlot.html">ListPlot</a> */
 public enum ListPlot {
   ;
-  /** @param visualSet
+  /** Hint: use
+   * jFreeChart.draw(graphics, ...) to render list plot
+   * 
+   * @param visualSet
    * @return */
   public static JFreeChart of(VisualSet visualSet) {
     XYSeriesCollection xySeriesCollection = DatasetFactory.xySeriesCollection(visualSet);

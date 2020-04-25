@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
-import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
@@ -13,7 +12,6 @@ import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -44,8 +42,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    RenderQuality.setQuality(graphics);
+  public void protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = getGeodesicControlPoints();
     final Tensor shape = getControlPointShape(); // .multiply(RealScalar.of(0.3));
     if (1 < control.length()) {
@@ -75,29 +72,23 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           .show(geodesicDisplay()::matrixLift, shape, sequence) //
           .render(geometricLayer, graphics);
       // ---
-      ScalarUnaryOperator variogram = PowerVariogram.of(RealScalar.ONE, beta());
+      ScalarUnaryOperator variogram = variogram();
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      WeightingInterface weightingInterface = spinnerDistances.getValue().of(SnManifold.INSTANCE, variogram);
-      Kriging kriging = Kriging.regression( //
-          weightingInterface, sequence, funceva, covariance);
-      Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
-      Tensor curve = estimate.pmul(DOMAIN);
-      new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);
-      Tensor errors = Tensor.of(DOMAIN.stream().map(kriging::variance));
-      // ---
-      Path2D path2d = geometricLayer.toPath2D(Join.of( //
-          estimate.add(errors).pmul(DOMAIN), //
-          Reverse.of(estimate.subtract(errors).pmul(DOMAIN))));
-      graphics.setColor(new Color(128, 128, 128, 32));
-      graphics.fill(path2d);
-      // new PathRender(Color.RED, STROKE) //
-      // .setCurve(estimate.add(errors).pmul(DOMAIN), true) //
-      // .render(geometricLayer, graphics);
-      // new PathRender(Color.GREEN, STROKE) //
-      // .setCurve(estimate.subtract(errors).pmul(DOMAIN), true) //
-      // .render(geometricLayer, graphics);
+      if (isDeterminate()) {
+        WeightingInterface weightingInterface = spinnerDistances.getValue().of(SnManifold.INSTANCE, variogram);
+        Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
+        Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
+        Tensor curve = estimate.pmul(DOMAIN);
+        new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);
+        Tensor errors = Tensor.of(DOMAIN.stream().map(kriging::variance));
+        // ---
+        Path2D path2d = geometricLayer.toPath2D(Join.of( //
+            estimate.add(errors).pmul(DOMAIN), //
+            Reverse.of(estimate.subtract(errors).pmul(DOMAIN))));
+        graphics.setColor(new Color(128, 128, 128, 32));
+        graphics.fill(path2d);
+      }
     }
-    renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

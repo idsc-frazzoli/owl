@@ -5,14 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
-import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.PowerVariogram;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -23,16 +21,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ class R1KrigingDemo extends A1KrigingDemo {
+/* package */ class R1KrigingDemo extends B1KrigingDemo {
   public R1KrigingDemo() {
     super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 1}, {2, 2, 0}}"));
@@ -40,17 +34,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
-  private static final Scalar MARGIN = RealScalar.of(2);
-
-  static Tensor domain(Tensor support) {
-    return Subdivide.of( //
-        support.stream().reduce(Min::of).get().add(MARGIN.negate()), //
-        support.stream().reduce(Max::of).get().add(MARGIN), 128).map(N.DOUBLE);
-  }
-
   @Override
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    RenderQuality.setQuality(graphics);
+  public void protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     Tensor control = Sort.of(getControlPointsSe2());
@@ -71,15 +56,15 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       }
       // ---
       Tensor sequence = support.map(Tensors::of);
-      ScalarUnaryOperator variogram = //
-          PowerVariogram.fit(geodesicDisplay.parametricDistance(), sequence, funceva, beta());
+      ScalarUnaryOperator variogram = variogram();
+      // PowerVariogram.fit(geodesicDisplay.parametricDistance(), sequence, funceva, beta());
       // variogram = SphericalVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       // variogram = ExponentialVariogram.of(spinnerBeta.getValue(), RealScalar.ONE);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       WeightingInterface weightingInterface = spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram);
       Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
       // ---
-      Tensor domain = domain(support);
+      Tensor domain = domain();
       Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));
       Tensor errors = Tensor.of(domain.stream().map(Tensors::of).map(kriging::variance));
       // ---
@@ -93,7 +78,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
           .render(geometricLayer, graphics);
     }
-    renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {
