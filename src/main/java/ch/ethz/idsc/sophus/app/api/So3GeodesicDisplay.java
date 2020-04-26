@@ -7,9 +7,7 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
@@ -18,6 +16,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
+import ch.ethz.idsc.sophus.lie.so3.So3Transport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -60,12 +59,12 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     Scalar norm = Norm._2.ofVector(axis);
     if (Scalars.lessThan(RealScalar.ONE, norm))
       axis = axis.divide(norm);
-    return So3Exponential.INSTANCE.exp(axis);
+    return So3Exponential.vectorExp(axis);
   }
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor xyz) {
-    return So3Exponential.INSTANCE.log(xyz).extract(0, 2).multiply(radius);
+    return So3Exponential.INSTANCE.flattenLog(xyz).extract(0, 2).multiply(radius);
   }
 
   @Override // from GeodesicDisplay
@@ -80,12 +79,12 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), So3Exponential.INSTANCE);
+    return So3Manifold.HS_EXP;
   }
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // TODO
+    return So3Transport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

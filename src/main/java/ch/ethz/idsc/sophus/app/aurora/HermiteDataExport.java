@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.app.aurora;
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.app.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;

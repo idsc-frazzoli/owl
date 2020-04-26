@@ -14,6 +14,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -22,9 +23,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.hs.sn.SnExponential;
-import ch.ethz.idsc.sophus.hs.sn.SnTransport;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorIteration;
@@ -87,6 +86,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
   private static final Stroke STROKE = //
       new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  private static final Tensor GEODESIC_DOMAIN = Subdivide.of(0.0, 1.0, 11);
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -105,18 +105,17 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     { // render tangents as geodesic on sphere
       for (Tensor ctrl : control) {
         Tensor p = ctrl.get(0); // point
-        Tensor pv = ctrl.get(1); // vector
+        Tensor v = ctrl.get(1); // vector
         {
-          Tensor q = new SnExponential(p).exp(pv); // point on sphere
+          Tensor q = new SnExponential(p).exp(v); // point on sphere
           ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(p, q);
           graphics.setStroke(STROKE);
-          Tensor domain = Subdivide.of(0, 1, 21);
-          Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
+          Tensor ms = Tensor.of(GEODESIC_DOMAIN.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
           graphics.setColor(Color.LIGHT_GRAY);
           graphics.draw(geometricLayer.toPath2D(ms));
         }
         {
-          Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(pv);
+          Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(v);
           graphics.setStroke(new BasicStroke(1.5f));
           graphics.setColor(Color.GRAY);
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
@@ -125,8 +124,11 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
         }
       }
     }
-    HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-        geodesicDisplay.hsExponential(), SnTransport.INSTANCE, geodesicDisplay.biinvariantMean());
+    HermiteSubdivisions hermiteSubdivisions = spinnerLabelScheme.getValue();
+    HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
+        geodesicDisplay.hsExponential(), //
+        geodesicDisplay.hsTransport(), //
+        geodesicDisplay.biinvariantMean());
     if (1 < control.length()) {
       TensorIteration tensorIteration = jToggleCyclic.isSelected() //
           ? hermiteSubdivision.cyclic(RealScalar.ONE, control)
@@ -137,8 +139,29 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           : control;
       Tensor points = result.get(Tensor.ALL, 0);
       new PathRender(Color.BLUE).setCurve(points, jToggleCyclic.isSelected()).render(geometricLayer, graphics);
+      if (jToggleButton.isSelected()) {
+        for (Tensor pv : result) {
+          Tensor p = pv.get(0);
+          Tensor v = pv.get(1);
+          {
+            Tensor q = new SnExponential(p).exp(v); // point on sphere
+            ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(p, q);
+            graphics.setStroke(STROKE);
+            Tensor ms = Tensor.of(GEODESIC_DOMAIN.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.draw(geometricLayer.toPath2D(ms));
+          }
+          // {
+          // Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(v);
+          // geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
+          // graphics.setStroke(new BasicStroke(1f));
+          // graphics.setColor(Color.LIGHT_GRAY);
+          // graphics.draw(geometricLayer.toLine2D(pr));
+          // geometricLayer.popMatrix();
+          // }
+        }
+      }
     }
-    RenderQuality.setDefault(graphics);
   }
 
   public static void main(String[] args) {
