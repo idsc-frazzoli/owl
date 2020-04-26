@@ -14,9 +14,13 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
+import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -55,13 +59,15 @@ import ch.ethz.idsc.tensor.sca.Chop;
     RenderQuality.setQuality(graphics);
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = getGeodesicControlPoints();
-    Optional<SphereFit> optional = SphereFit.of(control);
-    if (optional.isPresent()) {
-      Tensor center = optional.get().center();
-      Scalar radius = optional.get().radius();
-      geometricLayer.pushMatrix(Se2Matrix.translation(center));
-      pathRenderBall.setCurve(CirclePoints.of(40).multiply(radius), true);
-      geometricLayer.popMatrix();
+    {
+      Optional<SphereFit> optional = SphereFit.of(control);
+      if (optional.isPresent()) {
+        Tensor center = optional.get().center();
+        Scalar radius = optional.get().radius();
+        geometricLayer.pushMatrix(Se2Matrix.translation(center));
+        pathRenderBall.setCurve(CirclePoints.of(40).multiply(radius), true);
+        geometricLayer.popMatrix();
+      }
     }
     pathRenderHull.setCurve(ConvexHull.of(control), true);
     {
@@ -89,17 +95,22 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     {
-      SpatialMedian spatialMedian = //
-          HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), geodesicDisplay.parametricDistance(), Chop._06);
-      Tensor weiszfeld = spatialMedian.uniform(control).get();
-      geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
-      Path2D path2d = geometricLayer.toPath2D(StarPoints.of(5, 0.2, 0.05));
-      path2d.closePath();
-      graphics.setColor(new Color(128, 128, 255, 64));
-      graphics.fill(path2d);
-      graphics.setColor(new Color(128, 128, 255, 255));
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
+      PseudoDistances pseudoDistances = PseudoDistances.ABSOLUTE;
+      WeightingInterface weightingInterface = //
+          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(1)));
+      SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
+      Optional<Tensor> optional = spatialMedian.uniform(control);
+      if (optional.isPresent()) {
+        Tensor weiszfeld = optional.get();
+        geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
+        Path2D path2d = geometricLayer.toPath2D(StarPoints.of(5, 0.2, 0.05));
+        path2d.closePath();
+        graphics.setColor(new Color(128, 128, 255, 64));
+        graphics.fill(path2d);
+        graphics.setColor(new Color(128, 128, 255, 255));
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
     }
     renderControlPoints(geometricLayer, graphics);
   }

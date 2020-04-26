@@ -85,7 +85,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE;
+    return RnTransport.INSTANCE; // TODO
   }
 
   @Override // from GeodesicDisplay

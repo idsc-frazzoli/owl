@@ -3,13 +3,16 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -18,8 +21,12 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
+import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -42,11 +49,13 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
+  final SpinnerLabel<PseudoDistances> spinnerDistances = SpinnerLabel.of(PseudoDistances.values());
   private final JToggleButton axes = new JToggleButton("axes");
   private final JToggleButton median = new JToggleButton("median");
 
   public BiinvariantMeanDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_S2_H2_R2);
+    spinnerDistances.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "pseudo distances");
     timerFrame.jToolBar.add(axes);
     {
       median.setSelected(true);
@@ -95,11 +104,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    if (median.isSelected())
-      try {
-        SpatialMedian spatialMedian = //
-            HsWeiszfeldMethod.of(biinvariantMean, geodesicDisplay.parametricDistance(), Chop._05);
-        mean = spatialMedian.uniform(sequence).get();
+    if (median.isSelected()) {
+      PseudoDistances pseudoDistances = spinnerDistances.getValue();
+      WeightingInterface weightingInterface = //
+          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(1)));
+      SpatialMedian spatialMedian = HsWeiszfeldMethod.of(biinvariantMean, weightingInterface, Chop._05);
+      Optional<Tensor> optional = spatialMedian.uniform(sequence);
+      if (optional.isPresent()) {
+        mean = optional.get();
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
         Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(0.7)));
         path2d.closePath();
@@ -108,9 +120,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
         graphics.setColor(COLOR_DATA_INDEXED_DRAW.getColor(1));
         graphics.draw(path2d);
         geometricLayer.popMatrix();
-      } catch (Exception exception) {
-        System.err.println("no median");
       }
+    }
   }
 
   public static void main(String[] args) {
