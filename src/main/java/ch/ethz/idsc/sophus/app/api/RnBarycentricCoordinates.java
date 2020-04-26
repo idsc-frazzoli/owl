@@ -47,28 +47,28 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   RBF() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of(RnManifold.INSTANCE, r -> r));
+      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, r -> r));
     }
   }, //
   RBF_INV_MULTI() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
-          flattenLogManifold, new InverseMultiquadricVariogram(RealScalar.of(5))) //
+      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
+          flattenLogManifold, InverseMultiquadricVariogram.of(5)) //
       );
     }
   }, //
   RBF_TPS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
+      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
           flattenLogManifold, ThinPlateSplineVariogram.of(RealScalar.of(5))));
     }
   }, //
   RBF_GAUSS() {
     @Override
     public WeightingInterface from(FlattenLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.of( //
+      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
           flattenLogManifold, GaussianVariogram.of(RealScalar.of(5))));
     }
   }, //

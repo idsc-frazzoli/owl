@@ -9,8 +9,10 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionInterpolation;
-import ch.ethz.idsc.sophus.krg.ShepardInterpolation;
+import ch.ethz.idsc.sophus.krg.ShepardWeighting;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -35,7 +37,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       // ---
       Tensor sequence = support.map(Tensors::of);
       WeightingInterface weightingInterface = //
-          spinnerDistances.getValue().of(geodesicDisplay().flattenLogManifold(), variogram());
+          spinnerDistances.getValue().create(geodesicDisplay().flattenLogManifold(), variogram());
       Tensor domain = domain();
       try {
         TensorUnaryOperator tensorUnaryOperator = //
@@ -49,8 +51,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       }
       if (!isDeterminate())
         try {
-          WeightingInterface shepardInterpolation = ShepardInterpolation.of(weightingInterface, funceva);
-          Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(point -> shepardInterpolation.weights(sequence, point)));
+          TensorUnaryOperator operator = //
+              CrossAveraging.of(ShepardWeighting.of(weightingInterface), sequence, RnBiinvariantMean.INSTANCE, funceva);
+          Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(operator));
           new PathRender(Color.RED, 1.25f) //
               .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
               .render(geometricLayer, graphics);

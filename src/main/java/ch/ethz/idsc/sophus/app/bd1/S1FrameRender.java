@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.Color;

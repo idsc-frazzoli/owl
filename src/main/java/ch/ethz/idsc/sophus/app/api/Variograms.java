@@ -17,7 +17,7 @@ public enum Variograms {
   INVERSE_POWER() {
     @Override
     public ScalarUnaryOperator of(Scalar param) {
-      return InversePowerVariogram.of(RealScalar.ONE, param);
+      return InversePowerVariogram.of(param);
     }
   }, //
   POWER() {
@@ -53,13 +53,13 @@ public enum Variograms {
   MULTI_QUADRATIC() {
     @Override
     public ScalarUnaryOperator of(Scalar param) {
-      return new MultiquadricVariogram(param);
+      return MultiquadricVariogram.of(param);
     }
   }, //
   INVERSE_MULTI_QUADRADIC() {
     @Override
     public ScalarUnaryOperator of(Scalar param) {
-      return new InverseMultiquadricVariogram(param);
+      return InverseMultiquadricVariogram.of(param);
     }
   }, //
   ;

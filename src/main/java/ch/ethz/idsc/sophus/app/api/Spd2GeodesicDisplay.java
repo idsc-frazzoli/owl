@@ -5,10 +5,10 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.spd.SpdBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
 import ch.ethz.idsc.sophus.hs.spd.SpdMatrixExponential;
-import ch.ethz.idsc.sophus.hs.spd.SpdMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
@@ -105,7 +105,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return SpdMean.INSTANCE;
+    return SpdBiinvariantMean.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

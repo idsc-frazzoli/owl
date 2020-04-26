@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
       Tensor sequence = support.map(Tensors::of);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       WeightingInterface weightingInterface = //
-          spinnerDistances.getValue().of(geodesicDisplay.flattenLogManifold(), variogram());
+          spinnerDistances.getValue().create(geodesicDisplay.flattenLogManifold(), variogram());
       Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
       // ---
       Tensor domain = domain();

@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,15 +23,31 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   KR_ABSOLUTE() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.ABSOLUTE.of(flattenLogManifold, variogram), //
+      return kriging(PseudoDistances.ABSOLUTE.create(flattenLogManifold, variogram), //
           RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
   KR_RELATIVE() {
     @Override
     public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.RELATIVE.of(flattenLogManifold, variogram), //
+      return kriging(PseudoDistances.RELATIVE.create(flattenLogManifold, variogram), //
           RealScalar.of(0), flattenLogManifold, sequence, values);
+    }
+  }, //
+  SI_ABSOLUTE() {
+    @Override
+    public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
+          ShepardWeighting.absolute(flattenLogManifold, 2), sequence, RnBiinvariantMean.INSTANCE, values);
+      return point -> tensorUnaryOperator.apply(point).Get();
+    }
+  }, //
+  SI_RELATIVE() {
+    @Override
+    public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
+          ShepardWeighting.relative(flattenLogManifold, 2), sequence, RnBiinvariantMean.INSTANCE, values);
+      return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
   LW_ID_LINEAR() {

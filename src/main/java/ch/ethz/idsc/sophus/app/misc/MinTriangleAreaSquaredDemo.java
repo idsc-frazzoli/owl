@@ -25,13 +25,13 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class MinTriangleAreaSquaredDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
-  private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
+  private final PathRender pathRender = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
   public MinTriangleAreaSquaredDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
-    timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
+    timerFrame.geometricComponent.addRenderInterface(pathRender);
     // ---
     Tensor blub = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {2, 0, 2.5708}, {1, 0, 2.1}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     RenderQuality.setQuality(graphics);
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = getGeodesicControlPoints();
-    pathRenderHull.setCurve(control, true);
+    pathRender.setCurve(control, true);
     if (0 < control.length()) {
       Tensor polygon = control.copy();
       polygon.stream().forEach(row -> row.append(RealScalar.ONE));
