@@ -37,14 +37,14 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private final JToggleButton jToggleButton = new JToggleButton("lagrange");
-  private final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
 
   public R1BarycentricDegreeDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     {
-      spinnerCount.setList(Arrays.asList(0, 1, 2, 3, 4));
-      spinnerCount.setValue(1);
-      spinnerCount.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
+      spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4));
+      spinnerDegree.setValue(1);
+      spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
     }
     {
       jToggleButton.setSelected(true);
@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.N;
         }
       }
       // ---
-      ScalarTensorFunction scalarTensorFunction = BarycentricRationalInterpolation.of(support, spinnerCount.getValue());
+      ScalarTensorFunction scalarTensorFunction = BarycentricRationalInterpolation.of(support, spinnerDegree.getValue());
       Tensor basis = domain.map(scalarTensorFunction);
       {
         Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));

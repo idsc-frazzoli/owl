@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -45,7 +46,7 @@ import ch.ethz.idsc.tensor.red.Norm;
    * @param levels 4
    * @throws IOException */
   public HermiteArray(String name, Scalar period, int levels) throws IOException {
-    this.levels = levels;
+    this.levels = Integers.requirePositive(levels);
     folder = HomeDirectory.Documents(name);
     folder.mkdir();
     Tensor data = GokartPoseDataV2.INSTANCE.getPoseVel(name, 1_000);

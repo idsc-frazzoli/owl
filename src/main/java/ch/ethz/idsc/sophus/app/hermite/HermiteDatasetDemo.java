@@ -199,9 +199,7 @@ import ch.ethz.idsc.tensor.sca.Power;
         geodesicDisplay.biinvariantMean());
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
     int levels = spinnerLabelLevel.getValue();
-    Tensor refined = 0 < levels //
-        ? Do.of(tensorIteration::iterate, levels)
-        : _control;
+    Tensor refined = Do.of(_control, tensorIteration::iterate, levels);
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {

@@ -134,9 +134,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           ? hermiteSubdivision.cyclic(RealScalar.ONE, control)
           : hermiteSubdivision.string(RealScalar.ONE, control);
       int n = spinnerRefine.getValue();
-      Tensor result = 0 < n //
-          ? Do.of(tensorIteration::iterate, n)
-          : control;
+      Tensor result = Do.of(control, tensorIteration::iterate, n);
       Tensor points = result.get(Tensor.ALL, 0);
       new PathRender(Color.BLUE).setCurve(points, jToggleCyclic.isSelected()).render(geometricLayer, graphics);
       if (jToggleButton.isSelected()) {

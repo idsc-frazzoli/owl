@@ -127,7 +127,7 @@ import ch.ethz.idsc.tensor.sca.Power;
         new Hermite3Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER) //
             .string(delta, _control);
     int levels = 2 * spinnerLabelLevel.getValue();
-    Tensor refined = Do.of(tensorIteration::iterate, levels);
+    Tensor refined = Do.of(_control, tensorIteration::iterate, levels);
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       for (Tensor point : refined.get(Tensor.ALL, 0)) {

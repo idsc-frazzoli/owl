@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 
   final Scalar process(HermiteSubdivision hermiteSubdivision) {
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, control);
-    Tensor refined = Do.of(tensorIteration::iterate, levels);
+    Tensor refined = Do.of(control, tensorIteration::iterate, levels);
     // TODO not a distance
     if (refined.length() != data.length())
       System.err.println("nonono");

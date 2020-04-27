@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
+import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Group;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
@@ -59,12 +59,12 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     Scalar norm = Norm._2.ofVector(axis);
     if (Scalars.lessThan(RealScalar.ONE, norm))
       axis = axis.divide(norm);
-    return So3Exponential.vectorExp(axis);
+    return Rodrigues.vectorExp(axis);
   }
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor xyz) {
-    return So3Exponential.INSTANCE.flattenLog(xyz).extract(0, 2).multiply(radius);
+    return Rodrigues.INSTANCE.flattenLog(xyz).extract(0, 2).multiply(radius);
   }
 
   @Override // from GeodesicDisplay
@@ -79,7 +79,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return So3Manifold.HS_EXP;
+    return So3Manifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
