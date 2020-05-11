@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.pdf.EqualizingDistribution;
 import ch.ethz.idsc.tensor.pdf.InverseCDF;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -42,7 +43,7 @@ public class ClothoidTransition extends AbstractTransition {
     int intervals = Ceiling.FUNCTION.apply(clothoid.length().divide(minResolution)).number().intValue();
     Tensor uniform = Subdivide.of(_0, _1, Math.min(Math.max(1, intervals), MAX_INTERVALS));
     InverseCDF inverseCDF = //
-        (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Scalar::abs));
+        (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Abs.FUNCTION));
     Tensor inverse = uniform.map(inverseCDF::quantile).divide(DoubleScalar.of(uniform.length()));
     return inverse.map(clothoid);
   }

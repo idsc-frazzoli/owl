@@ -33,6 +33,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -230,7 +231,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Chop._03.requireClose(trajectorySample.stateTime().state(), integrator.tail().state());
       } catch (TensorRuntimeException e) { // +/- close to pi
         Chop._03.requireClose(trajectorySample.stateTime().state().extract(0, 2), integrator.tail().state().extract(0, 2));
-        Chop._03.requireClose(trajectorySample.stateTime().state().Get(2).abs(), integrator.tail().state().Get(2).abs());
+        Chop._03.requireClose( //
+            Abs.of(trajectorySample.stateTime().state().Get(2)), //
+            Abs.of(integrator.tail().state().Get(2)));
       }
     }
   }

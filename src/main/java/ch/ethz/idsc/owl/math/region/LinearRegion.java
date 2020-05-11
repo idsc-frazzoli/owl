@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -25,7 +26,7 @@ public class LinearRegion extends ImplicitRegionWithDistance implements Serializ
 
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
-    return center.subtract(x).abs().subtract(radius);
+    return Abs.between(center, (Scalar) x).subtract(radius);
   }
 
   /** @return center of region */

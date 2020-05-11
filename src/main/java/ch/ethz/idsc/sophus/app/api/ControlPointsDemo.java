@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -210,7 +211,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   }
 
   public Scalar getPositioningThreshold() {
-    return PIXEL_THRESHOLD.divide(Sqrt.FUNCTION.apply(Det.of(timerFrame.geometricComponent.getModel2Pixel()).abs()));
+    return PIXEL_THRESHOLD.divide(Sqrt.FUNCTION.apply(Abs.of(Det.of(timerFrame.geometricComponent.getModel2Pixel()))));
   }
 
   public final void addButtonDubins() {

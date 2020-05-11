@@ -28,13 +28,12 @@ import ch.ethz.idsc.tensor.Tensors;
   BSPLINE2(BSpline2CurveSubdivision::new), //
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::of), //
-  /** Dyn/Sharon 2014 that uses 2 binary averages */
-  BSPLINE4(BSpline4CurveSubdivision::of), //
-  /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
-  BSPLINE4S2(BSpline4CurveSubdivision::split2),
   /** Hakenberg 2018 that uses 3 binary averages */
-  BSPLINE4S3(CurveSubdivisionHelper::split3), //
-  BSPLINE5(BSpline5CurveSubdivision::new), //
+  BSPLINE4(CurveSubdivisionHelper::of), //
+  /** Dyn/Sharon 2014 that uses 2 binary averages */
+  BSPLINE4DS(BSpline4CurveSubdivision::dynSharon), //
+  /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
+  BSPLINE4S2(BSpline4CurveSubdivision::split2), BSPLINE5(BSpline5CurveSubdivision::new), //
   BSPLINE6(BSpline6CurveSubdivision::of), //
   LR1(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 1)), //
   LR2(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 2)), //

@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
       CurveSubdivisionSchemes.BSPLINE1, //
       CurveSubdivisionSchemes.BSPLINE2, //
       CurveSubdivisionSchemes.BSPLINE3, //
-      CurveSubdivisionSchemes.BSPLINE4, //
+      CurveSubdivisionSchemes.BSPLINE4DS, //
       CurveSubdivisionSchemes.FOURPOINT, //
       CurveSubdivisionSchemes.SIXPOINT);
 

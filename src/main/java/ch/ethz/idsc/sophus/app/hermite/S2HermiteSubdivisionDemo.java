@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
     }
     {
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
       spinnerRefine.setValue(4);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       for (Tensor ctrl : control) {
         Tensor p = ctrl.get(0); // point
         Tensor v = ctrl.get(1); // vector
-        {
+        if (jToggleButton.isSelected()) {
           Tensor q = new SnExponential(p).exp(v); // point on sphere
           ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(p, q);
           graphics.setStroke(STROKE);
@@ -115,10 +115,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           graphics.draw(geometricLayer.toPath2D(ms));
         }
         {
-          Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(v);
           graphics.setStroke(new BasicStroke(1.5f));
           graphics.setColor(Color.GRAY);
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
+          Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(v);
           graphics.draw(geometricLayer.toLine2D(pr));
           geometricLayer.popMatrix();
         }
@@ -137,7 +137,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       Tensor result = Do.of(control, tensorIteration::iterate, n);
       Tensor points = result.get(Tensor.ALL, 0);
       new PathRender(Color.BLUE).setCurve(points, jToggleCyclic.isSelected()).render(geometricLayer, graphics);
-      if (jToggleButton.isSelected()) {
+      if (jToggleButton.isSelected() && result.length() < 100) {
         for (Tensor pv : result) {
           Tensor p = pv.get(0);
           Tensor v = pv.get(1);

@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ class ClothoidSolutionsExport {
   private static final Scalar LAMBDA_THRES = RealScalar.of(1.0);
@@ -34,7 +35,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     }
 
     public boolean isClose(Sol sol) {
-      return Scalars.lessThan(sol.lambda.subtract(lambda).abs(), LAMBDA_THRES);
+      return Scalars.lessThan(Abs.between(sol.lambda, lambda), LAMBDA_THRES);
     }
 
     public void union(Sol[] sols, DisjointSets disjointSet) {

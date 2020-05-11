@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class LexicographicOrderTest extends TestCase {
@@ -38,7 +39,7 @@ public class LexicographicOrderTest extends TestCase {
   }
 
   public void testPartialLexicographic() {
-    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
+    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(Abs.of(x), Abs.of(y)));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
@@ -67,7 +68,7 @@ public class LexicographicOrderTest extends TestCase {
   }
 
   public void testException() {
-    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
+    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(Abs.of(x), Abs.of(y)));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
@@ -92,7 +93,7 @@ public class LexicographicOrderTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
+    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(Abs.of(x), Abs.of(y)));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);

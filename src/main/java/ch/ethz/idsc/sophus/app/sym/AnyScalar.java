@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
@@ -19,9 +20,9 @@ import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** any scalar tracks whether a scalar in a tensor has any effect within a computation */
 public final class AnyScalar extends AbstractScalar implements //
-    ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExactScalarQInterface, //
-    ExpInterface, LogInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, //
-    Serializable {
+    AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
+    ExactScalarQInterface, ExpInterface, LogInterface, MachineNumberQInterface, RoundingInterface, //
+    TrigonometryInterface, Serializable {
   public static final Scalar INSTANCE = new AnyScalar();
 
   // ---
@@ -47,11 +48,6 @@ public final class AnyScalar extends AbstractScalar implements //
   }
 
   @Override // from AbstractScalar
-  public Scalar abs() {
-    return this;
-  }
-
-  @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     return this;
   }
@@ -67,6 +63,11 @@ public final class AnyScalar extends AbstractScalar implements //
   }
 
   /***************************************************/
+  @Override // from AbsInterface
+  public Scalar abs() {
+    return this;
+  }
+
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     return this;

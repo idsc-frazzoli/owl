@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ enum Se2Prediction {
   ;
@@ -55,7 +56,7 @@ import ch.ethz.idsc.tensor.red.Total;
             err_xy.set(err::add, i, j);
           }
           {
-            Scalar diff = So2.MOD.apply(t_prediction.Get(2).subtract(t_measured.Get(2))).abs();
+            Scalar diff = So2.MOD.apply(Abs.between(t_prediction.Get(2), t_measured.Get(2)));
             err_hd.set(diff::add, i, j);
           }
         }

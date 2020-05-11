@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
 
   public BarycentricRationalInterpolationDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, GeodesicDisplays.METRIC);
     {
       spinnerBeta.setList(Tensors.fromString("{0, 1/4, 1/2, 3/4, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerBeta.setIndex(0);

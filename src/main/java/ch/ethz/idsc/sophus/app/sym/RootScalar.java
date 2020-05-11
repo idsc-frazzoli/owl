@@ -14,6 +14,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;
@@ -24,7 +26,7 @@ public class RootScalar extends AbstractScalar implements //
     // ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExpInterface, //
     // LogInterface, PowerInterface, RoundingInterface, SqrtInterface, TrigonometryInterface, //
     // ChopInterface,
-    ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
+    AbsInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
   /** creator with package visibility
    * 
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}
@@ -47,11 +49,6 @@ public class RootScalar extends AbstractScalar implements //
   }
 
   /***************************************************/
-  @Override // from Scalar
-  public Scalar abs() { // "complex modulus"
-    return re.add(im.multiply(Sqrt.of(ba))).abs();
-  }
-
   @Override // from Scalar
   public Scalar negate() {
     return new RootScalar(re.negate(), im.negate(), ba);
@@ -104,6 +101,12 @@ public class RootScalar extends AbstractScalar implements //
             ba);
     }
     throw new UnsupportedOperationException();
+  }
+
+  /***************************************************/
+  @Override // from AbsInterface
+  public Scalar abs() { // "complex modulus"
+    return Abs.FUNCTION.apply(re.add(im.multiply(Sqrt.of(ba))));
   }
 
   @Override // from ExactNumberInterface

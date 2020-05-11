@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(geodesicDisplay.geodesicInterface(), radius);
     Tensor refined = geodesicMeanFilter.apply(control);
-    Tensor curve = Nest.of(BSpline4CurveSubdivision.of(geodesicDisplay.geodesicInterface())::string, refined, 7);
+    Tensor curve = Nest.of(BSpline4CurveSubdivision.dynSharon(geodesicDisplay.geodesicInterface())::string, refined, 7);
     Tensor render = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
     Curvature2DRender.of(render, false, geometricLayer, graphics);
     renderPoints(geodesicDisplay, refined, geometricLayer, graphics);

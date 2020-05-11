@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** axis-aligned region of infinity extension in the direction of other axes */
 public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion implements Serializable {
@@ -27,6 +28,6 @@ public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion implements
 
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
-    return semiwidth.subtract(x.Get(index).subtract(center).abs());
+    return semiwidth.subtract(Abs.between(x.Get(index), center));
   }
 }

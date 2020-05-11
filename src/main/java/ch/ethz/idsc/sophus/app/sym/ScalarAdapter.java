@@ -21,11 +21,6 @@ public class ScalarAdapter extends AbstractScalar {
   }
 
   @Override
-  public Scalar abs() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public Number number() {
     throw new UnsupportedOperationException();
   }

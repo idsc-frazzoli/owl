@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -48,7 +49,7 @@ public final class So2Region extends ImplicitRegionWithDistance implements Seria
 
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
-    return mod.apply(center.subtract(x)).abs().subtract(radius);
+    return Abs.FUNCTION.apply(mod.apply(center.subtract(x))).subtract(radius);
   }
 
   /** @return center angle of region on unit circle */

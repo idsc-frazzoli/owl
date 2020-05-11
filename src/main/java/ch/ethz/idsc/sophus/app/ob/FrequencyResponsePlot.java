@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Exp;
 
@@ -52,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Exp;
             .add(a.Get(j).negate().multiply(Exp.FUNCTION.apply(ComplexScalar.I.negate().multiply(RealScalar.of(j)).multiply(omegaRange.Get(i)))));
       }
       Scalar result = nominator.divide(denominator);
-      resultAbs.append(result.abs());
+      resultAbs.append(Abs.FUNCTION.apply(result));
       resultPhase.append(Arg.FUNCTION.apply(result));
     }
     if (string == "PhaseResponse")

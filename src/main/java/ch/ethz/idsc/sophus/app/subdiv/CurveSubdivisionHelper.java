@@ -25,9 +25,9 @@ import ch.ethz.idsc.tensor.Scalar;
   // ---
   private static final Set<CurveSubdivisionSchemes> DUAL = EnumSet.of( //
       CurveSubdivisionSchemes.BSPLINE2, //
-      CurveSubdivisionSchemes.BSPLINE4, //
+      CurveSubdivisionSchemes.BSPLINE4DS, //
       CurveSubdivisionSchemes.BSPLINE4S2, //
-      CurveSubdivisionSchemes.BSPLINE4S3, //
+      CurveSubdivisionSchemes.BSPLINE4, //
       CurveSubdivisionSchemes.LR2, //
       CurveSubdivisionSchemes.LR4, //
       CurveSubdivisionSchemes.LR6);
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.Scalar;
   // ---
   static Scalar MAGIC_C = RationalScalar.of(1, 6);
 
-  static CurveSubdivision split3(SplitInterface splitInterface) {
+  static CurveSubdivision of(SplitInterface splitInterface) {
     return BSpline4CurveSubdivision.split3(splitInterface, MAGIC_C);
   }
 

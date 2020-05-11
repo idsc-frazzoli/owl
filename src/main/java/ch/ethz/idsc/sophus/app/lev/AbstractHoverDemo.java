@@ -22,12 +22,12 @@ import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ abstract class AbstractHoverDemo extends ControlPointsDemo {
   static final Random RANDOM = new Random();
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     if (geodesicDisplay instanceof SnGeodesicDisplay) {
       RandomSampleInterface randomSampleInterface = SnRandomSample.of(2);
       xyzs = Tensors.vector(i -> randomSampleInterface.randomSample(RANDOM), n);
-      xyzs.set(Scalar::abs, Tensor.ALL, 2);
+      xyzs.set(Abs.FUNCTION, Tensor.ALL, 2);
     } else {
       xyzs = Join.of(1, RandomVariate.of(UniformDistribution.of(-5, 5), RANDOM, n, 2), RandomVariate.of(UniformDistribution.of(-2, 2), RANDOM, n, 1));
     }

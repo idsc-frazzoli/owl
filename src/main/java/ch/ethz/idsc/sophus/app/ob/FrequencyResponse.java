@@ -1,9 +1,9 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * "H=Y/U is the frequency response of the system" */
 /* package */ enum FrequencyResponse implements TensorUnaryOperator {
-  MAGNITUDE(Scalar::abs), //
+  MAGNITUDE(Abs.FUNCTION), //
   PHASE(Arg.FUNCTION);
 
   private final ScalarUnaryOperator scalarUnaryOperator;

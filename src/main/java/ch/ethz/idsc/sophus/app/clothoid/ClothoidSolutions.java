@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.red.ArgMin;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -57,7 +58,7 @@ public class ClothoidSolutions {
         Scalar b1 = s1.subtract(s2);
         LagrangeQuadratic lagrangeQuadratic = CustomClothoids.of(lambda).lagrangeQuadratic(b0, b1);
         ClothoidIntegral clothoidIntegral = ClothoidIntegral.interp(lagrangeQuadratic);
-        Scalar length = clothoidIntegral.one().abs().reciprocal();
+        Scalar length = Abs.of(clothoidIntegral.one()).reciprocal();
         lengths.append(length);
       }
     }

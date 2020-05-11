@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.UserName;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum RelaxedDebugUtils {
   ;
@@ -60,7 +61,7 @@ public enum RelaxedDebugUtils {
       if (PRINT)
         System.out.println("Number of elements similar to best: " + StaticHelper.numberEquals(relaxedPriorityQueue));
       relaxedPriorityQueue.collection().stream().filter(a -> VectorScalars.vector(a.merit()).subtract(bestMerit).stream() //
-          .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v.abs(), RationalScalar.of(1, 100)))).forEach(x -> System.out.println(x.merit()));
+          .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(Abs.of(v), RationalScalar.of(1, 100)))).forEach(x -> System.out.println(x.merit()));
     }
   }
 

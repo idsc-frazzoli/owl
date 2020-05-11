@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum Tse2Controls {
   ;
@@ -15,7 +16,8 @@ public enum Tse2Controls {
   // TODO JPH max effective turning rate/angular rate depends on tangent speed
   public static Scalar maxTurning(Collection<Tensor> flows) {
     return flows.stream() //
-        .map(u -> u.Get(Tse2StateSpaceModel.CONTROL_INDEX_STEER).abs()) //
+        .map(u -> u.Get(Tse2StateSpaceModel.CONTROL_INDEX_STEER)) //
+        .map(Abs.FUNCTION) //
         .reduce(Max::of).get();
   }
 

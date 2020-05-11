@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -75,7 +76,7 @@ public class SmoothingKernelTest extends TestCase {
       Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
       Tensor vector = uniformWindowSampler.apply(1);
       assertEquals(vector, Tensors.of(RealScalar.ONE));
-      assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
+      assertTrue(Scalars.lessThan(RealScalar.of(1e-3), Abs.of(vector.Get(0))));
     }
   }
 
