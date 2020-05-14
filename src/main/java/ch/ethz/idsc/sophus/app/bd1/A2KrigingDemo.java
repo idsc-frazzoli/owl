@@ -40,7 +40,6 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
-  // ---
   private final SpinnerLabel<HsScalarFunctions> spinnerKriging = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();

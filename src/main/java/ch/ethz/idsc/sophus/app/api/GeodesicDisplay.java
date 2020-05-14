@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -51,6 +52,8 @@ public interface GeodesicDisplay {
 
   /** @return biinvariantMean, or null, if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();
+
+  LineDistance lineDistance();
 
   @Override // from Object
   String toString();

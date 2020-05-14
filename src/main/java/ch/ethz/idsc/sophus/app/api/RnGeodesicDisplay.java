@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -13,6 +14,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnLineDistance;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
@@ -70,6 +72,11 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
     return RnBiinvariantMean.INSTANCE;
+  }
+
+  @Override
+  public final LineDistance lineDistance() {
+    return RnLineDistance.INSTANCE;
   }
 
   @Override // from Object

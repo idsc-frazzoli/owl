@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -88,6 +89,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return StBiinvariantMean.INSTANCE;
+  }
+
+  @Override
+  public final LineDistance lineDistance() {
+    return null; // TODO line distance
   }
 
   @Override // from Object

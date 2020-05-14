@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -100,6 +101,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
     return So3Manifold.INSTANCE;
+  }
+
+  @Override
+  public final LineDistance lineDistance() {
+    return null; // TODO line distance should be similar to s^3
   }
 
   @Override // from Object

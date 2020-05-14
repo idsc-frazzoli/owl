@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.app.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.FieldTest;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -35,7 +36,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ class S2HermiteSubdivisionDemo extends ControlPointsDemo {
-  private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
+  @FieldTest
+  public final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");

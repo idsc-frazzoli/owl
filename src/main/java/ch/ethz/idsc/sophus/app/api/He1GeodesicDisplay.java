@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -87,6 +88,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public FlattenLogManifold flattenLogManifold() {
     return HeManifold.INSTANCE;
+  }
+
+  @Override
+  public LineDistance lineDistance() {
+    return null; // TODO line distance
   }
 
   @Override // from GeodesicDisplay

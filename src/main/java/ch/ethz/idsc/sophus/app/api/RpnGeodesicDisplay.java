@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -71,6 +72,11 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   @Override // from GeodesicDisplay
   public final FlattenLogManifold flattenLogManifold() {
     return RpnManifold.INSTANCE;
+  }
+
+  @Override
+  public final LineDistance lineDistance() {
+    return null; // TODO line distance
   }
 
   @Override

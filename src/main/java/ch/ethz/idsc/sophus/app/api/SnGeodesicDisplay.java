@@ -3,12 +3,14 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.hs.sn.SnLineDistance;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnTransport;
@@ -72,6 +74,11 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final FlattenLogManifold flattenLogManifold() {
     return SnManifold.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public final LineDistance lineDistance() {
+    return SnLineDistance.INSTANCE;
   }
 
   @Override

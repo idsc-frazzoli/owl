@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
@@ -50,6 +51,11 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   @Override // from GeodesicDisplay
   public final FlattenLogManifold flattenLogManifold() {
     return LieFlattenLogManifold.of(lieGroup(), Se2CoveringExponential.INSTANCE::log);
+  }
+
+  @Override
+  public final LineDistance lineDistance() {
+    return null; // TODO line distance
   }
 
   @Override // from Object
