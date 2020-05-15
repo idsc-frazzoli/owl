@@ -16,10 +16,14 @@ import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnExponential;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S2LogDemo extends ControlPointsDemo {
   public S2LogDemo() {
@@ -50,17 +54,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     if (0 < points.length()) {
       Tensor p = points.get(0);
       Tensor vs = Tensor.of(points.stream().skip(1).map(new SnExponential(p)::log));
-      {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-        Tensor ts = S2GeodesicDisplay.tangentSpace(p);
-        graphics.setStroke(new BasicStroke(1.5f));
-        graphics.setColor(Color.GRAY);
-        for (Tensor v : vs) // render tangents in tangent space
-          graphics.draw(geometricLayer.toLine2D(ts.dot(v)));
-        graphics.setColor(new Color(192, 192, 192, 64));
-        graphics.fill(geometricLayer.toPath2D(CirclePoints.of(41), true));
-        geometricLayer.popMatrix();
-      }
       // ---
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       for (Tensor v : vs) { // render tangents as geodesic on sphere
@@ -70,6 +63,18 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
         Tensor ms = Tensor.of(GEODESIC_DOMAIN.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
         graphics.setColor(new Color(192, 192, 192));
         graphics.draw(geometricLayer.toPath2D(ms));
+      }
+      {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
+        graphics.setStroke(new BasicStroke(1.5f));
+        graphics.setColor(new Color(0, 0, 255, 192));
+        Tensor ts = S2GeodesicDisplay.tangentSpace(p);
+        Scalar max = vs.stream().map(Norm._2::ofVector).reduce(Max::of).orElse(RealScalar.ONE);
+        for (Tensor v : vs) // render tangents in tangent space
+          graphics.draw(geometricLayer.toLine2D(ts.dot(v)));
+        graphics.setColor(new Color(192, 192, 192, 64));
+        graphics.fill(geometricLayer.toPath2D(CirclePoints.of(41).multiply(max), true));
+        geometricLayer.popMatrix();
       }
     }
     graphics.setStroke(new BasicStroke());
