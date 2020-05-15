@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
   private final SpinnerLabel<HsScalarFunctions> spinnerKriging = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
-  private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
+  private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleButton = new JToggleButton("thres");
@@ -61,7 +61,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       spinnerCvar.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "error");
     }
     {
-      spinnerColorData.setArray(ColorDataGradients.values());
       spinnerColorData.setValue(ColorDataGradients.PARULA);
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
     }
