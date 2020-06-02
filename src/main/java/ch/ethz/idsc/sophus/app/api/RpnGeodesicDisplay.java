@@ -5,9 +5,9 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
@@ -70,7 +70,7 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   }
 
   @Override // from GeodesicDisplay
-  public final FlattenLogManifold flattenLogManifold() {
+  public final VectorLogManifold flattenLogManifold() {
     return RpnManifold.INSTANCE;
   }
 

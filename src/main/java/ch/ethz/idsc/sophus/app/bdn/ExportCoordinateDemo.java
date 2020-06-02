@@ -53,6 +53,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       }
       System.out.println("done");
     }
+    System.out.println("all done");
   }
 
   abstract Tensor compute(WeightingInterface weightingInterface, int i);

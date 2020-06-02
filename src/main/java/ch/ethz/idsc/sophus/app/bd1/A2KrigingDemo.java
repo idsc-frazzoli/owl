@@ -21,7 +21,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Variograms;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
-import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -122,7 +122,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private BufferedImage bufferedImage(int resolution, //
-      FlattenLogManifold flattenLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      VectorLogManifold flattenLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
     TensorScalarFunction tsf = hsScalarFunction.build(flattenLogManifold, variogram, sequence, values);
     Tensor matrix = Tensors.matrix(array(resolution, tsf));
     // ---

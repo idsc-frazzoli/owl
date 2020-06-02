@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorNorm;
@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         Se2Matrix.flipY(bufferedImage.getHeight()));
   }
 
-  private BufferedImage bufferedImage(int resolution, FlattenLogManifold flattenLogManifold) {
+  private BufferedImage bufferedImage(int resolution, VectorLogManifold flattenLogManifold) {
     Tensor matrix = Tensors.matrix(array(resolution, tensorNorm()::norm));
     // ---
     Tensor colorData = matrix.map(spinnerColorData.getValue());

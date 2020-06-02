@@ -5,9 +5,9 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -65,7 +65,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor xyz) {
-    return Rodrigues.INSTANCE.flattenLog(xyz).extract(0, 2).multiply(radius);
+    return Rodrigues.INSTANCE.vectorLog(xyz).extract(0, 2).multiply(radius);
   }
 
   @Override // from GeodesicDisplay
@@ -99,7 +99,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
-  public FlattenLogManifold flattenLogManifold() {
+  public VectorLogManifold flattenLogManifold() {
     return So3Manifold.INSTANCE;
   }
 

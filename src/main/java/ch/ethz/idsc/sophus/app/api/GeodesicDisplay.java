@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.FlattenLogManifold;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -42,7 +42,7 @@ public interface GeodesicDisplay {
   HsTransport hsTransport();
 
   /** @return flattenLogManifold, or null if not applicable */
-  FlattenLogManifold flattenLogManifold();
+  VectorLogManifold flattenLogManifold();
 
   /** @param p control point
    * @param q control point

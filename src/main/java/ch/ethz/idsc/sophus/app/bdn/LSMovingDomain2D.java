@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.opt.RigidMotionFit;
     int rows = domain.length();
     int cols = Unprotect.dimension1(domain);
     Tensor[][] array = new Tensor[rows][cols];
+    Tensor origin = origin();
     IntStream.range(0, rows).parallel().forEach(cx -> {
       for (int cy = 0; cy < cols; ++cy)
         array[cx][cy] = RigidMotionFit.of(origin, target, weights[cx][cy]).apply(domain.get(cx, cy));
