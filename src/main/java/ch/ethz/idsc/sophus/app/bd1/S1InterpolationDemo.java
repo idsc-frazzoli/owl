@@ -15,8 +15,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S1InterpolationDemo extends ControlPointsDemo {
@@ -66,10 +67,11 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor spherics = domain.map(AngleVector::of);
       // ---
       VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, null); // TODO
+      TensorUnaryOperator tensorUnaryOperator = //
+          spinnerBarycentric.getValue().from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
       try {
         ScalarTensorFunction scalarTensorFunction = //
-            point -> weightingInterface.weights(sequence, AngleVector.of(point));
+            point -> tensorUnaryOperator.apply(AngleVector.of(point));
         Tensor basis = Tensor.of(domain.stream().parallel().map(Scalar.class::cast).map(scalarTensorFunction));
         Tensor curve = basis.dot(values).pmul(spherics);
         new PathRender(Color.BLUE, 1.25f).setCurve(curve, true).render(geometricLayer, graphics);

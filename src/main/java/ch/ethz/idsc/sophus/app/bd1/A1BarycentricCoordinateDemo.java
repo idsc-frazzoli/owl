@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
   private final SpinnerLabel<LogWeighting> spinnerBarycentric = new SpinnerLabel<>();
@@ -54,16 +54,16 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       // ---
       VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
       Object object = spinnerBarycentric.getValue();
-      final WeightingInterface weightingInterface;
+      Tensor sequence = support.map(this::lift);
+      final TensorUnaryOperator weightingInterface;
       if (object instanceof LogWeighting) {
         LogWeighting logWeighting = (LogWeighting) object;
-        weightingInterface = logWeighting.from(flattenLogManifold, InversePowerVariogram.of(2));
+        weightingInterface = logWeighting.from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
       } else {
         weightingInterface = null;
       }
-      Tensor sequence = support.map(this::lift);
       ScalarTensorFunction scalarTensorFunction = //
-          point -> weightingInterface.weights(sequence, lift(point));
+          point -> weightingInterface.apply(lift(point));
       Tensor basis = domain.map(scalarTensorFunction);
       {
         Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));

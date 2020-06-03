@@ -51,8 +51,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       }
       if (!isDeterminate())
         try {
+          WeightingInterface weightingInterface2 = ShepardWeighting.of(weightingInterface);
           TensorUnaryOperator operator = //
-              CrossAveraging.of(ShepardWeighting.of(weightingInterface), sequence, RnBiinvariantMean.INSTANCE, funceva);
+              CrossAveraging.of(p -> weightingInterface2.weights(sequence, p), RnBiinvariantMean.INSTANCE, funceva);
           Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(operator));
           new PathRender(Color.RED, 1.25f) //
               .setCurve(Transpose.of(Tensors.of(domain, result)), false) //

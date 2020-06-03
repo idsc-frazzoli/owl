@@ -13,8 +13,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
 /* package */ class LSMovingDomain2D extends MovingDomain2D {
-  public LSMovingDomain2D(Tensor origin, TensorUnaryOperator weightingInterface, Tensor domain) {
-    super(origin, weightingInterface, domain);
+  public LSMovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
+    super(origin, tensorUnaryOperator, domain);
   }
 
   @Override // from MovingDomain2D

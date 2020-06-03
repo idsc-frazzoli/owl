@@ -18,45 +18,45 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum LogWeightings implements LogWeighting {
   ID_STANDARD() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      return AbsoluteCoordinate.of(vectorLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      ProjectedCoordinate projectedCoordinate = AbsoluteCoordinate.of(vectorLogManifold, variogram);
+      return point -> projectedCoordinate.weights(sequence, point);
     }
   },
   /***************************************************/
   BI_DIAGONAL() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      return RelativeCoordinate.diagonal(vectorLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.diagonal(vectorLogManifold, variogram);
+      return point -> projectedCoordinate.weights(sequence, point);
     }
   },
   BI_STANDARD() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      return RelativeCoordinate.of(vectorLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.of(vectorLogManifold, variogram);
+      return point -> projectedCoordinate.weights(sequence, point);
     }
   },
   BI_GRASSMAN() {
     @Override
-    public WeightingInterface from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public TensorUnaryOperator ops(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return new GrCoordinate(vectorLogManifold, variogram, sequence);
     }
   },
   /***************************************************/
   ID_SHEPARD() {
     @Override
-    public WeightingInterface from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      return ShepardWeighting.absolute(vectorLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, variogram);
+      return point -> weightingInterface.weights(sequence, point);
     }
   },
   BI_SHEPARD() {
     @Override
-    public WeightingInterface from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
-      return ShepardWeighting.relative(vectorLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, variogram);
+      return point -> weightingInterface.weights(sequence, point);
     }
   }, //
   ;

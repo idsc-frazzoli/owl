@@ -19,10 +19,10 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2CoveringAnimationDemo extends ControlPointsDemo {
   private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
@@ -84,12 +84,13 @@ import ch.ethz.idsc.tensor.io.Timing;
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       RenderQuality.setQuality(graphics);
-      WeightingInterface weightingInterface = //
-          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
+      Tensor sequence = controlPoints.extract(1, controlPoints.length());
+      TensorUnaryOperator tensorUnaryOperator = //
+          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
-          weightingInterface, //
-          controlPoints.extract(1, controlPoints.length()), //
+          tensorUnaryOperator, //
+          sequence, //
           controlPoints.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
       leverRender.renderWeights();

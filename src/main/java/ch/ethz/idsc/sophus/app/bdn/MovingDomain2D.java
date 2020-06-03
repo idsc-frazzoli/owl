@@ -22,18 +22,17 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   final Tensor[][] weights;
   private final Tensor _wgs;
 
-  public MovingDomain2D(Tensor origin, TensorUnaryOperator weightingOperator, Tensor domain) {
+  public MovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
     this.origin = origin;
     this.domain = domain;
     int rows = domain.length();
     int cols = Unprotect.dimension1(domain);
     weights = new Tensor[rows][cols];
-    for (int cx = 0; cx < rows; ++cx) {
+    for (int cx = 0; cx < rows; ++cx)
       for (int cy = 0; cy < cols; ++cy) {
         Tensor point = domain.get(cx, cy);
-        weights[cx][cy] = weightingOperator.apply(point);
+        weights[cx][cy] = tensorUnaryOperator.apply(point);
       }
-    }
     {
       Tensor wgs = Tensors.matrix((i, j) -> weights[i][j], rows, cols);
       List<Integer> dims = Dimensions.of(wgs);

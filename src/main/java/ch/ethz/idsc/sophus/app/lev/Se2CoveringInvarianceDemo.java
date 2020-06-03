@@ -20,9 +20,9 @@ import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2CoveringInvarianceDemo extends ControlPointsDemo {
   private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
@@ -58,12 +58,13 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
-      WeightingInterface weightingInterface = //
-          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
+      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
+      TensorUnaryOperator weightingInterface = //
+          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence);
       {
         LeverRender leverRender = LeverRender.of(geodesicDisplay, //
             weightingInterface, //
-            controlPointsAll.extract(1, controlPointsAll.length()), //
+            sequence, //
             controlPointsAll.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();

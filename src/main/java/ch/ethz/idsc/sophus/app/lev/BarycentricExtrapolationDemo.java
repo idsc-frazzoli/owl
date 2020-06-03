@@ -19,13 +19,14 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class BarycentricExtrapolationDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
@@ -61,9 +62,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, null);
+      TensorUnaryOperator tensorUnaryOperator = //
+          spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, InversePowerVariogram.of(2), domain);
       Tensor curve = Tensor.of(samples.stream() //
-          .map(point -> weightingInterface.weights(domain, point)) //
+          .map(tensorUnaryOperator) //
           .map(weights -> biinvariantMean.mean(control, weights)));
       new PathRender(Color.BLUE, 1.5f) //
           .setCurve(curve, false) //

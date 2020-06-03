@@ -67,12 +67,10 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dy = Subdivide.of(0, EXTENT, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
     VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, movingOrigin);
+    TensorUnaryOperator tensorUnaryOperator = weightingInterface(flattenLogManifold, movingOrigin);
     return jToggleRigidMotionFit.isSelected() //
-        ? new LSMovingDomain2D(movingOrigin, weightingInterface, domain)
-        : new MovingDomain2D(movingOrigin, //
-            weightingInterface, //
-            domain);
+        ? new LSMovingDomain2D(movingOrigin, tensorUnaryOperator, domain)
+        : new MovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override

@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     root.mkdirs();
     for (LogWeighting logWeighting : LogWeightings.list()) {
       Tensor origin = getGeodesicControlPoints();
-      TensorUnaryOperator weightingInterface = logWeighting.ops(geodesicDisplay().flattenLogManifold(), InversePowerVariogram.of(2), origin);
+      TensorUnaryOperator weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold(), InversePowerVariogram.of(2), origin);
       System.out.print("computing...");
       Tensor wgs = compute(weightingInterface, 120);
       List<Integer> dims = Dimensions.of(wgs);

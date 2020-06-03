@@ -77,6 +77,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   final TensorUnaryOperator weightingInterface(VectorLogManifold flattenLogManifold, Tensor sequence) {
-    return spinnerWeighting.getValue().ops(flattenLogManifold, InversePowerVariogram.of(2), sequence);
+    return spinnerWeighting.getValue().from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
   }
 }

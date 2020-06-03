@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -42,8 +41,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
     VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, movingOrigin);
-    return new MovingDomain2D(movingOrigin, weightingInterface, domain);
+    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, movingOrigin), domain);
   }
 
   @Override

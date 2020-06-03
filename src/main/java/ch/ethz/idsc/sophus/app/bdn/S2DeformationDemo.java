@@ -53,11 +53,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
     VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, movingOrigin);
-    return new MovingDomain2D( //
-        movingOrigin, //
-        weightingInterface, //
-        domain);
+    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, movingOrigin), domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);

@@ -16,9 +16,9 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class BarycentricLeversDemo extends ControlPointsDemo {
   private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
@@ -48,12 +48,13 @@ import ch.ethz.idsc.tensor.Tensors;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
-      WeightingInterface weightingInterface = //
-          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
+      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
+      TensorUnaryOperator tensorUnaryOperator = //
+          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
-          weightingInterface, //
-          controlPointsAll.extract(1, controlPointsAll.length()), //
+          tensorUnaryOperator, //
+          sequence, //
           controlPointsAll.get(0), geometricLayer, graphics);
       leverRender.renderLevers();
       leverRender.renderWeights();

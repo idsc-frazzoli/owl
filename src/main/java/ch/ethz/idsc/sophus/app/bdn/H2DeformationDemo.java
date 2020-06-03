@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class H2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
@@ -43,10 +42,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
     VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, movingOrigin);
     return new MovingDomain2D( //
         movingOrigin, //
-        weightingInterface, //
+        weightingInterface(flattenLogManifold, movingOrigin), //
         domain);
   }
 

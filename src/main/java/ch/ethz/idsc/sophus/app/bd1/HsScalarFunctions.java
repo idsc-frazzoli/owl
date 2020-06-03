@@ -42,18 +42,20 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ABS_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      WeightingInterface weightingInterface = ShepardWeighting.absolute(flattenLogManifold, InversePowerVariogram.of(2));
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          ShepardWeighting.absolute(flattenLogManifold, InversePowerVariogram.of(2)), //
-          sequence, RnBiinvariantMean.INSTANCE, values);
+          point -> weightingInterface.weights(sequence, point), //
+          RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
   REL_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      WeightingInterface weightingInterface = ShepardWeighting.relative(flattenLogManifold, InversePowerVariogram.of(2));
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          ShepardWeighting.relative(flattenLogManifold, InversePowerVariogram.of(2)), //
-          sequence, RnBiinvariantMean.INSTANCE, values);
+          point -> weightingInterface.weights(sequence, point), //
+          RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
@@ -68,7 +70,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tuo = CrossAveraging.of( //
-          LogWeightings.BI_STANDARD.from(flattenLogManifold, InversePowerVariogram.of(0)), sequence, RnBiinvariantMean.INSTANCE, values);
+          LogWeightings.BI_STANDARD.from(flattenLogManifold, InversePowerVariogram.of(0), sequence), RnBiinvariantMean.INSTANCE, values);
       return t -> (Scalar) tuo.apply(t);
     }
   }, //

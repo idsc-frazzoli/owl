@@ -14,52 +14,58 @@ import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum RnBarycentricCoordinates implements LogWeighting {
   WACHSPRESS() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return R2BarycentricCoordinate.of(Barycenter.WACHSPRESS);
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      BarycentricCoordinate barycentricCoordinate = R2BarycentricCoordinate.of(Barycenter.WACHSPRESS);
+      return point -> barycentricCoordinate.weights(sequence, point);
     }
   },
   MEAN_VALUE() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE);
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      BarycentricCoordinate barycentricCoordinate = R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE);
+      return point -> barycentricCoordinate.weights(sequence, point);
     }
   },
   DISCRETE_HARMONIC() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC);
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      BarycentricCoordinate barycentricCoordinate = R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC);
+      return point -> barycentricCoordinate.weights(sequence, point);
     }
   },
   AFFINE() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return AffineCoordinate.INSTANCE;
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      return point -> AffineCoordinate.INSTANCE.weights(sequence, point);
     }
   },
   RBF() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, r -> r));
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      WeightingInterface weightingInterface = RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, r -> r));
+      return point -> weightingInterface.weights(sequence, point);
     }
   }, //
   // TODO variogram
   RBF_INV_MULTI() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
-          flattenLogManifold, variogram) //
-      );
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      WeightingInterface weightingInterface = RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(flattenLogManifold, variogram));
+      return point -> weightingInterface.weights(sequence, point);
     }
   },
   KR_ABSOLUTE() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
-      return PseudoDistances.ABSOLUTE.weighting(flattenLogManifold, variogram);
+    public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      WeightingInterface weightingInterface = PseudoDistances.ABSOLUTE.weighting(flattenLogManifold, variogram);
+      return point -> weightingInterface.weights(sequence, point);
     }
   }, //
   ;

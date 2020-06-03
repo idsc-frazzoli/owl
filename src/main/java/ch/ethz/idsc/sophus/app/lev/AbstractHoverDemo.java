@@ -21,11 +21,11 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -82,12 +82,13 @@ import ch.ethz.idsc.tensor.sca.Abs;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    WeightingInterface weightingInterface = //
-        spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2)); // TODO
+    Tensor sequence = getGeodesicControlPoints();
+    TensorUnaryOperator tensorUnaryOperator = //
+        spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence); // TODO
     render(geometricLayer, graphics, LeverRender.of( //
         geodesicDisplay, //
-        weightingInterface, //
-        getGeodesicControlPoints(), //
+        tensorUnaryOperator, //
+        sequence, //
         geodesicDisplay.project(geometricLayer.getMouseSe2State()), //
         geometricLayer, graphics));
   }
