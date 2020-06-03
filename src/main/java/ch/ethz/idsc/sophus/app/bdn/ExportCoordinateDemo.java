@@ -39,12 +39,12 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     File root = HomeDirectory.Pictures(getClass().getSimpleName(), geodesicDisplay().toString());
     root.mkdirs();
     for (LogWeighting logWeighting : LogWeightings.list()) {
-      WeightingInterface weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold());
+      WeightingInterface weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold(), null);
       System.out.print("computing...");
       Tensor wgs = compute(weightingInterface, 120);
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-      ArrayPlotRender arrayPlotRender = new ArrayPlotRender(_wgp, colorDataGradient(), 0, 0, 1);
+      ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgp, colorDataGradient(), 1);
       BufferedImage bufferedImage = arrayPlotRender.export();
       try {
         ImageIO.write(bufferedImage, "png", new File(root, logWeighting.toString() + ".png"));

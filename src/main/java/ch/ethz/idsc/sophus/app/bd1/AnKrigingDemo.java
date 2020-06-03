@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public AnKrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(true, geodesicDisplays);
-    spinnerVariogram.setValue(Variograms.POWER);
+    // spinnerVariogram.setValue(Variograms.POWER);
     spinnerVariogram.addToComponentReduced(timerFrame.jToolBar, new Dimension(250, 28), "variograms");
     {
       spinnerBeta.setList(Tensors.fromString("{1, 17/16, 9/8, 5/4, 3/2, 1.75, 1.99, 2, 3}").stream().map(Scalar.class::cast).collect(Collectors.toList()));

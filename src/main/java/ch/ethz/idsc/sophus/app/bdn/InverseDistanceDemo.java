@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor domain = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    BarycentricCoordinate barycentricCoordinate = AbsoluteCoordinate.smooth(geodesicDisplay.flattenLogManifold());
+    BarycentricCoordinate barycentricCoordinate = AbsoluteCoordinate.of(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
     Tensor point = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     if (geodesicDisplay.dimensions() < domain.length()) {
       Tensor weights = barycentricCoordinate.weights(domain, point);

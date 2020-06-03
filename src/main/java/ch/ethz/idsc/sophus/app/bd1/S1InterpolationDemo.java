@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor spherics = domain.map(AngleVector::of);
       // ---
       VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold);
+      WeightingInterface weightingInterface = spinnerBarycentric.getValue().from(flattenLogManifold, null); // TODO
       try {
         ScalarTensorFunction scalarTensorFunction = //
             point -> weightingInterface.weights(sequence, AngleVector.of(point));

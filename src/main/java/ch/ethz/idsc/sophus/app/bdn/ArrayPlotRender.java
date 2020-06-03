@@ -2,10 +2,12 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -16,26 +18,36 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class ArrayPlotRender implements RenderInterface {
+public class ArrayPlotRender implements RenderInterface {
   public static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
+
+  public static ArrayPlotRender rescale(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
+    Rescale rescale = new Rescale(tensor);
+    ScalarSummaryStatistics scalarSummaryStatistics = rescale.scalarSummaryStatistics();
+    Clip clip = 0 < scalarSummaryStatistics.getCount() //
+        ? Clips.interval(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax())
+        : null;
+    return new ArrayPlotRender(rescale.result(), clip, colorDataGradient, magnify);
+  }
+
+  public static ArrayPlotRender uniform(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
+    return new ArrayPlotRender(tensor, Clips.unit(), colorDataGradient, magnify);
+  }
+
   // ---
   private final BufferedImage bufferedImage;
-  private final ScalarSummaryStatistics scalarSummaryStatistics;
-  private final int pix;
-  private final int piy;
+  private final Clip clip;
   private final int width;
   private final int height;
   private final BufferedImage legend;
 
-  public ArrayPlotRender(Tensor tensor, ColorDataGradient colorDataGradient, int pix, int piy, int magnify) {
-    Rescale rescale = new Rescale(tensor);
-    bufferedImage = ImageFormat.of(rescale.result().map(colorDataGradient));
-    scalarSummaryStatistics = rescale.scalarSummaryStatistics();
-    this.pix = pix;
-    this.piy = piy;
+  public ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
+    bufferedImage = ImageFormat.of(tensor.map(colorDataGradient));
+    this.clip = clip;
     width = bufferedImage.getWidth() * magnify;
     height = bufferedImage.getHeight() * magnify;
     legend = ImageFormat.of(Subdivide.decreasing(Clips.unit(), height - 1).map(Tensors::of).map(colorDataGradient));
@@ -44,26 +56,26 @@ import ch.ethz.idsc.tensor.sca.Round;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     graphics.drawImage(bufferedImage, //
-        pix, //
-        piy, //
+        0, //
+        0, //
         width, //
         height, null);
     graphics.drawImage(legend, //
-        pix + width + 10, //
-        piy, //
+        width + 10, //
+        0, //
         10, //
         height, null);
-    if (0 < scalarSummaryStatistics.getCount()) {
+    if (Objects.nonNull(clip)) {
       graphics.setColor(Color.BLACK);
       graphics.setFont(FONT);
       FontMetrics fontMetrics = graphics.getFontMetrics();
-      String smax = "" + scalarSummaryStatistics.getMax().map(Round._3);
+      String smax = "" + clip.max().map(Round._3);
       int wmax = fontMetrics.stringWidth(smax);
-      String smin = "" + scalarSummaryStatistics.getMin().map(Round._3);
+      String smin = "" + clip.min().map(Round._3);
       int wmin = fontMetrics.stringWidth(smin);
-      int ofx = pix + width + 22 + Math.max(wmin, wmax);
-      graphics.drawString(smax, ofx - wmax, piy + fontMetrics.getAscent());
-      graphics.drawString(smin, ofx - wmin, piy + height);
+      int ofx = width + 22 + Math.max(wmin, wmax);
+      graphics.drawString(smax, ofx - wmax, fontMetrics.getAscent());
+      graphics.drawString(smin, ofx - wmin, height);
     }
   }
 
@@ -77,5 +89,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
     render(null, bi.createGraphics());
     return bi;
+  }
+
+  public Dimension getDimension() {
+    return new Dimension(width, height);
   }
 }

@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -56,7 +57,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       final WeightingInterface weightingInterface;
       if (object instanceof LogWeighting) {
         LogWeighting logWeighting = (LogWeighting) object;
-        weightingInterface = logWeighting.from(flattenLogManifold);
+        weightingInterface = logWeighting.from(flattenLogManifold, InversePowerVariogram.of(2));
       } else {
         weightingInterface = null;
       }

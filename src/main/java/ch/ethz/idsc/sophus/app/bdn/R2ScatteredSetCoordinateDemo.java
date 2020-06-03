@@ -125,7 +125,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       if (jToggleHeatmap.isSelected()) { // render basis functions
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        new ArrayPlotRender(_wgs, colorDataGradient, 0, 12, 3).render(geometricLayer, graphics);
+        ArrayPlotRender.rescale(_wgs, colorDataGradient, 3).render(geometricLayer, graphics);
       }
       // render grid lines functions
       if (jToggleArrows.isSelected()) {

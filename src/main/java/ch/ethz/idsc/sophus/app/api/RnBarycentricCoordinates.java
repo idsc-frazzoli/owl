@@ -7,83 +7,61 @@ import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.krg.GaussianVariogram;
-import ch.ethz.idsc.sophus.krg.InverseMultiquadricVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
-import ch.ethz.idsc.sophus.krg.ThinPlateSplineVariogram;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum RnBarycentricCoordinates implements LogWeighting {
   WACHSPRESS() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold) {
+    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return R2BarycentricCoordinate.of(Barycenter.WACHSPRESS);
     }
-  }, //
+  },
   MEAN_VALUE() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold) {
+    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE);
     }
-  }, //
+  },
   DISCRETE_HARMONIC() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold) {
+    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC);
     }
-  }, //
+  },
   AFFINE() {
     @Override
-    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold) {
+    public BarycentricCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return AffineCoordinate.INSTANCE;
     }
-  }, //
+  },
   RBF() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
+    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, r -> r));
     }
   }, //
+  // TODO variogram
   RBF_INV_MULTI() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
+    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
       return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
-          flattenLogManifold, InverseMultiquadricVariogram.of(5)) //
+          flattenLogManifold, variogram) //
       );
     }
-  }, //
-  RBF_TPS() {
-    @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
-          flattenLogManifold, ThinPlateSplineVariogram.of(RealScalar.of(5))));
-    }
-  }, //
-  RBF_GAUSS() {
-    @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create( //
-          flattenLogManifold, GaussianVariogram.of(RealScalar.of(5))));
-    }
-  }, //
+  },
   KR_ABSOLUTE() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return PseudoDistances.ABSOLUTE.weighting(flattenLogManifold, s -> s);
+    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
+      return PseudoDistances.ABSOLUTE.weighting(flattenLogManifold, variogram);
     }
-  }, // TODO variogram
-  KR_RELATIVE() {
-    @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return PseudoDistances.RELATIVE.weighting(flattenLogManifold, s -> s);
-    }
-  }, // TODO variogram
+  }, //
   ;
 
   public static List<LogWeighting> list() {
@@ -99,10 +77,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     list.add(AFFINE);
     list.add(RBF);
     list.add(RBF_INV_MULTI);
-    list.add(RBF_TPS);
-    list.add(RBF_GAUSS);
     list.add(KR_ABSOLUTE);
-    list.add(KR_RELATIVE);
     return list;
   }
 }

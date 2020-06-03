@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -75,6 +76,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   }
 
   final WeightingInterface weightingInterface(VectorLogManifold flattenLogManifold) {
-    return spinnerWeighting.getValue().from(flattenLogManifold);
+    return spinnerWeighting.getValue().from(flattenLogManifold, InversePowerVariogram.of(2));
   }
 }

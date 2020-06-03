@@ -115,7 +115,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         final int magnify = 3;
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-        ArrayPlotRender arrayPlotRender = new ArrayPlotRender(_wgs, colorDataGradient, 0, 32, magnify);
+        ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgs, colorDataGradient, magnify);
         arrayPlotRender.render(geometricLayer, graphics);
         {
           // BufferedImage bufferedImage = ImageFormat.of(ArrayPlot.of(_wgs, colorDataGradient));

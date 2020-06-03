@@ -58,21 +58,24 @@ import ch.ethz.idsc.tensor.sca.Abs;
       Tensor covariance = DiagonalMatrix.with(cvarian);
       WeightingInterface weightingInterface = //
           spinnerDistances.getValue().create(geodesicDisplay.flattenLogManifold(), variogram());
-      Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
-      // ---
-      Tensor domain = domain();
-      Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));
-      Tensor errors = Tensor.of(domain.stream().map(Tensors::of).map(kriging::variance));
-      // ---
-      Path2D path2d = geometricLayer.toPath2D(Join.of( //
-          Transpose.of(Tensors.of(domain, result.add(errors))), //
-          Reverse.of(Transpose.of(Tensors.of(domain, result.subtract(errors))))));
-      graphics.setColor(new Color(128, 128, 128, 32));
-      graphics.fill(path2d);
-      // ---
-      new PathRender(Color.BLUE, 1.25f) //
-          .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
-          .render(geometricLayer, graphics);
+      try {
+        Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
+        // ---
+        Tensor domain = domain();
+        Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(kriging::estimate));
+        Tensor errors = Tensor.of(domain.stream().map(Tensors::of).map(kriging::variance));
+        // ---
+        Path2D path2d = geometricLayer.toPath2D(Join.of( //
+            Transpose.of(Tensors.of(domain, result.add(errors))), //
+            Reverse.of(Transpose.of(Tensors.of(domain, result.subtract(errors))))));
+        graphics.setColor(new Color(128, 128, 128, 32));
+        graphics.fill(path2d);
+        new PathRender(Color.BLUE, 1.25f) //
+            .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
+            .render(geometricLayer, graphics);
+      } catch (Exception exception) {
+        // ---
+      }
     }
   }
 

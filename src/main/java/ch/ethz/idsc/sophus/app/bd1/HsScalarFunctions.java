@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.gbc.ProjectedCoordinate;
 import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.krg.ShepardWeighting;
@@ -24,71 +25,61 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** TODO need to document */
 /* package */ enum HsScalarFunctions implements HsScalarFunction {
-  KR_ABSOLUTE() {
+  ABS_KR() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       return kriging(PseudoDistances.ABSOLUTE.create(flattenLogManifold, variogram), //
           RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
-  KR_RELATIVE() {
+  REL_KR() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       return kriging(PseudoDistances.RELATIVE.create(flattenLogManifold, variogram), //
           RealScalar.of(0), flattenLogManifold, sequence, values);
     }
   }, //
-  SI_ABSOLUTE() {
+  ABS_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          ShepardWeighting.absolute(flattenLogManifold, 2), sequence, RnBiinvariantMean.INSTANCE, values);
+          ShepardWeighting.absolute(flattenLogManifold, InversePowerVariogram.of(2)), //
+          sequence, RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
-  SI_RELATIVE() {
+  REL_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          ShepardWeighting.relative(flattenLogManifold, 2), sequence, RnBiinvariantMean.INSTANCE, values);
+          ShepardWeighting.relative(flattenLogManifold, InversePowerVariogram.of(2)), //
+          sequence, RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
-  ID_ABSOLUTE() {
+  ABS_ID() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      ProjectedCoordinate projectedCoordinate = AbsoluteCoordinate.nugenx(flattenLogManifold, variogram);
+      ProjectedCoordinate projectedCoordinate = AbsoluteCoordinate.of(flattenLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point).Get(0);
-      // return logWeighting(LogWeightings.ID_LINEAR, flattenLogManifold, sequence, values);
     }
   }, //
-  // LW_ID_SMOOTH() {
-  // @Override
-  // public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-  // return logWeighting(LogWeightings.ID_SMOOTH, flattenLogManifold, sequence, values);
-  // }
-  // }, //
-  BI_RELATIVE() {
+  REL_A() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.nugenx(flattenLogManifold, variogram);
+      TensorUnaryOperator tuo = CrossAveraging.of( //
+          LogWeightings.BI_STANDARD.from(flattenLogManifold, InversePowerVariogram.of(0)), sequence, RnBiinvariantMean.INSTANCE, values);
+      return t -> (Scalar) tuo.apply(t);
+    }
+  }, //
+  REL_1() {
+    @Override
+    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.of(flattenLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point).Get(0);
-      // return logWeighting(LogWeightings.BI_LINEAR, flattenLogManifold, sequence, values);
     }
   }, //
-  // LW_BI_SMOOTH() {
-  // @Override
-  // public TensorScalarFunction build(FlattenLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-  // return logWeighting(LogWeightings.BI_SMOOTH, flattenLogManifold, sequence, values);
-  // }
-  // }, //
-  LW_BI_AFFINE() {
-    @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return logWeighting(LogWeightings.BI_AFFINE.from(flattenLogManifold), sequence, values);
-    }
-  }, //
-  GR_BI_SMOOTH() {
+  REL_2() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       GrCoordinate grCoordinate = new GrCoordinate(flattenLogManifold, variogram, sequence);
@@ -97,18 +88,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }, //
   ;
 
+  public static final HsScalarFunctions[] GBCS = { ABS_ID, REL_A, REL_1, REL_2 };
+
   private static TensorScalarFunction kriging( //
       WeightingInterface weightingInterface, Scalar cvar, //
       VectorLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
     Tensor covariance = DiagonalMatrix.with(ConstantArray.of(cvar, sequence.length()));
     Kriging kriging = Kriging.regression(weightingInterface, sequence, values, covariance);
     return point -> (Scalar) kriging.estimate(point);
-  }
-
-  private static TensorScalarFunction logWeighting( //
-      WeightingInterface weightingInterface, Tensor sequence, Tensor values) {
-    TensorUnaryOperator tuo = CrossAveraging.of( //
-        weightingInterface, sequence, RnBiinvariantMean.INSTANCE, values);
-    return t -> (Scalar) tuo.apply(t);
   }
 }

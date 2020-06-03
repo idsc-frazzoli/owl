@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       RenderQuality.setQuality(graphics);
-      new ArrayPlotRender(_wgp, colorDataGradient, 0, 32, magnification()).render(geometricLayer, graphics);
+      ArrayPlotRender.rescale(_wgp, colorDataGradient, magnification()).render(geometricLayer, graphics);
     }
   }
 }

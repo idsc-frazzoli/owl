@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE);
+      WeightingInterface weightingInterface = spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, null);
       Tensor curve = Tensor.of(samples.stream() //
           .map(point -> weightingInterface.weights(domain, point)) //
           .map(weights -> biinvariantMean.mean(control, weights)));

@@ -123,6 +123,6 @@ import ch.ethz.idsc.tensor.sca.N;
     if (jToggleAnchor.isSelected())
       renderControlPoints(geometricLayer, graphics);
     if (jToggleHeatmap.isSelected())
-      new ArrayPlotRender(movingDomain2D.weights(), colorDataGradient(), 0, 12, 3).render(geometricLayer, graphics);
+      ArrayPlotRender.rescale(movingDomain2D.weights(), colorDataGradient(), 3).render(geometricLayer, graphics);
   }
 }

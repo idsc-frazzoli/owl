@@ -10,87 +10,48 @@ import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum LogWeightings implements LogWeighting {
-  ID_LINEAR() {
+  ID_STANDARD() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return AbsoluteCoordinate.linear(flattenLogManifold);
-    }
-  },
-  ID_SMOOTH() {
-    @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return AbsoluteCoordinate.smooth(flattenLogManifold);
+    public ProjectedCoordinate from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
+      return AbsoluteCoordinate.of(vectorLogManifold, variogram);
     }
   },
   /***************************************************/
-  BI_LINEAR() {
+  BI_DIAGONAL() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return RelativeCoordinate.linear(flattenLogManifold);
+    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
+      return RelativeCoordinate.diagonal(flattenLogManifold, variogram);
     }
   },
-  BI_SMOOTH() {
+  BI_STANDARD() {
     @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return RelativeCoordinate.smooth(flattenLogManifold);
-    }
-  },
-  BI_DIAGONAL_LINEAR() {
-    @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return RelativeCoordinate.diagonal_linear(flattenLogManifold);
-    }
-  },
-  BI_DIAGONAL_SMOOTH() {
-    @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return RelativeCoordinate.diagonal_smooth(flattenLogManifold);
-    }
-  },
-  BI_AFFINE() {
-    @Override
-    public ProjectedCoordinate from(VectorLogManifold flattenLogManifold) {
-      return RelativeCoordinate.affine(flattenLogManifold);
+    public ProjectedCoordinate from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram) {
+      return RelativeCoordinate.of(vectorLogManifold, variogram);
     }
   },
   /***************************************************/
-  ID_S_LINEAR() {
+  ID_SHEPARD() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return ShepardWeighting.absolute(flattenLogManifold, 1);
+    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
+      return ShepardWeighting.absolute(flattenLogManifold, variogram);
     }
   },
-  ID_S_SMOOTH() {
+  BI_SHEPARD() {
     @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return ShepardWeighting.absolute(flattenLogManifold, 2);
-    }
-  },
-  BI_S_LINEAR() {
-    @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return ShepardWeighting.relative(flattenLogManifold, 1);
-    }
-  },
-  BI_S_SMOOTH() {
-    @Override
-    public WeightingInterface from(VectorLogManifold flattenLogManifold) {
-      return ShepardWeighting.relative(flattenLogManifold, 2);
+    public WeightingInterface from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram) {
+      return ShepardWeighting.relative(flattenLogManifold, variogram);
     }
   }, //
   ;
 
   public static List<LogWeighting> biinvariant() {
     return Arrays.asList( //
-        BI_LINEAR, //
-        BI_SMOOTH, //
-        BI_DIAGONAL_LINEAR, //
-        BI_DIAGONAL_SMOOTH, //
-        BI_AFFINE, //
-        BI_S_LINEAR, //
-        BI_S_SMOOTH);
+        BI_STANDARD, //
+        BI_DIAGONAL, //
+        BI_SHEPARD);
   }
 
   public static List<LogWeighting> list() {

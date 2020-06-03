@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -47,7 +48,8 @@ import ch.ethz.idsc.tensor.Tensors;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
-      WeightingInterface weightingInterface = spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold());
+      WeightingInterface weightingInterface = //
+          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           weightingInterface, //
