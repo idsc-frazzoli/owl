@@ -32,7 +32,8 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor domain = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    BarycentricCoordinate barycentricCoordinate = AbsoluteCoordinate.of(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2));
+    BarycentricCoordinate barycentricCoordinate = //
+        AbsoluteCoordinate.of(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2));
     Tensor point = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     if (geodesicDisplay.dimensions() < domain.length()) {
       Tensor weights = barycentricCoordinate.weights(domain, point);

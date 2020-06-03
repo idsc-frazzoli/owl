@@ -49,8 +49,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      TensorUnaryOperator tensorUnaryOperator = //
-          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator tensorUnaryOperator = spinnerWeights.getValue().from( //
+          geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2), sequence);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //

@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JToggleButton;
 
@@ -13,13 +14,17 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
   final SpinnerLabel<LogWeighting> spinnerWeighting = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -36,6 +41,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       spinnerWeighting.setList(array);
       spinnerWeighting.setIndex(0);
       spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
+    }
+    {
+      spinnerBeta
+          .setList(Tensors.fromString("{0, 1/2, 1, 17/16, 9/8, 5/4, 3/2, 1.75, 1.99, 2, 3}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setIndex(2);
+      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
@@ -76,7 +87,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     return spinnerColorData.getValue();
   }
 
-  final TensorUnaryOperator weightingInterface(VectorLogManifold flattenLogManifold, Tensor sequence) {
-    return spinnerWeighting.getValue().from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
+  final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
+    return spinnerWeighting.getValue().from( //
+        vectorLogManifold, variogram(), sequence);
+  }
+
+  final ScalarUnaryOperator variogram() {
+    return InversePowerVariogram.of(spinnerBeta.getValue());
   }
 }

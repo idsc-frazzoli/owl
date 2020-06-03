@@ -41,8 +41,8 @@ public interface GeodesicDisplay {
 
   HsTransport hsTransport();
 
-  /** @return flattenLogManifold, or null if not applicable */
-  VectorLogManifold flattenLogManifold();
+  /** @return vectorLogManifold, or null if not applicable */
+  VectorLogManifold vectorLogManifold();
 
   /** @param p control point
    * @param q control point

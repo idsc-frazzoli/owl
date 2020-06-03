@@ -78,10 +78,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     // ---
     if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
-      VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
       Tensor origin = getGeodesicControlPoints();
-      TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, origin);
-      Tensor wgs = compute(weightingInterface, refinement());
+      TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, origin);
+      Tensor wgs = compute(tensorUnaryOperator, refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       RenderQuality.setQuality(graphics);

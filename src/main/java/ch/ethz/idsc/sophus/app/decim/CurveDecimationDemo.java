@@ -130,7 +130,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
     HsCurveDecimation hsCurveDecimation = spinnerType.getValue();
     CurveDecimation curveDecimation = hsCurveDecimation.of( //
-        geodesicDisplay.flattenLogManifold(), //
+        geodesicDisplay.vectorLogManifold(), //
         geodesicDisplay.hsExponential(), epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Result result = curveDecimation.evaluate(control);

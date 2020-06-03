@@ -14,7 +14,6 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.Scalar;
@@ -66,9 +65,8 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor domain = Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 511);
       Tensor spherics = domain.map(AngleVector::of);
       // ---
-      VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      TensorUnaryOperator tensorUnaryOperator = //
-          spinnerBarycentric.getValue().from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().from( //
+          geodesicDisplay().vectorLogManifold(), InversePowerVariogram.of(2), sequence);
       try {
         ScalarTensorFunction scalarTensorFunction = //
             point -> tensorUnaryOperator.apply(AngleVector.of(point));

@@ -40,8 +40,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, movingOrigin), domain);
+    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
+    return new MovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
   }
 
   @Override

@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      TensorUnaryOperator weightingInterface = weightingInterface(RnManifold.INSTANCE, domain);
+      TensorUnaryOperator tensorUnaryOperator = weightingOperator(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = refinement();
@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
           if (jToggleEntire.isSelected() || Polygons.isInside(domain, px)) {
-            Tensor weights = weightingInterface.apply(px);
+            Tensor weights = tensorUnaryOperator.apply(px);
             wgs.set(weights, c1, c0);
             boolean anyNegative = weights.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
             neg.set(Boole.of(anyNegative), c1, c0);

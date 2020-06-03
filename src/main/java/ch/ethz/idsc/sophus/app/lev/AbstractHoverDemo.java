@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     TensorUnaryOperator tensorUnaryOperator = //
-        spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence); // TODO
+        spinnerWeights.getValue().from(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2), sequence); // TODO
     render(geometricLayer, graphics, LeverRender.of( //
         geodesicDisplay, //
         tensorUnaryOperator, //

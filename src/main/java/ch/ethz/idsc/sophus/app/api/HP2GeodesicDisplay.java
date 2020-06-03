@@ -75,7 +75,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public VectorLogManifold flattenLogManifold() {
+  public VectorLogManifold vectorLogManifold() {
     // FIXME
     return null;
   }

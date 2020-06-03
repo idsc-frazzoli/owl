@@ -86,7 +86,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public VectorLogManifold flattenLogManifold() {
+  public VectorLogManifold vectorLogManifold() {
     return HeManifold.INSTANCE;
   }
 

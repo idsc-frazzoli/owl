@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -41,9 +40,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     root.mkdirs();
     for (LogWeighting logWeighting : LogWeightings.list()) {
       Tensor origin = getGeodesicControlPoints();
-      TensorUnaryOperator weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold(), InversePowerVariogram.of(2), origin);
+      TensorUnaryOperator tensorUnaryOperator = logWeighting.from( //
+          geodesicDisplay().vectorLogManifold(), //
+          variogram(), //
+          origin);
       System.out.print("computing...");
-      Tensor wgs = compute(weightingInterface, 120);
+      Tensor wgs = compute(tensorUnaryOperator, 120);
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgp, colorDataGradient(), 1);

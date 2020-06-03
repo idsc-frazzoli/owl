@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     final Tensor mouse = geometricLayer.getMouseSe2State();
     {
-      HsLineDistance hsLineDistance = new HsLineDistance(geodesicDisplay.flattenLogManifold());
+      HsLineDistance hsLineDistance = new HsLineDistance(geodesicDisplay.vectorLogManifold());
       NormImpl normImpl = hsLineDistance.tensorNorm(beg, end);
       {
         Tensor project = normImpl.project(mouse);

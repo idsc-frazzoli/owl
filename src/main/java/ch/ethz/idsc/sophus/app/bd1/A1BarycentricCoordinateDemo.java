@@ -52,13 +52,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       // ---
       Tensor domain = domain(support);
       // ---
-      VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
       Object object = spinnerBarycentric.getValue();
       Tensor sequence = support.map(this::lift);
       final TensorUnaryOperator weightingInterface;
       if (object instanceof LogWeighting) {
         LogWeighting logWeighting = (LogWeighting) object;
-        weightingInterface = logWeighting.from(flattenLogManifold, InversePowerVariogram.of(2), sequence);
+        weightingInterface = logWeighting.from(vectorLogManifold, InversePowerVariogram.of(2), sequence);
       } else {
         weightingInterface = null;
       }

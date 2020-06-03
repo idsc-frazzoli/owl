@@ -49,7 +49,7 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   }
 
   @Override // from GeodesicDisplay
-  public final VectorLogManifold flattenLogManifold() {
+  public final VectorLogManifold vectorLogManifold() {
     return LieVectorLogManifold.of(lieGroup(), Se2CoveringExponential.INSTANCE::log);
   }
 

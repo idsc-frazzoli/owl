@@ -99,7 +99,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
-  public VectorLogManifold flattenLogManifold() {
+  public VectorLogManifold vectorLogManifold() {
     return So3Manifold.INSTANCE;
   }
 

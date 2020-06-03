@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class A2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
@@ -64,10 +63,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     // ---
     if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
-      VectorLogManifold flattenLogManifold = geodesicDisplay.flattenLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       Tensor origin = getGeodesicControlPoints();
-      TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, origin);
-      Tensor wgs = compute(weightingInterface, refinement());
+      Tensor wgs = compute(weightingOperator(vectorLogManifold, origin), refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       RenderQuality.setQuality(graphics);

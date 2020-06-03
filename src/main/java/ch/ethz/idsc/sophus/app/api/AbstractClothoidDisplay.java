@@ -66,7 +66,7 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   }
 
   @Override // from GeodesicDisplay
-  public final VectorLogManifold flattenLogManifold() {
+  public final VectorLogManifold vectorLogManifold() {
     return null;
   }
 

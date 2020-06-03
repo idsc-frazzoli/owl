@@ -59,8 +59,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      TensorUnaryOperator weightingInterface = //
-          spinnerWeights.getValue().from(geodesicDisplay.flattenLogManifold(), InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator weightingInterface = spinnerWeights.getValue().from( //
+          geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2), sequence);
       {
         LeverRender leverRender = LeverRender.of(geodesicDisplay, //
             weightingInterface, //

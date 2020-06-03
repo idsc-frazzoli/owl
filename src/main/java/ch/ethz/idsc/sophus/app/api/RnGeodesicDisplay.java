@@ -60,7 +60,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override
-  public final VectorLogManifold flattenLogManifold() {
+  public final VectorLogManifold vectorLogManifold() {
     return RnManifold.INSTANCE;
   }
 

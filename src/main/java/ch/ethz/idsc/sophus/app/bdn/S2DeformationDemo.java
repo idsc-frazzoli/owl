@@ -52,8 +52,8 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
-    VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    return new MovingDomain2D(movingOrigin, weightingInterface(flattenLogManifold, movingOrigin), domain);
+    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
+    return new MovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);

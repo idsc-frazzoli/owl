@@ -41,10 +41,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
-    VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
+    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
     return new MovingDomain2D( //
         movingOrigin, //
-        weightingInterface(flattenLogManifold, movingOrigin), //
+        weightingOperator(vectorLogManifold, movingOrigin), //
         domain);
   }
 

@@ -95,7 +95,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public VectorLogManifold flattenLogManifold() {
+  public VectorLogManifold vectorLogManifold() {
     return SpdManifold.INSTANCE;
   }
 

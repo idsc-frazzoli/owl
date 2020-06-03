@@ -111,7 +111,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
     ScalarUnaryOperator variogram = variogram();
     Tensor matrix = matrix( //
-        spinnerRes.getValue(), geodesicDisplay().flattenLogManifold(), spinnerKriging.getValue(), //
+        spinnerRes.getValue(), geodesicDisplay().vectorLogManifold(), spinnerKriging.getValue(), //
         variogram, sequence, values);
     BufferedImage bufferedImage = bufferedImage(matrix);
     RenderQuality.setDefault(graphics);
@@ -152,7 +152,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       System.out.println(format);
       Tensor matrix = matrix( //
           256, //
-          geodesicDisplay().flattenLogManifold(), //
+          geodesicDisplay().vectorLogManifold(), //
           hsScalarFunction, //
           variogram, //
           sequence, values);
