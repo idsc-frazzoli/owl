@@ -13,9 +13,10 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
   final SpinnerLabel<LogWeighting> spinnerWeighting = new SpinnerLabel<>();
@@ -75,7 +76,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     return spinnerColorData.getValue();
   }
 
-  final WeightingInterface weightingInterface(VectorLogManifold flattenLogManifold) {
-    return spinnerWeighting.getValue().from(flattenLogManifold, InversePowerVariogram.of(2));
+  final TensorUnaryOperator weightingInterface(VectorLogManifold flattenLogManifold, Tensor sequence) {
+    return spinnerWeighting.getValue().ops(flattenLogManifold, InversePowerVariogram.of(2), sequence);
   }
 }

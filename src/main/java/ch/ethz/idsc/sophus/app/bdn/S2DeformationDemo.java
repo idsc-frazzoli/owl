@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -54,8 +53,11 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
     VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-    WeightingInterface weightingInterface = weightingInterface(flattenLogManifold);
-    return new MovingDomain2D(movingOrigin, weightingInterface, domain);
+    TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, movingOrigin);
+    return new MovingDomain2D( //
+        movingOrigin, //
+        weightingInterface, //
+        domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);

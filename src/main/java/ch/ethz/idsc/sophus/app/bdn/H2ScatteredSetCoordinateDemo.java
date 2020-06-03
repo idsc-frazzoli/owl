@@ -6,13 +6,13 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
@@ -24,18 +24,18 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   @Override
-  public Tensor compute(WeightingInterface weightingInterface, int refinement) {
+  public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
     Tensor sX = Subdivide.of(-3.0, +3.0, refinement);
     Tensor sY = Subdivide.of(+3.0, -3.0, refinement);
     int n = sX.length();
-    final Tensor origin = getGeodesicControlPoints();
+    Tensor origin = getGeodesicControlPoints();
     Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n, n, origin.length());
     IntStream.range(0, n).parallel().forEach(c0 -> {
       Scalar x = sX.Get(c0);
       int c1 = 0;
       for (Tensor y : sY) {
         Tensor point = H2GeodesicDisplay.INSTANCE.project(Tensors.of(x, y));
-        wgs.set(weightingInterface.weights(origin, point), c1, c0);
+        wgs.set(weightingInterface.apply(point), c1, c0);
         ++c1;
       }
     });

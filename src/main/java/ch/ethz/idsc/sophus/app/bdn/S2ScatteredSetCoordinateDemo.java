@@ -9,7 +9,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   @Override
-  public Tensor compute(WeightingInterface weightingInterface, int refinement) {
+  public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
     Tensor sX = Subdivide.of(-1.0, +1.0, refinement);
     Tensor sY = Subdivide.of(+1.0, -1.0, refinement);
     int n = sX.length();
@@ -51,10 +51,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         Optional<Tensor> optionalP = S2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
         if (optionalP.isPresent()) {
           Tensor point = optionalP.get();
-          wgs.set(weightingInterface.weights(origin, point), c1, c0);
+          wgs.set(weightingInterface.apply(point), c1, c0);
           if (lower) {
             point.set(Scalar::negate, 2);
-            wgs.set(weightingInterface.weights(origin, point), n + c1, c0);
+            wgs.set(weightingInterface.apply(point), n + c1, c0);
           }
         }
         ++c1;

@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Reference:
  * "Weighted Averages on Surfaces"
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
   final Tensor[][] weights;
   private final Tensor _wgs;
 
-  public MovingDomain2D(Tensor origin, WeightingInterface weightingInterface, Tensor domain) {
+  public MovingDomain2D(Tensor origin, TensorUnaryOperator weightingOperator, Tensor domain) {
     this.origin = origin;
     this.domain = domain;
     int rows = domain.length();
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
     for (int cx = 0; cx < rows; ++cx) {
       for (int cy = 0; cy < cols; ++cy) {
         Tensor point = domain.get(cx, cy);
-        weights[cx][cy] = weightingInterface.weights(origin, point);
+        weights[cx][cy] = weightingOperator.apply(point);
       }
     }
     {

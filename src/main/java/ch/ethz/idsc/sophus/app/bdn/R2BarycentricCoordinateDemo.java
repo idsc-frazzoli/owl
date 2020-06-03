@@ -24,7 +24,6 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -43,6 +42,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Boole;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1));
       }
-      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE);
+      TensorUnaryOperator weightingInterface = weightingInterface(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
       final int n = refinement();
@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
           if (jToggleEntire.isSelected() || Polygons.isInside(domain, px)) {
-            Tensor weights = weightingInterface.weights(domain, px);
+            Tensor weights = weightingInterface.apply(px);
             wgs.set(weights, c1, c0);
             boolean anyNegative = weights.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
             neg.set(Boole.of(anyNegative), c1, c0);

@@ -20,7 +20,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -33,6 +32,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
 /** transfer weights from barycentric coordinates defined by set of control points
@@ -94,7 +94,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       RenderQuality.setQuality(graphics);
       // ---
-      WeightingInterface weightingInterface = weightingInterface(RnManifold.INSTANCE);
+      TensorUnaryOperator weightingInterface = weightingInterface(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       min = Tensors.vector(-5, -5);
@@ -110,7 +110,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor px = Tensors.of(x, y);
-          Tensor weights = weightingInterface.weights(domain, px);
+          Tensor weights = weightingInterface.apply(px);
           wgs.set(weights, c1, c0);
           Tensor mean = biinvariantMean.mean(controlPoints, weights);
           array[c0][c1] = mean;

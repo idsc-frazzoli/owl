@@ -4,16 +4,16 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.RigidMotionFit;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
 /* package */ class LSMovingDomain2D extends MovingDomain2D {
-  public LSMovingDomain2D(Tensor origin, WeightingInterface weightingInterface, Tensor domain) {
+  public LSMovingDomain2D(Tensor origin, TensorUnaryOperator weightingInterface, Tensor domain) {
     super(origin, weightingInterface, domain);
   }
 

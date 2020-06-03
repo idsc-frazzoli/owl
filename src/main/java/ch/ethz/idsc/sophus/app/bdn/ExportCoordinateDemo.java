@@ -13,12 +13,13 @@ import javax.swing.JButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
+import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
   private final JButton jButtonExport = new JButton("export");
@@ -39,7 +40,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     File root = HomeDirectory.Pictures(getClass().getSimpleName(), geodesicDisplay().toString());
     root.mkdirs();
     for (LogWeighting logWeighting : LogWeightings.list()) {
-      WeightingInterface weightingInterface = logWeighting.from(geodesicDisplay().flattenLogManifold(), null);
+      Tensor origin = getGeodesicControlPoints();
+      TensorUnaryOperator weightingInterface = logWeighting.ops(geodesicDisplay().flattenLogManifold(), InversePowerVariogram.of(2), origin);
       System.out.print("computing...");
       Tensor wgs = compute(weightingInterface, 120);
       List<Integer> dims = Dimensions.of(wgs);
@@ -56,5 +58,5 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     System.out.println("all done");
   }
 
-  abstract Tensor compute(WeightingInterface weightingInterface, int i);
+  abstract Tensor compute(TensorUnaryOperator weightingInterface, int i);
 }

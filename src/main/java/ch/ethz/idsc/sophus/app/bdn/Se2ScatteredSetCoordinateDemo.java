@@ -17,7 +17,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,6 +29,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
@@ -79,7 +79,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     // ---
     if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
       VectorLogManifold flattenLogManifold = geodesicDisplay().flattenLogManifold();
-      WeightingInterface weightingInterface = weightingInterface(flattenLogManifold);
+      Tensor origin = getGeodesicControlPoints();
+      TensorUnaryOperator weightingInterface = weightingInterface(flattenLogManifold, origin);
       Tensor wgs = compute(weightingInterface, refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
@@ -89,12 +90,12 @@ import ch.ethz.idsc.tensor.opt.Pi;
   }
 
   @Override
-  public Tensor compute(WeightingInterface weightingInterface, int refinement) {
+  public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
     Tensor sX = Subdivide.of(-3.0, +3.0, refinement);
     Tensor sY = Subdivide.of(+3.0, -3.0, refinement);
     Tensor sA = Drop.tail(Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 6), 1);
     int n = sX.length();
-    final Tensor origin = getGeodesicControlPoints();
+    Tensor origin = getGeodesicControlPoints(); // TODO
     Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, n * sA.length(), n, origin.length());
     IntStream.range(0, n).parallel().forEach(c0 -> {
       Scalar x = sX.Get(c0);
@@ -103,7 +104,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor point = Tensors.of(x, y, a);
-          wgs.set(weightingInterface.weights(origin, point), ofs + c1, c0);
+          wgs.set(weightingInterface.apply(point), ofs + c1, c0);
           ++c1;
         }
         ofs += n;
