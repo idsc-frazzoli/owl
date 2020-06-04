@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.N;
     super(false, list, array);
     setMidpointIndicated(false);
     // ---
-    spinnerWeighting.addSpinnerListener(v -> recomputeMD2D());
+    spinnerLogWeighting.addSpinnerListener(v -> recomputeMD2D());
     spinnerBeta.addSpinnerListener(v -> recomputeMD2D());
     spinnerRefine.addSpinnerListener(v -> recomputeMD2D());
     // ---

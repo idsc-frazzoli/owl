@@ -31,14 +31,14 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /* package */ class BarycentricExtrapolationDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private final SpinnerLabel<LogWeighting> spinnerProjectedCoordinates = new SpinnerLabel<>();
+  private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
 
   public BarycentricExtrapolationDemo() {
     super(true, GeodesicDisplays.SE2C_R2);
     {
-      spinnerProjectedCoordinates.setList(LogWeightings.list());
-      spinnerProjectedCoordinates.setIndex(0);
-      spinnerProjectedCoordinates.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "projected coordinate");
+      spinnerLogWeighting.setList(LogWeightings.list());
+      spinnerLogWeighting.setIndex(0);
+      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "projected coordinate");
     }
   }
 
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
       TensorUnaryOperator tensorUnaryOperator = //
-          spinnerProjectedCoordinates.getValue().from(RnManifold.INSTANCE, InversePowerVariogram.of(2), domain);
+          spinnerLogWeighting.getValue().from(RnManifold.INSTANCE, InversePowerVariogram.of(2), domain);
       Tensor curve = Tensor.of(samples.stream() //
           .map(tensorUnaryOperator) //
           .map(weights -> biinvariantMean.mean(control, weights)));

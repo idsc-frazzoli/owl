@@ -23,7 +23,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  final SpinnerLabel<LogWeighting> spinnerWeighting = new SpinnerLabel<>();
+  private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}");
+  // ---
+  final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
@@ -38,13 +40,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       List<LogWeighting> array) {
     super(addRemoveControlPoints, list);
     {
-      spinnerWeighting.setList(array);
-      spinnerWeighting.setIndex(0);
-      spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
+      spinnerLogWeighting.setList(array);
+      spinnerLogWeighting.setIndex(0);
+      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
     }
     {
-      spinnerBeta.setList(Tensors.fromString("{0, 1/2, 1, 3/2, 2, 3}") //
-          .stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerBeta.setIndex(2);
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }
@@ -88,7 +89,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
-    return spinnerWeighting.getValue().from( //
+    return spinnerLogWeighting.getValue().from( //
         vectorLogManifold, variogram(), sequence);
   }
 

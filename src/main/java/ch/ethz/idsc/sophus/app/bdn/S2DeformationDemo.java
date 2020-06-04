@@ -47,13 +47,14 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   @Override
-  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
     VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    return new MovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
+    TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
+    return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
 
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
@@ -69,6 +70,6 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   public static void main(String[] args) {
-    new S2DeformationDemo().setVisible(1000, 800);
+    new S2DeformationDemo().setVisible(1200, 800);
   }
 }

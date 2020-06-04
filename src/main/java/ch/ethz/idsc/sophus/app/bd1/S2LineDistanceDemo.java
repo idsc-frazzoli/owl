@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         Se2Matrix.flipY(bufferedImage.getHeight()));
   }
 
-  private BufferedImage bufferedImage(int resolution, VectorLogManifold flattenLogManifold) {
+  private BufferedImage bufferedImage(int resolution, VectorLogManifold vectorLogManifold) {
     Tensor matrix = Tensors.matrix(array(resolution, tensorNorm()::norm));
     // ---
     Tensor colorData = matrix.map(spinnerColorData.getValue());

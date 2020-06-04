@@ -35,13 +35,13 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   @Override
-  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
     VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    return new MovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
+    return new AveragedMovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
   }
 
   @Override

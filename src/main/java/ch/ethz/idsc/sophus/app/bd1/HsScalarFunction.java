@@ -8,11 +8,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 @FunctionalInterface
 interface HsScalarFunction {
-  /** @param flattenLogManifold
+  /** @param vectorLogManifold
    * @param variogram
    * @param sequence
    * @param values
    * @return */
   TensorScalarFunction build( //
-      VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values);
+      VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values);
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class H2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
@@ -35,17 +36,15 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   @Override // from AbstractDeformationDemo
-  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     double rad = 1.0;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
     VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    return new MovingDomain2D( //
-        movingOrigin, //
-        weightingOperator(vectorLogManifold, movingOrigin), //
-        domain);
+    TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
+    return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override // from AbstractDeformationDemo
@@ -59,6 +58,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   public static void main(String[] args) {
-    new H2DeformationDemo().setVisible(1000, 800);
+    new H2DeformationDemo().setVisible(1200, 800);
   }
 }

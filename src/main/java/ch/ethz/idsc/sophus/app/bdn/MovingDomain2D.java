@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,7 +15,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
-/* package */ class MovingDomain2D {
+public abstract class MovingDomain2D {
   private final Tensor origin;
   final Tensor domain;
   final Tensor[][] weights;
@@ -44,18 +43,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     return origin;
   }
 
-  public Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean) {
-    int rows = domain.length();
-    int cols = Unprotect.dimension1(domain);
-    Tensor[][] array = new Tensor[rows][cols];
-    IntStream.range(0, rows).parallel().forEach(cx -> {
-      for (int cy = 0; cy < cols; ++cy)
-        array[cx][cy] = biinvariantMean.mean(target, weights[cx][cy]);
-    });
-    return array;
-  }
-
   public final Tensor weights() {
     return _wgs;
   }
+
+  public abstract Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean);
 }

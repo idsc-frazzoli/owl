@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.bd1;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
-import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
 import ch.ethz.idsc.sophus.gbc.Relative1Coordinate;
+import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
@@ -27,22 +27,22 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ enum HsScalarFunctions implements HsScalarFunction {
   ABS_KR() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.ABSOLUTE.create(flattenLogManifold, variogram), //
-          RealScalar.of(0), flattenLogManifold, sequence, values);
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      return kriging(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram), //
+          RealScalar.of(0), vectorLogManifold, sequence, values);
     }
   }, //
   REL_KR() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.RELATIVE.create(flattenLogManifold, variogram), //
-          RealScalar.of(0), flattenLogManifold, sequence, values);
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      return kriging(PseudoDistances.RELATIVE.create(vectorLogManifold, variogram), //
+          RealScalar.of(0), vectorLogManifold, sequence, values);
     }
   }, //
   ABS_SI() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.absolute(flattenLogManifold, InversePowerVariogram.of(2));
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, InversePowerVariogram.of(2));
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           point -> weightingInterface.weights(sequence, point), //
           RnBiinvariantMean.INSTANCE, values);
@@ -51,8 +51,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }, //
   REL_SI() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.relative(flattenLogManifold, InversePowerVariogram.of(2));
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, InversePowerVariogram.of(2));
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           point -> weightingInterface.weights(sequence, point), //
           RnBiinvariantMean.INSTANCE, values);
@@ -61,30 +61,30 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }, //
   ABS_ID() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      BarycentricCoordinate projectedCoordinate = AbsoluteCoordinate.of(flattenLogManifold, variogram);
-      return point -> projectedCoordinate.weights(sequence, point).Get(0);
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      BarycentricCoordinate barycentricCoordinate = AbsoluteCoordinate.of(vectorLogManifold, variogram);
+      return point -> barycentricCoordinate.weights(sequence, point).Get(0);
     }
   }, //
   REL_A() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tuo = CrossAveraging.of( //
-          LogWeightings.BI_STANDARD.from(flattenLogManifold, InversePowerVariogram.of(0), sequence), RnBiinvariantMean.INSTANCE, values);
+          LogWeightings.BI_STANDARD.from(vectorLogManifold, InversePowerVariogram.of(0), sequence), RnBiinvariantMean.INSTANCE, values);
       return t -> (Scalar) tuo.apply(t);
     }
   }, //
   REL_1() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      BarycentricCoordinate projectedCoordinate = Relative1Coordinate.of(flattenLogManifold, variogram);
-      return point -> projectedCoordinate.weights(sequence, point).Get(0);
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      BarycentricCoordinate barycentricCoordinate = Relative1Coordinate.of(vectorLogManifold, variogram);
+      return point -> barycentricCoordinate.weights(sequence, point).Get(0);
     }
   }, //
   REL_2() {
     @Override
-    public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      Relative2Coordinate grCoordinate = new Relative2Coordinate(flattenLogManifold, variogram, sequence);
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      Relative2Coordinate grCoordinate = new Relative2Coordinate(vectorLogManifold, variogram, sequence);
       return point -> grCoordinate.apply(point).Get(0);
     }
   }, //
@@ -94,7 +94,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   private static TensorScalarFunction kriging( //
       WeightingInterface weightingInterface, Scalar cvar, //
-      VectorLogManifold flattenLogManifold, Tensor sequence, Tensor values) {
+      VectorLogManifold vectorLogManifold, Tensor sequence, Tensor values) {
     Tensor covariance = DiagonalMatrix.with(ConstantArray.of(cvar, sequence.length()));
     Kriging kriging = Kriging.regression(weightingInterface, sequence, values, covariance);
     return point -> (Scalar) kriging.estimate(point);

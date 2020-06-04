@@ -125,8 +125,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private Tensor matrix(int resolution, //
-      VectorLogManifold flattenLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-    TensorScalarFunction tsf = hsScalarFunction.build(flattenLogManifold, variogram, sequence, values);
+      VectorLogManifold vectorLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+    TensorScalarFunction tsf = hsScalarFunction.build(vectorLogManifold, variogram, sequence, values);
     Tensor matrix = Tensors.matrix(array(resolution, tsf));
     // ---
     if (jToggleButton.isSelected())

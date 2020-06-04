@@ -5,13 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
-import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.gbc.Relative0Coordinate;
 import ch.ethz.idsc.sophus.gbc.Relative1Coordinate;
 import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.ShepardWeighting;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -20,23 +18,20 @@ public enum LogWeightings implements LogWeighting {
   ID_STANDARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      BarycentricCoordinate projectedCoordinate = AbsoluteCoordinate.of(vectorLogManifold, variogram);
-      return point -> projectedCoordinate.weights(sequence, point);
+      return LogWeighting.wrap(AbsoluteCoordinate.of(vectorLogManifold, variogram), sequence);
     }
   },
   /***************************************************/
   BI_DIAGONAL() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      BarycentricCoordinate projectedCoordinate = Relative0Coordinate.of(vectorLogManifold, variogram);
-      return point -> projectedCoordinate.weights(sequence, point);
+      return LogWeighting.wrap(Relative0Coordinate.of(vectorLogManifold, variogram), sequence);
     }
   },
   BI_STANDARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      BarycentricCoordinate projectedCoordinate = Relative1Coordinate.of(vectorLogManifold, variogram);
-      return point -> projectedCoordinate.weights(sequence, point);
+      return LogWeighting.wrap(Relative1Coordinate.of(vectorLogManifold, variogram), sequence);
     }
   },
   BI_GRASSMAN() {
@@ -49,15 +44,13 @@ public enum LogWeightings implements LogWeighting {
   ID_SHEPARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, variogram);
-      return point -> weightingInterface.weights(sequence, point);
+      return LogWeighting.wrap(ShepardWeighting.absolute(vectorLogManifold, variogram), sequence);
     }
   },
   BI_SHEPARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, variogram);
-      return point -> weightingInterface.weights(sequence, point);
+      return LogWeighting.wrap(ShepardWeighting.relative(vectorLogManifold, variogram), sequence);
     }
   }, //
   ;

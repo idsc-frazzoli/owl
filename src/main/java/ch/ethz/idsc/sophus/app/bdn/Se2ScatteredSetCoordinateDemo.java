@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     renderControlPoints(geometricLayer, graphics);
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
-    graphics.drawString("" + spinnerWeighting.getValue(), 0, 10 + 17);
+    graphics.drawString("" + spinnerLogWeighting.getValue(), 0, 10 + 17);
     final Tensor controlPoints = getGeodesicControlPoints();
     int index = 0;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

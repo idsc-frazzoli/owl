@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 /* package */ class R2DeformationDemo extends AbstractDeformationDemo {
   private static final int EXTENT = 5;
   private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.1));
+  // ---
   private final JToggleButton jToggleRigidMotionFit = new JToggleButton("MLS");
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -45,8 +46,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       jToggleRigidMotionFit.addActionListener(l -> recomputeMD2D());
       timerFrame.jToolBar.add(jToggleRigidMotionFit);
     }
-    // Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
-    // timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(2, 2, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(300, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(renderInterface);
     shuffleSnap();
@@ -69,8 +68,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
     TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
     return jToggleRigidMotionFit.isSelected() //
-        ? new LSMovingDomain2D(movingOrigin, tensorUnaryOperator, domain)
-        : new MovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
+        ? new RnFittedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain)
+        : new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override
