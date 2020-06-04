@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
   final SpinnerLabel<LogWeighting> spinnerWeighting = new SpinnerLabel<>();
-  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
@@ -43,8 +43,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       spinnerWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
     }
     {
-      spinnerBeta
-          .setList(Tensors.fromString("{0, 1/2, 1, 17/16, 9/8, 5/4, 3/2, 1.75, 1.99, 2, 3}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setList(Tensors.fromString("{0, 1/2, 1, 3/2, 2, 3}") //
+          .stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerBeta.setIndex(2);
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }

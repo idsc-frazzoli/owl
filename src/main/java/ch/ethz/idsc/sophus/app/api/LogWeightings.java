@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
-import ch.ethz.idsc.sophus.gbc.GrCoordinate;
-import ch.ethz.idsc.sophus.gbc.ProjectedCoordinate;
-import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
+import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.gbc.Relative0Coordinate;
+import ch.ethz.idsc.sophus.gbc.Relative1Coordinate;
+import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
@@ -19,7 +20,7 @@ public enum LogWeightings implements LogWeighting {
   ID_STANDARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      ProjectedCoordinate projectedCoordinate = AbsoluteCoordinate.of(vectorLogManifold, variogram);
+      BarycentricCoordinate projectedCoordinate = AbsoluteCoordinate.of(vectorLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point);
     }
   },
@@ -27,21 +28,21 @@ public enum LogWeightings implements LogWeighting {
   BI_DIAGONAL() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.diagonal(vectorLogManifold, variogram);
+      BarycentricCoordinate projectedCoordinate = Relative0Coordinate.of(vectorLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point);
     }
   },
   BI_STANDARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.of(vectorLogManifold, variogram);
+      BarycentricCoordinate projectedCoordinate = Relative1Coordinate.of(vectorLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point);
     }
   },
   BI_GRASSMAN() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return new GrCoordinate(vectorLogManifold, variogram, sequence);
+      return new Relative2Coordinate(vectorLogManifold, variogram, sequence);
     }
   },
   /***************************************************/

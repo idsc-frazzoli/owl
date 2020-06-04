@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.AffineCoordinate;
+import ch.ethz.idsc.sophus.lie.rn.RnAffineCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
@@ -43,7 +43,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   AFFINE() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return point -> AffineCoordinate.INSTANCE.weights(sequence, point);
+      return point -> RnAffineCoordinate.INSTANCE.weights(sequence, point);
     }
   },
   RBF() {

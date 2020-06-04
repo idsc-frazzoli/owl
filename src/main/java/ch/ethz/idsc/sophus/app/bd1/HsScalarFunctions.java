@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.app.bd1;
 
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
-import ch.ethz.idsc.sophus.gbc.GrCoordinate;
-import ch.ethz.idsc.sophus.gbc.ProjectedCoordinate;
-import ch.ethz.idsc.sophus.gbc.RelativeCoordinate;
+import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
+import ch.ethz.idsc.sophus.gbc.Relative1Coordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ABS_ID() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      ProjectedCoordinate projectedCoordinate = AbsoluteCoordinate.of(flattenLogManifold, variogram);
+      BarycentricCoordinate projectedCoordinate = AbsoluteCoordinate.of(flattenLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point).Get(0);
     }
   }, //
@@ -77,14 +77,14 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   REL_1() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      ProjectedCoordinate projectedCoordinate = RelativeCoordinate.of(flattenLogManifold, variogram);
+      BarycentricCoordinate projectedCoordinate = Relative1Coordinate.of(flattenLogManifold, variogram);
       return point -> projectedCoordinate.weights(sequence, point).Get(0);
     }
   }, //
   REL_2() {
     @Override
     public TensorScalarFunction build(VectorLogManifold flattenLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      GrCoordinate grCoordinate = new GrCoordinate(flattenLogManifold, variogram, sequence);
+      Relative2Coordinate grCoordinate = new Relative2Coordinate(flattenLogManifold, variogram, sequence);
       return point -> grCoordinate.apply(point).Get(0);
     }
   }, //
