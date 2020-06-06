@@ -23,10 +23,8 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
-import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -37,6 +35,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.SpatialMedian;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -106,8 +105,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     }
     if (median.isSelected()) {
       PseudoDistances pseudoDistances = spinnerDistances.getValue();
-      WeightingInterface weightingInterface = //
-          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), sequence));
+      TensorUnaryOperator weightingInterface = //
+          pseudoDistances.affine(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), sequence);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(biinvariantMean, weightingInterface, Chop._05);
       Optional<Tensor> optional = spatialMedian.uniform(sequence);
       if (optional.isPresent()) {

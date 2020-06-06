@@ -11,9 +11,7 @@ import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
-import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -42,19 +40,27 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ABS_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator create = //
+          PseudoDistances.ABSOLUTE.affine(vectorLogManifold, variogram, sequence);
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          point -> weightingInterface.weights(sequence, point), //
+          create, RnBiinvariantMean.INSTANCE, values);
+      return point -> tensorUnaryOperator.apply(point).Get();
+    }
+  }, //
+  REL1_SI() {
+    @Override
+    public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
+          PseudoDistances.RELATIVE1.affine(vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
   }, //
-  REL_SI() {
+  REL2_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, InversePowerVariogram.of(2), sequence);
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          point -> weightingInterface.weights(sequence, point), //
+          PseudoDistances.RELATIVE2.affine(vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
@@ -93,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public static final HsScalarFunctions[] GBCS = { ABS_ID, REL_A, REL_S, REL_G };
 
   private static TensorScalarFunction kriging( //
-      WeightingInterface weightingInterface, Scalar cvar, //
+      TensorUnaryOperator weightingInterface, Scalar cvar, //
       VectorLogManifold vectorLogManifold, Tensor sequence, Tensor values) {
     Tensor covariance = DiagonalMatrix.with(ConstantArray.of(cvar, sequence.length()));
     Kriging kriging = Kriging.regression(weightingInterface, sequence, values, covariance);

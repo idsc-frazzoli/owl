@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,6 +22,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ class R1KrigingDemo extends B1KrigingDemo {
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
       // ---
       Tensor sequence = support.map(Tensors::of);
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      WeightingInterface weightingInterface = //
+      TensorUnaryOperator weightingInterface = //
           spinnerDistances.getValue().create(geodesicDisplay.vectorLogManifold(), variogram(), sequence);
       try {
         Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);

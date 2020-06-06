@@ -16,11 +16,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
-import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,6 +28,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -96,8 +95,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     }
     {
       PseudoDistances pseudoDistances = PseudoDistances.ABSOLUTE;
-      WeightingInterface weightingInterface = //
-          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control));
+      TensorUnaryOperator weightingInterface = //
+          pseudoDistances.affine(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
       Optional<Tensor> optional = spatialMedian.uniform(control);
       if (optional.isPresent()) {

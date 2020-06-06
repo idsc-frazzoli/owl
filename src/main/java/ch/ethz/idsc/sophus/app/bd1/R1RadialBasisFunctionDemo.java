@@ -11,9 +11,7 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionInterpolation;
-import ch.ethz.idsc.sophus.krg.ShepardWeighting;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
-import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Sort;
@@ -36,10 +34,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor funceva = control.get(Tensor.ALL, 1);
       // ---
       Tensor sequence = support.map(Tensors::of);
-      WeightingInterface weightingInterface = //
-          spinnerDistances.getValue().create(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
       Tensor domain = domain();
       try {
+        TensorUnaryOperator weightingInterface = //
+            spinnerDistances.getValue().create(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
         TensorUnaryOperator tensorUnaryOperator = //
             RadialBasisFunctionInterpolation.normalized(weightingInterface, sequence, funceva);
         Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(tensorUnaryOperator));
@@ -51,9 +49,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       }
       if (!isDeterminate())
         try {
-          WeightingInterface weightingInterface2 = ShepardWeighting.of(weightingInterface);
+          TensorUnaryOperator weightingInterface = //
+              spinnerDistances.getValue().affine(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
           TensorUnaryOperator operator = //
-              CrossAveraging.of(p -> weightingInterface2.weights(sequence, p), RnBiinvariantMean.INSTANCE, funceva);
+              CrossAveraging.of(p -> weightingInterface.apply(p), RnBiinvariantMean.INSTANCE, funceva);
           Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(operator));
           new PathRender(Color.RED, 1.25f) //
               .setCurve(Transpose.of(Tensors.of(domain, result)), false) //
