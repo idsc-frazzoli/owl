@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   // ---
   private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
@@ -56,8 +57,6 @@ import ch.ethz.idsc.tensor.red.Norm;
     TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
     return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
-
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   @Override
   BiinvariantMean biinvariantMean() {

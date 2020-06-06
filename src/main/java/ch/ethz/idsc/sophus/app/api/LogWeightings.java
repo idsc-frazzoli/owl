@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.AbsoluteCoordinate;
-import ch.ethz.idsc.sophus.gbc.Relative0Coordinate;
 import ch.ethz.idsc.sophus.gbc.Relative1Coordinate;
 import ch.ethz.idsc.sophus.gbc.Relative2Coordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
@@ -22,12 +21,6 @@ public enum LogWeightings implements LogWeighting {
     }
   },
   /***************************************************/
-  BI_DIAGONAL() {
-    @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return LogWeighting.wrap(Relative0Coordinate.of(vectorLogManifold, variogram), sequence);
-    }
-  },
   BI_STANDARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
@@ -58,7 +51,6 @@ public enum LogWeightings implements LogWeighting {
   public static List<LogWeighting> biinvariant() {
     return Arrays.asList( //
         BI_STANDARD, //
-        BI_DIAGONAL, //
         BI_SHEPARD);
   }
 

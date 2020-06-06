@@ -13,6 +13,8 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.hs.HsProjection;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,6 +26,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
+import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -119,6 +122,68 @@ public class LeverRender {
       graphics.drawString(string, pix, piy);
       geometricLayer.popMatrix();
       ++index;
+    }
+  }
+
+  public void renderGrassmannians() {
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    HsProjection hsProjection = new HsProjection(vectorLogManifold);
+    Tensor grassmann = Tensor.of(sequence.stream().map(point -> hsProjection.projection(sequence, point)));
+    // ---
+    graphics.setFont(FONT);
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    int fheight = fontMetrics.getAscent();
+    int index = 0;
+    for (Tensor q : sequence) {
+      Tensor matrix = geodesicDisplay.matrixLift(q);
+      geometricLayer.pushMatrix(matrix);
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      Rectangle rectangle = path2d.getBounds();
+      String lines = Pretty.of(grassmann.get(index).map(Round._2));
+      int pix = rectangle.x + rectangle.width;
+      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
+      renderString(lines, pix, piy);
+      geometricLayer.popMatrix();
+      ++index;
+    }
+  }
+
+  public void renderGrassmannianOrigin() {
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    HsProjection hsProjection = new HsProjection(vectorLogManifold);
+    Tensor grassmann = hsProjection.projection(sequence, origin);
+    // ---
+    graphics.setFont(FONT);
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    int fheight = fontMetrics.getAscent();
+    Tensor q = origin;
+    {
+      Tensor matrix = geodesicDisplay.matrixLift(q);
+      geometricLayer.pushMatrix(matrix);
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      Rectangle rectangle = path2d.getBounds();
+      String lines = Pretty.of(grassmann.map(Round._2));
+      int pix = rectangle.x + rectangle.width;
+      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
+      renderString(lines, pix, piy);
+      geometricLayer.popMatrix();
+    }
+  }
+
+  private void renderString(String lines, int pix, int piy) {
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    int fheight = fontMetrics.getAscent();
+    String[] splits = lines.split("\\n");
+    for (int count = 0; count < splits.length; ++count) {
+      String string = splits[count];
+      graphics.setColor(Color.WHITE);
+      graphics.drawString(string, pix - 1, piy - 1);
+      graphics.drawString(string, pix + 1, piy - 1);
+      graphics.drawString(string, pix - 1, piy + 1);
+      graphics.drawString(string, pix + 1, piy + 1);
+      graphics.setColor(Color.BLACK);
+      graphics.drawString(string, pix, piy);
+      piy += fheight;
     }
   }
 

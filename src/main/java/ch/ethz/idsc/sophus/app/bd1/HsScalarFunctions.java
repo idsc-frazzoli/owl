@@ -74,14 +74,14 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       return t -> (Scalar) tuo.apply(t);
     }
   }, //
-  REL_1() {
+  REL_S() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       BarycentricCoordinate barycentricCoordinate = Relative1Coordinate.of(vectorLogManifold, variogram);
       return point -> barycentricCoordinate.weights(sequence, point).Get(0);
     }
   }, //
-  REL_2() {
+  REL_G() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       Relative2Coordinate grCoordinate = new Relative2Coordinate(vectorLogManifold, variogram, sequence);
@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }, //
   ;
 
-  public static final HsScalarFunctions[] GBCS = { ABS_ID, REL_A, REL_1, REL_2 };
+  public static final HsScalarFunctions[] GBCS = { ABS_ID, REL_A, REL_S, REL_G };
 
   private static TensorScalarFunction kriging( //
       WeightingInterface weightingInterface, Scalar cvar, //

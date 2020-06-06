@@ -112,7 +112,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         // ++c0;
       });
       if (jToggleHeatmap.isSelected()) { // render basis functions
-        final int magnify = 3;
+        final int magnify = magnification();
         List<Integer> dims = Dimensions.of(wgs);
         Tensor _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
         ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgs, colorDataGradient, magnify);
@@ -127,7 +127,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
         {
           Tensor image = ArrayPlot.of(neg, ColorDataGradients.TEMPERATURE);
           BufferedImage bufferedImage = ImageFormat.of(image);
-          // int wid = ;
           graphics.drawImage(bufferedImage, 0, 32 + arrayPlotRender.height(), //
               bufferedImage.getWidth() * magnify, //
               bufferedImage.getHeight() * magnify, null);
