@@ -107,7 +107,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     if (median.isSelected()) {
       PseudoDistances pseudoDistances = spinnerDistances.getValue();
       WeightingInterface weightingInterface = //
-          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1)));
+          ShepardWeighting.of(pseudoDistances.create(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), sequence));
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(biinvariantMean, weightingInterface, Chop._05);
       Optional<Tensor> optional = spatialMedian.uniform(sequence);
       if (optional.isPresent()) {

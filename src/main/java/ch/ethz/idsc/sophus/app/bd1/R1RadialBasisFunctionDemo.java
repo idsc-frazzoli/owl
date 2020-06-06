@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       // ---
       Tensor sequence = support.map(Tensors::of);
       WeightingInterface weightingInterface = //
-          spinnerDistances.getValue().create(geodesicDisplay().vectorLogManifold(), variogram());
+          spinnerDistances.getValue().create(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
       Tensor domain = domain();
       try {
         TensorUnaryOperator tensorUnaryOperator = //

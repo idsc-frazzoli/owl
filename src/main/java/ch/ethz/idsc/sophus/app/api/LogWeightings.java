@@ -37,13 +37,13 @@ public enum LogWeightings implements LogWeighting {
   ID_SHEPARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return LogWeighting.wrap(ShepardWeighting.absolute(vectorLogManifold, variogram), sequence);
+      return LogWeighting.wrap(ShepardWeighting.absolute(vectorLogManifold, variogram, sequence), sequence);
     }
   },
   BI_SHEPARD() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return LogWeighting.wrap(ShepardWeighting.relative(vectorLogManifold, variogram), sequence);
+      return LogWeighting.wrap(ShepardWeighting.relative(vectorLogManifold, variogram, sequence), sequence);
     }
   }, //
   ;

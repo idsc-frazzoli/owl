@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       ScalarUnaryOperator variogram = variogram();
       Tensor covariance = DiagonalMatrix.with(cvarian);
       if (isDeterminate()) {
-        WeightingInterface weightingInterface = spinnerDistances.getValue().create(SnManifold.INSTANCE, variogram);
+        WeightingInterface weightingInterface = spinnerDistances.getValue().create(SnManifold.INSTANCE, variogram, sequence);
         Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
         Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
         Tensor curve = estimate.pmul(DOMAIN);

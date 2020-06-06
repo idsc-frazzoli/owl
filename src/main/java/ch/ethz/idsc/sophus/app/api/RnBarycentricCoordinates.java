@@ -45,20 +45,20 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, variogram)), sequence);
+          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, variogram, sequence)), sequence);
     }
   },
   RBF_VL() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram)), sequence);
+          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram, sequence)), sequence);
     }
   },
   KR_ABSOLUTE() {
     @Override
     public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return LogWeighting.wrap(PseudoDistances.ABSOLUTE.weighting(vectorLogManifold, variogram), sequence);
+      return LogWeighting.wrap(PseudoDistances.ABSOLUTE.weighting(vectorLogManifold, variogram, sequence), sequence);
     }
   }, //
   ;

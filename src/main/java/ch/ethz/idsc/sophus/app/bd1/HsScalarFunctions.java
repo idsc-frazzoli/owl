@@ -28,21 +28,21 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ABS_KR() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram), //
+      return kriging(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram, sequence), //
           RealScalar.of(0), vectorLogManifold, sequence, values);
     }
   }, //
   REL_KR() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      return kriging(PseudoDistances.RELATIVE.create(vectorLogManifold, variogram), //
+      return kriging(PseudoDistances.RELATIVE1.create(vectorLogManifold, variogram, sequence), //
           RealScalar.of(0), vectorLogManifold, sequence, values);
     }
   }, //
   ABS_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, InversePowerVariogram.of(2));
+      WeightingInterface weightingInterface = ShepardWeighting.absolute(vectorLogManifold, InversePowerVariogram.of(2), sequence);
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           point -> weightingInterface.weights(sequence, point), //
           RnBiinvariantMean.INSTANCE, values);
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   REL_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, InversePowerVariogram.of(2));
+      WeightingInterface weightingInterface = ShepardWeighting.relative(vectorLogManifold, InversePowerVariogram.of(2), sequence);
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           point -> weightingInterface.weights(sequence, point), //
           RnBiinvariantMean.INSTANCE, values);
