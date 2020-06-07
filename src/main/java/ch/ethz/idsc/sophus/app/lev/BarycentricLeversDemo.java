@@ -1,38 +1,26 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class BarycentricLeversDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
+/* package */ class BarycentricLeversDemo extends LogWeightingDemo {
   private final JToggleButton jToggleMean = new JToggleButton("mean");
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
   public BarycentricLeversDemo() {
     super(true, GeodesicDisplays.MANIFOLDS);
     setMidpointIndicated(false);
-    {
-      spinnerWeights.setList(LogWeightings.list());
-      spinnerWeights.setIndex(0);
-      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
-    }
     {
       timerFrame.jToolBar.add(jToggleMean);
       timerFrame.jToolBar.add(jToggleLevers);
@@ -49,8 +37,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor controlPointsAll = getGeodesicControlPoints();
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      TensorUnaryOperator tensorUnaryOperator = spinnerWeights.getValue().from( //
-          geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //
