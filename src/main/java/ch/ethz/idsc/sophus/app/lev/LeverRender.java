@@ -26,7 +26,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
-import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -125,7 +124,7 @@ public class LeverRender {
     }
   }
 
-  public void renderGrassmannians() {
+  public void renderGrassmannians(ColorDataGradient colorDataGradient) {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     HsProjection hsProjection = new HsProjection(vectorLogManifold);
     Tensor grassmann = Tensor.of(sequence.stream().map(point -> hsProjection.projection(sequence, point)));
@@ -139,16 +138,15 @@ public class LeverRender {
       geometricLayer.pushMatrix(matrix);
       Path2D path2d = geometricLayer.toPath2D(shape, true);
       Rectangle rectangle = path2d.getBounds();
-      String lines = Pretty.of(grassmann.get(index).map(Round._2));
       int pix = rectangle.x + rectangle.width;
       int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderString(lines, pix, piy);
+      renderString(colorDataGradient, grassmann.get(index), pix, piy);
       geometricLayer.popMatrix();
       ++index;
     }
   }
 
-  public void renderGrassmannianOrigin() {
+  public void renderGrassmannianOrigin(ColorDataGradient colorDataGradient) {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     HsProjection hsProjection = new HsProjection(vectorLogManifold);
     Tensor grassmann = hsProjection.projection(sequence, origin);
@@ -162,28 +160,33 @@ public class LeverRender {
       geometricLayer.pushMatrix(matrix);
       Path2D path2d = geometricLayer.toPath2D(shape, true);
       Rectangle rectangle = path2d.getBounds();
-      String lines = Pretty.of(grassmann.map(Round._2));
       int pix = rectangle.x + rectangle.width;
       int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderString(lines, pix, piy);
+      renderString(colorDataGradient, grassmann, pix, piy);
       geometricLayer.popMatrix();
     }
   }
 
-  private void renderString(String lines, int pix, int piy) {
+  private void renderString(ColorDataGradient colorDataGradient, Tensor matrix, int pix, int piy) {
+    Tensor rounded = matrix.map(Round._2);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
-    String[] splits = lines.split("\\n");
-    for (int count = 0; count < splits.length; ++count) {
-      String string = splits[count];
-      graphics.setColor(Color.WHITE);
-      graphics.drawString(string, pix - 1, piy - 1);
-      graphics.drawString(string, pix + 1, piy - 1);
-      graphics.drawString(string, pix - 1, piy + 1);
-      graphics.drawString(string, pix + 1, piy + 1);
-      graphics.setColor(Color.BLACK);
-      graphics.drawString(string, pix, piy);
-      piy += fheight;
+    int max = rounded.flatten(-1) //
+        .map(s -> s.toString()).mapToInt(s -> fontMetrics.stringWidth(s)).max().getAsInt();
+    int width = max + 2;
+    for (int inx = 0; inx < rounded.length(); ++inx) {
+      Tensor row = matrix.get(inx);
+      for (int iny = 0; iny < row.length(); ++iny) {
+        Color color = ColorFormat.toColor(colorDataGradient.apply(Clips.absoluteOne().rescale(row.Get(iny))));
+        graphics.setColor(color);
+        int tpx = pix + width * inx;
+        int tpy = piy + fheight * iny;
+        graphics.fillRect(tpx, tpy, width, fheight);
+        graphics.setColor(Color.DARK_GRAY);
+        String string = rounded.Get(inx, iny).toString();
+        int sw = fontMetrics.stringWidth(string);
+        graphics.drawString(string, tpx + width - sw, tpy + fheight - 1);
+      }
     }
   }
 

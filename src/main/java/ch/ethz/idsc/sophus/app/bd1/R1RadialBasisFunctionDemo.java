@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       if (!isDeterminate())
         try {
           TensorUnaryOperator weightingInterface = //
-              spinnerDistances.getValue().affine(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
+              spinnerDistances.getValue().normalized(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
           TensorUnaryOperator operator = //
               CrossAveraging.of(p -> weightingInterface.apply(p), RnBiinvariantMean.INSTANCE, funceva);
           Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(operator));

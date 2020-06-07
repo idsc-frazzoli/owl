@@ -40,8 +40,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   ABS_SI() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      TensorUnaryOperator create = //
-          PseudoDistances.ABSOLUTE.affine(vectorLogManifold, variogram, sequence);
+      TensorUnaryOperator create = PseudoDistances.ABSOLUTE.normalized(vectorLogManifold, variogram, sequence);
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           create, RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
@@ -51,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          PseudoDistances.RELATIVE1.affine(vectorLogManifold, variogram, sequence), //
+          PseudoDistances.RELATIVE1.normalized(vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
@@ -60,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          PseudoDistances.RELATIVE2.affine(vectorLogManifold, variogram, sequence), //
+          PseudoDistances.RELATIVE2.normalized(vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
@@ -76,7 +75,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tuo = CrossAveraging.of( //
-          LogWeightings.BI_STANDARD.from(vectorLogManifold, InversePowerVariogram.of(0), sequence), RnBiinvariantMean.INSTANCE, values);
+          LogWeightings.COORDS_REL1.from(vectorLogManifold, InversePowerVariogram.of(0), sequence), RnBiinvariantMean.INSTANCE, values);
       return t -> (Scalar) tuo.apply(t);
     }
   }, //
@@ -90,7 +89,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   REL_G() {
     @Override
     public TensorScalarFunction build(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-      Relative2Coordinate grCoordinate = new Relative2Coordinate(vectorLogManifold, variogram, sequence);
+      TensorUnaryOperator grCoordinate = Relative2Coordinate.of(vectorLogManifold, variogram, sequence);
       return point -> grCoordinate.apply(point).Get(0);
     }
   }, //

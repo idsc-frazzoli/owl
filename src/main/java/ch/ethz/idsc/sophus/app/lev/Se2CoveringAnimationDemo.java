@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.stream.Collectors;
 
 import javax.swing.JToggleButton;
 
@@ -19,13 +20,17 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2CoveringAnimationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogWeighting> spinnerWeights = new SpinnerLabel<>();
+  private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}");
+  // ---
+  private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -37,10 +42,16 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     super(true, GeodesicDisplays.SE2C_SE2);
     setMidpointIndicated(false);
     {
-      spinnerWeights.setList(LogWeightings.list());
-      spinnerWeights.setIndex(0);
-      spinnerWeights.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
+      spinnerLogWeighting.setList(LogWeightings.list());
+      spinnerLogWeighting.setIndex(0);
+      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weights");
     }
+    {
+      spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setIndex(2);
+      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
+    }
+    timerFrame.jToolBar.addSeparator();
     {
       timerFrame.jToolBar.add(jToggleAxes);
       jToggleAxes.setSelected(true);
@@ -85,8 +96,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       RenderQuality.setQuality(graphics);
       Tensor sequence = controlPoints.extract(1, controlPoints.length());
-      TensorUnaryOperator tensorUnaryOperator = spinnerWeights.getValue().from( //
-          geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator tensorUnaryOperator = spinnerLogWeighting.getValue().from( //
+          geodesicDisplay.vectorLogManifold(), //
+          InversePowerVariogram.of(spinnerBeta.getValue()), //
+          sequence);
       LeverRender leverRender = LeverRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //

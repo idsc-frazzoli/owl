@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
   // ---
   private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
-  final JToggleButton jToggleAxes = new JToggleButton("axes");
+  private final JToggleButton jToggleAxes = new JToggleButton("axes");
   final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
   private final JButton jButtonShuffle = new JButton("shuffle");
 
@@ -71,6 +71,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
       timerFrame.jToolBar.add(jButtonShuffle);
     }
     shuffle(spinnerCount.getValue());
+    timerFrame.jToolBar.addSeparator();
   }
 
   void shuffle(int n) {

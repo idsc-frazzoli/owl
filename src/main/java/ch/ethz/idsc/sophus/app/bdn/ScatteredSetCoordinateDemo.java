@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
-  private final SpinnerLabel<ColorDataGradient> spinnerColorData = new SpinnerLabel<>();
+  private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   // final JToggleButton jToggleMidpoints = new JToggleButton("midp.");
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
@@ -59,11 +59,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       spinnerMagnif.setValue(2);
       spinnerMagnif.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
     }
-    {
-      spinnerColorData.setArray(ColorDataGradients.values());
-      spinnerColorData.setIndex(0);
-      spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "color scheme");
-    }
+    spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "color scheme");
     {
       // jToggleMidpoints.setSelected(isMidpointIndicated());
       // jToggleMidpoints.addActionListener(l -> setMidpointIndicated(jToggleMidpoints.isSelected()));

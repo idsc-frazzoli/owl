@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     {
       PseudoDistances pseudoDistances = PseudoDistances.ABSOLUTE;
       TensorUnaryOperator weightingInterface = //
-          pseudoDistances.affine(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
+          pseudoDistances.normalized(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
       Optional<Tensor> optional = spatialMedian.uniform(control);
       if (optional.isPresent()) {
