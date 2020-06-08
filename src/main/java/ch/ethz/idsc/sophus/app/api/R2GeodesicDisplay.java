@@ -30,4 +30,9 @@ public class R2GeodesicDisplay extends RnGeodesicDisplay {
   public Tensor matrixLift(Tensor p) {
     return Se2Matrix.translation(p);
   }
+
+  @Override // from GeodesicDisplay
+  public GeodesicArrayPlot geodesicArrayPlot() {
+    return new R2ArrayPlot(RealScalar.of(5.0));
+  }
 }

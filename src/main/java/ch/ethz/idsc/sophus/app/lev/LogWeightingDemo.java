@@ -19,8 +19,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /* package */ abstract class LogWeightingDemo extends ControlPointsDemo {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}");
   // ---
-  private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
-  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
+  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
   public LogWeightingDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
     super(addRemoveControlPoints, list);

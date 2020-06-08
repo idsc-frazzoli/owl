@@ -55,6 +55,13 @@ public interface GeodesicDisplay {
 
   LineDistance lineDistance();
 
+  /** @param resolution
+   * @param tensorScalarFunction
+   * @return array of scalar values clipped to interval [0, 1] or DoubleScalar.INDETERMINATE */
+  default GeodesicArrayPlot geodesicArrayPlot() {
+    throw new UnsupportedOperationException();
+  }
+
   @Override // from Object
   String toString();
 }

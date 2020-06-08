@@ -89,4 +89,9 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     skew = Tensors.of(r, r, RealScalar.ONE).pmul(skew);
     return Se2Matrix.translation(toPoint(xyz)).dot(skew);
   }
+
+  @Override // from GeodesicDisplay
+  public GeodesicArrayPlot geodesicArrayPlot() {
+    return new S2ArrayPlot();
+  }
 }

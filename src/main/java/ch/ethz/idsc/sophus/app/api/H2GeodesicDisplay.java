@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class H2GeodesicDisplay extends HnGeodesicDisplay {
@@ -26,5 +27,10 @@ public class H2GeodesicDisplay extends HnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     return Se2Matrix.translation(p);
+  }
+
+  @Override
+  public GeodesicArrayPlot geodesicArrayPlot() {
+    return new R2ArrayPlot(RealScalar.of(5.0));
   }
 }

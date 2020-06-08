@@ -22,20 +22,16 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.bdn.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -52,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     super(geodesicDisplays);
     {
       spinnerKriging.setArray(HsScalarFunctions.values());
-      spinnerKriging.setArray(HsScalarFunctions.GBCS);
+      spinnerKriging.setArray(HsScalarFunctions.GBCS); // TODO
       spinnerKriging.setIndex(0);
       spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "function type");
     }
@@ -91,43 +87,35 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
-  private Tensor pixel2model(Dimension dimension) {
-    double rad = rad();
-    Tensor range = Tensors.vector(rad, rad).multiply(RealScalar.of(2)); // model
-    Tensor scale = Tensors.vector(dimension.width, dimension.height) //
-        .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
-    return Dot.of( //
-        Se2Matrix.translation(range.multiply(RationalScalar.HALF.negate())), //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), // pixel 2 model
-        Se2Matrix.flipY(dimension.height));
-  }
-
   @Override
   public final void protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     prepare();
     // ---
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
     ScalarUnaryOperator variogram = variogram();
     Tensor matrix = matrix( //
-        spinnerRes.getValue(), geodesicDisplay().vectorLogManifold(), spinnerKriging.getValue(), //
+        spinnerRes.getValue(), //
+        geodesicDisplay.vectorLogManifold(), //
+        spinnerKriging.getValue(), //
         variogram, sequence, values);
     BufferedImage bufferedImage = bufferedImage(matrix);
     RenderQuality.setDefault(graphics);
-    ImageRender.of(bufferedImage, pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()))) //
-        .render(geometricLayer, graphics);
+    Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
+    ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    LeverRender leverRender = //
-        new LeverRender(geodesicDisplay(), sequence, null, values, geometricLayer, graphics);
+    LeverRender leverRender = new LeverRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
     leverRender.renderWeights();
   }
 
   private Tensor matrix(int resolution, //
       VectorLogManifold vectorLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
     TensorScalarFunction tsf = hsScalarFunction.build(vectorLogManifold, variogram, sequence, values);
-    Tensor matrix = Tensors.matrix(array(resolution, tsf));
+    Scalar[][] array = geodesicDisplay().geodesicArrayPlot().array(resolution, tsf.andThen(Clips.unit()));
+    Tensor matrix = Tensors.matrix(array);
     // ---
     if (jToggleButton.isSelected())
       matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
@@ -158,7 +146,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           sequence, values);
       ArrayPlotRender arrayPlotRender = ArrayPlotRender.uniform(matrix, spinnerColorData.getValue(), 1);
       BufferedImage bufferedImage = arrayPlotRender.export();
-      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(pixel2model(arrayPlotRender.getDimension())));
+      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(geodesicDisplay().geodesicArrayPlot().pixel2model(arrayPlotRender.getDimension())));
       Graphics2D graphics = bufferedImage.createGraphics();
       RenderQuality.setQuality(graphics);
       renderControlPoints(geometricLayer, graphics);
@@ -177,11 +165,4 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   void prepare() {
     // ---
   }
-
-  /** @param resolution
-   * @param tensorScalarFunction
-   * @return array of scalar values clipped to interval [0, 1] or DoubleScalar.INDETERMINATE */
-  abstract Scalar[][] array(int resolution, TensorScalarFunction tensorScalarFunction);
-
-  abstract double rad();
 }
