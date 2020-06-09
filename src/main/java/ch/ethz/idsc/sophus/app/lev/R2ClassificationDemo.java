@@ -17,6 +17,7 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -43,7 +44,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private Tensor vector;
 
   public R2ClassificationDemo() {
-    super(false, GeodesicDisplays.R2_ONLY);
+    super(false, GeodesicDisplays.R2_ONLY, LogWeightings.list());
     {
       spinnerCount.setList(Arrays.asList(5, 10, 15, 20, 25, 30, 40));
       spinnerCount.setValue(15);
@@ -60,8 +61,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       jButtonShuffle.addActionListener(e -> shuffle(spinnerCount.getValue()));
       timerFrame.jToolBar.add(jButtonShuffle);
     }
-    spinnerLogWeighting.addSpinnerListener(v -> recompute());
-    spinnerBeta.addSpinnerListener(v -> recompute());
     spinnerLabels.addSpinnerListener(v -> recompute());
     shuffle(spinnerCount.getValue());
     spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
@@ -77,13 +76,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     recompute();
   }
 
+  @Override
   public void recompute() {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    LabelInterface labelInterface = spinnerLabels.getValue().apply(vector);
+    Classification labelInterface = spinnerLabels.getValue().apply(vector);
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
     TensorUnaryOperator operator = operator(getGeodesicControlPoints());
     TensorScalarFunction tensorScalarFunction = //
-        point -> RealScalar.of(labelInterface.label(operator.apply(point)));
+        point -> RealScalar.of(labelInterface.result(operator.apply(point)).getLabel());
     Scalar[][] scalars = geodesicArrayPlot.array(spinnerRes.getValue(), tensorScalarFunction);
     Tensor image = Tensors.matrix(scalars).map(ColorDataLists._097.cyclic().deriveWithAlpha(128));
     bufferedImage = ImageFormat.of(image);

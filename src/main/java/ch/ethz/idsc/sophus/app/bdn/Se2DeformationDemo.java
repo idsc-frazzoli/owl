@@ -5,7 +5,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -40,8 +39,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    return new AveragedMovingDomain2D(movingOrigin, weightingOperator(vectorLogManifold, movingOrigin), domain);
+    return new AveragedMovingDomain2D(movingOrigin, operator(movingOrigin), domain);
   }
 
   @Override

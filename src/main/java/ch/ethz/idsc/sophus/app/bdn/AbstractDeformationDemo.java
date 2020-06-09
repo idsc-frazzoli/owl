@@ -47,9 +47,7 @@ import ch.ethz.idsc.tensor.sca.N;
     super(false, list, array);
     setMidpointIndicated(false);
     // ---
-    spinnerLogWeighting.addSpinnerListener(v -> recomputeMD2D());
-    spinnerBeta.addSpinnerListener(v -> recomputeMD2D());
-    spinnerRefine.addSpinnerListener(v -> recomputeMD2D());
+    spinnerRefine.addSpinnerListener(v -> recompute());
     // ---
     {
       spinnerLength.addSpinnerListener(v -> shuffleSnap());
@@ -77,10 +75,11 @@ import ch.ethz.idsc.tensor.sca.N;
   final void snap() {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
-    recomputeMD2D();
+    recompute();
   }
 
-  final void recomputeMD2D() {
+  @Override
+  protected final void recompute() {
     movingDomain2D = updateMovingDomain2D(movingOrigin);
   }
 

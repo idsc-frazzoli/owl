@@ -4,29 +4,17 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ abstract class ScatteredSetCoordinateDemo extends ControlPointsDemo {
-  private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}");
-  // ---
-  final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
-  final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+/* package */ abstract class ScatteredSetCoordinateDemo extends LogWeightingDemo {
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
@@ -38,17 +26,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       boolean addRemoveControlPoints, //
       List<GeodesicDisplay> list, //
       List<LogWeighting> array) {
-    super(addRemoveControlPoints, list);
-    {
-      spinnerLogWeighting.setList(array);
-      spinnerLogWeighting.setIndex(0);
-      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "weighting");
-    }
-    {
-      spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
-      spinnerBeta.setIndex(2);
-      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
-    }
+    super(addRemoveControlPoints, list, array);
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
       spinnerRefine.setValue(20);
@@ -82,14 +60,5 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   final ColorDataGradient colorDataGradient() {
     return spinnerColorData.getValue();
-  }
-
-  final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
-    return spinnerLogWeighting.getValue().from( //
-        vectorLogManifold, variogram(), sequence);
-  }
-
-  final ScalarUnaryOperator variogram() {
-    return InversePowerVariogram.of(spinnerBeta.getValue());
   }
 }

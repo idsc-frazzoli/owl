@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +28,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Tensor snapshot;
 
   public Se2CoveringAnimationDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2);
+    super(true, GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleAxes);

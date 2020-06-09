@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -58,7 +57,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     renderControlPoints(geometricLayer, graphics);
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
-    graphics.drawString("" + spinnerLogWeighting.getValue(), 0, 10 + 17);
+    // graphics.drawString("" + spinnerLogWeighting.getValue(), 0, 10 + 17);
     final Tensor controlPoints = getGeodesicControlPoints();
     int index = 0;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
@@ -78,9 +77,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     // ---
     if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
-      VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
       Tensor origin = getGeodesicControlPoints();
-      TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, origin);
+      TensorUnaryOperator tensorUnaryOperator = operator(origin);
       Tensor wgs = compute(tensorUnaryOperator, refinement());
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));

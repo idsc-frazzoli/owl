@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JTextField jTextField = new JTextField();
 
   public Se2CoveringInvarianceDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2);
+    super(true, GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleAxes);

@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
@@ -34,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
   private final JButton jButtonShuffle = new JButton("shuffle");
 
   public AbstractHoverDemo() {
-    super(false, GeodesicDisplays.SE2C_SE2_S2_H2_R2);
+    super(false, GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
     setMidpointIndicated(false);
     setPositioningEnabled(false);
     {

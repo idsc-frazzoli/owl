@@ -7,7 +7,6 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,8 +41,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
-    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
+    TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
     return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }
 

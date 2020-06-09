@@ -9,6 +9,7 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -19,7 +20,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
   public BarycentricLeversDemo() {
-    super(true, GeodesicDisplays.MANIFOLDS);
+    super(true, GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleMean);

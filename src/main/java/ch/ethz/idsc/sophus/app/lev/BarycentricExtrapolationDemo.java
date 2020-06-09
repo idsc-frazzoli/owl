@@ -3,23 +3,18 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,18 +23,12 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class BarycentricExtrapolationDemo extends ControlPointsDemo {
+/* package */ class BarycentricExtrapolationDemo extends LogWeightingDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
 
   public BarycentricExtrapolationDemo() {
-    super(true, GeodesicDisplays.SE2C_R2);
-    {
-      spinnerLogWeighting.setList(LogWeightings.list());
-      spinnerLogWeighting.setIndex(0);
-      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "projected coordinate");
-    }
+    super(true, GeodesicDisplays.SE2C_R2, LogWeightings.list());
   }
 
   @Override
@@ -62,8 +51,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      TensorUnaryOperator tensorUnaryOperator = //
-          spinnerLogWeighting.getValue().from(RnManifold.INSTANCE, InversePowerVariogram.of(2), domain);
+      TensorUnaryOperator tensorUnaryOperator = weightingOperator(RnManifold.INSTANCE, domain);
       Tensor curve = Tensor.of(samples.stream() //
           .map(tensorUnaryOperator) //
           .map(weights -> biinvariantMean.mean(control, weights)));

@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +28,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Tensor snapshot;
 
   public S2AnimationDemo() {
-    super(true, GeodesicDisplays.S2_ONLY);
+    super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
     setMidpointIndicated(false);
     {
       timerFrame.jToolBar.add(jToggleAxes);

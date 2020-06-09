@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -43,7 +42,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     super(GeodesicDisplays.R2_ONLY, RnBarycentricCoordinates.scattered());
     // ---
     {
-      jToggleRigidMotionFit.addActionListener(l -> recomputeMD2D());
+      jToggleRigidMotionFit.addActionListener(l -> recompute());
       timerFrame.jToolBar.add(jToggleRigidMotionFit);
     }
     timerFrame.configCoordinateOffset(300, 500);
@@ -65,8 +64,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Tensor dx = Subdivide.of(0, EXTENT, res - 1);
     Tensor dy = Subdivide.of(0, EXTENT, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
-    VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-    TensorUnaryOperator tensorUnaryOperator = weightingOperator(vectorLogManifold, movingOrigin);
+    TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
     return jToggleRigidMotionFit.isSelected() //
         ? new RnFittedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain)
         : new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);

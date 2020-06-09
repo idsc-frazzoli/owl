@@ -54,8 +54,8 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       ++index;
     }
     // ---
-    LabelInterface labelInterface = spinnerLabels.getValue().apply(vector);
-    int bestLabel = labelInterface.label(leverRender.getWeights());
+    Classification labelInterface = spinnerLabels.getValue().apply(vector);
+    int bestLabel = labelInterface.result(leverRender.getWeights()).getLabel();
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicMouse));
     Path2D path2d = geometricLayer.toPath2D(shape, true);
     graphics.setColor(COLOR_DATA_INDEXED_T.getColor(bestLabel));

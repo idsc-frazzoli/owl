@@ -2,20 +2,16 @@
 package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.List;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
+import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,16 +21,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ abstract class A1BarycentricCoordinateDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogWeighting> spinnerBarycentric = new SpinnerLabel<>();
-
+/* package */ abstract class A1BarycentricCoordinateDemo extends LogWeightingDemo {
   public A1BarycentricCoordinateDemo(List<LogWeighting> array) {
-    super(true, GeodesicDisplays.R2_ONLY);
-    {
-      spinnerBarycentric.setList(array);
-      spinnerBarycentric.setIndex(0);
-      spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
-    }
+    super(true, GeodesicDisplays.R2_ONLY, array);
     // ---
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 2, 0}}"));
     // ---
@@ -52,16 +41,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       // ---
       Tensor domain = domain(support);
       // ---
-      VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
-      Object object = spinnerBarycentric.getValue();
       Tensor sequence = support.map(this::lift);
-      final TensorUnaryOperator weightingInterface;
-      if (object instanceof LogWeighting) {
-        LogWeighting logWeighting = (LogWeighting) object;
-        weightingInterface = logWeighting.from(vectorLogManifold, InversePowerVariogram.of(2), sequence);
-      } else {
-        weightingInterface = null;
-      }
+      TensorUnaryOperator weightingInterface = operator(sequence);
       ScalarTensorFunction scalarTensorFunction = //
           point -> weightingInterface.apply(lift(point));
       Tensor basis = domain.map(scalarTensorFunction);

@@ -5,19 +5,19 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ enum Labels implements Function<Tensor, LabelInterface> {
-  ARG_MAX(Classification::argMax), //
-  ACC_MAX(Classification::accMax), //
+/* package */ enum Labels implements Function<Tensor, Classification> {
+  ARG_MAX(Classifier::argMax), //
+  ACC_MAX(Classifier::accMax), //
   ;
 
-  private final Function<Tensor, LabelInterface> function;
+  private final Function<Tensor, Classification> function;
 
-  private Labels(Function<Tensor, LabelInterface> function) {
+  private Labels(Function<Tensor, Classification> function) {
     this.function = function;
   }
 
   @Override
-  public LabelInterface apply(Tensor vector) {
+  public Classification apply(Tensor vector) {
     return function.apply(vector);
   }
 }
