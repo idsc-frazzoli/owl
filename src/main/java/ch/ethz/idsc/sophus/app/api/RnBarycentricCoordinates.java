@@ -13,46 +13,89 @@ import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnAffineCoordinate;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum RnBarycentricCoordinates implements LogWeighting {
   WACHSPRESS() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS), sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   },
   MEAN_VALUE() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE), sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   },
   DISCRETE_HARMONIC() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC), sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   },
   AFFINE() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return RnAffineCoordinate.of(sequence); // precomputation
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   },
   RBF_RN() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(RnManifold.INSTANCE, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(pseudoDistances.weighting(RnManifold.INSTANCE, variogram, sequence)), sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   },
   RBF_VL() {
     @Override
-    public TensorUnaryOperator from(VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(PseudoDistances.ABSOLUTE.create(vectorLogManifold, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(pseudoDistances.weighting(vectorLogManifold, variogram, sequence)), sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+        Tensor values) {
+      // TODO Auto-generated method stub
+      return null;
     }
   }, //
   ;

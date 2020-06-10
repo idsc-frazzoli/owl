@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class R1RadialBasisFunctionDemo extends B1KrigingDemo {
+/* package */ class R1RadialBasisFunctionDemo extends A1KrigingDemo {
   public R1RadialBasisFunctionDemo() {
     super(R2GeodesicDisplay.INSTANCE);
   }
@@ -36,8 +36,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor sequence = support.map(Tensors::of);
       Tensor domain = domain();
       try {
-        TensorUnaryOperator weightingInterface = //
-            spinnerDistances.getValue().create(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
+        TensorUnaryOperator weightingInterface = operator(sequence);
         TensorUnaryOperator tensorUnaryOperator = //
             RadialBasisFunctionInterpolation.normalized(weightingInterface, sequence, funceva);
         Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(tensorUnaryOperator));
@@ -49,8 +48,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       }
       if (!isDeterminate())
         try {
-          TensorUnaryOperator weightingInterface = //
-              spinnerDistances.getValue().normalized(geodesicDisplay().vectorLogManifold(), variogram(), sequence);
+          TensorUnaryOperator weightingInterface = operator(sequence);
           TensorUnaryOperator operator = //
               CrossAveraging.of(p -> weightingInterface.apply(p), RnBiinvariantMean.INSTANCE, funceva);
           Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(operator));

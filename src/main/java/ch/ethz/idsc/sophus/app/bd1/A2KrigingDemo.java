@@ -1,15 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
@@ -19,24 +16,18 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.bdn.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.lev.LeverRender;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
-  private final SpinnerLabel<HsScalarFunctions> spinnerKriging = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
@@ -46,12 +37,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public A2KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(geodesicDisplays);
-    {
-      spinnerKriging.setArray(HsScalarFunctions.values());
-      spinnerKriging.setArray(HsScalarFunctions.GBCS); // TODO
-      spinnerKriging.setIndex(0);
-      spinnerKriging.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "function type");
-    }
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerCvar.setIndex(0);
@@ -95,25 +80,23 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    ScalarUnaryOperator variogram = variogram();
-    Tensor matrix = matrix( //
-        spinnerRes.getValue(), //
-        geodesicDisplay.vectorLogManifold(), //
-        spinnerKriging.getValue(), //
-        variogram, sequence, values);
-    BufferedImage bufferedImage = bufferedImage(matrix);
-    RenderQuality.setDefault(graphics);
-    Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
-    ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
+    try {
+      Tensor matrix = matrix(spinnerRes.getValue(), sequence, values);
+      BufferedImage bufferedImage = bufferedImage(matrix);
+      RenderQuality.setDefault(graphics);
+      Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
+      ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     LeverRender leverRender = new LeverRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
     leverRender.renderWeights();
   }
 
-  private Tensor matrix(int resolution, //
-      VectorLogManifold vectorLogManifold, HsScalarFunction hsScalarFunction, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
-    TensorScalarFunction tsf = hsScalarFunction.build(vectorLogManifold, variogram, sequence, values);
+  private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
+    TensorScalarFunction tsf = function(sequence, values);
     Scalar[][] array = geodesicDisplay().geodesicArrayPlot().array(resolution, tsf.andThen(Clips.unit()));
     Tensor matrix = Tensors.matrix(array);
     // ---
@@ -128,38 +111,38 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private void export() {
-    Tensor sequence = getGeodesicControlPoints();
-    Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    File folder = HomeDirectory.Pictures(getClass().getSimpleName(), spinnerColorData.getValue().toString());
-    folder.mkdirs();
-    System.out.println("exporting");
-    int index = 0;
-    ScalarUnaryOperator variogram = variogram();
-    for (HsScalarFunction hsScalarFunction : spinnerKriging.getList()) {
-      String format = String.format("%02d%s.png", index, hsScalarFunction);
-      System.out.println(format);
-      Tensor matrix = matrix( //
-          256, //
-          geodesicDisplay().vectorLogManifold(), //
-          hsScalarFunction, //
-          variogram, //
-          sequence, values);
-      ArrayPlotRender arrayPlotRender = ArrayPlotRender.uniform(matrix, spinnerColorData.getValue(), 1);
-      BufferedImage bufferedImage = arrayPlotRender.export();
-      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(geodesicDisplay().geodesicArrayPlot().pixel2model(arrayPlotRender.getDimension())));
-      Graphics2D graphics = bufferedImage.createGraphics();
-      RenderQuality.setQuality(graphics);
-      renderControlPoints(geometricLayer, graphics);
-      {
-        graphics.setColor(Color.WHITE);
-        graphics.drawString(hsScalarFunction.toString(), 0, 10);
-      }
-      try {
-        ImageIO.write(bufferedImage, "png", new File(folder, format));
-      } catch (Exception exception) {
-        exception.printStackTrace();
-      }
-    }
+    // Tensor sequence = getGeodesicControlPoints();
+    // Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
+    // File folder = HomeDirectory.Pictures(getClass().getSimpleName(), spinnerColorData.getValue().toString());
+    // folder.mkdirs();
+    // System.out.println("exporting");
+    // int index = 0;
+    // ScalarUnaryOperator variogram = variogram();
+    // for (HsScalarFunction hsScalarFunction : spinnerKriging.getList()) {
+    // String format = String.format("%02d%s.png", index, hsScalarFunction);
+    // System.out.println(format);
+    // Tensor matrix = matrix( //
+    // 256, //
+    // geodesicDisplay().vectorLogManifold(), //
+    // hsScalarFunction, //
+    // variogram, //
+    // sequence, values);
+    // ArrayPlotRender arrayPlotRender = ArrayPlotRender.uniform(matrix, spinnerColorData.getValue(), 1);
+    // BufferedImage bufferedImage = arrayPlotRender.export();
+    // GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(geodesicDisplay().geodesicArrayPlot().pixel2model(arrayPlotRender.getDimension())));
+    // Graphics2D graphics = bufferedImage.createGraphics();
+    // RenderQuality.setQuality(graphics);
+    // renderControlPoints(geometricLayer, graphics);
+    // {
+    // graphics.setColor(Color.WHITE);
+    // graphics.drawString(hsScalarFunction.toString(), 0, 10);
+    // }
+    // try {
+    // ImageIO.write(bufferedImage, "png", new File(folder, format));
+    // } catch (Exception exception) {
+    // exception.printStackTrace();
+    // }
+    // }
   }
 
   void prepare() {

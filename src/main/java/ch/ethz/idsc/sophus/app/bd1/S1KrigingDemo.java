@@ -30,9 +30,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ class S1KrigingDemo extends A1KrigingDemo {
+/* package */ class S1KrigingDemo extends AnKrigingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
   public S1KrigingDemo() {
@@ -72,12 +71,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255)) //
           .show(geodesicDisplay()::matrixLift, shape, sequence) //
           .render(geometricLayer, graphics);
-      // ---
-      ScalarUnaryOperator variogram = variogram();
       Tensor covariance = DiagonalMatrix.with(cvarian);
       if (isDeterminate()) {
-        TensorUnaryOperator weightingInterface = spinnerDistances.getValue().create(SnManifold.INSTANCE, variogram, sequence);
-        Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
+        TensorUnaryOperator tensorUnaryOperator = weightingOperator(SnManifold.INSTANCE, sequence);
+        Kriging kriging = Kriging.regression(tensorUnaryOperator, sequence, funceva, covariance);
         Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
         Tensor curve = estimate.pmul(DOMAIN);
         new PathRender(Color.BLUE, 1.25f).setCurve(curve, false).render(geometricLayer, graphics);

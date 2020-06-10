@@ -8,7 +8,6 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -25,7 +24,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
-/* package */ class R1KrigingDemo extends B1KrigingDemo {
+/* package */ class R1KrigingDemo extends A1KrigingDemo {
   public R1KrigingDemo() {
     super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 1}, {2, 2, 0}}"));
@@ -35,8 +34,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   @Override
   public void protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    // ---
     Tensor control = Sort.of(getControlPointsSe2());
     if (1 < control.length()) {
       Tensor support = control.get(Tensor.ALL, 0);
@@ -56,8 +53,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
       // ---
       Tensor sequence = support.map(Tensors::of);
       Tensor covariance = DiagonalMatrix.with(cvarian);
-      TensorUnaryOperator weightingInterface = //
-          spinnerDistances.getValue().create(geodesicDisplay.vectorLogManifold(), variogram(), sequence);
+      TensorUnaryOperator weightingInterface = operator(sequence);
       try {
         Kriging kriging = Kriging.regression(weightingInterface, sequence, funceva, covariance);
         // ---

@@ -2,19 +2,15 @@
 package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
+import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,17 +23,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class S1InterpolationDemo extends ControlPointsDemo {
-  private final SpinnerLabel<LogWeighting> spinnerBarycentric = new SpinnerLabel<>();
-
+/* package */ class S1InterpolationDemo extends LogWeightingDemo {
   public S1InterpolationDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
+    super(true, GeodesicDisplays.R2_ONLY, LogWeightings.list());
     setMidpointIndicated(false);
-    {
-      spinnerBarycentric.setArray(LogWeightings.values());
-      spinnerBarycentric.setIndex(0);
-      spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
-    }
     // ---
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 0, 0}}"));
     timerFrame.configCoordinateOffset(500, 500);
@@ -65,8 +54,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor domain = Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 511);
       Tensor spherics = domain.map(AngleVector::of);
       // ---
-      TensorUnaryOperator tensorUnaryOperator = spinnerBarycentric.getValue().from( //
-          geodesicDisplay().vectorLogManifold(), InversePowerVariogram.of(2), sequence);
+      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
       try {
         ScalarTensorFunction scalarTensorFunction = //
             point -> tensorUnaryOperator.apply(AngleVector.of(point));

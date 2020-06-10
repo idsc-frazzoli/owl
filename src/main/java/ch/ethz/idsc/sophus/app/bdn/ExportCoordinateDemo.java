@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -41,6 +42,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     for (LogWeighting logWeighting : LogWeightings.list()) {
       Tensor origin = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.from( //
+          PseudoDistances.ABSOLUTE, // TODO
           geodesicDisplay().vectorLogManifold(), //
           variogram(), //
           origin);

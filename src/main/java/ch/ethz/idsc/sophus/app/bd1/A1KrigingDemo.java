@@ -2,22 +2,34 @@
 package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.BasicStroke;
-import java.awt.Dimension;
 import java.awt.Stroke;
-import java.util.List;
+import java.util.Arrays;
 
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ abstract class A1KrigingDemo extends AnKrigingDemo {
   static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  // ---
-  final SpinnerLabel<PseudoDistances> spinnerDistances = SpinnerLabel.of(PseudoDistances.values());
+  private static final Scalar MARGIN = RealScalar.of(2);
 
-  public A1KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
-    super(geodesicDisplays);
-    spinnerDistances.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "pseudo distances");
+  public A1KrigingDemo(GeodesicDisplay geodesicDisplay) {
+    super(Arrays.asList(geodesicDisplay));
+  }
+
+  final Tensor domain() {
+    Tensor support = getControlPointsSe2().get(Tensor.ALL, 0).map(N.DOUBLE);
+    Tensor subdiv = Subdivide.of( //
+        support.stream().reduce(Min::of).get().add(MARGIN.negate()), //
+        support.stream().reduce(Max::of).get().add(MARGIN), 100).map(N.DOUBLE);
+    Tensor predom = Join.of(subdiv, support);
+    return Tensor.of(predom.stream().distinct().sorted());
   }
 }
