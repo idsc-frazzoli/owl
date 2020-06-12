@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.gbc.InverseCoordinate;
+import ch.ethz.idsc.sophus.gbc.KrigingCoordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.krg.Kriging;
@@ -26,7 +28,7 @@ public enum LogWeightings implements LogWeighting {
     public TensorScalarFunction build( //
         PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          pseudoDistances.coordinate(vectorLogManifold, variogram, sequence), //
+          from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
@@ -42,7 +44,7 @@ public enum LogWeightings implements LogWeighting {
     public TensorScalarFunction build( //
         PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
-          pseudoDistances.normalized(vectorLogManifold, variogram, sequence), //
+          from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
       return point -> tensorUnaryOperator.apply(point).Get();
     }
@@ -61,6 +63,8 @@ public enum LogWeightings implements LogWeighting {
     }
   },
   /***************************************************/
+  /** produces affine weights
+   * restricted to certain variograms, e.g. power(1.5) */
   KRIGING() {
     @Override
     public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
@@ -78,9 +82,49 @@ public enum LogWeightings implements LogWeighting {
       return point -> (Scalar) kriging.estimate(point);
     }
   }, //
+  /***************************************************/
+  KRIGING_COORDINATE() {
+    @Override
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+      return KrigingCoordinate.of(tensorUnaryOperator, vectorLogManifold, sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build( //
+        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
+          from(pseudoDistances, vectorLogManifold, variogram, sequence), //
+          RnBiinvariantMean.INSTANCE, values);
+      return point -> tensorUnaryOperator.apply(point).Get();
+    }
+  }, //
+  INVERSE_COORDINATE() {
+    @Override
+    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+      return InverseCoordinate.of(tensorUnaryOperator, vectorLogManifold, sequence);
+    }
+
+    @Override
+    public TensorScalarFunction build( //
+        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+      TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
+          from(pseudoDistances, vectorLogManifold, variogram, sequence), //
+          RnBiinvariantMean.INSTANCE, values);
+      return point -> tensorUnaryOperator.apply(point).Get();
+    }
+  }, //
   ;
 
   public static List<LogWeighting> list() {
     return Arrays.asList(values());
+  }
+
+  public static List<LogWeighting> coordinates() {
+    return Arrays.asList( //
+        COORDINATE, //
+        KRIGING_COORDINATE, //
+        INVERSE_COORDINATE);
   }
 }

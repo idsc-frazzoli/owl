@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 
   Se2DeformationDemo() {
-    super(GeodesicDisplays.SE2C_SE2, LogWeightings.list());
+    super(GeodesicDisplays.SE2C_SE2, LogWeightings.coordinates());
     // ---
     timerFrame.configCoordinateOffset(300, 500);
     shuffleSnap();
@@ -53,6 +53,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   public static void main(String[] args) {
-    new Se2DeformationDemo().setVisible(1000, 800);
+    new Se2DeformationDemo().setVisible(1200, 800);
   }
 }

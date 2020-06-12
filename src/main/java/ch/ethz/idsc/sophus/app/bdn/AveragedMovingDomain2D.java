@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     super(origin, tensorUnaryOperator, domain);
   }
 
+  @Override
   public Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean) {
     int rows = domain.length();
     int cols = Unprotect.dimension1(domain);

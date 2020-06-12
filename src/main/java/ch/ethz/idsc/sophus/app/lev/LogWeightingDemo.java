@@ -9,6 +9,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Variograms;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public abstract class LogWeightingDemo extends ControlPointsDemo {
-  private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}");
+  private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
   private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   private final SpinnerLabel<PseudoDistances> spinnerPseudoDistances = new SpinnerLabel<>();
@@ -33,6 +34,12 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerLogWeighting.setList(array);
       spinnerLogWeighting.setIndex(0);
       spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(130, 28), "weights");
+      spinnerLogWeighting.addSpinnerListener(v -> {
+        if (v.equals(LogWeightings.COORDINATE))
+          spinnerVariogram.setValue(Variograms.INVERSE_POWER);
+        if (v.equals(LogWeightings.KRIGING_COORDINATE))
+          spinnerVariogram.setValue(Variograms.POWER);
+      });
       spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {
@@ -50,10 +57,6 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerBeta.addSpinnerListener(v -> recompute());
     }
     timerFrame.jToolBar.addSeparator();
-  }
-
-  protected void recompute() {
-    // ---
   }
 
   protected final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
@@ -80,5 +83,9 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
         geodesicDisplay().vectorLogManifold(), //
         variogram(), //
         sequence, values);
+  }
+
+  protected void recompute() {
+    // ---
   }
 }

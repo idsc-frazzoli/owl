@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
   S2DeformationDemo() {
-    super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
+    super(GeodesicDisplays.S2_ONLY, LogWeightings.coordinates());
     // ---
     spinnerSnMeans.setValue(SnMeans.FAST);
     spinnerSnMeans.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "sn means");
