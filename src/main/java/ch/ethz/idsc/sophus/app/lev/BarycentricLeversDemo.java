@@ -15,13 +15,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class BarycentricLeversDemo extends LogWeightingDemo {
+/* package */ class BarycentricLeversDemo extends AbstractPlaceDemo {
   private final JToggleButton jToggleMean = new JToggleButton("mean");
   private final JToggleButton jToggleLevers = new JToggleButton("levers");
 
   public BarycentricLeversDemo() {
-    super(true, GeodesicDisplays.MANIFOLDS, LogWeightings.list());
-    setMidpointIndicated(false);
+    super(GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     {
       timerFrame.jToolBar.add(jToggleMean);
       timerFrame.jToolBar.add(jToggleLevers);
@@ -39,15 +38,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-      LeversRender leverRender = LeversRender.of( //
+      LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //
           sequence, //
           controlPointsAll.get(0), geometricLayer, graphics);
-      leverRender.renderLevers();
-      leverRender.renderWeights();
-      leverRender.renderSequence();
-      leverRender.renderOrigin();
+      leversRender.renderWeights();
+      LeversHud.render(pseudoDistances(), leversRender);
     }
   }
 

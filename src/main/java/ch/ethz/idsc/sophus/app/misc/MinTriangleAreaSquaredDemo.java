@@ -49,10 +49,10 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       polygon.stream().forEach(row -> row.append(RealScalar.ONE));
       Tensor weights = MinTriangleAreaSquared.weights(polygon);
       Tensor weiszfeld = weights.dot(polygon).extract(0, 2);
-      LeversRender leverRender = new LeversRender(geodesicDisplay, control, weiszfeld, weights, geometricLayer, graphics);
-      leverRender.renderWeights();
-      leverRender.renderOrigin();
-      leverRender.renderLevers();
+      LeversRender leversRender = new LeversRender(geodesicDisplay, control, weiszfeld, weights, geometricLayer, graphics);
+      leversRender.renderWeights();
+      leversRender.renderOrigin();
+      leversRender.renderLevers();
     }
     renderControlPoints(geometricLayer, graphics);
   }

@@ -7,12 +7,12 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 
 /* package */ class CoordinatesDemo extends AbstractHoverDemo {
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leverRender) {
-    leverRender.renderLevers();
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
+    leversRender.renderLevers();
     // ---
-    leverRender.renderWeights();
-    leverRender.renderSequence();
-    leverRender.renderOrigin();
+    leversRender.renderWeights();
+    leversRender.renderSequence();
+    leversRender.renderOrigin();
   }
 
   public static void main(String[] args) {

@@ -34,6 +34,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
+import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
+import ch.ethz.idsc.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
@@ -160,9 +162,8 @@ public class LeversRender {
     graphics.setStroke(new BasicStroke());
   }
 
-  private static final Color COLOR_TEXT_DRAW = Color.DARK_GRAY;
+  static final Color COLOR_TEXT_DRAW = Color.DARK_GRAY;
   private static final Color COLOR_TEXT_FILL = new Color(255 - 32, 255 - 32, 255 - 32, 128);
-  private static final Tensor RGBA_TEXT_FILL = Tensors.vector(0, 0, 0, 16);
 
   public void renderLeverLength() {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
@@ -243,92 +244,56 @@ public class LeversRender {
     }
   }
 
-  public void renderMahFormsP() {
+  public void renderMahFormsP(ColorDataGradient colorDataGradient) {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
     Tensor forms = Tensor.of(sequence.stream().map(point -> mahalanobis.new Form(sequence, point).sigma_inverse()));
     graphics.setFont(FONT_MATRIX);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
     int index = 0;
+    MatrixRender matrixRender = MatrixRender.arcTan(graphics, COLOR_TEXT_DRAW, colorDataGradient);
     for (Tensor q : sequence) {
-      Tensor form = forms.get(index);
-      Tensor matrix = geodesicDisplay.matrixLift(q);
-      geometricLayer.pushMatrix(matrix);
-      Path2D path2d = geometricLayer.toPath2D(shape, true);
-      Rectangle rectangle = path2d.getBounds();
-      int pix = rectangle.x + rectangle.width;
-      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderMatrix(s -> RGBA_TEXT_FILL, form, pix, piy);
-      geometricLayer.popMatrix();
+      renderMatrix(q, matrixRender, forms.get(index));
+      renderPD_Status(q, matrixRender, forms.get(index));
       ++index;
     }
   }
 
-  public void renderMahFormX() {
+  public void renderMahFormX(ColorDataGradient colorDataGradient) {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
     Tensor form = mahalanobis.new Form(sequence, origin).sigma_inverse();
     graphics.setFont(FONT_MATRIX);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
-    {
-      Tensor matrix = geodesicDisplay.matrixLift(origin);
-      geometricLayer.pushMatrix(matrix);
-      Path2D path2d = geometricLayer.toPath2D(shape, true);
-      Rectangle rectangle = path2d.getBounds();
-      int pix = rectangle.x + rectangle.width;
-      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderMatrix(s -> RGBA_TEXT_FILL, form, pix, piy);
-      geometricLayer.popMatrix();
-    }
+    MatrixRender matrixRender = MatrixRender.arcTan(graphics, COLOR_TEXT_DRAW, colorDataGradient);
+    renderMatrix(origin, matrixRender, form);
+    renderPD_Status(origin, matrixRender, form);
   }
 
-  public void renderGrassmannians(ColorDataGradient colorDataGradient) {
+  public void renderProjectionsP(ColorDataGradient colorDataGradient) {
     if (!isSufficient())
       return;
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     HsProjection hsProjection = new HsProjection(vectorLogManifold);
-    Tensor grassmann = Tensor.of(sequence.stream().map(point -> hsProjection.projection(sequence, point)));
+    Tensor projections = Tensor.of(sequence.stream().map(point -> hsProjection.projection(sequence, point)));
     // ---
     graphics.setFont(FONT_MATRIX);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
     int index = 0;
+    MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, COLOR_TEXT_DRAW, colorDataGradient);
     for (Tensor q : sequence) {
-      Tensor matrix = geodesicDisplay.matrixLift(q);
-      geometricLayer.pushMatrix(matrix);
-      Path2D path2d = geometricLayer.toPath2D(shape, true);
-      Rectangle rectangle = path2d.getBounds();
-      int pix = rectangle.x + rectangle.width;
-      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderMatrix(colorDataGradient, grassmann.get(index), pix, piy);
-      geometricLayer.popMatrix();
+      renderMatrix(q, matrixRender, projections.get(index));
       ++index;
     }
   }
 
-  public void renderGrassmannianX(ColorDataGradient colorDataGradient) {
+  public void renderProjectionX(ColorDataGradient colorDataGradient) {
     if (!isSufficient())
       return;
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     HsProjection hsProjection = new HsProjection(vectorLogManifold);
-    Tensor grassmann = hsProjection.projection(sequence, origin);
+    Tensor projection = hsProjection.projection(sequence, origin);
     // ---
     graphics.setFont(FONT_MATRIX);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
-    Tensor q = origin;
-    {
-      Tensor matrix = geodesicDisplay.matrixLift(q);
-      geometricLayer.pushMatrix(matrix);
-      Path2D path2d = geometricLayer.toPath2D(shape, true);
-      Rectangle rectangle = path2d.getBounds();
-      int pix = rectangle.x + rectangle.width;
-      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      renderMatrix(colorDataGradient, grassmann, pix, piy);
-      geometricLayer.popMatrix();
-    }
+    MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, COLOR_TEXT_DRAW, colorDataGradient);
+    renderMatrix(origin, matrixRender, projection);
   }
 
   /** render control points */
@@ -358,26 +323,35 @@ public class LeversRender {
   }
 
   /***************************************************/
-  private void renderMatrix(ScalarTensorFunction colorDataGradient, Tensor matrix, int pix, int piy) {
-    Tensor rounded = matrix.map(Round._2);
+  private void renderMatrix(Tensor q, MatrixRender matrixRender, Tensor matrix) {
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
-    int max = rounded.flatten(-1) //
-        .map(s -> s.toString()).mapToInt(s -> fontMetrics.stringWidth(s)).max().getAsInt();
-    int width = max + 3;
-    for (int inx = 0; inx < rounded.length(); ++inx) {
-      Tensor row = matrix.get(inx);
-      for (int iny = 0; iny < row.length(); ++iny) {
-        Color color = ColorFormat.toColor(colorDataGradient.apply(Clips.absoluteOne().rescale(row.Get(iny))));
-        graphics.setColor(color);
-        int tpx = pix + width * inx;
-        int tpy = piy + fheight * iny;
-        graphics.fillRect(tpx, tpy, width, fheight);
-        graphics.setColor(COLOR_TEXT_DRAW);
-        String string = rounded.Get(inx, iny).toString();
-        int sw = fontMetrics.stringWidth(string);
-        graphics.drawString(string, tpx + width - sw, tpy + fheight - 1);
+    geometricLayer.pushMatrix(geodesicDisplay.matrixLift(q));
+    Path2D path2d = geometricLayer.toPath2D(shape, true);
+    Rectangle rectangle = path2d.getBounds();
+    int pix = rectangle.x + rectangle.width;
+    int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
+    matrixRender.renderMatrix(matrix, Round._2, pix, piy);
+    geometricLayer.popMatrix();
+  }
+
+  private void renderPD_Status(Tensor q, MatrixRender matrixRender, Tensor form) {
+    Tensor matrix = geodesicDisplay.matrixLift(q);
+    geometricLayer.pushMatrix(matrix);
+    Path2D path2d = geometricLayer.toPath2D(shape, true);
+    Rectangle rectangle = path2d.getBounds();
+    int pix = rectangle.x + rectangle.width;
+    int piy = rectangle.y + rectangle.height + (-rectangle.height) / 2;
+    geometricLayer.popMatrix();
+    // ---
+    String string = "no";
+    if (PositiveDefiniteMatrixQ.ofHermitian(form)) {
+      string = "PD";
+    } else {
+      if (PositiveSemidefiniteMatrixQ.ofHermitian(form)) {
+        string = "PSD";
       }
     }
+    graphics.drawString(string, pix, piy);
   }
 }

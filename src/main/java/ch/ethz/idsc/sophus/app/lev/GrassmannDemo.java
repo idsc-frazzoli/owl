@@ -17,7 +17,6 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -60,38 +59,11 @@ import ch.ethz.idsc.tensor.sca.Round;
       TensorUnaryOperator tensorUnaryOperator = jToggleNeutral.isSelected() //
           ? null
           : operator(sequence);
-      LeversRender leverRender = LeversRender.of( //
+      LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, tensorUnaryOperator, //
           sequence, origin, geometricLayer, graphics);
-      leverRender.renderIndex();
-      leverRender.renderSequence();
-      leverRender.renderOrigin();
-      leverRender.renderLevers();
-      PseudoDistances pseudoDistances = pseudoDistances();
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
-      switch (pseudoDistances) {
-      case ABSOLUTE:
-        leverRender.renderLeverLength();
-        break;
-      case SOLITARY:
-        leverRender.renderTangentsXtoP(true);
-        leverRender.renderGrassmannianX(colorDataGradient);
-        break;
-      case MONOMAHA:
-        leverRender.renderTangentsXtoP(true);
-        leverRender.renderMahFormX();
-        break;
-      case PAIRWISE:
-      case NORM2:
-        leverRender.renderGrassmannianX(colorDataGradient);
-        leverRender.renderGrassmannians(colorDataGradient);
-        break;
-      case STARLIKE:
-        leverRender.renderTangentsPtoX();
-        leverRender.renderMahFormsP();
-      default:
-        break;
-      }
+      LeversHud.render(pseudoDistances(), leversRender, colorDataGradient);
     } else {
       renderControlPoints(geometricLayer, graphics);
     }

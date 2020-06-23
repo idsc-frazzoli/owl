@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class S2AnimationDemo extends LogWeightingDemo {
+/* package */ class S2AnimationDemo extends AbstractPlaceDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -28,8 +28,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Tensor snapshot;
 
   public S2AnimationDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
-    setMidpointIndicated(false);
+    super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
     {
       timerFrame.jToolBar.add(jToggleAxes);
       jToggleAxes.setSelected(true);
@@ -79,15 +78,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       RenderQuality.setQuality(graphics);
       Tensor sequence = controlPoints.extract(1, controlPoints.length());
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-      LeversRender leverRender = LeversRender.of( //
+      LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //
           sequence, //
           controlPoints.get(0), geometricLayer, graphics);
-      leverRender.renderLevers();
-      leverRender.renderWeights();
-      leverRender.renderSequence();
-      leverRender.renderOrigin();
+      leversRender.renderWeights();
+      LeversHud.render(pseudoDistances(), leversRender);
     }
   }
 

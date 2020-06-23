@@ -42,8 +42,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
     final Tensor sequence = getGeodesicControlPoints();
-    LeversRender leverRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
-    leverRender.renderIndex();
+    LeversRender leversRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
+    leversRender.renderIndex();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     if (geodesicDisplay.dimensions() < sequence.length()) { // render basis functions

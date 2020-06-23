@@ -91,8 +91,8 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    LeversRender leverRender = new LeversRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
-    leverRender.renderWeights();
+    LeversRender leversRender = new LeversRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
+    leversRender.renderWeights();
   }
 
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
