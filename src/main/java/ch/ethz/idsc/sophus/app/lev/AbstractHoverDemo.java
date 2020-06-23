@@ -76,13 +76,14 @@ import ch.ethz.idsc.tensor.sca.Abs;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-    render(geometricLayer, graphics, LeverRender.of( //
+    LeversRender leverRender = LeversRender.of( //
         geodesicDisplay, //
         tensorUnaryOperator, //
         sequence, //
         geodesicDisplay.project(geometricLayer.getMouseSe2State()), //
-        geometricLayer, graphics));
+        geometricLayer, graphics);
+    render(geometricLayer, graphics, leverRender);
   }
 
-  abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeverRender leverRender);
+  abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leverRender);
 }

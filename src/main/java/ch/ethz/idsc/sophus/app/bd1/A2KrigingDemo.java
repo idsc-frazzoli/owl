@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.lev.LeverRender;
+import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    LeverRender leverRender = new LeverRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
+    LeversRender leverRender = new LeversRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
     leverRender.renderWeights();
   }
 

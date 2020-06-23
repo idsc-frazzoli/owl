@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 
 /* package */ class CoordinatesDemo extends AbstractHoverDemo {
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeverRender leverRender) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leverRender) {
     leverRender.renderLevers();
     // ---
     leverRender.renderWeights();

@@ -49,12 +49,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      TensorUnaryOperator weightingInterface = operator(sequence);
+      Tensor origin = controlPointsAll.get(0);
+      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
       {
-        LeverRender leverRender = LeverRender.of(geodesicDisplay, //
-            weightingInterface, //
+        LeversRender leverRender = LeversRender.of(geodesicDisplay, //
+            tensorUnaryOperator, //
             sequence, //
-            controlPointsAll.get(0), geometricLayer, graphics);
+            origin, geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();
         leverRender.renderWeights();
@@ -64,9 +65,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
         Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
-        LeverRender leverRender = LeverRender.of(geodesicDisplay, //
-            weightingInterface, //
-            result.extract(1, result.length()), result.get(0), geometricLayer, graphics);
+        LeversRender leverRender = LeversRender.of(geodesicDisplay, //
+            tensorUnaryOperator, //
+            result.extract(1, result.length()), //
+            result.get(0), geometricLayer, graphics);
         leverRender.renderSequence();
         leverRender.renderLevers();
         leverRender.renderWeights();

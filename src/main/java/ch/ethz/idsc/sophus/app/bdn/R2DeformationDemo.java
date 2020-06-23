@@ -81,6 +81,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   public static void main(String[] args) {
-    new R2DeformationDemo().setVisible(1000, 800);
+    new R2DeformationDemo().setVisible(1300, 800);
   }
 }

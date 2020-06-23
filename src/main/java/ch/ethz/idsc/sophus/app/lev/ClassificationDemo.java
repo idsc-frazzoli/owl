@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeverRender leverRender) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leverRender) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = leverRender.getSequence();
     Tensor geodesicMouse = leverRender.getOrigin();

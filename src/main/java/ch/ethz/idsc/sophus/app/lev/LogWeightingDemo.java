@@ -59,6 +59,10 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     timerFrame.jToolBar.addSeparator();
   }
 
+  protected final PseudoDistances pseudoDistances() {
+    return spinnerPseudoDistances.getValue();
+  }
+
   protected final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
     LogWeighting logWeighting = spinnerLogWeighting.getValue();
     return logWeighting.from( //

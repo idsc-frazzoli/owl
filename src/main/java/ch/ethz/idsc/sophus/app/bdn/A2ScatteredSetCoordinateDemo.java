@@ -2,9 +2,7 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.List;
 
 import javax.swing.JToggleButton;
@@ -14,6 +12,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -42,26 +41,12 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     renderControlPoints(geometricLayer, graphics);
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
-    // graphics.drawString("" + spinnerLogWeighting.getValue(), 0, 10 + 17);
-    final Tensor controlPoints = getGeodesicControlPoints();
-    int index = 0;
+    final Tensor sequence = getGeodesicControlPoints();
+    LeversRender leverRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
+    leverRender.renderIndex();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor shape = geodesicDisplay.shape();
-    graphics.setFont(ArrayPlotRender.FONT);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
-    graphics.setColor(Color.BLACK);
-    for (Tensor q : controlPoints) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(q));
-      Rectangle rectangle = geometricLayer.toPath2D(shape, true).getBounds();
-      graphics.drawString(" " + (index + 1), //
-          rectangle.x + rectangle.width, //
-          rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2);
-      geometricLayer.popMatrix();
-      ++index;
-    }
     // ---
-    if (geodesicDisplay.dimensions() < controlPoints.length()) { // render basis functions
+    if (geodesicDisplay.dimensions() < sequence.length()) { // render basis functions
       Tensor origin = getGeodesicControlPoints();
       Tensor wgs = compute(operator(origin), refinement());
       List<Integer> dims = Dimensions.of(wgs);

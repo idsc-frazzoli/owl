@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-      LeverRender leverRender = LeverRender.of( //
+      LeversRender leverRender = LeversRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //
           sequence, //
