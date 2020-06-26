@@ -12,7 +12,6 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
@@ -22,6 +21,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
+  private static final int REFINEMENT = 120;
   private final JButton jButtonExport = new JButton("export");
 
   public ExportCoordinateDemo( //
@@ -39,28 +39,29 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public final void actionPerformed(ActionEvent actionEvent) {
     File root = HomeDirectory.Pictures(getClass().getSimpleName(), geodesicDisplay().toString());
     root.mkdirs();
-    for (LogWeighting logWeighting : LogWeightings.list()) {
-      Tensor origin = getGeodesicControlPoints();
+    for (PseudoDistances pseudoDistances : PseudoDistances.distinct()) {
+      LogWeighting logWeighting = logWeighting();
+      Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.from( //
-          PseudoDistances.ABSOLUTE, // TODO
+          pseudoDistances, //
           geodesicDisplay().vectorLogManifold(), //
           variogram(), //
-          origin);
-      System.out.print("computing...");
-      Tensor wgs = compute(tensorUnaryOperator, 120);
+          sequence);
+      System.out.print("computing " + pseudoDistances);
+      Tensor wgs = compute(tensorUnaryOperator, REFINEMENT);
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgp, colorDataGradient(), 1);
       BufferedImage bufferedImage = arrayPlotRender.export();
       try {
-        ImageIO.write(bufferedImage, "png", new File(root, logWeighting.toString() + ".png"));
+        ImageIO.write(bufferedImage, "png", new File(root, pseudoDistances.toString() + ".png"));
       } catch (Exception exception) {
         exception.printStackTrace();
       }
-      System.out.println("done");
+      System.out.println(" done");
     }
     System.out.println("all done");
   }
 
-  abstract Tensor compute(TensorUnaryOperator weightingInterface, int i);
+  abstract Tensor compute(TensorUnaryOperator weightingInterface, int refinement);
 }

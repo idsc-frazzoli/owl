@@ -14,6 +14,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4).unmodifiable();
@@ -21,6 +22,11 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   @Override // from GeodesicDisplay
   public final int dimensions() {
     return 3;
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor p) {
+    return v -> v.extract(0, 2);
   }
 
   @Override // from GeodesicDisplay

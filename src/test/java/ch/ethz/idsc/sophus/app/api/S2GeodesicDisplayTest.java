@@ -41,7 +41,7 @@ public class S2GeodesicDisplayTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor xya = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor xyz = s2GeodesicDisplay.project(xya);
-      Tensor tan = s2GeodesicDisplay.projectTangent(xya);
+      Tensor tan = s2GeodesicDisplay.createTangent(xya);
       Tolerance.CHOP.requireAllZero(xyz.dot(tan));
     }
   }

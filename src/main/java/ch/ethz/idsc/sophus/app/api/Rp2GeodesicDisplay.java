@@ -51,6 +51,11 @@ public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
     return Normalize.with(Norm._2).apply(xyz);
   }
 
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return null; // FIXME
+  }
+
   public Tensor projectTangent(Tensor xya) {
     return projectTangent(xya, xya.Get(2));
   }

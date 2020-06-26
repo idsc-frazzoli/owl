@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public enum He1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
@@ -46,6 +47,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     return Tensors.of(xya.extract(0, 1), xya.extract(1, 2), xya.Get(2));
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay

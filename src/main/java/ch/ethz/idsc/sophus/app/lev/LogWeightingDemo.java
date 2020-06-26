@@ -59,6 +59,14 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     timerFrame.jToolBar.addSeparator();
   }
 
+  protected final LogWeighting logWeighting() {
+    return spinnerLogWeighting.getValue();
+  }
+
+  protected final void setPseudoDistance(PseudoDistances pseudoDistances) {
+    spinnerPseudoDistances.setValue(pseudoDistances);
+  }
+
   protected final PseudoDistances pseudoDistances() {
     return spinnerPseudoDistances.getValue();
   }

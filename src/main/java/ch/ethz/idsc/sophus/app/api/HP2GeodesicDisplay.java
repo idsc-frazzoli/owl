@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -47,6 +48,11 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
     Tensor point = xya.extract(0, 2);
     point.set(MAX_Y, 1);
     return point;
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay

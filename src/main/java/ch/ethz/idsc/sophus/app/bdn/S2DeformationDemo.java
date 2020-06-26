@@ -67,6 +67,6 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   public static void main(String[] args) {
-    new S2DeformationDemo().setVisible(1200, 800);
+    new S2DeformationDemo().setVisible(1400, 800);
   }
 }

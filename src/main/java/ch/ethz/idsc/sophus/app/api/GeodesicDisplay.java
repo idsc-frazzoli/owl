@@ -10,6 +10,7 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Hint: the interface GeodesicDisplay is intended for use in the demo layer
  * but not in the library functions. */
@@ -29,6 +30,10 @@ public interface GeodesicDisplay {
   /** @param p control point
    * @return vector of length 2 with grid coordinates {x, y} */
   Tensor toPoint(Tensor p);
+
+  /** @param p
+   * @return */
+  TensorUnaryOperator tangentProjection(Tensor p);
 
   /** @param p control point
    * @return matrix with dimensions 3 x 3 */

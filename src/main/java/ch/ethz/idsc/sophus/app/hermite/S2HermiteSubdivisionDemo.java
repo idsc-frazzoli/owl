@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       xy0.set(Scalar::zero, 2);
       return Tensors.of( //
           geodesicDisplay.project(xy0), //
-          geodesicDisplay.projectTangent(xy0, xya.Get(2)).multiply(vscale));
+          geodesicDisplay.createTangent(xy0, xya.Get(2)).multiply(vscale));
     }));
     POINTS_RENDER_0.show(geodesicDisplay()::matrixLift, getControlPointShape(), control.get(Tensor.ALL, 0)).render(geometricLayer, graphics);
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
@@ -118,7 +118,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           graphics.setStroke(new BasicStroke(1.5f));
           graphics.setColor(Color.GRAY);
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-          Tensor pr = S2GeodesicDisplay.tangentSpace(p).dot(v);
+          Tensor pr = geodesicDisplay.tangentProjection(p).apply(v);
           graphics.draw(geometricLayer.toLine2D(pr));
           geometricLayer.popMatrix();
         }

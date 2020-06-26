@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -37,6 +38,11 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override
   public final int dimensions() {
     return dimensions;
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay

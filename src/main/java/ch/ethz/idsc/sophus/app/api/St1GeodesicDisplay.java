@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -37,6 +38,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public int dimensions() {
     return 2;
+  }
+
+  @Override // from GeodesicDisplay
+  public TensorUnaryOperator tangentProjection(Tensor p) {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay

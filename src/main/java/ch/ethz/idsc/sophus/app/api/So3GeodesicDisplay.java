@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
@@ -61,6 +62,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
     if (Scalars.lessThan(RealScalar.ONE, norm))
       axis = axis.divide(norm);
     return Rodrigues.vectorExp(axis);
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay

@@ -44,6 +44,11 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public TensorUnaryOperator tangentProjection(Tensor p) {
+    return null; // FIXME
+  }
+
+  @Override // from GeodesicDisplay
   public Tensor shape() {
     return CIRCLE_POINTS;
   }

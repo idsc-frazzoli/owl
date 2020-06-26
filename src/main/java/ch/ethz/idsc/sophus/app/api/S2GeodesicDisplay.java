@@ -35,12 +35,6 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     super(2);
   }
 
-  /** @param xyz normalized vector
-   * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
-  public static Tensor tangentSpace(Tensor xyz) {
-    return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
-  }
-
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     Tensor xyz = xya.copy();
@@ -52,11 +46,22 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
     return Normalize.with(Norm._2).apply(xyz);
   }
 
-  public Tensor projectTangent(Tensor xya) {
-    return projectTangent(xya, xya.Get(2));
+  /** @param xyz normalized vector, point on 2-dimensional sphere
+   * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
+  /* package */ static Tensor tangentSpace(Tensor xyz) {
+    return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
   }
 
-  public Tensor projectTangent(Tensor xya, Scalar angle) {
+  @Override // from GeodesicDisplay
+  public TensorUnaryOperator tangentProjection(Tensor xyz) {
+    return tangentSpace(xyz)::dot;
+  }
+
+  public Tensor createTangent(Tensor xya) {
+    return createTangent(xya, xya.Get(2));
+  }
+
+  public Tensor createTangent(Tensor xya, Scalar angle) {
     Tensor xyz = project(xya);
     return AngleVector.of(angle).dot(tangentSpace(xyz));
   }

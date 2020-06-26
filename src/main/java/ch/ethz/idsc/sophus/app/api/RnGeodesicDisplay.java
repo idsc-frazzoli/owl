@@ -21,11 +21,14 @@ import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.PadRight;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable {
+  private static final TensorUnaryOperator PAD = PadRight.zeros(2);
   private final int dimensions;
 
-  public RnGeodesicDisplay(int dimensions) {
+  /* package */ RnGeodesicDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 
@@ -34,7 +37,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
     return RnGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final int dimensions() {
     return dimensions;
   }
@@ -45,21 +48,26 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor p) {
+    return PAD;
+  }
+
+  @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
     return RnGroup.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), RnExponential.INSTANCE);
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
     return RnTransport.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final VectorLogManifold vectorLogManifold() {
     return RnManifold.INSTANCE;
   }
@@ -74,7 +82,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
     return RnBiinvariantMean.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final LineDistance lineDistance() {
     return RnLineDistance.INSTANCE;
   }

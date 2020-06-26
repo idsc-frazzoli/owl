@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Drop;
       leversRender.renderLevers();
       leversRender.renderOrigin();
       leversRender.renderSequence();
-      leversRender.renderTangentsPtoX();
+      leversRender.renderTangentsPtoX(true);
       leversRender.renderTangentsXtoP(true);
     }
   }

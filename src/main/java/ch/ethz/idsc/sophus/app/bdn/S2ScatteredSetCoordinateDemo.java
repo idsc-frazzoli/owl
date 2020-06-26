@@ -29,14 +29,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);
     }
-    setControlPointsSe2(Tensors.fromString("{{-0.51, 0.32, 0}, {0.33, 0.54, 0}, {-0.45, -0.36, 0}, {0.27, -0.38, -1}}"));
+    setControlPointsSe2(Tensors.fromString( //
+        "{{-0.293, 0.473, 0.000}, {0.613, 0.703, 0.000}, {0.490, -0.287, 0.000}, {-0.023, -0.693, 0.000}, {-0.713, 0.127, -0.524}, {0.407, 0.357, -0.524}, {0.000, -0.030, -0.524}, {0.233, -0.443, -0.524}}"));
     setMidpointIndicated(false);
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(500, 500);
   }
 
-  @Override
+  @Override // from ExportCoordinateDemo
   public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
     Tensor sX = Subdivide.of(-1.0, +1.0, refinement);
     Tensor sY = Subdivide.of(+1.0, -1.0, refinement);

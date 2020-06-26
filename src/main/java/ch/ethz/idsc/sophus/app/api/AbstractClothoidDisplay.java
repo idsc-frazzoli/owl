@@ -17,6 +17,7 @@ import ch.ethz.idsc.sophus.ply.Spearhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor SPEARHEAD = PolygonNormalize.of( //
@@ -33,6 +34,11 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   @Override // from GeodesicDisplay
   public final Tensor shape() {
     return SPEARHEAD;
+  }
+
+  @Override // from GeodesicDisplay
+  public final TensorUnaryOperator tangentProjection(Tensor p) {
+    return v -> v.extract(0, 2);
   }
 
   @Override // from GeodesicDisplay

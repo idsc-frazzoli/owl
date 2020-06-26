@@ -17,7 +17,6 @@ public enum LeversHud {
       PseudoDistances pseudoDistances, //
       LeversRender leversRender, //
       ColorDataGradient colorDataGradient) {
-    leversRender.renderIndex();
     leversRender.renderSequence();
     leversRender.renderOrigin();
     leversRender.renderLevers();
@@ -27,7 +26,7 @@ public enum LeversHud {
       leversRender.renderLeverLength();
       break;
     case SOLITARY:
-      leversRender.renderTangentsXtoP(true);
+      // leversRender.renderTangentsXtoP(true);
       leversRender.renderProjectionX(colorDataGradient);
       break;
     case MONOMAHA:
@@ -40,10 +39,11 @@ public enum LeversHud {
       leversRender.renderProjectionsP(colorDataGradient);
       break;
     case STARLIKE:
-      leversRender.renderTangentsPtoX();
+      leversRender.renderTangentsPtoX(true);
       leversRender.renderMahFormsP(colorDataGradient);
     default:
       break;
     }
+    leversRender.renderIndex();
   }
 }
