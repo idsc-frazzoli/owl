@@ -30,12 +30,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
+import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
@@ -53,8 +54,10 @@ public class LeversRender {
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
   private static final PointsRender ORIGIN_RENDER_0 = //
       new PointsRender(new Color(64, 128, 64, 128), new Color(64, 128, 64, 255));
-  private static final Stroke STROKE = //
+  private static final Stroke STROKE_GEODESIC = //
       new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  // ---
+  public static boolean DEBUG_FLAG = false;
 
   public static LeversRender of( //
       GeodesicDisplay geodesicDisplay, TensorUnaryOperator tensorUnaryOperator, //
@@ -149,7 +152,7 @@ public class LeversRender {
     Tensor rescale = !isSufficient() || getWeights().equals(Array.zeros(sequence.length())) //
         ? getWeights().map(s -> NEUTRAL_DEFAULT)
         : Rescale.of(getWeights());
-    graphics.setStroke(STROKE);
+    graphics.setStroke(STROKE_GEODESIC);
     for (Tensor p : sequence) {
       ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
       Tensor domain = Subdivide.of(0, 1, 21);
@@ -214,21 +217,22 @@ public class LeversRender {
   }
 
   /***************************************************/
+  private static final Stroke STROKE_TANGENT = new BasicStroke(1.5f);
   private static final Color COLOR_TANGENT = new Color(0, 0, 255, 192);
   private static final Color COLOR_PLANE = new Color(192, 192, 192, 64);
-  private static final Tensor CIRCLE = CirclePoints.of(41);
+  private static final Tensor CIRCLE = CirclePoints.of(41).unmodifiable();
 
   public void renderTangentsPtoX(boolean tangentPlane) {
     HsExponential hsExponential = geodesicDisplay.hsExponential();
-    graphics.setStroke(new BasicStroke(1.5f));
+    graphics.setStroke(STROKE_TANGENT);
     for (Tensor p : sequence) { // draw tangent at p
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
       Tensor v = hsExponential.exponential(p).log(origin);
       graphics.setColor(COLOR_TANGENT);
       TensorUnaryOperator tangentProjection = geodesicDisplay.tangentProjection(p);
-      if (Objects.nonNull(tangentProjection)) {
+      if (Objects.nonNull(tangentProjection))
         graphics.draw(geometricLayer.toLine2D(tangentProjection.apply(v)));
-      }
+      // ---
       if (tangentPlane) {
         if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
           Scalar max = Norm._2.ofVector(v);
@@ -245,13 +249,13 @@ public class LeversRender {
     HsExponential hsExponential = geodesicDisplay.hsExponential();
     Tensor vs = Tensor.of(sequence.stream().map(hsExponential.exponential(origin)::log));
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
-    graphics.setStroke(new BasicStroke(1.5f));
+    graphics.setStroke(STROKE_TANGENT);
     graphics.setColor(COLOR_TANGENT);
     TensorUnaryOperator tangentProjection = geodesicDisplay.tangentProjection(origin);
-    if (Objects.nonNull(tangentProjection)) {
+    if (Objects.nonNull(tangentProjection))
       for (Tensor v : vs)
         graphics.draw(geometricLayer.toLine2D(tangentProjection.apply(v)));
-    }
+    // ---
     if (tangentPlane) {
       if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
         Scalar max = vs.stream().map(Norm._2::ofVector).reduce(Max::of).orElse(RealScalar.ONE);
@@ -263,82 +267,58 @@ public class LeversRender {
   }
 
   /***************************************************/
-  private static final TensorUnaryOperator PADDING = PadRight.zeros(3, 3);
-
-  public void renderMahFormsP(ColorDataGradient colorDataGradient) {
-    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-    Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
-    Tensor forms = Tensor.of(sequence.stream().map(point -> mahalanobis.new Form(sequence, point).sigma_inverse()));
-    { // show matrix
-      int index = 0;
-      graphics.setFont(FONT_MATRIX);
-      MatrixRender matrixRender = MatrixRender.arcTan(graphics, COLOR_TEXT_DRAW, colorDataGradient);
-      for (Tensor p : sequence) {
-        renderMatrix(p, matrixRender, forms.get(index));
-        ++index;
-      }
-    }
-    if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE)) {
-      int index = 0;
-      for (Tensor p : sequence) {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p)); // translation
-        Tensor matrix = PADDING.apply(forms.get(index));
-        matrix.set(RealScalar.ONE, 2, 2);
-        geometricLayer.pushMatrix(matrix);
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE, true);
-        graphics.setColor(new Color(64, 192, 64, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(64, 192, 64, 192));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-        geometricLayer.popMatrix();
-        ++index;
-      }
-    }
-    // else //
-    // if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
-    // int index = 0;
-    // for (Tensor q : sequence) {
-    // Tensor basis = geodesicDisplay.matrixLift(q);
-    // geometricLayer.pushMatrix(basis);
-    // Tensor form = forms.get(index);
-    // graphics.setColor(new Color(192, 64, 64, 64));
-    // Tensor v1 = BasisTransform.of(form, 0, basis);
-    // Tensor v2 = BasisTransform.of(form, 2, basis);
-    // System.out.println("---");
-    // System.out.println(Pretty.of(v1.map(Round._3)));
-    // System.out.println(Pretty.of(v2.map(Round._3)));
-    // geometricLayer.pushMatrix(form);
-    // graphics.fill(geometricLayer.toPath2D(CirclePoints.of(41).multiply(RealScalar.of(0.2)), true));
-    // geometricLayer.popMatrix();
-    // geometricLayer.popMatrix();
-    // ++index;
-    // }
-    // }
-  }
-
-  public void renderMahFormX(ColorDataGradient colorDataGradient) {
-    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-    Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
-    Tensor form = mahalanobis.new Form(sequence, origin).sigma_inverse();
+  private void renderMahalanobisMatrix(Tensor p, Tensor form, ColorDataGradient colorDataGradient) {
     graphics.setFont(FONT_MATRIX);
     MatrixRender matrixRender = MatrixRender.arcTan(graphics, COLOR_TEXT_DRAW, colorDataGradient);
-    renderMatrix(origin, matrixRender, form);
-    if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE)) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin)); // translation
-      Tensor matrix = PADDING.apply(form);
-      matrix.set(RealScalar.ONE, 2, 2);
-      geometricLayer.pushMatrix(matrix);
-      Path2D path2d = geometricLayer.toPath2D(CIRCLE, true);
+    Tensor alt = Tensors.of(Eigensystem.ofSymmetric(form).values());
+    renderMatrix(p, matrixRender, Transpose.of(alt));
+  }
+
+  private void renderMahalanobisForm(Tensor p, Tensor form) {
+    Tensor vs = null;
+    if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE))
+      vs = CIRCLE;
+    else //
+    if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
+      vs = CIRCLE.dot(S2GeodesicDisplay.tangentSpace(p));
+    // ---
+    if (Objects.nonNull(vs)) {
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
+      Tensor ellipse = Tensor.of(vs.stream() //
+          .map(form::dot) //
+          .map(geodesicDisplay.tangentProjection(p)));
+      Path2D path2d = geometricLayer.toPath2D(ellipse, true);
       graphics.setColor(new Color(64, 192, 64, 64));
       graphics.fill(path2d);
       graphics.setColor(new Color(64, 192, 64, 192));
       graphics.draw(path2d);
       geometricLayer.popMatrix();
-      geometricLayer.popMatrix();
     }
   }
 
+  public void renderMahalanobisFormX(boolean matrix, ColorDataGradient colorDataGradient) {
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
+    if (Tensors.nonEmpty(sequence)) {
+      Tensor form = mahalanobis.new Form(sequence, origin).sigma_inverse();
+      if (matrix)
+        renderMahalanobisMatrix(origin, form, colorDataGradient);
+      renderMahalanobisForm(origin, form);
+    }
+  }
+
+  public void renderMahalanobisFormsP(boolean matrix, ColorDataGradient colorDataGradient) {
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
+    for (Tensor p : sequence) {
+      Tensor form = mahalanobis.new Form(sequence, p).sigma_inverse();
+      if (matrix)
+        renderMahalanobisMatrix(p, form, colorDataGradient);
+      renderMahalanobisForm(p, form);
+    }
+  }
+
+  /***************************************************/
   public void renderProjectionsP(ColorDataGradient colorDataGradient) {
     if (!isSufficient())
       return;
@@ -355,7 +335,6 @@ public class LeversRender {
     }
   }
 
-  /***************************************************/
   public void renderProjectionX(ColorDataGradient colorDataGradient) {
     if (!isSufficient())
       return;

@@ -48,7 +48,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   /** @param xyz normalized vector, point on 2-dimensional sphere
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
-  /* package */ static Tensor tangentSpace(Tensor xyz) {
+  public static Tensor tangentSpace(Tensor xyz) {
     return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
   }
 

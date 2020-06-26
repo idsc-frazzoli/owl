@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -18,9 +17,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class S2AnimationDemo extends AbstractPlaceDemo {
-  private final JToggleButton jToggleAxes = new JToggleButton("axes");
+  private final JToggleButton jToggleAxes = new JToggleButton("toggle");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
   // ---
@@ -58,8 +58,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (jToggleAxes.isSelected())
-      AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     if (0 < controlPoints.length()) {
@@ -69,9 +67,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         Tensor list = Tensors.empty();
         for (Tensor xya : snapshot) {
           Tensor project = vectorExp.dot(geodesicDisplay.project(xya));
-          Tensor xya_ = geodesicDisplay.toPoint(project).append(RealScalar.ZERO);
+          Tensor xya_ = geodesicDisplay.toPoint(project).append(Sign.isNegative(project.Get(2)) //
+              ? RealScalar.of(-1)
+              : RealScalar.ZERO);
           list.append(xya_);
-          // project);
         }
         setControlPointsSe2(list);
       }

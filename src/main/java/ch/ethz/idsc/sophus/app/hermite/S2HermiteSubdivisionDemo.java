@@ -118,8 +118,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           graphics.setStroke(new BasicStroke(1.5f));
           graphics.setColor(Color.GRAY);
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-          Tensor pr = geodesicDisplay.tangentProjection(p).apply(v);
-          graphics.draw(geometricLayer.toLine2D(pr));
+          graphics.draw(geometricLayer.toLine2D(geodesicDisplay.tangentProjection(p).apply(v)));
           geometricLayer.popMatrix();
         }
       }

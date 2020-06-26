@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
+// TODO jToggleArrows does not have effect
 /* package */ class Se2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor ORIGIN = Arrowhead.of(RealScalar.of(0.2));
 

@@ -26,12 +26,7 @@ public enum LeversHud {
       leversRender.renderLeverLength();
       break;
     case SOLITARY:
-      // leversRender.renderTangentsXtoP(true);
       leversRender.renderProjectionX(colorDataGradient);
-      break;
-    case MONOMAHA:
-      leversRender.renderTangentsXtoP(true);
-      leversRender.renderMahFormX(colorDataGradient);
       break;
     case PAIRWISE:
     case NORM2:
@@ -39,8 +34,13 @@ public enum LeversHud {
       leversRender.renderProjectionsP(colorDataGradient);
       break;
     case STARLIKE:
-      leversRender.renderTangentsPtoX(true);
-      leversRender.renderMahFormsP(colorDataGradient);
+      leversRender.renderTangentsPtoX(false);
+      leversRender.renderMahalanobisFormsP(false, colorDataGradient);
+      break;
+    case MONOMAHA:
+      leversRender.renderTangentsXtoP(true);
+      leversRender.renderMahalanobisFormX(false, colorDataGradient);
+      break;
     default:
       break;
     }

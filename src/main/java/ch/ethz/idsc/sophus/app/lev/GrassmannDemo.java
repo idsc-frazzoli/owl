@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
     GeodesicDisplay geodesicDisplay = Se2CoveringGeodesicDisplay.INSTANCE;
-    geodesicDisplay = R2GeodesicDisplay.INSTANCE;
+    geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
     setPseudoDistance(PseudoDistances.MONOMAHA);
     actionPerformed(geodesicDisplay);
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (0 < geodesicControlPoints.length()) {
       Tensor sequence = Drop.head(geodesicControlPoints, 1);
       Tensor origin = geodesicControlPoints.get(0);
-      TensorUnaryOperator tensorUnaryOperator = jToggleNeutral.isSelected() //
+      TensorUnaryOperator tensorUnaryOperator = jToggleNeutral.isSelected() || Tensors.isEmpty(sequence) //
           ? null
           : operator(sequence);
       LeversRender leversRender = LeversRender.of( //
