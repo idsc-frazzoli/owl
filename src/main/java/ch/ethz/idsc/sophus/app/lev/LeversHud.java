@@ -1,20 +1,20 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 public enum LeversHud {
   ;
-  public static void render(PseudoDistances pseudoDistances, LeversRender leversRender) {
+  public static void render(Biinvariant pseudoDistances, LeversRender leversRender) {
     render(pseudoDistances, leversRender, //
         ColorDataGradients.TEMPERATURE.deriveWithOpacity(RealScalar.of(0.5)));
   }
 
   public static void render( //
-      PseudoDistances pseudoDistances, //
+      Biinvariant pseudoDistances, //
       LeversRender leversRender, //
       ColorDataGradient colorDataGradient) {
     leversRender.renderSequence();
@@ -22,23 +22,23 @@ public enum LeversHud {
     leversRender.renderLevers();
     // ---
     switch (pseudoDistances) {
-    case ABSOLUTE:
+    case METRIC:
       leversRender.renderLeverLength();
       break;
-    case SOLITARY:
+    case ANCHOR:
       leversRender.renderProjectionX(colorDataGradient);
       break;
-    case PAIRWISE:
+    case HARBOR:
     case NORM2:
       leversRender.renderProjectionX(colorDataGradient);
       leversRender.renderProjectionsP(colorDataGradient);
       break;
-    case STARLIKE:
+    case GARDEN:
       leversRender.renderTangentsPtoX(false);
       leversRender.renderMahalanobisFormsP(false, colorDataGradient);
       break;
-    case MONOMAHA:
-      leversRender.renderTangentsXtoP(true);
+    case TARGET:
+      leversRender.renderTangentsXtoP(false);
       leversRender.renderMahalanobisFormX(false, colorDataGradient);
       break;
     default:

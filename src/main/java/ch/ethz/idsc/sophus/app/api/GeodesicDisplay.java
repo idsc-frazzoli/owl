@@ -32,7 +32,7 @@ public interface GeodesicDisplay {
   Tensor toPoint(Tensor p);
 
   /** @param p
-   * @return */
+   * @return operator that maps arbitrary dimension tangent vectors to 2d for display */
   TensorUnaryOperator tangentProjection(Tensor p);
 
   /** @param p control point

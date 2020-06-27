@@ -43,6 +43,16 @@ public class MatrixRender {
     this.function = function;
   }
 
+  static final String beautify(String string) {
+    char[] array = string.toCharArray();
+    int count = string.length();
+    while (array[count - 1] == '0')
+      --count;
+    if (array[count - 1] == '.')
+      --count;
+    return new String(array, 0, count);
+  }
+
   public void renderMatrix(Tensor matrix, ScalarUnaryOperator round, int pix, int piy) {
     Tensor rounded = matrix.map(round);
     FontMetrics fontMetrics = graphics.getFontMetrics();
@@ -60,10 +70,14 @@ public class MatrixRender {
         int tpx = pix + width * inx;
         int tpy = piy + fheight * iny;
         graphics.fillRect(tpx, tpy, width, fheight);
-        graphics.setColor(color_text);
         String string = rounded.Get(inx, iny).toString();
         int sw = fontMetrics.stringWidth(string);
-        graphics.drawString(string, tpx + width - sw, tpy + fheight - 1);
+        String show; // = beautify(string);
+        show = string;
+        graphics.setColor(new Color(255, 255, 255, 128));
+        graphics.drawString(show, tpx + width - sw - 1, tpy + fheight - 2);
+        graphics.setColor(color_text);
+        graphics.drawString(show, tpx + width - sw, tpy + fheight - 1);
       }
     }
   }

@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.hs.HsProjection;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Mahalanobis;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
+import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -49,7 +50,7 @@ public class LeversRender {
   public static final Font FONT_MATRIX = new Font(Font.DIALOG, Font.BOLD, 14);
   private static final Tensor RGBA = Tensors.fromString("{{0, 0, 0, 16}, {0, 0, 0, 255}}");
   private static final ColorDataGradient COLOR_DATA_GRADIENT = LinearColorDataGradient.of(RGBA);
-  private static final Scalar NEUTRAL_DEFAULT = RealScalar.of(0.5);
+  private static final Scalar NEUTRAL_DEFAULT = RealScalar.of(0.33);
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
   private static final PointsRender ORIGIN_RENDER_0 = //
@@ -165,28 +166,30 @@ public class LeversRender {
     graphics.setStroke(new BasicStroke());
   }
 
-  static final Color COLOR_TEXT_DRAW = Color.GRAY;
+  static final Color COLOR_TEXT_DRAW = new Color(128 - 32, 128 - 32, 128 - 32);
   private static final Color COLOR_TEXT_FILL = new Color(255 - 32, 255 - 32, 255 - 32, 128);
 
   public void renderLeverLength() {
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     TensorMetric tensorMetric = geodesicDisplay.parametricDistance();
-    graphics.setFont(FONT_MATRIX);
-    FontMetrics fontMetrics = graphics.getFontMetrics();
-    int fheight = fontMetrics.getAscent();
-    for (Tensor p : sequence) {
-      Scalar d = tensorMetric.distance(origin, p);
-      ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
-      Tensor ms = geodesicDisplay.toPoint(scalarTensorFunction.apply(RationalScalar.HALF));
-      Point2D point2d = geometricLayer.toPoint2D(ms);
-      String string = "" + d.map(Round._3);
-      int width = fontMetrics.stringWidth(string);
-      int pix = (int) point2d.getX() - width / 2;
-      int piy = (int) point2d.getY() + fheight / 2;
-      graphics.setColor(COLOR_TEXT_FILL);
-      graphics.fillRect(pix, piy - fheight, width, fheight);
-      graphics.setColor(COLOR_TEXT_DRAW);
-      graphics.drawString(string, pix, piy);
+    if (Objects.nonNull(tensorMetric)) {
+      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      graphics.setFont(FONT_MATRIX);
+      FontMetrics fontMetrics = graphics.getFontMetrics();
+      int fheight = fontMetrics.getAscent();
+      for (Tensor p : sequence) {
+        Scalar d = tensorMetric.distance(origin, p);
+        ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
+        Tensor ms = geodesicDisplay.toPoint(scalarTensorFunction.apply(RationalScalar.HALF));
+        Point2D point2d = geometricLayer.toPoint2D(ms);
+        String string = "" + d.map(Round._3);
+        int width = fontMetrics.stringWidth(string);
+        int pix = (int) point2d.getX() - width / 2;
+        int piy = (int) point2d.getY() + fheight / 2;
+        graphics.setColor(COLOR_TEXT_FILL);
+        graphics.fillRect(pix, piy - fheight, width, fheight);
+        graphics.setColor(COLOR_TEXT_DRAW);
+        graphics.drawString(string, pix, piy);
+      }
     }
   }
 
@@ -221,6 +224,7 @@ public class LeversRender {
   private static final Color COLOR_TANGENT = new Color(0, 0, 255, 192);
   private static final Color COLOR_PLANE = new Color(192, 192, 192, 64);
   private static final Tensor CIRCLE = CirclePoints.of(41).unmodifiable();
+  private static final Tensor CIRCLE_MINOR = CirclePoints.of(41).multiply(RealScalar.of(0.5)).unmodifiable();
 
   public void renderTangentsPtoX(boolean tangentPlane) {
     HsExponential hsExponential = geodesicDisplay.hsExponential();
@@ -274,19 +278,31 @@ public class LeversRender {
     renderMatrix(p, matrixRender, Transpose.of(alt));
   }
 
+  public static boolean form_shadow = false;
+
   private void renderMahalanobisForm(Tensor p, Tensor form) {
     Tensor vs = null;
     if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE;
+      vs = CIRCLE_MINOR;
     else //
     if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE.dot(S2GeodesicDisplay.tangentSpace(p));
+      vs = CIRCLE_MINOR.dot(S2GeodesicDisplay.tangentSpace(p));
     // ---
     if (Objects.nonNull(vs)) {
+      vs = Tensor.of(vs.stream().map(form::dot)); //
+      if (form_shadow) {
+        Exponential exponential = geodesicDisplay.hsExponential().exponential(p);
+        Tensor ms = Tensor.of(vs.stream().map(exponential::exp).map(geodesicDisplay::toPoint));
+        Path2D path2d = geometricLayer.toPath2D(ms, true);
+        graphics.setStroke(new BasicStroke());
+        graphics.setColor(new Color(0, 0, 0, 16));
+        graphics.fill(path2d);
+        graphics.setColor(new Color(0, 0, 0, 32));
+        graphics.draw(path2d);
+      }
+      // ---
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-      Tensor ellipse = Tensor.of(vs.stream() //
-          .map(form::dot) //
-          .map(geodesicDisplay.tangentProjection(p)));
+      Tensor ellipse = Tensor.of(vs.stream().map(geodesicDisplay.tangentProjection(p))); // from 3d to 2d
       Path2D path2d = geometricLayer.toPath2D(ellipse, true);
       graphics.setColor(new Color(64, 192, 64, 64));
       graphics.fill(path2d);

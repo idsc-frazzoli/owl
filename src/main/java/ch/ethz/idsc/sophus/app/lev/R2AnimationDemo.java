@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.lie.so2.RotationMatrix;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       timerFrame.jToolBar.add(jToggleAnimate);
     }
     setControlPointsSe2(R2PointCollection.SOME);
-    setPseudoDistance(PseudoDistances.STARLIKE);
+    setBiinvariant(Biinvariant.GARDEN);
   }
 
   private static Tensor random(double toc, int index) {
@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           sequence, //
           controlPoints.get(0), geometricLayer, graphics);
       leversRender.renderWeights();
-      LeversHud.render(pseudoDistances(), leversRender);
+      LeversHud.render(biinvariant(), leversRender);
     }
   }
 

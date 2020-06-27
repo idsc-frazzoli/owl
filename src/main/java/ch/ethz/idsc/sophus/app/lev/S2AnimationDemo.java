@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
           sequence, //
           controlPoints.get(0), geometricLayer, graphics);
       leversRender.renderWeights();
-      LeversHud.render(pseudoDistances(), leversRender);
+      LeversHud.render(biinvariant(), leversRender);
     }
   }
 

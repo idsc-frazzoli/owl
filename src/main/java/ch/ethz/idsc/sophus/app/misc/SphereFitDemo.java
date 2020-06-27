@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
@@ -94,9 +94,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     {
-      PseudoDistances pseudoDistances = PseudoDistances.ABSOLUTE;
+      Biinvariant pseudoDistances = Biinvariant.METRIC;
       TensorUnaryOperator weightingInterface = //
-          pseudoDistances.normalized(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
+          pseudoDistances.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
       Optional<Tensor> optional = spatialMedian.uniform(control);
       if (optional.isPresent()) {

@@ -89,7 +89,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public TensorMetric parametricDistance() {
-    throw new UnsupportedOperationException();
+    return null;
   }
 
   @Override // from GeodesicDisplay

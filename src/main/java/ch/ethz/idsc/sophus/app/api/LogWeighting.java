@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
@@ -25,7 +25,7 @@ public interface LogWeighting {
    * @param variogram
    * @param sequence
    * @return */
-  TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence);
+  TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence);
 
   /** @param pseudoDistances
    * @param vectorLogManifold
@@ -34,5 +34,5 @@ public interface LogWeighting {
    * @param values
    * @return */
   TensorScalarFunction build( //
-      PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values);
+      Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values);
 }

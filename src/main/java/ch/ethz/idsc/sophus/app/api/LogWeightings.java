@@ -8,8 +8,8 @@ import ch.ethz.idsc.sophus.gbc.InverseCoordinate;
 import ch.ethz.idsc.sophus.gbc.KrigingCoordinate;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.krg.Kriging;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,13 +20,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum LogWeightings implements LogWeighting {
   COORDINATE() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return pseudoDistances.coordinate(vectorLogManifold, variogram, sequence);
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
@@ -36,13 +36,13 @@ public enum LogWeightings implements LogWeighting {
   /***************************************************/
   NORMALIZED() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return pseudoDistances.normalized(vectorLogManifold, variogram, sequence);
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      return pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
@@ -52,13 +52,13 @@ public enum LogWeightings implements LogWeighting {
   /***************************************************/
   DISTANCE() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      return pseudoDistances.distances(vectorLogManifold, variogram, sequence);
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       throw new UnsupportedOperationException();
     }
   },
@@ -67,17 +67,17 @@ public enum LogWeightings implements LogWeighting {
    * restricted to certain variograms, e.g. power(1.5) */
   KRIGING() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.distances(vectorLogManifold, variogram, sequence);
       Kriging kriging = Kriging.barycentric(tensorUnaryOperator, sequence);
       return kriging::estimate;
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = //
-          pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+          pseudoDistances.distances(vectorLogManifold, variogram, sequence);
       Kriging kriging = Kriging.interpolation(tensorUnaryOperator, sequence, values);
       return point -> (Scalar) kriging.estimate(point);
     }
@@ -85,14 +85,14 @@ public enum LogWeightings implements LogWeighting {
   /***************************************************/
   KRIGING_COORDINATE() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.distances(vectorLogManifold, variogram, sequence);
       return KrigingCoordinate.of(tensorUnaryOperator, vectorLogManifold, sequence);
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
@@ -101,14 +101,14 @@ public enum LogWeightings implements LogWeighting {
   }, //
   INVERSE_COORDINATE() {
     @Override
-    public TensorUnaryOperator from(PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.weighting(vectorLogManifold, variogram, sequence);
+    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+      TensorUnaryOperator tensorUnaryOperator = pseudoDistances.distances(vectorLogManifold, variogram, sequence);
       return InverseCoordinate.of(tensorUnaryOperator, vectorLogManifold, sequence);
     }
 
     @Override
     public TensorScalarFunction build( //
-        PseudoDistances pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
+        Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           from(pseudoDistances, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);

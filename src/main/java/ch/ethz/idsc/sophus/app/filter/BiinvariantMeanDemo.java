@@ -21,8 +21,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.krg.PseudoDistances;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
-  final SpinnerLabel<PseudoDistances> spinnerDistances = SpinnerLabel.of(PseudoDistances.values());
+  final SpinnerLabel<Biinvariant> spinnerDistances = SpinnerLabel.of(Biinvariant.values());
   private final JToggleButton axes = new JToggleButton("axes");
   private final JToggleButton median = new JToggleButton("median");
 
@@ -104,9 +104,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     if (median.isSelected()) {
-      PseudoDistances pseudoDistances = spinnerDistances.getValue();
+      Biinvariant pseudoDistances = spinnerDistances.getValue();
       TensorUnaryOperator weightingInterface = //
-          pseudoDistances.normalized(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), sequence);
+          pseudoDistances.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), sequence);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(biinvariantMean, weightingInterface, Chop._05);
       Optional<Tensor> optional = spatialMedian.uniform(sequence);
       if (optional.isPresent()) {
