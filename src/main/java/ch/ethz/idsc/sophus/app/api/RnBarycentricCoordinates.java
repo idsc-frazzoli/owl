@@ -20,12 +20,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum RnBarycentricCoordinates implements LogWeighting {
   WACHSPRESS() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS), sequence);
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;
@@ -33,12 +33,12 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   },
   MEAN_VALUE() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE), sequence);
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;
@@ -46,12 +46,12 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   },
   DISCRETE_HARMONIC() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC), sequence);
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;
@@ -59,12 +59,12 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   },
   AFFINE() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return RnAffineCoordinate.of(sequence); // precomputation
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;
@@ -72,13 +72,13 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   },
   RBF_RN() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(pseudoDistances.distances(RnManifold.INSTANCE, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(biinvariant.distances(RnManifold.INSTANCE, variogram, sequence)), sequence);
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;
@@ -86,13 +86,13 @@ public enum RnBarycentricCoordinates implements LogWeighting {
   },
   RBF_VL() {
     @Override
-    public TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
+    public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(pseudoDistances.distances(vectorLogManifold, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(biinvariant.distances(vectorLogManifold, variogram, sequence)), sequence);
     }
 
     @Override
-    public TensorScalarFunction build(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
+    public TensorScalarFunction build(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence,
         Tensor values) {
       // TODO Auto-generated method stub
       return null;

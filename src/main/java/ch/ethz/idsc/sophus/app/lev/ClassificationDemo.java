@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 /* package */ class ClassificationDemo extends AbstractHoverDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_O = ColorDataLists._097.cyclic();
+  private static final ColorDataIndexed COLOR_DATA_INDEXED_C = COLOR_DATA_INDEXED_O.deriveWithAlpha(192);
   private static final ColorDataIndexed COLOR_DATA_INDEXED_T = COLOR_DATA_INDEXED_O.deriveWithAlpha(128);
   // ---
   private final SpinnerLabel<Labels> spinnerLabels = SpinnerLabel.of(Labels.values());
@@ -57,8 +58,8 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     Classification labelInterface = spinnerLabels.getValue().apply(vector);
     int bestLabel = labelInterface.result(leversRender.getWeights()).getLabel();
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicMouse));
-    Path2D path2d = geometricLayer.toPath2D(shape, true);
-    graphics.setColor(COLOR_DATA_INDEXED_T.getColor(bestLabel));
+    Path2D path2d = geometricLayer.toPath2D(shape.multiply(RealScalar.of(1.2)), true);
+    graphics.setColor(COLOR_DATA_INDEXED_C.getColor(bestLabel));
     graphics.fill(path2d);
     graphics.setColor(COLOR_DATA_INDEXED_O.getColor(bestLabel));
     graphics.draw(path2d);

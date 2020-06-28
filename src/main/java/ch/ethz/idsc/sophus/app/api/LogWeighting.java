@@ -25,14 +25,16 @@ public interface LogWeighting {
    * @param variogram
    * @param sequence
    * @return */
-  TensorUnaryOperator from(Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence);
+  TensorUnaryOperator from( //
+      Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence);
 
-  /** @param pseudoDistances
+  /** @param biinvariant
    * @param vectorLogManifold
    * @param variogram
    * @param sequence
    * @param values
    * @return */
   TensorScalarFunction build( //
-      Biinvariant pseudoDistances, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence, Tensor values);
+      Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, //
+      Tensor sequence, Tensor values);
 }

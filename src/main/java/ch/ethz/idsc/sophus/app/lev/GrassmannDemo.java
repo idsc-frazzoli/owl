@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.lev;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
@@ -26,12 +25,10 @@ import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ class GrassmannDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
-  private final JButton jButtonPrint = new JButton("print");
 
   public GrassmannDemo() {
     super(GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
@@ -39,9 +36,6 @@ import ch.ethz.idsc.tensor.sca.Round;
     spinnerColorData.setValue(ColorDataGradients.TEMPERATURE);
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
     // ---
-    jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2().map(Round._3)));
-    // ---
-    timerFrame.jToolBar.add(jButtonPrint);
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
     GeodesicDisplay geodesicDisplay = Se2CoveringGeodesicDisplay.INSTANCE;

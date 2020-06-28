@@ -16,13 +16,13 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -52,6 +52,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
       timerFrame.jToolBar.add(jButtonShuffle);
     }
     shuffle(spinnerCount.getValue());
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
     timerFrame.jToolBar.addSeparator();
   }
 
@@ -63,7 +64,10 @@ import ch.ethz.idsc.tensor.sca.Abs;
       xyzs = Tensors.vector(i -> randomSampleInterface.randomSample(RANDOM), n);
       xyzs.set(Abs.FUNCTION, Tensor.ALL, 2);
     } else {
-      xyzs = Join.of(1, RandomVariate.of(UniformDistribution.of(-5, 5), RANDOM, n, 2), RandomVariate.of(UniformDistribution.of(-2, 2), RANDOM, n, 1));
+      double lim = 3;
+      xyzs = Join.of(1, //
+          RandomVariate.of(UniformDistribution.of(-lim, lim), RANDOM, n, 2), //
+          RandomVariate.of(UniformDistribution.of(-Math.PI, Math.PI), RANDOM, n, 1));
     }
     setControlPointsSe2(xyzs);
   }
@@ -75,15 +79,16 @@ import ch.ethz.idsc.tensor.sca.Abs;
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
-    TensorUnaryOperator tensorUnaryOperator = operator(sequence);
+    Tensor origin = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     LeversRender leversRender = LeversRender.of( //
         geodesicDisplay, //
-        tensorUnaryOperator, //
-        sequence, //
-        geodesicDisplay.project(geometricLayer.getMouseSe2State()), //
+        operator(sequence), sequence, origin, //
         geometricLayer, graphics);
     render(geometricLayer, graphics, leversRender);
   }
 
+  /** @param geometricLayer
+   * @param graphics
+   * @param leversRender */
   abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender);
 }

@@ -94,9 +94,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     {
-      Biinvariant pseudoDistances = Biinvariant.METRIC;
+      Biinvariant biinvariant = Biinvariant.METRIC;
       TensorUnaryOperator weightingInterface = //
-          pseudoDistances.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
+          biinvariant.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
       Optional<Tensor> optional = spatialMedian.uniform(control);
       if (optional.isPresent()) {

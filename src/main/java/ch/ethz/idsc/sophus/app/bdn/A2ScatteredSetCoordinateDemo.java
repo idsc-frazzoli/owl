@@ -38,6 +38,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     ColorDataGradient colorDataGradient = colorDataGradient();
+    RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     graphics.setFont(ArrayPlotRender.FONT);
     graphics.setColor(Color.BLACK);
@@ -46,13 +47,14 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     leversRender.renderIndex();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
-    if (geodesicDisplay.dimensions() < sequence.length()) { // render basis functions
-      Tensor origin = getGeodesicControlPoints();
-      Tensor wgs = compute(operator(origin), refinement());
-      List<Integer> dims = Dimensions.of(wgs);
-      Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-      RenderQuality.setQuality(graphics);
-      ArrayPlotRender.rescale(_wgp, colorDataGradient, magnification()).render(geometricLayer, graphics);
-    }
+    if (jToggleHeatmap.isSelected()) // render basis functions
+      if (geodesicDisplay.dimensions() < sequence.length()) { // render basis functions
+        Tensor origin = getGeodesicControlPoints();
+        Tensor wgs = compute(operator(origin), refinement());
+        List<Integer> dims = Dimensions.of(wgs);
+        Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+        // RenderQuality.setQuality(graphics);
+        ArrayPlotRender.rescale(_wgp, colorDataGradient, magnification()).render(geometricLayer, graphics);
+      }
   }
 }

@@ -8,25 +8,27 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 public enum LeversHud {
   ;
-  public static void render(Biinvariant pseudoDistances, LeversRender leversRender) {
-    render(pseudoDistances, leversRender, //
+  public static void render(Biinvariant biinvariant, LeversRender leversRender) {
+    render(biinvariant, leversRender, //
         ColorDataGradients.TEMPERATURE.deriveWithOpacity(RealScalar.of(0.5)));
   }
 
   public static void render( //
-      Biinvariant pseudoDistances, //
-      LeversRender leversRender, //
-      ColorDataGradient colorDataGradient) {
+      Biinvariant biinvariant, LeversRender leversRender, ColorDataGradient colorDataGradient) {
     leversRender.renderSequence();
     leversRender.renderOrigin();
     leversRender.renderLevers();
     // ---
-    switch (pseudoDistances) {
+    switch (biinvariant) {
     case METRIC:
       leversRender.renderLeverLength();
       break;
     case ANCHOR:
       leversRender.renderProjectionX(colorDataGradient);
+      break;
+    case TARGET:
+      leversRender.renderTangentsXtoP(false);
+      leversRender.renderMahalanobisFormX(false, colorDataGradient);
       break;
     case HARBOR:
     case NORM2:
@@ -36,10 +38,6 @@ public enum LeversHud {
     case GARDEN:
       leversRender.renderTangentsPtoX(false);
       leversRender.renderMahalanobisFormsP(false, colorDataGradient);
-      break;
-    case TARGET:
-      leversRender.renderTangentsXtoP(false);
-      leversRender.renderMahalanobisFormX(false, colorDataGradient);
       break;
     default:
       break;

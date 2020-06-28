@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Variograms;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -44,7 +45,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     }
     {
       spinnerBiinvariant.setArray(Biinvariant.values());
-      spinnerBiinvariant.setIndex(0);
+      spinnerBiinvariant.setValue(Biinvariant.ANCHOR);
       spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(90, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }
@@ -52,7 +53,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     spinnerVariogram.addSpinnerListener(v -> recompute());
     {
       spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
-      spinnerBeta.setIndex(2);
+      spinnerBeta.setValue(RealScalar.of(2));
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
       spinnerBeta.addSpinnerListener(v -> recompute());
     }
@@ -63,8 +64,8 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     return spinnerLogWeighting.getValue();
   }
 
-  protected final void setBiinvariant(Biinvariant pseudoDistances) {
-    spinnerBiinvariant.setValue(pseudoDistances);
+  protected final void setBiinvariant(Biinvariant biinvariant) {
+    spinnerBiinvariant.setValue(biinvariant);
   }
 
   protected final Biinvariant biinvariant() {
@@ -72,9 +73,8 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   }
 
   protected final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
-    LogWeighting logWeighting = spinnerLogWeighting.getValue();
-    return logWeighting.from( //
-        spinnerBiinvariant.getValue(), //
+    return logWeighting().from( //
+        biinvariant(), //
         vectorLogManifold, //
         variogram(), //
         sequence);
@@ -89,9 +89,8 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   }
 
   protected final TensorScalarFunction function(Tensor sequence, Tensor values) {
-    LogWeighting logWeighting = spinnerLogWeighting.getValue();
-    return logWeighting.build( //
-        spinnerBiinvariant.getValue(), //
+    return logWeighting().build( //
+        biinvariant(), //
         geodesicDisplay().vectorLogManifold(), //
         variogram(), //
         sequence, values);
