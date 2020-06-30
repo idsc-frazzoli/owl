@@ -23,8 +23,8 @@ public enum LeversHud {
     case METRIC:
       leversRender.renderLeverLength();
       break;
-    case ANCHOR:
-      leversRender.renderProjectionX(colorDataGradient);
+    case LEVERAGE:
+      leversRender.renderLeverages();
       break;
     case TARGET:
       leversRender.renderTangentsXtoP(false);
@@ -32,8 +32,8 @@ public enum LeversHud {
       break;
     case HARBOR:
     case NORM2:
-      leversRender.renderProjectionX(colorDataGradient);
-      leversRender.renderProjectionsP(colorDataGradient);
+      leversRender.renderInfluenceX(colorDataGradient);
+      leversRender.renderInfluenceP(colorDataGradient);
       break;
     case GARDEN:
       leversRender.renderTangentsPtoX(false);

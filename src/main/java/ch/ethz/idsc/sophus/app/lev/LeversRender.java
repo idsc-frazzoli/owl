@@ -42,6 +42,7 @@ import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -201,6 +202,10 @@ public class LeversRender {
   }
 
   public void renderWeights() {
+    renderWeights(weights);
+  }
+
+  public void renderWeights(Tensor weights) {
     graphics.setFont(FONT_MATRIX);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
@@ -341,12 +346,32 @@ public class LeversRender {
   }
 
   /***************************************************/
-  public void renderProjectionsP(ColorDataGradient colorDataGradient) {
+  public void renderLeverages() {
+    if (!isSufficient())
+      return;
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    renderWeights(Diagonal.of(new HsProjection(vectorLogManifold).new Matrix(sequence, origin).influence()));
+  }
+
+  public void renderInfluenceX(ColorDataGradient colorDataGradient) {
     if (!isSufficient())
       return;
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     HsProjection hsProjection = new HsProjection(vectorLogManifold);
-    Tensor projections = Tensor.of(sequence.stream().map(point -> hsProjection.projection(sequence, point)));
+    Tensor influence = hsProjection.new Matrix(sequence, origin).influence();
+    // ---
+    graphics.setFont(FONT_MATRIX);
+    MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
+    matrixRender.setScalarMapper(Round._2);
+    renderMatrix(origin, matrixRender, influence);
+  }
+
+  public void renderInfluenceP(ColorDataGradient colorDataGradient) {
+    if (!isSufficient())
+      return;
+    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+    HsProjection hsProjection = new HsProjection(vectorLogManifold);
+    Tensor projections = Tensor.of(sequence.stream().map(point -> hsProjection.new Matrix(sequence, point).influence()));
     // ---
     graphics.setFont(FONT_MATRIX);
     int index = 0;
@@ -356,20 +381,6 @@ public class LeversRender {
       renderMatrix(p, matrixRender, projections.get(index));
       ++index;
     }
-  }
-
-  public void renderProjectionX(ColorDataGradient colorDataGradient) {
-    if (!isSufficient())
-      return;
-    VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-    HsProjection hsProjection = new HsProjection(vectorLogManifold);
-    Tensor projection = hsProjection.projection(sequence, origin);
-    // ---
-    graphics.setFont(FONT_MATRIX);
-    // of
-    MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
-    matrixRender.setScalarMapper(Round._2);
-    renderMatrix(origin, matrixRender, projection);
   }
 
   public void renderMatrix(int index, Tensor matrix, ColorDataIndexed colorDataIndexed) {

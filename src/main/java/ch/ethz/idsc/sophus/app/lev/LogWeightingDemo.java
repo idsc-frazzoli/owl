@@ -58,8 +58,8 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     }
     {
       spinnerBiinvariant.setArray(Biinvariant.values());
-      spinnerBiinvariant.setValue(Biinvariant.ANCHOR);
-      spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(90, 28), "distance");
+      spinnerBiinvariant.setValue(Biinvariant.LEVERAGE);
+      spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }
     spinnerVariogram.addToComponentReduced(timerFrame.jToolBar, new Dimension(230, 28), "variograms");

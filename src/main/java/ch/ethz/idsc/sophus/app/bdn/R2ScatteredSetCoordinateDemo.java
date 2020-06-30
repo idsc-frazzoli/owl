@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -18,6 +19,7 @@ import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -100,8 +102,15 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       TensorUnaryOperator tensorUnaryOperator = weightingOperator(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
-      min = Tensors.vector(-5, -5);
-      max = Tensors.vector(+5, +5);
+      double rng = 5;
+      min = Tensors.vector(-rng, -rng);
+      max = Tensors.vector(+rng, +rng);
+      {
+        Tensor sq = Tensors.matrixDouble(new double[][] { { -rng, -rng }, { rng, -rng }, { rng, rng }, { -rng, rng } });
+        Path2D path2d = geometricLayer.toPath2D(sq, true);
+        graphics.setColor(Color.GRAY);
+        graphics.draw(path2d);
+      }
       Tensor sX = Subdivide.of(min.Get(0), max.Get(0), refinement());
       Tensor sY = Subdivide.of(max.Get(1), min.Get(1), refinement());
       int n = sX.length();
@@ -144,7 +153,10 @@ import ch.ethz.idsc.tensor.red.Entrywise;
           }
       }
     }
-    renderControlPoints(geometricLayer, graphics);
+    LeversRender leversRender = LeversRender.of(geodesicDisplay, null, controlPoints, null, geometricLayer, graphics);
+    leversRender.renderSequence();
+    leversRender.renderIndex("q");
+    // renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {
