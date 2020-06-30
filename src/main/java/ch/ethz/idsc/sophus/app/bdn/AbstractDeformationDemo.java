@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -36,8 +37,9 @@ import ch.ethz.idsc.tensor.sca.N;
   // ---
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("snap");
-  private final JToggleButton jToggleAnchor = new JToggleButton("anchor");
+  private final JToggleButton jToggleTarget = new JToggleButton("target");
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
+  private final JButton jButtonPrint = new JButton("print");
   // ---
   /** in coordinate specific to geodesic display */
   private Tensor movingOrigin;
@@ -45,7 +47,6 @@ import ch.ethz.idsc.tensor.sca.N;
 
   AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(false, list, array);
-    setMidpointIndicated(false);
     // ---
     spinnerRefine.addSpinnerListener(v -> recompute());
     // ---
@@ -56,12 +57,16 @@ import ch.ethz.idsc.tensor.sca.N;
       spinnerLength.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "number of points");
     }
     timerFrame.jToolBar.add(jToggleAxes);
-    jToggleAnchor.setSelected(true);
-    jToggleAnchor.setToolTipText("display anchor");
-    timerFrame.jToolBar.add(jToggleAnchor);
+    jToggleTarget.setSelected(true);
+    jToggleTarget.setToolTipText("display target");
+    timerFrame.jToolBar.add(jToggleTarget);
     {
       jButton.addActionListener(l -> snap());
       timerFrame.jToolBar.add(jButton);
+    }
+    {
+      jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2()));
+      timerFrame.jToolBar.add(jButtonPrint);
     }
   }
 
@@ -120,8 +125,14 @@ import ch.ethz.idsc.tensor.sca.N;
     POINTS_RENDER_POINTS //
         .show(geodesicDisplay::matrixLift, shapeOrigin(), origin) //
         .render(geometricLayer, graphics);
-    if (jToggleAnchor.isSelected())
-      renderControlPoints(geometricLayer, graphics);
+    if (jToggleTarget.isSelected()) {
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, null, getGeodesicControlPoints(), null, geometricLayer, graphics);
+      leversRender.renderIndex("q");
+      leversRender.renderSequence();
+    } else {
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, null, origin, null, geometricLayer, graphics);
+      leversRender.renderIndex();
+    }
     if (jToggleHeatmap.isSelected())
       ArrayPlotRender.rescale(movingDomain2D.weights(), colorDataGradient(), 3).render(geometricLayer, graphics);
   }

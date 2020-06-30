@@ -43,7 +43,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor se2 = Tensors.fromString("{{-1.5, 1.3, -2.3}, {+1.5, +1.3, 2.3}, {0.3, 1.5, 1.2}, {0.0, 0.5, -0.5}, {-1.4, -1.3, 0.1}, {1.2, -1.3, -1.2}}");
     // Tensor del = RandomVariate.of(UniformDistribution.of(0.00, 0.1),Dimensions.of(se2));
     setControlPointsSe2(se2);
-    setMidpointIndicated(false);
     // Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     // timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(500, 500);

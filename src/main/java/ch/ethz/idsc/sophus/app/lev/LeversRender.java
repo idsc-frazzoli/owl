@@ -110,6 +110,10 @@ public class LeversRender {
   }
 
   public void renderIndex() {
+    renderIndex("p");
+  }
+
+  public void renderIndex(String plabel) {
     int index = 0;
     Tensor shape = geodesicDisplay.shape();
     graphics.setFont(FONT_LABELS);
@@ -127,9 +131,8 @@ public class LeversRender {
         graphics.drawString(string, pix, piy);
       }
       {
-        String string = "p";
-        pix -= fontMetrics.stringWidth(string);
-        graphics.drawString(string, pix, piy - fheight / 3);
+        pix -= fontMetrics.stringWidth(plabel);
+        graphics.drawString(plabel, pix, piy - fheight / 3);
       }
       // ---
       geometricLayer.popMatrix();

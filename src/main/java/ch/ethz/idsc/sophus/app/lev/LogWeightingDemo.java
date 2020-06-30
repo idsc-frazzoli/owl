@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
@@ -13,6 +14,7 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Variograms;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,6 +30,22 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
+    @Override
+    public void actionPerformed(LogWeighting logWeighting) {
+      if (logWeighting.equals(LogWeightings.COORDINATE)) {
+        spinnerVariogram.setValue(Variograms.INVERSE_POWER);
+        spinnerBeta.setValueSafe(RealScalar.of(2));
+      }
+      if ( //
+      logWeighting.equals(LogWeightings.KRIGING) || //
+      logWeighting.equals(LogWeightings.KRIGING_COORDINATE)) {
+        spinnerVariogram.setValue(Variograms.POWER);
+        setBiinvariant(Biinvariant.HARBOR);
+        spinnerBeta.setValueSafe(RationalScalar.of(3, 2));
+      }
+    }
+  };
 
   public LogWeightingDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list);
@@ -35,12 +53,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerLogWeighting.setList(array);
       spinnerLogWeighting.setIndex(0);
       spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(130, 28), "weights");
-      spinnerLogWeighting.addSpinnerListener(v -> {
-        if (v.equals(LogWeightings.COORDINATE))
-          spinnerVariogram.setValue(Variograms.INVERSE_POWER);
-        if (v.equals(LogWeightings.KRIGING_COORDINATE))
-          spinnerVariogram.setValue(Variograms.POWER);
-      });
+      spinnerLogWeighting.addSpinnerListener(spinnerListener);
       spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {

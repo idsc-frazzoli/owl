@@ -13,7 +13,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
@@ -33,6 +32,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleButton = new JToggleButton("thres");
+  private final JButton jButtonPrint = new JButton("print");
   private final JButton jButtonExport = new JButton("export");
 
   public A2KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
@@ -66,10 +66,14 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     timerFrame.jToolBar.addSeparator();
     {
+      jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2()));
+      timerFrame.jToolBar.add(jButtonPrint);
+    }
+    {
       jButtonExport.addActionListener(e -> export());
       timerFrame.jToolBar.add(jButtonExport);
     }
-    timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
+    // timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
   @Override
@@ -86,8 +90,9 @@ import ch.ethz.idsc.tensor.sca.Round;
       RenderQuality.setDefault(graphics);
       Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
-    } catch (Exception e) {
-      // TODO: handle exception
+    } catch (Exception exception) {
+      System.out.println(exception);
+      exception.printStackTrace();
     }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);

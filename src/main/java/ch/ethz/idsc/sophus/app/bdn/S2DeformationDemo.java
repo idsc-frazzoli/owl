@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 /* package */ class S2DeformationDemo extends AbstractDeformationDemo {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.05));
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+  private static final Scalar ZHEIGHT = RealScalar.of(1.0); // 1.8 for initial pics
   // ---
   private final SpinnerLabel<SnMeans> spinnerSnMeans = SpinnerLabel.of(SnMeans.values());
 
@@ -36,6 +38,10 @@ import ch.ethz.idsc.tensor.red.Norm;
     timerFrame.configCoordinateOffset(400, 400);
     // ---
     shuffleSnap();
+    // ---
+    setControlPointsSe2(Tensors.fromString( //
+        "{{-13/75, 7/20, 0.0}, {19/300, 31/150, 0.0}, {53/150, 101/300, 0.0}, {31/300, -1/100, 0.0}, {-7/25, -7/150, 0.0}, {-1/100, -97/300, 0.0}, {27/100, -29/150, 0.0}, {-9/25, -137/300, 0.0}}"));
+    snap();
   }
 
   @Override
@@ -51,7 +57,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
-    Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), RealScalar.of(1.8))), dx.length(), dy.length());
+    Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), ZHEIGHT)), dx.length(), dy.length());
     TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
     return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
   }

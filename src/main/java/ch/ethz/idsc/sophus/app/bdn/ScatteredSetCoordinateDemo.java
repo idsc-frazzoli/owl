@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       List<GeodesicDisplay> list, //
       List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
+    setMidpointIndicated(false);
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
       spinnerRefine.setValue(20);

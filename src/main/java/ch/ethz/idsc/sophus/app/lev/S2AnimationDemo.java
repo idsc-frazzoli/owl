@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class S2AnimationDemo extends AbstractPlaceDemo {
-  private final JToggleButton jToggleAxes = new JToggleButton("toggle");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
   // ---
@@ -29,10 +28,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   public S2AnimationDemo() {
     super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
-    {
-      timerFrame.jToolBar.add(jToggleAxes);
-      jToggleAxes.setSelected(true);
-    }
     {
       jToggleAnimate.addActionListener(e -> {
         if (jToggleAnimate.isSelected()) {
