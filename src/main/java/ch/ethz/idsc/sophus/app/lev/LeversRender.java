@@ -42,6 +42,7 @@ import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -227,7 +228,6 @@ public class LeversRender {
   private static final Color COLOR_TANGENT = new Color(0, 0, 255, 192);
   private static final Color COLOR_PLANE = new Color(192, 192, 192, 64);
   private static final Tensor CIRCLE = CirclePoints.of(41).unmodifiable();
-  private static final Tensor CIRCLE_MINOR = CirclePoints.of(41).multiply(RealScalar.of(0.5)).unmodifiable();
 
   public void renderTangentsPtoX(boolean tangentPlane) {
     HsExponential hsExponential = geodesicDisplay.hsExponential();
@@ -242,7 +242,7 @@ public class LeversRender {
       // ---
       if (tangentPlane) {
         if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
-          Scalar max = Norm._2.ofVector(v);
+          Scalar max = Hypot.ofVector(v);
           graphics.setColor(COLOR_PLANE);
           graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(max), true));
         }
@@ -286,10 +286,10 @@ public class LeversRender {
   private void renderMahalanobisForm(Tensor p, Tensor form) {
     Tensor vs = null;
     if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE_MINOR;
+      vs = CIRCLE;
     else //
     if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE_MINOR.dot(S2GeodesicDisplay.tangentSpace(p));
+      vs = CIRCLE.dot(S2GeodesicDisplay.tangentSpace(p));
     // ---
     if (Objects.nonNull(vs)) {
       vs = Tensor.of(vs.stream().map(form::dot)); //

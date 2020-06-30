@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
+import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -36,7 +36,7 @@ public class Se2CoveringGeodesicDisplay extends Se2AbstractGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public TensorMetric parametricDistance() {
-    return Se2CoveringParametricDistance.INSTANCE;
+    return Se2CoveringParametric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

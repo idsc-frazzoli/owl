@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Hypot;
 
 /* package */ class PredictionAccuracy implements MultivariateFunction {
   private final Tensor[] data;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor pqr = data[index];
       Tensor t_prediction = tensorUnaryOperator.apply(pqr);
       Tensor g = inverse[index].combine(t_prediction);
-      Scalar err = Norm._2.ofVector(Se2CoveringExponential.INSTANCE.log(g));
+      Scalar err = Hypot.ofVector(Se2CoveringExponential.INSTANCE.log(g));
       sum = sum.add(err);
     }
     return sum.number().doubleValue();

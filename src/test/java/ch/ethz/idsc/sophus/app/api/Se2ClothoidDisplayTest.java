@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
-import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
+import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.ply.PolygonArea;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,7 +22,7 @@ public class Se2ClothoidDisplayTest extends TestCase {
     Tensor q = Tensors.vector(0, 2, 0);
     Scalar scalar = Se2ClothoidDisplay.INSTANCE.parametricDistance().distance(p, q);
     Clips.interval(2.542, 2.55).requireInside(scalar);
-    Scalar result = Se2ParametricDistance.INSTANCE.distance(p, q);
+    Scalar result = Se2Parametric.INSTANCE.distance(p, q);
     assertEquals(result, RealScalar.of(2));
   }
 

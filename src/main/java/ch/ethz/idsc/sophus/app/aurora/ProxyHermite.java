@@ -9,7 +9,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
+import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
     for (int index = 0; index < refined.length(); ++index) {
       Tensor p = refined.get(index, 0);
       Tensor q = data.get(index, 0);
-      total = total.add(Se2ParametricDistance.INSTANCE.distance(p, q));
+      total = total.add(Se2Parametric.INSTANCE.distance(p, q));
     }
     return total;
   }
