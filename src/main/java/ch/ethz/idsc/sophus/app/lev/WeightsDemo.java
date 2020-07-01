@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class WeightsDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private static final Biinvariant[] BIINVARIANTS = //
-      { Biinvariant.METRIC, Biinvariant.LEVERAGE, Biinvariant.HARBOR, Biinvariant.GARDEN };
+      { Biinvariant.METRIC, Biinvariant.ANCHOR, Biinvariant.HARBOR, Biinvariant.GARDEN };
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public WeightsDemo() {
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         int fheight = fontMetrics.getAscent();
         for (Biinvariant biinvariant : BIINVARIANTS) {
           graphics.setColor(colorDataIndexed.getColor(index));
-          graphics.drawString(biinvariant.name(), 2, (index + 1) * fheight);
+          graphics.drawString(biinvariant.title(), 2, (index + 1) * fheight);
           ++index;
         }
       }

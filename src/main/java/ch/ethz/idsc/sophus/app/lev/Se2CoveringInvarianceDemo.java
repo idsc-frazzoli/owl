@@ -13,12 +13,13 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.hs.HsProjection;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2CoveringInvarianceDemo extends AbstractPlaceDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
@@ -47,35 +48,40 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
-      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      Tensor origin = controlPointsAll.get(0);
-      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
+      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      HsProjection hsProjection = new HsProjection(vectorLogManifold);
       {
-        LeversRender leversRender = LeversRender.of(geodesicDisplay, //
-            tensorUnaryOperator, //
-            sequence, //
-            origin, geometricLayer, graphics);
+        Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
+        Tensor origin = controlPointsAll.get(0);
+        Tensor weights = hsProjection.new Matrix(sequence, origin).leverages();
+        LeversRender leversRender = //
+            LeversRender.of(geodesicDisplay, null, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
         leversRender.renderLevers();
-        leversRender.renderWeights();
+        leversRender.renderWeights(weights);
+        leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
         leversRender.renderOrigin();
+        leversRender.renderIndex();
       }
+      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
       try {
-        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
         Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
-        LeversRender leverRender = LeversRender.of(geodesicDisplay, //
-            tensorUnaryOperator, //
-            result.extract(1, result.length()), //
-            result.get(0), geometricLayer, graphics);
-        leverRender.renderSequence();
-        leverRender.renderLevers();
-        leverRender.renderWeights();
-        leverRender.renderOrigin();
-        geometricLayer.popMatrix();
+        Tensor sequence = result.extract(1, result.length());
+        Tensor origin = result.get(0);
+        Tensor weights = hsProjection.new Matrix(sequence, origin).leverages();
+        LeversRender leversRender = //
+            LeversRender.of(geodesicDisplay, null, sequence, origin, geometricLayer, graphics);
+        leversRender.renderSequence();
+        leversRender.renderLevers();
+        leversRender.renderWeights(weights);
+        leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
+        leversRender.renderOrigin();
+        leversRender.renderIndex("q");
       } catch (Exception exception) {
         exception.printStackTrace();
       }
+      geometricLayer.popMatrix();
     }
   }
 

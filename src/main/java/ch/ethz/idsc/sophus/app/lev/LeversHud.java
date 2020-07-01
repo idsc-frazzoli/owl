@@ -8,9 +8,11 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
 public enum LeversHud {
   ;
+  public static final ColorDataGradient COLOR_DATA_GRADIENT = //
+      ColorDataGradients.TEMPERATURE.deriveWithOpacity(RealScalar.of(0.5));
+
   public static void render(Biinvariant biinvariant, LeversRender leversRender) {
-    render(biinvariant, leversRender, //
-        ColorDataGradients.TEMPERATURE.deriveWithOpacity(RealScalar.of(0.5)));
+    render(biinvariant, leversRender, COLOR_DATA_GRADIENT);
   }
 
   public static void render( //
@@ -23,7 +25,8 @@ public enum LeversHud {
     case METRIC:
       leversRender.renderLeverLength();
       break;
-    case LEVERAGE:
+    case ANCHOR:
+      leversRender.renderInfluenceX(colorDataGradient);
       leversRender.renderLeverages();
       break;
     case TARGET:

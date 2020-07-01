@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     return Arrays.asList( //
         Biinvariant.METRIC, //
         Biinvariant.GARDEN, //
-        Biinvariant.LEVERAGE, //
+        Biinvariant.ANCHOR, //
         Biinvariant.HARBOR);
   }
 

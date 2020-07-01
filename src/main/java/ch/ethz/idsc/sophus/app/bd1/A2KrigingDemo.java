@@ -16,15 +16,20 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
@@ -111,7 +116,13 @@ import ch.ethz.idsc.tensor.sca.Round;
   }
 
   private BufferedImage bufferedImage(Tensor matrix) {
-    Tensor colorData = matrix.map(spinnerColorData.getValue());
+    Tensor tensor = ResourceData.of("/colorscheme/" + spinnerColorData.getValue().toString().toLowerCase() + ".csv");
+    ScalarUnaryOperator suo = s -> s.multiply(RationalScalar.HALF).add(RealScalar.of(127));
+    tensor.set(suo, Tensor.ALL, 0);
+    tensor.set(suo, Tensor.ALL, 1);
+    tensor.set(suo, Tensor.ALL, 2);
+    ColorDataGradient colorDataGradient = LinearColorDataGradient.of(tensor);
+    Tensor colorData = matrix.map(colorDataGradient);
     return ImageFormat.of(colorData);
   }
 
