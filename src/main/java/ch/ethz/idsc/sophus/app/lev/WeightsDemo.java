@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class WeightsDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private static final Biinvariant[] BIINVARIANTS = //
-      { Biinvariant.METRIC, Biinvariant.ANCHOR, Biinvariant.HARBOR, Biinvariant.GARDEN };
+      { Biinvariant.METRIC, Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN };
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public WeightsDemo() {

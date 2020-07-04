@@ -22,15 +22,16 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
+  private static final int REFINEMENT = 60;
+
   public static List<Biinvariant> distinct() {
     return Arrays.asList( //
         Biinvariant.METRIC, //
+        Biinvariant.TARGET, //
         Biinvariant.GARDEN, //
-        Biinvariant.ANCHOR, //
         Biinvariant.HARBOR);
   }
 
-  private static final int REFINEMENT = 120;
   private final JButton jButtonExport = new JButton("export");
 
   public ExportCoordinateDemo( //
@@ -46,10 +47,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override
   public final void actionPerformed(ActionEvent actionEvent) {
-    File root = HomeDirectory.Pictures(getClass().getSimpleName(), geodesicDisplay().toString());
+    LogWeighting logWeighting = logWeighting();
+    File root = HomeDirectory.Pictures( //
+        getClass().getSimpleName(), //
+        geodesicDisplay().toString(), //
+        logWeighting.toString());
     root.mkdirs();
     for (Biinvariant biinvariant : distinct()) {
-      LogWeighting logWeighting = logWeighting();
       Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.from( //
           biinvariant, //

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -31,6 +32,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
+  private static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public Se2ScatteredSetCoordinateDemo() {
@@ -54,14 +56,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     ColorDataGradient colorDataGradient = colorDataGradient();
     renderControlPoints(geometricLayer, graphics);
-    graphics.setFont(ArrayPlotRender.FONT);
-    graphics.setColor(Color.BLACK);
-    // graphics.drawString("" + spinnerLogWeighting.getValue(), 0, 10 + 17);
     final Tensor controlPoints = getGeodesicControlPoints();
     int index = 0;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor shape = geodesicDisplay.shape();
-    graphics.setFont(ArrayPlotRender.FONT);
+    graphics.setFont(FONT);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
     graphics.setColor(Color.BLACK);

@@ -74,7 +74,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(biinvariant.distances(RnManifold.INSTANCE, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(biinvariant.distances(RnManifold.INSTANCE, sequence)), sequence);
     }
 
     @Override
@@ -88,7 +88,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public TensorUnaryOperator from(Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
       return LogWeighting.wrap( //
-          RadialBasisFunctionWeighting.of(biinvariant.distances(vectorLogManifold, variogram, sequence)), sequence);
+          RadialBasisFunctionWeighting.of(biinvariant.distances(vectorLogManifold, sequence)), sequence);
     }
 
     @Override

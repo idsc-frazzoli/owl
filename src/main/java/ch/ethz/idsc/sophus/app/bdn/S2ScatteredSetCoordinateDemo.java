@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
@@ -26,7 +27,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public S2ScatteredSetCoordinateDemo() {
     super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
     {
-      jToggleLower.setSelected(true);
       timerFrame.jToolBar.add(jToggleLower);
     }
     // example in pdf
@@ -34,9 +34,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         "{{-0.293, 0.473, 0.000}, {0.613, 0.703, 0.000}, {0.490, -0.287, 0.000}, {-0.023, -0.693, 0.000}, {-0.713, 0.127, -0.524}, {0.407, 0.357, -0.524}, {0.000, -0.030, -0.524}, {0.233, -0.443, -0.524}}"));
     setControlPointsSe2(Tensors.fromString( //
         "{{-0.423, 0.823, 0}, {0.823, 0.450, 0}, {-0.450, 0.330, 0}, {0.007, 0.003, 0}, {-0.487, -0.240, 0}, {0.583, -0.490, 0}, {-0.003, -0.753, 0}}"));
+    setControlPointsSe2(Tensors.fromString( //
+        "{{-0.423, 0.823, 0.000}, {0.663, 0.400, 0.000}, {-0.450, 0.330, 0.000}, {0.007, -0.007, 0.000}, {-0.487, -0.240, 0.000}, {0.197, -0.660, 0.000}, {0.733, -0.650, 0.000}, {-0.097, -0.940, 0.000}}"));
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     timerFrame.configCoordinateOffset(500, 500);
+    {
+      boolean lower = getControlPointsSe2().stream().anyMatch(r -> Sign.isNegative(r.Get(2)));
+      jToggleLower.setSelected(lower);
+    }
   }
 
   @Override // from ExportCoordinateDemo
@@ -67,6 +73,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void main(String[] args) {
-    new S2ScatteredSetCoordinateDemo().setVisible(1200, 900);
+    new S2ScatteredSetCoordinateDemo().setVisible(1300, 900);
   }
 }

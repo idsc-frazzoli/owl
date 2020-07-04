@@ -47,7 +47,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     }
     timerFrame.configCoordinateOffset(300, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(renderInterface);
-    shuffleSnap();
+    setControlPointsSe2(Tensors.fromString( //
+        "{{0.650, 4.183, 0.000}, {3.517, 4.650, 0.000}, {2.233, 2.733, 0.000}, {4.217, 2.917, 0.000}, {1.767, 1.150, 0.000}, {0.600, 0.317, 0.000}, {4.450, 0.550, 0.000}}"));
+    // deformed to:
+    // "{{1.400, 4.067, 0.000}, {2.867, 4.167, 0.000}, {1.667, 2.283, 0.000}, {3.983, 2.283, 0.000}, {2.617, 1.200, 0.000}, {0.600, 0.350, 0.000}, {3.917,
+    // 1.183, 0.000}}"
+    snap();
   }
 
   @Override

@@ -25,22 +25,22 @@ public enum LeversHud {
     case METRIC:
       leversRender.renderLeverLength();
       break;
+    case TARGET:
+      leversRender.renderTangentsXtoP(false);
+      leversRender.renderMahalanobisFormX(false, colorDataGradient);
+      leversRender.renderLeverages();
+      break;
     case ANCHOR:
       leversRender.renderInfluenceX(colorDataGradient);
       leversRender.renderLeverages();
       break;
-    case TARGET:
-      leversRender.renderTangentsXtoP(false);
-      leversRender.renderMahalanobisFormX(false, colorDataGradient);
-      break;
-    case HARBOR:
-    case NORM2:
-      leversRender.renderInfluenceX(colorDataGradient);
-      leversRender.renderInfluenceP(colorDataGradient);
-      break;
     case GARDEN:
       leversRender.renderTangentsPtoX(false);
       leversRender.renderMahalanobisFormsP(false, colorDataGradient);
+      break;
+    case HARBOR:
+      leversRender.renderInfluenceX(colorDataGradient);
+      leversRender.renderInfluenceP(colorDataGradient);
       break;
     default:
       break;

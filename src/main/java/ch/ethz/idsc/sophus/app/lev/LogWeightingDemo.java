@@ -33,6 +33,10 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
     @Override
     public void actionPerformed(LogWeighting logWeighting) {
+      if (logWeighting.equals(LogWeightings.DISTANCES)) {
+        spinnerVariogram.setValue(Variograms.POWER);
+        spinnerBeta.setValueSafe(RealScalar.of(1));
+      }
       if (logWeighting.equals(LogWeightings.COORDINATE)) {
         spinnerVariogram.setValue(Variograms.INVERSE_POWER);
         spinnerBeta.setValueSafe(RealScalar.of(2));
@@ -51,14 +55,14 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     super(addRemoveControlPoints, list);
     {
       spinnerLogWeighting.setList(array);
-      spinnerLogWeighting.setIndex(0);
+      spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
       spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(130, 28), "weights");
       spinnerLogWeighting.addSpinnerListener(spinnerListener);
       spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {
       spinnerBiinvariant.setArray(Biinvariant.values());
-      spinnerBiinvariant.setValue(Biinvariant.ANCHOR);
+      spinnerBiinvariant.setValue(Biinvariant.TARGET);
       spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }

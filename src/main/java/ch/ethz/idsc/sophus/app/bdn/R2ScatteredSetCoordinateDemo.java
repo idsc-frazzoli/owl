@@ -155,7 +155,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     }
     LeversRender leversRender = LeversRender.of(geodesicDisplay, null, controlPoints, null, geometricLayer, graphics);
     leversRender.renderSequence();
-    leversRender.renderIndex("q");
+    leversRender.renderIndex("q", "x");
     // renderControlPoints(geometricLayer, graphics);
   }
 

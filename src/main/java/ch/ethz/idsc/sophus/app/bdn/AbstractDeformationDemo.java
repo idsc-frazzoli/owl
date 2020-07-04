@@ -48,6 +48,7 @@ import ch.ethz.idsc.tensor.sca.N;
   AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(false, list, array);
     // ---
+    jToggleHeatmap.setSelected(false);
     spinnerRefine.addSpinnerListener(v -> recompute());
     // ---
     {
@@ -127,7 +128,7 @@ import ch.ethz.idsc.tensor.sca.N;
         .render(geometricLayer, graphics);
     if (jToggleTarget.isSelected()) {
       LeversRender leversRender = LeversRender.of(geodesicDisplay, null, getGeodesicControlPoints(), null, geometricLayer, graphics);
-      leversRender.renderIndex("q");
+      leversRender.renderIndex("q", "");
       leversRender.renderSequence();
     } else {
       LeversRender leversRender = LeversRender.of(geodesicDisplay, null, origin, null, geometricLayer, graphics);

@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.HsProjection;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -31,11 +32,15 @@ import ch.ethz.idsc.tensor.Tensors;
       timerFrame.jToolBar.add(jToggleAxes);
     }
     {
-      jTextField.setText("{1, 1, 1}");
+      jTextField.setText("{1, 1, 3}");
       jTextField.setPreferredSize(new Dimension(100, 28));
       timerFrame.jToolBar.add(jTextField);
     }
-    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}, {-3, 0, 0}}"));
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setControlPointsSe2(Tensors.fromString( //
+        "{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}, {-3, 0, 0}}"));
+    setControlPointsSe2(Tensors.fromString( //
+        "{{0.000, 0.000, 0.000}, {-0.950, 1.750, -2.618}, {0.833, 2.300, -1.047}, {2.667, 0.733, -2.618}, {2.033, -1.800, 2.356}, {-1.217, -0.633, -3.665}}"));
   }
 
   @Override // from RenderInterface
@@ -77,7 +82,7 @@ import ch.ethz.idsc.tensor.Tensors;
         leversRender.renderWeights(weights);
         leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
         leversRender.renderOrigin();
-        leversRender.renderIndex("q");
+        leversRender.renderIndex("p'", "x'");
       } catch (Exception exception) {
         exception.printStackTrace();
       }

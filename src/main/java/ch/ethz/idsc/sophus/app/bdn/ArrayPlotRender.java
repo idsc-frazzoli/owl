@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +24,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class ArrayPlotRender implements RenderInterface {
-  public static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
+  private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
+  private static final Color FONT_COLOR = Color.BLACK;
+  // new Color(32, 32, 32);
 
   public static ArrayPlotRender rescale(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
     Rescale rescale = new Rescale(tensor);
@@ -66,16 +69,18 @@ public class ArrayPlotRender implements RenderInterface {
         10, //
         height, null);
     if (Objects.nonNull(clip)) {
-      graphics.setColor(Color.BLACK);
       graphics.setFont(FONT);
+      graphics.setColor(FONT_COLOR);
       FontMetrics fontMetrics = graphics.getFontMetrics();
       String smax = "" + clip.max().map(Round._3);
       int wmax = fontMetrics.stringWidth(smax);
       String smin = "" + clip.min().map(Round._3);
       int wmin = fontMetrics.stringWidth(smin);
       int ofx = width + 22 + Math.max(wmin, wmax);
+      RenderQuality.setQuality(graphics);
       graphics.drawString(smax, ofx - wmax, fontMetrics.getAscent());
       graphics.drawString(smin, ofx - wmin, height);
+      RenderQuality.setDefault(graphics);
     }
   }
 

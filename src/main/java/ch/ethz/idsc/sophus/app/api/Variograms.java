@@ -1,14 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.krg.ExponentialVariogram;
-import ch.ethz.idsc.sophus.krg.GaussianVariogram;
-import ch.ethz.idsc.sophus.krg.InverseMultiquadricVariogram;
-import ch.ethz.idsc.sophus.krg.InversePowerVariogram;
-import ch.ethz.idsc.sophus.krg.MultiquadricVariogram;
-import ch.ethz.idsc.sophus.krg.PowerVariogram;
-import ch.ethz.idsc.sophus.krg.SphericalVariogram;
-import ch.ethz.idsc.sophus.krg.ThinPlateSplineVariogram;
+import ch.ethz.idsc.sophus.math.var.ExponentialVariogram;
+import ch.ethz.idsc.sophus.math.var.GaussianVariogram;
+import ch.ethz.idsc.sophus.math.var.InverseMultiquadricVariogram;
+import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
+import ch.ethz.idsc.sophus.math.var.MultiquadricVariogram;
+import ch.ethz.idsc.sophus.math.var.PowerVariogram;
+import ch.ethz.idsc.sophus.math.var.SphericalVariogram;
+import ch.ethz.idsc.sophus.math.var.ThinPlateSplineVariogram;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;

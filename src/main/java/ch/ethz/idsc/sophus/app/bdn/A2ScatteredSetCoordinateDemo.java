@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
 
@@ -40,8 +39,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     ColorDataGradient colorDataGradient = colorDataGradient();
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    graphics.setFont(ArrayPlotRender.FONT);
-    graphics.setColor(Color.BLACK);
     final Tensor sequence = getGeodesicControlPoints();
     LeversRender leversRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
     leversRender.renderIndex();
