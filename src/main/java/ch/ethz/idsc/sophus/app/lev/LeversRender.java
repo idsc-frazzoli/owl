@@ -110,11 +110,15 @@ public class LeversRender {
     this.graphics = graphics;
   }
 
-  public void renderIndex() {
-    renderIndex("p", "x");
+  public void renderIndexP() {
+    renderIndexP("p");
   }
 
-  public void renderIndex(String plabel, String xlabel) {
+  public void renderIndexX() {
+    renderIndexX("x");
+  }
+
+  public void renderIndexP(String plabel) {
     int index = 0;
     Tensor shape = geodesicDisplay.shape();
     graphics.setFont(FONT_LABELS);
@@ -139,6 +143,14 @@ public class LeversRender {
       geometricLayer.popMatrix();
       ++index;
     }
+  }
+
+  public void renderIndexX(String xlabel) {
+    Tensor shape = geodesicDisplay.shape();
+    graphics.setFont(FONT_LABELS);
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    int fheight = fontMetrics.getAscent();
+    graphics.setColor(Color.BLACK);
     if (Objects.nonNull(origin)) {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
       Rectangle rectangle = geometricLayer.toPath2D(shape, true).getBounds();

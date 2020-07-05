@@ -61,7 +61,8 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       leversRender.renderSequence();
       leversRender.renderOrigin();
       leversRender.renderLevers();
-      leversRender.renderIndex();
+      leversRender.renderIndexX();
+      leversRender.renderIndexP();
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
         Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //

@@ -66,7 +66,8 @@ import ch.ethz.idsc.tensor.Tensors;
         leversRender.renderWeights(weights);
         leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
         leversRender.renderOrigin();
-        leversRender.renderIndex();
+        leversRender.renderIndexX();
+        leversRender.renderIndexP();
       }
       geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
       try {
@@ -82,7 +83,8 @@ import ch.ethz.idsc.tensor.Tensors;
         leversRender.renderWeights(weights);
         leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
         leversRender.renderOrigin();
-        leversRender.renderIndex("p'", "x'");
+        leversRender.renderIndexX("x'");
+        leversRender.renderIndexP("p'");
       } catch (Exception exception) {
         exception.printStackTrace();
       }

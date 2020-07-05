@@ -128,11 +128,12 @@ import ch.ethz.idsc.tensor.sca.N;
         .render(geometricLayer, graphics);
     if (jToggleTarget.isSelected()) {
       LeversRender leversRender = LeversRender.of(geodesicDisplay, null, getGeodesicControlPoints(), null, geometricLayer, graphics);
-      leversRender.renderIndex("q", "");
+      leversRender.renderIndexP("q");
       leversRender.renderSequence();
     } else {
       LeversRender leversRender = LeversRender.of(geodesicDisplay, null, origin, null, geometricLayer, graphics);
-      leversRender.renderIndex();
+      leversRender.renderIndexX();
+      leversRender.renderIndexP();
     }
     if (jToggleHeatmap.isSelected())
       ArrayPlotRender.rescale(movingDomain2D.weights(), colorDataGradient(), 3).render(geometricLayer, graphics);

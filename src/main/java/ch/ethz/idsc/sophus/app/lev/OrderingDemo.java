@@ -90,10 +90,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
           Tensors.empty(), origin, //
           geometricLayer, graphics);
       // ---
-      // leversRender.renderSequence();
-      // leversRender.renderLevers();
-      // leversRender.renderWeights(weights);
-      // ---
       Integer[] integers = Ordering.INCREASING.of(weights);
       ColorDataGradient colorDataGradientF = spinnerColorData.getValue().deriveWithOpacity(RationalScalar.HALF);
       ColorDataGradient colorDataGradientD = spinnerColorData.getValue();
@@ -130,8 +126,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
             height, null);
         ArrayPlotRender.renderLegendLabel(graphics, "far", "near", 10, height);
       }
-      leversRender.renderOrigin();
-      leversRender.renderIndex();
+      leversRender.renderIndexX();
+      leversRender.renderIndexP();
     }
   }
 

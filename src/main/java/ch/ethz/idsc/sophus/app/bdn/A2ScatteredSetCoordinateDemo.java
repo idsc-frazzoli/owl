@@ -41,7 +41,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     renderControlPoints(geometricLayer, graphics);
     final Tensor sequence = getGeodesicControlPoints();
     LeversRender leversRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
-    leversRender.renderIndex();
+    leversRender.renderIndexX();
+    leversRender.renderIndexP();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     if (jToggleHeatmap.isSelected()) // render basis functions

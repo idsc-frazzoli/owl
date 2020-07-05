@@ -49,7 +49,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor geodesicControlPoints = getGeodesicControlPoints();

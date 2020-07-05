@@ -67,8 +67,8 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
       graphics.setPaint(paint);
       graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(RealScalar.of(modelWidth))));
       // ---
-      graphics.setColor(BORDER);
-      graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
+      // graphics.setColor(BORDER);
+      // graphics.draw(geometricLayer.toPath2D(CIRCLE, true));
     } else //
     if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
       Point2D point2d = geometricLayer.toPoint2D(0, 0);

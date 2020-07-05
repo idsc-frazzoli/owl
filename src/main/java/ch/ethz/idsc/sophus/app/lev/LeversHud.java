@@ -45,6 +45,7 @@ public enum LeversHud {
     default:
       break;
     }
-    leversRender.renderIndex();
+    leversRender.renderIndexX();
+    leversRender.renderIndexP();
   }
 }
