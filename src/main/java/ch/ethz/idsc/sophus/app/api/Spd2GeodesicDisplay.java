@@ -110,6 +110,11 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public boolean isMetricBiinvariant() {
+    return true;
+  }
+
+  @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return SpdBiinvariantMean.INSTANCE;
   }

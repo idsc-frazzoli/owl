@@ -100,6 +100,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
+  public boolean isMetricBiinvariant() {
+    return true;
+  }
+
+  @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return So3BiinvariantMean.INSTANCE;
   }

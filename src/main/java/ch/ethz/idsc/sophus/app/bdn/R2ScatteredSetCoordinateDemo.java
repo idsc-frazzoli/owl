@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       Tensor domain = Tensor.of(controlPoints.stream().map(geodesicDisplay::toPoint));
       RenderQuality.setQuality(graphics);
       // ---
-      TensorUnaryOperator tensorUnaryOperator = weightingOperator(RnManifold.INSTANCE, domain);
+      TensorUnaryOperator tensorUnaryOperator = operator(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
       double rng = 5;

@@ -30,7 +30,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
-  private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
+  public final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
     @Override
     public void actionPerformed(LogWeighting logWeighting) {
       if (logWeighting.equals(LogWeightings.DISTANCES)) {
@@ -81,6 +81,10 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     return spinnerLogWeighting.getValue();
   }
 
+  protected final void setLogWeighting(LogWeighting logWeighting) {
+    spinnerLogWeighting.setValue(logWeighting);
+  }
+
   protected final void setBiinvariant(Biinvariant biinvariant) {
     spinnerBiinvariant.setValue(biinvariant);
   }
@@ -89,7 +93,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
     return spinnerBiinvariant.getValue();
   }
 
-  protected final TensorUnaryOperator weightingOperator(VectorLogManifold vectorLogManifold, Tensor sequence) {
+  protected final TensorUnaryOperator operator(VectorLogManifold vectorLogManifold, Tensor sequence) {
     return logWeighting().from( //
         biinvariant(), //
         vectorLogManifold, //
@@ -98,7 +102,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   }
 
   protected final TensorUnaryOperator operator(Tensor sequence) {
-    return weightingOperator(geodesicDisplay().vectorLogManifold(), sequence);
+    return operator(geodesicDisplay().vectorLogManifold(), sequence);
   }
 
   protected final ScalarUnaryOperator variogram() {

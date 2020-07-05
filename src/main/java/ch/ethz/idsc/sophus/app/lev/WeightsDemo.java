@@ -14,17 +14,18 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Spd2GeodesicDisplay;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.ArgMin;
 
 /* package */ class WeightsDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
-  private static final Biinvariant[] BIINVARIANTS = //
-      { Biinvariant.METRIC, Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN };
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public WeightsDemo() {
@@ -33,9 +34,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       timerFrame.jToolBar.add(jToggleAxes);
     }
     setControlPointsSe2(Tensors.fromString("{{-1, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}}"));
-    GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
+    GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
+    setLogWeighting(LogWeightings.DISTANCES);
+    spinnerListener.actionPerformed(LogWeightings.DISTANCES);
     actionPerformed(geodesicDisplay);
+    addSpinnerListener(this);
   }
 
   @Override // from RenderInterface
@@ -53,19 +57,32 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           null, //
           sequence, //
           origin, geometricLayer, graphics);
-      leversRender.renderLevers();
-      leversRender.renderOrigin();
+      // ---
       leversRender.renderSequence();
+      leversRender.renderOrigin();
+      leversRender.renderLevers();
+      leversRender.renderIndex();
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
+        Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //
+            ? new Biinvariant[] { Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN, Biinvariant.METRIC }
+            : new Biinvariant[] { Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN };
         Tensor matrix = Tensors.empty();
-        for (Biinvariant biinvariant : BIINVARIANTS) {
+        int[] minIndex = new int[biinvariants.length];
+        VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+        for (int index = 0; index < biinvariants.length; ++index) {
           TensorUnaryOperator tensorUnaryOperator = //
-              biinvariant.coordinate(geodesicDisplay.vectorLogManifold(), variogram(), sequence);
+              logWeighting().from( //
+                  biinvariants[index], //
+                  vectorLogManifold, //
+                  variogram(), //
+                  sequence);
           Tensor weights = tensorUnaryOperator.apply(origin);
+          minIndex[index] = ArgMin.of(weights);
           matrix.append(weights);
         }
-        // ---
+        System.out.println(Tensors.vectorInt(minIndex));
+        // System.out.println("---");
         ColorDataIndexed colorDataIndexed = ColorDataLists._097.strict();
         for (int index = 0; index < sequence.length(); ++index) {
           Tensor map = matrix.get(Tensor.ALL, index).map(Tensors::of);
@@ -75,7 +92,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         graphics.setFont(LeversRender.FONT_MATRIX);
         FontMetrics fontMetrics = graphics.getFontMetrics();
         int fheight = fontMetrics.getAscent();
-        for (Biinvariant biinvariant : BIINVARIANTS) {
+        for (Biinvariant biinvariant : biinvariants) {
           graphics.setColor(colorDataIndexed.getColor(index));
           graphics.drawString(biinvariant.title(), 2, (index + 1) * fheight);
           ++index;
@@ -93,6 +110,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (geodesicDisplay instanceof Spd2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
           "{{-0.325, -0.125, 1.309}, {-0.708, 1.475, -3.927}, {1.942, 1.075, -1.309}, {-0.308, -0.825, 4.974}, {-2.292, -0.608, 0.524}, {2.042, -0.625, -4.189}, {-4.108, 0.325, 1.309}}"));
+    }
+    System.out.println(geodesicDisplay.toString());
+    if (geodesicDisplay.toString().startsWith("SE2")) {
+      setControlPointsSe2(Tensors.fromString( //
+          "{{-0.563, -0.150, 6.545}, {4.783, 1.017, -0.785}, {-4.696, -0.650, 5.760}, {2.138, 0.600, 0.785}, {4.021, -0.550, 7.592}, {1.113, -1.208, 4.451}, {-0.154, -1.283, -1.309}, {-2.596, 0.933, 8.639}, {-2.429, -1.283, 7.854}, {-3.729, 0.483, 4.451}}"));
     }
   }
 

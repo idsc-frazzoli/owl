@@ -93,6 +93,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public boolean isMetricBiinvariant() {
+    return false;
+  }
+
+  @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return StBiinvariantMean.INSTANCE;
   }

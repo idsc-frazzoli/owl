@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (1 < length) {
       Tensor samples = Subdivide.of(-length, 0, 127).map(Tensors::of);
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      TensorUnaryOperator tensorUnaryOperator = weightingOperator(RnManifold.INSTANCE, domain);
+      TensorUnaryOperator tensorUnaryOperator = operator(RnManifold.INSTANCE, domain);
       Tensor curve = Tensor.of(samples.stream() //
           .map(tensorUnaryOperator) //
           .map(weights -> biinvariantMean.mean(control, weights)));

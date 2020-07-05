@@ -55,6 +55,9 @@ public interface GeodesicDisplay {
    * @throws Exception if functionality is not supported */
   TensorMetric parametricDistance();
 
+  /** @return whether biinvariant scalar product exists */
+  boolean isMetricBiinvariant();
+
   /** @return biinvariantMean, or null, if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();
 

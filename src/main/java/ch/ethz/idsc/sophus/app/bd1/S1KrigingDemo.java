@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.N;
           .render(geometricLayer, graphics);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       if (isDeterminate()) {
-        TensorUnaryOperator tensorUnaryOperator = weightingOperator(SnManifold.INSTANCE, sequence);
+        TensorUnaryOperator tensorUnaryOperator = operator(SnManifold.INSTANCE, sequence);
         Kriging kriging = Kriging.regression(tensorUnaryOperator, sequence, funceva, covariance);
         Tensor estimate = Tensor.of(DOMAIN.stream().map(kriging::estimate));
         Tensor curve = estimate.pmul(DOMAIN);

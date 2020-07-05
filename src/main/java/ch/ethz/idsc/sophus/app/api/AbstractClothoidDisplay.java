@@ -81,6 +81,11 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
     return (p, q) -> geodesicInterface().curve(p, q).length();
   }
 
+  @Override // from GeodesicDisplay
+  public final boolean isMetricBiinvariant() {
+    return false;
+  }
+
   @Override
   public final LineDistance lineDistance() {
     return null; // TODO line distance

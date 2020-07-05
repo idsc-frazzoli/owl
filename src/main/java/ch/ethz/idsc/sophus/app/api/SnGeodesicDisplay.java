@@ -36,7 +36,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
     return SnGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final int dimensions() {
     return dimensions;
   }
@@ -51,12 +51,12 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
     return null;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final HsExponential hsExponential() {
     return SnManifold.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
     return SnTransport.INSTANCE;
   }
@@ -64,6 +64,11 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final TensorMetric parametricDistance() {
     return SnMetric.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public final boolean isMetricBiinvariant() {
+    return true;
   }
 
   @Override // from GeodesicDisplay

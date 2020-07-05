@@ -69,19 +69,25 @@ public class ArrayPlotRender implements RenderInterface {
         10, //
         height, null);
     if (Objects.nonNull(clip)) {
-      graphics.setFont(FONT);
-      graphics.setColor(FONT_COLOR);
-      FontMetrics fontMetrics = graphics.getFontMetrics();
       String smax = "" + clip.max().map(Round._3);
-      int wmax = fontMetrics.stringWidth(smax);
       String smin = "" + clip.min().map(Round._3);
-      int wmin = fontMetrics.stringWidth(smin);
-      int ofx = width + 22 + Math.max(wmin, wmax);
-      RenderQuality.setQuality(graphics);
-      graphics.drawString(smax, ofx - wmax, fontMetrics.getAscent());
-      graphics.drawString(smin, ofx - wmin, height);
-      RenderQuality.setDefault(graphics);
+      renderLegendLabel(graphics, smax, smin, width + 20, height);
     }
+  }
+
+  public static void renderLegendLabel(Graphics2D graphics, String smax, String smin, int width, int height) {
+    graphics.setFont(FONT);
+    graphics.setColor(FONT_COLOR);
+    FontMetrics fontMetrics = graphics.getFontMetrics();
+    // String smax = "" + clip.max().map(Round._3);
+    int wmax = fontMetrics.stringWidth(smax);
+    // String smin = "" + clip.min().map(Round._3);
+    int wmin = fontMetrics.stringWidth(smin);
+    int ofx = width + 2 + Math.max(wmin, wmax);
+    RenderQuality.setQuality(graphics);
+    graphics.drawString(smax, ofx - wmax, fontMetrics.getAscent());
+    graphics.drawString(smin, ofx - wmin, height);
+    RenderQuality.setDefault(graphics);
   }
 
   public int height() {

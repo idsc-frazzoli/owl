@@ -59,6 +59,11 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
     return LieVectorLogManifold.of(lieGroup(), Se2CoveringExponential.INSTANCE::log);
   }
 
+  @Override // from GeodesicDisplay
+  public final boolean isMetricBiinvariant() {
+    return false;
+  }
+
   @Override
   public final LineDistance lineDistance() {
     return null; // TODO line distance

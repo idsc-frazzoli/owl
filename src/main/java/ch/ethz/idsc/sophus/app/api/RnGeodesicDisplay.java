@@ -78,6 +78,11 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
+  public final boolean isMetricBiinvariant() {
+    return true;
+  }
+
+  @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
     return RnBiinvariantMean.INSTANCE;
   }

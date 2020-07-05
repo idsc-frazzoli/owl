@@ -92,6 +92,11 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public final boolean isMetricBiinvariant() {
+    return true;
+  }
+
+  @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return null;
   }
