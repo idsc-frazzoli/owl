@@ -72,12 +72,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
       RenderQuality.setQuality(graphics);
       Tensor sequence = controlPoints.extract(1, controlPoints.length());
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
+      Tensor origin = controlPoints.get(0);
+      Tensor weights = tensorUnaryOperator.apply(origin);
       LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, //
           tensorUnaryOperator, //
           sequence, //
-          controlPoints.get(0), geometricLayer, graphics);
-      leversRender.renderWeights();
+          origin, geometricLayer, graphics);
+      leversRender.renderWeights(weights);
       LeversHud.render(biinvariant(), leversRender);
     }
   }

@@ -102,7 +102,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     LeversRender leversRender = new LeversRender(geodesicDisplay, sequence, null, values, geometricLayer, graphics);
-    leversRender.renderWeights();
+    // FIXME not sure what this does !? below
+    // leversRender.renderWeights();
   }
 
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {

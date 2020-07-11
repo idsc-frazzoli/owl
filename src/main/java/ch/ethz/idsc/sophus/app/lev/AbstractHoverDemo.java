@@ -80,15 +80,16 @@ import ch.ethz.idsc.tensor.sca.Abs;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor origin = geodesicDisplay.project(geometricLayer.getMouseSe2State());
+    Tensor weights = operator(sequence).apply(origin);
     LeversRender leversRender = LeversRender.of( //
         geodesicDisplay, //
         operator(sequence), sequence, origin, //
         geometricLayer, graphics);
-    render(geometricLayer, graphics, leversRender);
+    render(geometricLayer, graphics, leversRender, weights);
   }
 
   /** @param geometricLayer
    * @param graphics
    * @param leversRender */
-  abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender);
+  abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights);
 }

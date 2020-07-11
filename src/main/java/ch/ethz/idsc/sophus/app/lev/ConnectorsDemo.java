@@ -18,14 +18,13 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 
 /* package */ class ConnectorsDemo extends AbstractHoverDemo {
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights) {
     leversRender.renderLevers();
     // ---
-    leversRender.renderWeights();
+    leversRender.renderWeights(weights);
     leversRender.renderSequence();
     leversRender.renderOrigin();
     // ---
-    Tensor weights = leversRender.getWeights();
     Tensor controlPoints = leversRender.getSequence();
     int length = controlPoints.length();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

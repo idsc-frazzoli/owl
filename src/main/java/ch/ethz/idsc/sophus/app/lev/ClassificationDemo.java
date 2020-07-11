@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     }
     // ---
     Classification labelInterface = spinnerLabels.getValue().apply(vector);
-    int bestLabel = labelInterface.result(leversRender.getWeights()).getLabel();
+    int bestLabel = labelInterface.result(weights).getLabel();
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicMouse));
     Path2D path2d = geometricLayer.toPath2D(shape, true);
     graphics.setColor(COLOR_DATA_INDEXED_T.getColor(bestLabel));

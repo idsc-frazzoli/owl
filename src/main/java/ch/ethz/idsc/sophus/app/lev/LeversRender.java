@@ -173,9 +173,9 @@ public class LeversRender {
   public void renderLevers() {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     int index = 0;
-    Tensor rescale = !isSufficient() || getWeights().equals(Array.zeros(sequence.length())) //
-        ? getWeights().map(s -> NEUTRAL_DEFAULT)
-        : Rescale.of(getWeights());
+    Tensor rescale = !isSufficient() || weights.equals(Array.zeros(sequence.length())) //
+        ? weights.map(s -> NEUTRAL_DEFAULT)
+        : Rescale.of(weights);
     graphics.setStroke(STROKE_GEODESIC);
     for (Tensor p : sequence) {
       ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
@@ -212,10 +212,9 @@ public class LeversRender {
       }
     }
   }
-
-  public void renderWeights() {
-    renderWeights(weights);
-  }
+  // public void renderWeights() {
+  // renderWeights(weights);
+  // }
 
   public void renderWeights(Tensor weights) {
     graphics.setFont(FONT_MATRIX);
@@ -417,10 +416,6 @@ public class LeversRender {
   }
 
   /***************************************************/
-  public Tensor getWeights() {
-    return weights.unmodifiable();
-  }
-
   public Tensor getSequence() {
     return sequence.unmodifiable();
   }
