@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Drop;
     if (0 < points.length()) {
       Tensor x = points.get(0);
       Tensor sequence = Drop.head(points, 1);
-      LeversRender leversRender = LeversRender.of(geodesicDisplay, null, sequence, x, geometricLayer, graphics);
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, sequence, x, geometricLayer, graphics);
       leversRender.renderLevers();
       leversRender.renderOrigin();
       leversRender.renderSequence();

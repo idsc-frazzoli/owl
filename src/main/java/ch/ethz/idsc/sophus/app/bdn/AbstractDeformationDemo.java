@@ -128,11 +128,11 @@ import ch.ethz.idsc.tensor.sca.N;
         .show(geodesicDisplay::matrixLift, shapeOrigin(), origin) //
         .render(geometricLayer, graphics);
     if (jToggleTarget.isSelected()) {
-      LeversRender leversRender = LeversRender.of(geodesicDisplay, null, getGeodesicControlPoints(), null, geometricLayer, graphics);
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, getGeodesicControlPoints(), null, geometricLayer, graphics);
       leversRender.renderIndexP("q");
       leversRender.renderSequence();
     } else {
-      LeversRender leversRender = LeversRender.of(geodesicDisplay, null, origin, null, geometricLayer, graphics);
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, origin, null, geometricLayer, graphics);
       leversRender.renderIndexX();
       leversRender.renderIndexP();
     }

@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     final Tensor sequence = getGeodesicControlPoints();
-    LeversRender leversRender = LeversRender.of(geodesicDisplay(), operator(sequence), sequence, null, geometricLayer, graphics);
+    LeversRender leversRender = LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
     leversRender.renderIndexX();
     leversRender.renderIndexP();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

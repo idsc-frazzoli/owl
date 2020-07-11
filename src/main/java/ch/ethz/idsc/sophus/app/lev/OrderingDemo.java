@@ -118,7 +118,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
         geometricLayer.popMatrix();
       }
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay, null, //
+          geodesicDisplay, //
           Tensors.empty(), origin, //
           geometricLayer, graphics);
       leversRender.renderIndexX();

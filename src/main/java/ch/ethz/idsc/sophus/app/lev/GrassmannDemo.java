@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class GrassmannDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
@@ -55,11 +54,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (0 < geodesicControlPoints.length()) {
       Tensor sequence = Drop.head(geodesicControlPoints, 1);
       Tensor origin = geodesicControlPoints.get(0);
-      TensorUnaryOperator tensorUnaryOperator = jToggleNeutral.isSelected() || Tensors.isEmpty(sequence) //
-          ? null
-          : operator(sequence);
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay, tensorUnaryOperator, //
+          geodesicDisplay, //
           sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
       LeversHud.render(biinvariant(), leversRender, colorDataGradient);

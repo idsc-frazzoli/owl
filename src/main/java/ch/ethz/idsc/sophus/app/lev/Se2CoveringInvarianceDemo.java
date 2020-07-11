@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor origin = controlPointsAll.get(0);
         Tensor weights = hsProjection.new Matrix(sequence, origin).leverages();
         LeversRender leversRender = //
-            LeversRender.of(geodesicDisplay, null, sequence, origin, geometricLayer, graphics);
+            LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
         leversRender.renderLevers();
         leversRender.renderWeights(weights);
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor origin = result.get(0);
         Tensor weights = hsProjection.new Matrix(sequence, origin).leverages();
         LeversRender leversRender = //
-            LeversRender.of(geodesicDisplay, null, sequence, origin, geometricLayer, graphics);
+            LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
         leversRender.renderLevers();
         leversRender.renderWeights(weights);

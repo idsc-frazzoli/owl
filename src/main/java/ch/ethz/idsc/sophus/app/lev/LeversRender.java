@@ -69,22 +69,16 @@ public class LeversRender {
   public static boolean DEBUG_FLAG = false;
 
   public static LeversRender of( //
-      GeodesicDisplay geodesicDisplay, TensorUnaryOperator tensorUnaryOperator, //
+      GeodesicDisplay geodesicDisplay, //
       Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor weights = Objects.nonNull(tensorUnaryOperator) //
-        && geodesicDisplay.dimensions() < sequence.length() //
-        && Objects.nonNull(origin) //
-            ? tensorUnaryOperator.apply(origin)
-            : Array.zeros(sequence.length());
     return new LeversRender( //
         geodesicDisplay, sequence, origin, //
-        weights, geometricLayer, graphics);
+        geometricLayer, graphics);
   }
 
   /***************************************************/
   private final GeodesicDisplay geodesicDisplay;
-  private final Tensor weights;
   private final Tensor sequence;
   private final Tensor origin;
   private final Tensor shape;
@@ -99,13 +93,12 @@ public class LeversRender {
    * @param graphics */
   public LeversRender( //
       GeodesicDisplay geodesicDisplay, //
-      Tensor sequence, Tensor origin, Tensor weights, //
+      Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
     this.origin = origin;
     shape = geodesicDisplay.shape();
-    this.weights = weights;
     this.geometricLayer = geometricLayer;
     this.graphics = graphics;
   }
@@ -171,6 +164,10 @@ public class LeversRender {
   }
 
   public void renderLevers() {
+    renderLevers(Array.zeros(sequence.length()));
+  }
+
+  public void renderLevers(Tensor weights) {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     int index = 0;
     Tensor rescale = !isSufficient() || weights.equals(Array.zeros(sequence.length())) //
@@ -212,9 +209,6 @@ public class LeversRender {
       }
     }
   }
-  // public void renderWeights() {
-  // renderWeights(weights);
-  // }
 
   public void renderWeights(Tensor weights) {
     graphics.setFont(FONT_MATRIX);

@@ -76,7 +76,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Tensor weights = tensorUnaryOperator.apply(origin);
       LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, //
-          tensorUnaryOperator, //
           sequence, //
           origin, geometricLayer, graphics);
       leversRender.renderWeights(weights);

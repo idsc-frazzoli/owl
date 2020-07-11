@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
     Tensor weights = operator(sequence).apply(origin);
     LeversRender leversRender = LeversRender.of( //
         geodesicDisplay, //
-        operator(sequence), sequence, origin, //
+        sequence, origin, //
         geometricLayer, graphics);
     render(geometricLayer, graphics, leversRender, weights);
   }

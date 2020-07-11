@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();
     // ---
-    leversRender.renderLevers();
+    leversRender.renderLevers(weights);
     // ---
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.4));
     int index = 0;

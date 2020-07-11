@@ -55,7 +55,6 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       Tensor origin = controlPointsAll.get(0);
       LeversRender leversRender = LeversRender.of( //
           geodesicDisplay, //
-          null, //
           sequence, //
           origin, geometricLayer, graphics);
       // ---

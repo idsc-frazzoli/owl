@@ -75,7 +75,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       {
         LeversRender leversRender = LeversRender.of( //
             geodesicDisplay, //
-            null, //
             sequence, origin, //
             geometricLayer, graphics);
         leversRender.renderOrigin();
@@ -138,7 +137,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           Tensor border = domain.map(scalarTensorFunction);
           LeversRender leversRender = LeversRender.of( //
               geodesicDisplay, //
-              null, //
               border, origin, //
               geometricLayer, graphics);
           leversRender.renderLevers();

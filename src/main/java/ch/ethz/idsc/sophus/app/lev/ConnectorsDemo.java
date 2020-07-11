@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 /* package */ class ConnectorsDemo extends AbstractHoverDemo {
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights) {
-    leversRender.renderLevers();
+    leversRender.renderLevers(weights);
     // ---
     leversRender.renderWeights(weights);
     leversRender.renderSequence();
