@@ -30,7 +30,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -46,7 +45,6 @@ import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class LeversRender {
@@ -68,9 +66,13 @@ public class LeversRender {
   // ---
   public static boolean DEBUG_FLAG = false;
 
-  public static LeversRender of( //
-      GeodesicDisplay geodesicDisplay, //
-      Tensor sequence, Tensor origin, //
+  /** @param geodesicDisplay
+   * @param sequence
+   * @param origin
+   * @param geometricLayer
+   * @param graphics
+   * @return */
+  public static LeversRender of(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     return new LeversRender( //
         geodesicDisplay, sequence, origin, //
@@ -85,15 +87,7 @@ public class LeversRender {
   private final GeometricLayer geometricLayer;
   private final Graphics2D graphics;
 
-  /** @param geodesicDisplay
-   * @param sequence
-   * @param origin may be null
-   * @param weights
-   * @param geometricLayer
-   * @param graphics */
-  public LeversRender( //
-      GeodesicDisplay geodesicDisplay, //
-      Tensor sequence, Tensor origin, //
+  private LeversRender(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
@@ -164,21 +158,22 @@ public class LeversRender {
   }
 
   public void renderLevers() {
-    renderLevers(Array.zeros(sequence.length()));
+    renderLeversRescaled(Tensors.vector(i -> NEUTRAL_DEFAULT, sequence.length()));
   }
 
   public void renderLevers(Tensor weights) {
+    renderLeversRescaled(Rescale.of(weights));
+  }
+
+  private void renderLeversRescaled(Tensor rescale) {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     int index = 0;
-    Tensor rescale = !isSufficient() || weights.equals(Array.zeros(sequence.length())) //
-        ? weights.map(s -> NEUTRAL_DEFAULT)
-        : Rescale.of(weights);
     graphics.setStroke(STROKE_GEODESIC);
     for (Tensor p : sequence) {
       ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
       Tensor domain = Subdivide.of(0, 1, 21);
       Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream().map(geodesicDisplay::toPoint));
-      Tensor rgba = COLOR_DATA_GRADIENT.apply(Clips.unit().apply(rescale.Get(index)));
+      Tensor rgba = COLOR_DATA_GRADIENT.apply(rescale.Get(index));
       graphics.setColor(ColorFormat.toColor(rgba));
       graphics.draw(geometricLayer.toPath2D(ms));
       ++index;

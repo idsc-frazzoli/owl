@@ -101,7 +101,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    LeversRender leversRender = new LeversRender(geodesicDisplay, sequence, values, geometricLayer, graphics);
+    LeversRender leversRender = LeversRender.of(geodesicDisplay, sequence, values, geometricLayer, graphics);
     leversRender.renderWeights(values);
   }
 
