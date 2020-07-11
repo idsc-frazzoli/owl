@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
@@ -48,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
-  final SpinnerLabel<Biinvariant> spinnerDistances = SpinnerLabel.of(Biinvariant.values());
+  final SpinnerLabel<Biinvariant> spinnerDistances = SpinnerLabel.of(Biinvariants.values());
   private final JToggleButton axes = new JToggleButton("axes");
   private final JToggleButton median = new JToggleButton("median");
 

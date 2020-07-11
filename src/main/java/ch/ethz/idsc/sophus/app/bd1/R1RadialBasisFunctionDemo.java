@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       try {
         TensorUnaryOperator weightingInterface = operator(sequence);
         TensorUnaryOperator tensorUnaryOperator = //
-            RadialBasisFunctionInterpolation.normalized(weightingInterface, sequence, funceva);
+            RadialBasisFunctionInterpolation.of(weightingInterface, sequence, funceva);
         Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(tensorUnaryOperator));
         new PathRender(Color.BLUE, 1.25f) //
             .setCurve(Transpose.of(Tensors.of(domain, result)), false) //

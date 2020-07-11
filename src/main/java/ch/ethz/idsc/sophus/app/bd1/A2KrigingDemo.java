@@ -106,8 +106,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
-    TensorScalarFunction tsf = function(sequence, values);
-    Scalar[][] array = geodesicDisplay().geodesicArrayPlot().array(resolution, tsf.andThen(Clips.unit()));
+    TensorScalarFunction tensorScalarFunction = function(sequence, values);
+    Scalar[][] array = geodesicDisplay().geodesicArrayPlot().array(resolution, tensorScalarFunction.andThen(Clips.unit()));
     Tensor matrix = Tensors.matrix(array);
     // ---
     if (jToggleButton.isSelected())

@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -26,10 +27,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public static List<Biinvariant> distinct() {
     return Arrays.asList( //
-        Biinvariant.METRIC, //
-        Biinvariant.TARGET, //
-        Biinvariant.GARDEN, //
-        Biinvariant.HARBOR);
+        Biinvariants.METRIC, //
+        Biinvariants.TARGET, //
+        Biinvariants.GARDEN, //
+        Biinvariants.HARBOR);
   }
 
   private final JButton jButtonExport = new JButton("export");
@@ -55,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     root.mkdirs();
     for (Biinvariant biinvariant : distinct()) {
       Tensor sequence = getGeodesicControlPoints();
-      TensorUnaryOperator tensorUnaryOperator = logWeighting.from( //
+      TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
           biinvariant, //
           geodesicDisplay().vectorLogManifold(), //
           variogram(), //

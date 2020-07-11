@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.lev;
 
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -21,7 +22,8 @@ public enum LeversHud {
     leversRender.renderOrigin();
     leversRender.renderLevers();
     // ---
-    switch (biinvariant) {
+    Biinvariants biinvariants = (Biinvariants) biinvariant;
+    switch (biinvariants) {
     case METRIC:
       leversRender.renderLeverLength();
       break;

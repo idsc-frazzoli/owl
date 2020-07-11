@@ -78,35 +78,16 @@ import ch.ethz.idsc.tensor.sca.Clips;
       Tensor origin = controlPointsAll.get(0);
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       TensorUnaryOperator tensorUnaryOperator = //
-          logWeighting().from( //
-              biinvariant(), //
-              vectorLogManifold, //
-              variogram(), //
-              sequence);
+          logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);
       Tensor weights = tensorUnaryOperator.apply(origin);
-      LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay, //
-          null, //
-          Tensors.empty(), origin, //
-          geometricLayer, graphics);
       // ---
       Integer[] integers = Ordering.INCREASING.of(weights);
       ColorDataGradient colorDataGradientF = spinnerColorData.getValue().deriveWithOpacity(RationalScalar.HALF);
       ColorDataGradient colorDataGradientD = spinnerColorData.getValue();
       Tensor shape = geodesicDisplay.shape();
-      {
-        Tensor q = origin;
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(q));
-        Path2D path2d = geometricLayer.toPath2D(shape, true);
-        graphics.setColor(Color.DARK_GRAY);
-        graphics.fill(path2d);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
       for (int index = 0; index < sequence.length(); ++index) {
-        Tensor q = sequence.get(integers[index]);
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(q));
+        Tensor point = sequence.get(integers[index]);
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape, true);
         Scalar ratio = RationalScalar.of(index, integers.length);
         graphics.setColor(ColorFormat.toColor(colorDataGradientF.apply(ratio)));
@@ -126,8 +107,21 @@ import ch.ethz.idsc.tensor.sca.Clips;
             height, null);
         ArrayPlotRender.renderLegendLabel(graphics, "far", "near", 10, height);
       }
+      RenderQuality.setQuality(graphics);
+      {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
+        Path2D path2d = geometricLayer.toPath2D(shape, true);
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.fill(path2d);
+        graphics.setColor(Color.BLACK);
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
+      LeversRender leversRender = LeversRender.of( //
+          geodesicDisplay, null, //
+          Tensors.empty(), origin, //
+          geometricLayer, graphics);
       leversRender.renderIndexX();
-      leversRender.renderIndexP();
     }
   }
 

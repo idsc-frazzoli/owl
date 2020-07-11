@@ -80,6 +80,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
   final void snap() {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    System.out.println("store MO");
     movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
     recompute();
   }

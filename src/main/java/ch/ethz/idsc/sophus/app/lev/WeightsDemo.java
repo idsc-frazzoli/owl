@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Spd2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -66,14 +67,14 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
         Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //
-            ? new Biinvariant[] { Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN, Biinvariant.METRIC }
-            : new Biinvariant[] { Biinvariant.TARGET, Biinvariant.HARBOR, Biinvariant.GARDEN };
+            ? new Biinvariant[] { Biinvariants.TARGET, Biinvariants.HARBOR, Biinvariants.GARDEN, Biinvariants.METRIC }
+            : new Biinvariant[] { Biinvariants.TARGET, Biinvariants.HARBOR, Biinvariants.GARDEN };
         Tensor matrix = Tensors.empty();
         int[] minIndex = new int[biinvariants.length];
         VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
         for (int index = 0; index < biinvariants.length; ++index) {
           TensorUnaryOperator tensorUnaryOperator = //
-              logWeighting().from( //
+              logWeighting().operator( //
                   biinvariants[index], //
                   vectorLogManifold, //
                   variogram(), //
@@ -95,7 +96,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
         int fheight = fontMetrics.getAscent();
         for (Biinvariant biinvariant : biinvariants) {
           graphics.setColor(colorDataIndexed.getColor(index));
-          graphics.drawString(biinvariant.title(), 2, (index + 1) * fheight);
+          graphics.drawString(((Biinvariants) biinvariant).title(), 2, (index + 1) * fheight);
           ++index;
         }
       }

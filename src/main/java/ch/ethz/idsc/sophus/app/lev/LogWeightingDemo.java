@@ -14,6 +14,7 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Variograms;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Biinvariant;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -45,7 +46,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       logWeighting.equals(LogWeightings.KRIGING) || //
       logWeighting.equals(LogWeightings.KRIGING_COORDINATE)) {
         spinnerVariogram.setValue(Variograms.POWER);
-        setBiinvariant(Biinvariant.HARBOR);
+        setBiinvariant(Biinvariants.HARBOR);
         spinnerBeta.setValueSafe(RationalScalar.of(3, 2));
       }
     }
@@ -61,8 +62,8 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {
-      spinnerBiinvariant.setArray(Biinvariant.values());
-      spinnerBiinvariant.setValue(Biinvariant.TARGET);
+      spinnerBiinvariant.setArray(Biinvariants.values());
+      spinnerBiinvariant.setValue(Biinvariants.TARGET);
       spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }
@@ -94,7 +95,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   }
 
   protected final TensorUnaryOperator operator(VectorLogManifold vectorLogManifold, Tensor sequence) {
-    return logWeighting().from( //
+    return logWeighting().operator( //
         biinvariant(), //
         vectorLogManifold, //
         variogram(), //
@@ -110,7 +111,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   }
 
   protected final TensorScalarFunction function(Tensor sequence, Tensor values) {
-    return logWeighting().build( //
+    return logWeighting().function( //
         biinvariant(), //
         geodesicDisplay().vectorLogManifold(), //
         variogram(), //
