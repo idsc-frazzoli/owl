@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public abstract class LogWeightingDemo extends ControlPointsDemo {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
-  private final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
+  final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();

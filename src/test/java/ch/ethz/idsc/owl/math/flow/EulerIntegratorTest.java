@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class EulerIntegratorTest extends TestCase {
-  private final Integrator lieEulerIntegrator = EulerLieIntegrator.of(RnGroup.INSTANCE, RnExponential.INSTANCE);
+  private final Integrator integrator = EulerLieIntegrator.of(RnGroup.INSTANCE, RnExponential.INSTANCE);
 
   public void testSimple() {
     StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;
@@ -24,7 +24,7 @@ public class EulerIntegratorTest extends TestCase {
     Scalar h = Quantity.of(2, "s");
     Tensor r = EulerIntegrator.INSTANCE.step(stateSpaceModel, x, u, h);
     assertEquals(r, Tensors.fromString("{3[m], 6[m]}"));
-    assertEquals(r, lieEulerIntegrator.step(stateSpaceModel, x, u, h));
+    assertEquals(r, integrator.step(stateSpaceModel, x, u, h));
   }
 
   public void testDouble() {

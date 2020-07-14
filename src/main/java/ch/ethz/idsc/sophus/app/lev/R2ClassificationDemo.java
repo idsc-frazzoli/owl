@@ -45,6 +45,19 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   public R2ClassificationDemo() {
     super(false, GeodesicDisplays.R2_ONLY, LogWeightings.list());
+    // {
+    // spinnerLogWeighting.addSpinnerListener(logWeighting -> {
+    // if (logWeighting.equals(LogWeightings.DISTANCES)) {
+    // spinnerLabels.setValue(Labels.ARG_MIN);
+    // }
+    // if (logWeighting.equals(LogWeightings.WEIGHTING)) {
+    // spinnerLabels.setValue(Labels.ARG_MAX);
+    // }
+    // if (logWeighting.equals(LogWeightings.COORDINATE)) {
+    // spinnerLabels.setValue(Labels.ARG_MAX);
+    // }
+    // });
+    // }
     {
       spinnerCount.setList(Arrays.asList(5, 10, 15, 20, 25, 30, 40));
       spinnerCount.setValue(15);
@@ -78,6 +91,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   public void recompute() {
+    System.out.println("recomp");
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Classification labelInterface = spinnerLabels.getValue().apply(vector);
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();

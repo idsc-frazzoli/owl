@@ -12,13 +12,16 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class EulerLieIntegrator implements Integrator, LieIntegrator, Serializable {
+  /** @param lieGroup
+   * @param exponential
+   * @return */
   public static Integrator of(LieGroup lieGroup, Exponential exponential) {
     return new EulerLieIntegrator( //
         Objects.requireNonNull(lieGroup), //
         Objects.requireNonNull(exponential));
   }
 
-  // ---
+  /***************************************************/
   private final LieGroup lieGroup;
   private final Exponential exponential;
 

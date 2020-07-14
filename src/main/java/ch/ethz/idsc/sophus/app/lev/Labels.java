@@ -6,6 +6,7 @@ import java.util.function.Function;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum Labels implements Function<Tensor, Classification> {
+  ARG_MIN(Classifier::argMin), //
   ARG_MAX(Classifier::argMax), //
   ACC_MAX(Classifier::accMax), //
   ;

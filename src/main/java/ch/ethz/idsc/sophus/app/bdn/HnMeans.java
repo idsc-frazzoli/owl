@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** RMF(p,t,w)[x] == w.t for w = IDC(p,x) */
 /* package */ enum HnMeans implements Supplier<BiinvariantMean> {
-  EXACT(new HnBiinvariantMean(Chop._05)), //
+  EXACT(HnBiinvariantMean.of(Chop._05)), //
   FAST(HnFastMean.INSTANCE), //
   PHONG(HnPhongMean.INSTANCE), //
   ;
