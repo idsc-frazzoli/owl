@@ -14,8 +14,10 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -107,8 +109,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
     TensorScalarFunction tensorScalarFunction = function(sequence, values);
-    Scalar[][] array = geodesicDisplay().geodesicArrayPlot().array(resolution, tensorScalarFunction.andThen(Clips.unit()));
-    Tensor matrix = Tensors.matrix(array);
+    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+    Tensor matrix = geodesicArrayPlot.array(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
     // ---
     if (jToggleButton.isSelected())
       matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1

@@ -8,9 +8,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,6 +30,22 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   private Tensor vector;
 
   public ClassificationDemo() {
+    { // code redundant with R2ClassificationDemo
+      SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
+        @Override
+        public void actionPerformed(LogWeighting logWeighting) {
+          if (logWeighting.equals(LogWeightings.DISTANCES))
+            spinnerLabels.setValue(Labels.ARG_MIN);
+          else //
+          if ( //
+          logWeighting.equals(LogWeightings.WEIGHTING) || //
+          logWeighting.equals(LogWeightings.COORDINATE))
+            spinnerLabels.setValue(Labels.ARG_MAX);
+        }
+      };
+      spinnerLogWeighting.addSpinnerListener(spinnerListener);
+      spinnerListener.actionPerformed(logWeighting());
+    }
     spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
   }
 
@@ -43,7 +62,9 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();
     // ---
-    leversRender.renderLevers(weights);
+    leversRender.renderLevers(spinnerLabels.getValue().equals(Labels.ARG_MIN) //
+        ? weights.negate()
+        : weights);
     // ---
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.4));
     int index = 0;

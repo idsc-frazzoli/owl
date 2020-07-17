@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
@@ -23,15 +22,11 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -133,44 +128,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     TensorUnaryOperator operator = operator(getGeodesicControlPoints());
     ColorDataLists colorDataLists = spinnerColor.getValue();
     int resolution = spinnerRes.getValue();
-    bufferedImage = computeImage3(geodesicArrayPlot, classification, operator, resolution, colorDataLists);
-  }
-
-  public static BufferedImage computeImage( //
-      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
-      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
-    TensorScalarFunction tensorScalarFunction = //
-        point -> RealScalar.of(classification.result(operator.apply(point)).getLabel());
-    Scalar[][] scalars = geodesicArrayPlot.array(res, tensorScalarFunction);
-    Tensor image = Tensors.matrix(scalars).map(colorDataLists.cyclic().deriveWithAlpha(128 + 64));
-    return ImageFormat.of(image);
-  }
-
-  public static BufferedImage computeImage2( //
-      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
-      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
-    TensorScalarFunction tensorScalarFunction = //
-        point -> classification.result(operator.apply(point)).getConfidence();
-    Scalar[][] scalars = geodesicArrayPlot.array(res, tensorScalarFunction);
-    Tensor image = Tensors.matrix(scalars).map(ColorDataGradients.CLASSIC);
-    return ImageFormat.of(image);
-  }
-
-  public static BufferedImage computeImage3( //
-      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
-      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
-    ColorDataIndexed colorDataIndexed = colorDataLists.strict();
-    TensorUnaryOperator tensorScalarFunction = //
-        point -> {
-          ClassificationResult classificationResult = classification.result(operator.apply(point));
-          Tensor rgba = colorDataIndexed.apply(RealScalar.of(classificationResult.getLabel()));
-          rgba.set(classificationResult.getConfidence().multiply(RealScalar.of(128 + 64)), 3);
-          // rgba.set(classificationResult.getConfidence().multiply(RealScalar.of(255)), 3);
-          return rgba;
-        };
-    Tensor[][] tensors = geodesicArrayPlot.arrai(res, tensorScalarFunction, Tensors.vector(0, 0, 0, 0));
-    Tensor image = Tensor.of(Stream.of(tensors).map(Tensors::of));
-    return ImageFormat.of(image);
+    bufferedImage = StaticHelper.computeImage3(geodesicArrayPlot, classification, operator, resolution, colorDataLists);
   }
 
   @Override // from RenderInterface
