@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Dimension;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
-/* package */ class R2ArrayPlot implements GeodesicArrayPlot {
+/* package */ class R2ArrayPlot implements GeodesicArrayPlot, Serializable {
   private final Scalar radius;
 
   public R2ArrayPlot(Scalar radius) {
@@ -23,7 +24,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
   }
 
   @Override // from GeodesicArrayPlot
-  public Tensor array(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback) {
+  public Tensor raster(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback) {
     Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
     Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
     return Tensor.of(dy.stream().parallel() //

@@ -3,8 +3,10 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Dimension;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,28 +16,25 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Sign;
-import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/* package */ class S2ArrayPlot implements GeodesicArrayPlot, Serializable {
-  private static final double RADIUS = 1;
+/* package */ class H2ArrayPlot implements GeodesicArrayPlot, Serializable {
+  private final Scalar radius;
+
+  public H2ArrayPlot(Scalar radius) {
+    this.radius = Objects.requireNonNull(radius);
+  }
 
   @Override // from GeodesicArrayPlot
   public Tensor raster(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback) {
-    Tensor dx = Subdivide.of(-RADIUS, +RADIUS, resolution);
-    Tensor dy = Subdivide.of(+RADIUS, -RADIUS, resolution);
+    Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
+    Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
     return Tensor.of(dy.stream().parallel() //
-        .map(vy -> Tensor.of(dx.stream().map(vx -> {
-          Tensor point = Tensors.of(vx, vy); // in R2
-          Scalar z2 = RealScalar.ONE.subtract(Norm2Squared.ofVector(point));
-          return Sign.isPositive(z2) ? function.apply(point.append(Sqrt.FUNCTION.apply(z2))) : fallback;
-        }))));
+        .map(vy -> Tensor.of(dx.stream().map(px -> Tensors.of(px, vy)).map(HnWeierstrassCoordinate::toPoint).map(function))));
   }
 
   @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
-    Tensor range = Tensors.vector(RADIUS, RADIUS).multiply(RealScalar.of(2)); // model
+    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2)); // model
     Tensor scale = Tensors.vector(dimension.width, dimension.height) //
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //

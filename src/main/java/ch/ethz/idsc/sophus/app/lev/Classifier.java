@@ -83,7 +83,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
         IntStream.range(0, labels.length) //
             .forEach(index -> arguments.set(weights.get(index)::add, labels[index]));
         int label = ArgMax.of(arguments);
-        // int label = labels[index];
         Scalar confidence = //
             Clips.unit().apply(TWO.subtract(Total.ofVector(arguments).divide(arguments.Get(label))));
         return new ClassificationResult(label, confidence);

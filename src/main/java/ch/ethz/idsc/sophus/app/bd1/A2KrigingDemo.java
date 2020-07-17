@@ -110,7 +110,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
     TensorScalarFunction tensorScalarFunction = function(sequence, values);
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
-    Tensor matrix = geodesicArrayPlot.array(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
+    Tensor matrix = geodesicArrayPlot.raster(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
     // ---
     if (jToggleButton.isSelected())
       matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1

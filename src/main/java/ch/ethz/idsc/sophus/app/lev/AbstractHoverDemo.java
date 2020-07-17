@@ -17,15 +17,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.SnGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ abstract class AbstractHoverDemo extends LogWeightingDemo {
   static final Random RANDOM = new Random();
@@ -38,6 +32,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
     super(false, GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
     setMidpointIndicated(false);
     setPositioningEnabled(false);
+    addSpinnerListener(v -> shuffle(spinnerCount.getValue()));
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }
@@ -58,17 +53,8 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   void shuffle(int n) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final Tensor xyzs;
-    if (geodesicDisplay instanceof SnGeodesicDisplay) {
-      RandomSampleInterface randomSampleInterface = SnRandomSample.of(2);
-      xyzs = Tensors.vector(i -> randomSampleInterface.randomSample(RANDOM), n);
-      xyzs.set(Abs.FUNCTION, Tensor.ALL, 2);
-    } else {
-      double lim = 3;
-      xyzs = Join.of(1, //
-          RandomVariate.of(UniformDistribution.of(-lim, lim), RANDOM, n, 2), //
-          RandomVariate.of(UniformDistribution.of(-Math.PI, Math.PI), RANDOM, n, 1));
-    }
+    RandomSampleInterface randomSampleInterface = geodesicDisplay.randomSampleInterface();
+    Tensor xyzs = RandomSample.of(randomSampleInterface, n);
     setControlPointsSe2(xyzs);
   }
 

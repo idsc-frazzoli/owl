@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.lev;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum R2PointCollection {
+/* package */ enum R2PointCollection {
   ;
   public static final Tensor SOME = Tensors.matrix(new Number[][] { //
       { 0, 0, 0 }, //

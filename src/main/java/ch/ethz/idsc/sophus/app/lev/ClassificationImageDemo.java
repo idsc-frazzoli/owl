@@ -21,18 +21,20 @@ import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-/* package */ class R2ClassificationDemo extends LogWeightingDemo {
+/* package */ class ClassificationImageDemo extends LogWeightingDemo {
   static final Random RANDOM = new Random();
   // ---
   private final SpinnerLabel<ColorDataLists> spinnerColor = SpinnerLabel.of(ColorDataLists.values());
@@ -41,11 +43,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private final JButton jButtonShuffle = new JButton("shuffle");
   private final JToggleButton jToggleButton = new JToggleButton("track");
   private final SpinnerLabel<Labels> spinnerLabels = SpinnerLabel.of(Labels.values());
-  private Tensor vector;
+  private final SpinnerLabel<ClassificationImage> spinnerImage = SpinnerLabel.of(ClassificationImage.values());
+  // ---
+  protected Tensor vector;
 
-  public R2ClassificationDemo() {
-    super(false, GeodesicDisplays.R2_ONLY, LogWeightings.list());
+  public ClassificationImageDemo() {
+    super(false, GeodesicDisplays.R2_H2_S2_RP2, LogWeightings.list());
     setMidpointIndicated(false);
+    addSpinnerListener(v -> shuffle(spinnerCount.getValue()));
     {
       spinnerLogWeighting.addSpinnerListener(logWeighting -> {
         if (logWeighting.equals(LogWeightings.DISTANCES))
@@ -86,6 +91,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     setLogWeighting(LogWeightings.DISTANCES);
     shuffle(spinnerCount.getValue());
     spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
+    spinnerImage.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "image");
+    spinnerImage.addSpinnerListener(v -> recompute());
     // ---
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
@@ -111,9 +118,9 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   private BufferedImage bufferedImage;
 
-  void shuffle(int n) {
-    Tensor xyzs = Join.of(1, RandomVariate.of(UniformDistribution.of(-5, 5), RANDOM, n, 2), RandomVariate.of(UniformDistribution.of(-2, 2), RANDOM, n, 1));
-    setControlPointsSe2(xyzs);
+  final void shuffle(int n) {
+    RandomSampleInterface randomSampleInterface = geodesicDisplay().randomSampleInterface();
+    setControlPointsSe2(RandomSample.of(randomSampleInterface, n));
     // assignment of random labels to points
     vector = RandomVariate.of(DiscreteUniformDistribution.of(0, 3), RANDOM, n);
     recompute();
@@ -127,8 +134,10 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     Classification classification = spinnerLabels.getValue().apply(vector);
     TensorUnaryOperator operator = operator(getGeodesicControlPoints());
     ColorDataLists colorDataLists = spinnerColor.getValue();
+    TensorUnaryOperator tensorUnaryOperator = //
+        spinnerImage.getValue().operator(classification, operator, colorDataLists.strict());
     int resolution = spinnerRes.getValue();
-    bufferedImage = StaticHelper.computeImage3(geodesicArrayPlot, classification, operator, resolution, colorDataLists);
+    bufferedImage = ImageFormat.of(geodesicArrayPlot.raster(resolution, tensorUnaryOperator, Array.zeros(4)));
   }
 
   @Override // from RenderInterface
@@ -139,7 +148,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     }
     // ---
-    Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.4));
+    Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.0));
     int index = 0;
     for (Tensor point : getGeodesicControlPoints()) {
       int label = vector.Get(index).number().intValue();
@@ -147,14 +156,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       ColorDataIndexed colorDataIndexedT = colorDataLists.cyclic();
       ColorDataIndexed colorDataIndexedO = colorDataIndexedT.deriveWithAlpha(128);
       PointsRender pointsRender = new PointsRender( //
-          colorDataIndexedT.getColor(label), //
-          colorDataIndexedO.getColor(label));
+          colorDataIndexedO.getColor(label), //
+          colorDataIndexedT.getColor(label));
       pointsRender.show(geodesicDisplay::matrixLift, shape, Tensors.of(point)).render(geometricLayer, graphics);
       ++index;
     }
   }
 
   public static void main(String[] args) {
-    new R2ClassificationDemo().setVisible(1200, 900);
+    new ClassificationImageDemo().setVisible(1200, 900);
   }
 }

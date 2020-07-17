@@ -10,12 +10,14 @@ import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnMetric;
+import ch.ethz.idsc.sophus.hs.rpn.RpnRandomSample;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -87,5 +89,10 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   @Override
   public final String toString() {
     return "RP" + dimensions();
+  }
+
+  @Override
+  public final RandomSampleInterface randomSampleInterface() {
+    return RpnRandomSample.of(dimensions());
   }
 }

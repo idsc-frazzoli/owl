@@ -5,13 +5,15 @@ import java.awt.Dimension;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.img.ArrayPlot;
 
+/** @see ArrayPlot */
 public interface GeodesicArrayPlot {
   /** @param resolution
-   * @param tensorScalarFunction
+   * @param function
    * @param fallback
    * @return */
-  Tensor array(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback);
+  Tensor raster(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback);
 
   /** @param dimension
    * @return */

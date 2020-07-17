@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -13,13 +14,16 @@ import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.hs.sn.SnLineDistance;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
+import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.hs.sn.SnTransport;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -84,6 +88,19 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final LineDistance lineDistance() {
     return SnLineDistance.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public final RandomSampleInterface randomSampleInterface() {
+    RandomSampleInterface randomSampleInterface = SnRandomSample.of(dimensions);
+    return new RandomSampleInterface() {
+      @Override
+      public Tensor randomSample(Random random) {
+        Tensor xyz = randomSampleInterface.randomSample(random);
+        xyz.set(Abs.FUNCTION, dimensions);
+        return xyz;
+      }
+    };
   }
 
   @Override

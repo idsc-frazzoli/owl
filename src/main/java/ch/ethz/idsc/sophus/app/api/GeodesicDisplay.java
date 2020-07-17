@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -67,6 +68,10 @@ public interface GeodesicDisplay {
    * @param tensorScalarFunction
    * @return array of scalar values clipped to interval [0, 1] or DoubleScalar.INDETERMINATE */
   default GeodesicArrayPlot geodesicArrayPlot() {
+    throw new UnsupportedOperationException();
+  }
+
+  default RandomSampleInterface randomSampleInterface() {
     throw new UnsupportedOperationException();
   }
 
