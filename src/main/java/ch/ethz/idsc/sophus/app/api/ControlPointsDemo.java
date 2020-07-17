@@ -83,9 +83,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       if (!isPositioningEnabled())
         return;
       mouse = geometricLayer.getMouseSe2State();
-      if (Objects.nonNull(min_index))
-        control.set(mouse, min_index);
-      else {
+      if (isPositioningOngoing()) {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         final boolean hold;
         {
@@ -113,7 +111,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           graphics.draw(geometricLayer.toLine2D(mouse, new Midpoints().closestXY()));
           graphics.setStroke(new BasicStroke());
         }
-      }
+      } else
+        control.set(mouse, min_index);
     }
   };
 
@@ -140,13 +139,13 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           return;
         switch (mouseEvent.getButton()) {
         case MouseEvent.BUTTON1: // insert point
-          if (Objects.isNull(min_index)) {
+          if (isPositioningOngoing()) {
             {
               Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }
-            if (Objects.isNull(min_index) && addRemoveControlPoints) {
+            if (isPositioningOngoing() && addRemoveControlPoints) {
               // insert
               if (control.length() < 2) {
                 control = control.append(mouse);
@@ -164,12 +163,12 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           break;
         case MouseEvent.BUTTON3: // remove point
           if (addRemoveControlPoints) {
-            if (Objects.isNull(min_index)) {
+            if (isPositioningOngoing()) {
               Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }
-            if (Objects.nonNull(min_index)) {
+            if (!isPositioningOngoing()) {
               control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
               min_index = null;
             }
@@ -183,10 +182,14 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
+
   /** function is called when mouse is released */
   // public void released() {
   // API needs comments and better naming
   // }
+  public boolean isPositioningOngoing() {
+    return Objects.isNull(min_index);
+  }
 
   /** when positioning is disabled, the mouse position is not indicated graphically
    * 

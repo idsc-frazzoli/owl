@@ -30,9 +30,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public AnKrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(true, geodesicDisplays, LogWeightings.list());
+    setMidpointIndicated(false);
+    spinnerLogWeighting.addSpinnerListener(v -> recompute());
+    // ---
     jToggleButton.setSelected(false);
     timerFrame.jToolBar.add(jToggleButton);
-    setMidpointIndicated(false);
   }
 
   final boolean isDeterminate() {

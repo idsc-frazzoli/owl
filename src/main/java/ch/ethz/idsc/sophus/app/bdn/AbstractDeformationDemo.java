@@ -47,6 +47,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
   AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(false, list, array);
+    spinnerLogWeighting.addSpinnerListener(v -> recompute());
     // ---
     jToggleHeatmap.setSelected(false);
     spinnerRefine.addSpinnerListener(v -> recompute());

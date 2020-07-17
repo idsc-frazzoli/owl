@@ -27,11 +27,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public abstract class LogWeightingDemo extends ControlPointsDemo {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
-  final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
+  protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
-  public final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
+  private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
     @Override
     public void actionPerformed(LogWeighting logWeighting) {
       if (logWeighting.equals(LogWeightings.DISTANCES)) {
@@ -59,7 +59,6 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
       spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(130, 28), "weights");
       spinnerLogWeighting.addSpinnerListener(spinnerListener);
-      spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {
       spinnerBiinvariant.setArray(Biinvariants.values());
@@ -84,6 +83,7 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
 
   protected final void setLogWeighting(LogWeighting logWeighting) {
     spinnerLogWeighting.setValue(logWeighting);
+    spinnerListener.actionPerformed(logWeighting);
   }
 
   protected final void setBiinvariant(Biinvariant biinvariant) {

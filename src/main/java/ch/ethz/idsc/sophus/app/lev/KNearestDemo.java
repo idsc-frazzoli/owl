@@ -54,7 +54,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
     }
     setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
     setLogWeighting(LogWeightings.DISTANCES);
-    spinnerListener.actionPerformed(LogWeightings.DISTANCES);
     shuffleSnap();
   }
 

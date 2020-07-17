@@ -38,7 +38,6 @@ import ch.ethz.idsc.tensor.red.ArgMin;
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
     setLogWeighting(LogWeightings.DISTANCES);
-    spinnerListener.actionPerformed(LogWeightings.DISTANCES);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
   }
