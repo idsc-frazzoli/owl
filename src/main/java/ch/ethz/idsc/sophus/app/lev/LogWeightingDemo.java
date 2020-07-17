@@ -34,11 +34,18 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
   private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
     @Override
     public void actionPerformed(LogWeighting logWeighting) {
+      {
+        boolean enabled = !logWeighting.equals(LogWeightings.DISTANCES);
+        spinnerVariogram.setEnabled(enabled);
+        spinnerBeta.setEnabled(enabled);
+      }
       if (logWeighting.equals(LogWeightings.DISTANCES)) {
         spinnerVariogram.setValue(Variograms.POWER);
         spinnerBeta.setValueSafe(RealScalar.of(1));
       }
-      if (logWeighting.equals(LogWeightings.COORDINATE)) {
+      if ( //
+      logWeighting.equals(LogWeightings.WEIGHTING) || //
+      logWeighting.equals(LogWeightings.COORDINATE)) {
         spinnerVariogram.setValue(Variograms.INVERSE_POWER);
         spinnerBeta.setValueSafe(RealScalar.of(2));
       }

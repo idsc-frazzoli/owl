@@ -9,8 +9,10 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
@@ -25,6 +27,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ImageFormat;
@@ -41,6 +44,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   private final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JButton jButtonShuffle = new JButton("shuffle");
+  private final JToggleButton jToggleButton = new JToggleButton("track");
   private final SpinnerLabel<Labels> spinnerLabels = SpinnerLabel.of(Labels.values());
   private Tensor vector;
 
@@ -49,37 +53,39 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     setMidpointIndicated(false);
     {
       spinnerLogWeighting.addSpinnerListener(logWeighting -> {
-        if (logWeighting.equals(LogWeightings.DISTANCES)) {
+        if (logWeighting.equals(LogWeightings.DISTANCES))
           spinnerLabels.setValue(Labels.ARG_MIN);
-        }
-        if (logWeighting.equals(LogWeightings.WEIGHTING)) {
+        else //
+        if ( //
+        logWeighting.equals(LogWeightings.WEIGHTING) || //
+        logWeighting.equals(LogWeightings.COORDINATE))
           spinnerLabels.setValue(Labels.ARG_MAX);
-        }
-        if (logWeighting.equals(LogWeightings.COORDINATE)) {
-          spinnerLabels.setValue(Labels.ARG_MAX);
-        }
       });
       spinnerLogWeighting.addSpinnerListener(v -> recompute());
     }
     {
       spinnerColor.addSpinnerListener(v -> recompute());
-      spinnerColor.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "color data lists");
+      spinnerColor.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "color data lists");
     }
     {
       spinnerCount.setList(Arrays.asList(5, 10, 15, 20, 25, 30, 40));
       spinnerCount.setValue(15);
-      spinnerCount.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
+      spinnerCount.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "landmark count");
       spinnerCount.addSpinnerListener(this::shuffle);
     }
     {
       spinnerRes.setArray(25, 50, 75, 100, 150, 200, 250);
-      spinnerRes.setValue(100);
+      spinnerRes.setValue(50);
       spinnerRes.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "resolution");
       spinnerRes.addSpinnerListener(v -> recompute());
     }
     {
       jButtonShuffle.addActionListener(e -> shuffle(spinnerCount.getValue()));
       timerFrame.jToolBar.add(jButtonShuffle);
+    }
+    {
+      jToggleButton.setSelected(true);
+      timerFrame.jToolBar.add(jToggleButton);
     }
     spinnerLabels.addSpinnerListener(v -> recompute());
     setLogWeighting(LogWeightings.DISTANCES);
@@ -91,11 +97,17 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       public void mousePressed(MouseEvent mouseEvent) {
         switch (mouseEvent.getButton()) {
         case MouseEvent.BUTTON1: // insert point
-          if (isPositioningOngoing())
+          if (!isPositioningOngoing())
             recompute();
           break;
         }
       }
+
+      @Override
+      public void mouseMoved(MouseEvent e) {
+        if (jToggleButton.isSelected() && isPositioningOngoing())
+          recompute();
+      };
     };
     // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
@@ -116,15 +128,49 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   public void recompute() {
     System.out.println("recomp");
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Classification labelInterface = spinnerLabels.getValue().apply(vector);
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
+    Classification classification = spinnerLabels.getValue().apply(vector);
     TensorUnaryOperator operator = operator(getGeodesicControlPoints());
-    TensorScalarFunction tensorScalarFunction = //
-        point -> RealScalar.of(labelInterface.result(operator.apply(point)).getLabel());
-    Scalar[][] scalars = geodesicArrayPlot.array(spinnerRes.getValue(), tensorScalarFunction);
     ColorDataLists colorDataLists = spinnerColor.getValue();
+    int resolution = spinnerRes.getValue();
+    bufferedImage = computeImage3(geodesicArrayPlot, classification, operator, resolution, colorDataLists);
+  }
+
+  public static BufferedImage computeImage( //
+      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
+      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
+    TensorScalarFunction tensorScalarFunction = //
+        point -> RealScalar.of(classification.result(operator.apply(point)).getLabel());
+    Scalar[][] scalars = geodesicArrayPlot.array(res, tensorScalarFunction);
     Tensor image = Tensors.matrix(scalars).map(colorDataLists.cyclic().deriveWithAlpha(128 + 64));
-    bufferedImage = ImageFormat.of(image);
+    return ImageFormat.of(image);
+  }
+
+  public static BufferedImage computeImage2( //
+      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
+      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
+    TensorScalarFunction tensorScalarFunction = //
+        point -> classification.result(operator.apply(point)).getConfidence();
+    Scalar[][] scalars = geodesicArrayPlot.array(res, tensorScalarFunction);
+    Tensor image = Tensors.matrix(scalars).map(ColorDataGradients.CLASSIC);
+    return ImageFormat.of(image);
+  }
+
+  public static BufferedImage computeImage3( //
+      GeodesicArrayPlot geodesicArrayPlot, Classification classification, //
+      TensorUnaryOperator operator, int res, ColorDataLists colorDataLists) {
+    ColorDataIndexed colorDataIndexed = colorDataLists.strict();
+    TensorUnaryOperator tensorScalarFunction = //
+        point -> {
+          ClassificationResult classificationResult = classification.result(operator.apply(point));
+          Tensor rgba = colorDataIndexed.apply(RealScalar.of(classificationResult.getLabel()));
+          rgba.set(classificationResult.getConfidence().multiply(RealScalar.of(128 + 64)), 3);
+          // rgba.set(classificationResult.getConfidence().multiply(RealScalar.of(255)), 3);
+          return rgba;
+        };
+    Tensor[][] tensors = geodesicArrayPlot.arrai(res, tensorScalarFunction, Tensors.vector(0, 0, 0, 0));
+    Tensor image = Tensor.of(Stream.of(tensors).map(Tensors::of));
+    return ImageFormat.of(image);
   }
 
   @Override // from RenderInterface

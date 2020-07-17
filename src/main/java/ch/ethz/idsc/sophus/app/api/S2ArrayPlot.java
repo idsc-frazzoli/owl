@@ -43,6 +43,28 @@ public class S2ArrayPlot implements GeodesicArrayPlot {
   }
 
   @Override
+  public Tensor[][] arrai(int resolution, Function<Tensor, Tensor> tensorTensorFunction, Tensor fallback) {
+    double rad = rad();
+    Tensor dx = Subdivide.of(-rad, +rad, resolution);
+    Tensor dy = Subdivide.of(+rad, -rad, resolution);
+    int rows = dy.length();
+    int cols = dx.length();
+    Tensor[][] array = new Scalar[rows][cols];
+    IntStream.range(0, rows).parallel().forEach(cx -> {
+      for (int cy = 0; cy < cols; ++cy) {
+        Tensor point = Tensors.of(dx.get(cx), dy.get(cy)); // in R2
+        Scalar z2 = RealScalar.ONE.subtract(Norm2Squared.ofVector(point));
+        if (Sign.isPositive(z2)) {
+          Scalar z = Sqrt.FUNCTION.apply(z2);
+          array[cy][cx] = tensorTensorFunction.apply(point.append(z));
+        } else
+          array[cy][cx] = fallback;
+      }
+    });
+    return array;
+  }
+
+  @Override
   public Tensor pixel2model(Dimension dimension) {
     double rad = rad();
     Tensor range = Tensors.vector(rad, rad).multiply(RealScalar.of(2)); // model

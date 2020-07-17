@@ -83,7 +83,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       if (!isPositioningEnabled())
         return;
       mouse = geometricLayer.getMouseSe2State();
-      if (isPositioningOngoing()) {
+      if (isPositioningOngoing())
+        control.set(mouse, min_index);
+      else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         final boolean hold;
         {
@@ -111,8 +113,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           graphics.draw(geometricLayer.toLine2D(mouse, new Midpoints().closestXY()));
           graphics.setStroke(new BasicStroke());
         }
-      } else
-        control.set(mouse, min_index);
+      }
     }
   };
 
@@ -138,14 +139,17 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         if (!isPositioningEnabled())
           return;
         switch (mouseEvent.getButton()) {
-        case MouseEvent.BUTTON1: // insert point
+        case MouseEvent.BUTTON1:
           if (isPositioningOngoing()) {
+            min_index = null; // release
+            // released();
+          } else {
             {
               Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }
-            if (isPositioningOngoing() && addRemoveControlPoints) {
+            if (!isPositioningOngoing() && addRemoveControlPoints) {
               // insert
               if (control.length() < 2) {
                 control = control.append(mouse);
@@ -156,19 +160,16 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
                 min_index = midpoints.index;
               }
             }
-          } else {
-            min_index = null;
-            // released();
           }
           break;
         case MouseEvent.BUTTON3: // remove point
           if (addRemoveControlPoints) {
-            if (isPositioningOngoing()) {
+            if (!isPositioningOngoing()) {
               Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }
-            if (!isPositioningOngoing()) {
+            if (isPositioningOngoing()) {
               control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
               min_index = null;
             }
@@ -187,10 +188,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   // public void released() {
   // API needs comments and better naming
   // }
-  public boolean isPositioningOngoing() {
-    return Objects.isNull(min_index);
-  }
-
   /** when positioning is disabled, the mouse position is not indicated graphically
    * 
    * @param enabled */
@@ -203,6 +200,11 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** @return */
   public boolean isPositioningEnabled() {
     return mousePositioning;
+  }
+
+  /** @return whether user is currently dragging a control point */
+  public boolean isPositioningOngoing() {
+    return Objects.nonNull(min_index);
   }
 
   public void setMidpointIndicated(boolean enabled) {

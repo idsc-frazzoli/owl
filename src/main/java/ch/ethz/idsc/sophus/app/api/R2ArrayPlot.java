@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Dimension;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -19,10 +20,10 @@ public class R2ArrayPlot implements GeodesicArrayPlot {
   private final Scalar radius;
 
   public R2ArrayPlot(Scalar radius) {
-    this.radius = radius;
+    this.radius = Objects.requireNonNull(radius);
   }
 
-  @Override
+  @Override // from GeodesicArrayPlot
   public Scalar[][] array(int resolution, Function<Tensor, Scalar> tensorScalarFunction) {
     Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
     Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
@@ -39,6 +40,22 @@ public class R2ArrayPlot implements GeodesicArrayPlot {
   }
 
   @Override
+  public Tensor[][] arrai(int resolution, Function<Tensor, Tensor> tensorTensorFunction, Tensor fallback) {
+    Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
+    Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
+    int rows = dy.length();
+    int cols = dx.length();
+    Tensor[][] array = new Tensor[rows][cols];
+    IntStream.range(0, rows).parallel().forEach(cx -> {
+      for (int cy = 0; cy < cols; ++cy) {
+        Tensor point = Tensors.of(dx.get(cx), dy.get(cy));
+        array[cy][cx] = tensorTensorFunction.apply(point);
+      }
+    });
+    return array;
+  }
+
+  @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
     Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2)); // model
     Tensor scale = Tensors.vector(dimension.width, dimension.height) //
