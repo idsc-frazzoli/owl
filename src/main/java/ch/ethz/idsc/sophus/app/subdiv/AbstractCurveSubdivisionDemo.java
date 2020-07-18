@@ -104,7 +104,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     timerFrame.jToolBar.add(jToggleHelp);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
-    spinnerLabel.setIndex(9);
+    spinnerLabel.setIndex(0);
     spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));

@@ -54,8 +54,7 @@ import ch.ethz.idsc.tensor.Tensor;
   void shuffle(int n) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     RandomSampleInterface randomSampleInterface = geodesicDisplay.randomSampleInterface();
-    Tensor xyzs = RandomSample.of(randomSampleInterface, n);
-    setControlPointsSe2(xyzs);
+    setControlPointsSe2(RandomSample.of(randomSampleInterface, n));
   }
 
   @Override // from RenderInterface
@@ -76,6 +75,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   /** @param geometricLayer
    * @param graphics
-   * @param leversRender */
+   * @param leversRender
+   * @param weights */
   abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights);
 }

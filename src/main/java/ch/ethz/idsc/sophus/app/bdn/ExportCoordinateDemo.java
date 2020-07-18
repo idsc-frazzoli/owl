@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
   private static final int REFINEMENT = 60;
 
-  public static List<Biinvariant> distinct() {
+  private static List<Biinvariant> distinct() {
     return Arrays.asList( //
         Biinvariants.METRIC, //
         Biinvariants.TARGET, //

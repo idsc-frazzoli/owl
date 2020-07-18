@@ -42,9 +42,11 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
       CurveSubdivisionSchemes.BSPLINE1, //
       CurveSubdivisionSchemes.BSPLINE2, //
       CurveSubdivisionSchemes.BSPLINE3, //
-      CurveSubdivisionSchemes.BSPLINE4DS, //
-      CurveSubdivisionSchemes.FOURPOINT, //
-      CurveSubdivisionSchemes.SIXPOINT);
+      CurveSubdivisionSchemes.BSPLINE4DS
+  // , //
+  // CurveSubdivisionSchemes.FOURPOINT, //
+  // CurveSubdivisionSchemes.SIXPOINT
+  );
 
   private static class Container {
     final GeodesicDisplay geodesicDisplay;
@@ -98,7 +100,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     }
     {
       spinnerLabelScheme.setList(SCHEMES);
-      spinnerLabelScheme.setValue(CurveSubdivisionSchemes.FOURPOINT);
+      spinnerLabelScheme.setValue(CurveSubdivisionSchemes.BSPLINE1);
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(160, 28), "scheme");
       spinnerLabelScheme.addSpinnerListener(type -> updateState());
     }
@@ -124,7 +126,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
         .map(i -> i * steps) //
         .mapToObj(tracked::get));
     CurveSubdivision curveSubdivision = //
-        spinnerLabelScheme.getValue().of(geodesicDisplay.geodesicInterface());
+        spinnerLabelScheme.getValue().of(geodesicDisplay);
     Tensor refined = Nest.of(curveSubdivision::string, control, level);
     _container = new Container(geodesicDisplay, tracked, control, refined);
   }

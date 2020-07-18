@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor STAR_POINTS = StarPoints.of(6, 0.08, 0.03).unmodifiable();
+  private static final Tensor STAR_POINTS = StarPoints.of(6, 0.12, 0.04).unmodifiable();
   // ---
   private final int dimensions;
 

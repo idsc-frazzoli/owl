@@ -31,6 +31,7 @@ public class SplitCurveSubdivisionDemo extends AbstractCurveSubdivisionDemo {
   @Override
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    //
     if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
       setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
     // ---
@@ -52,7 +53,7 @@ public class SplitCurveSubdivisionDemo extends AbstractCurveSubdivisionDemo {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine( //
-        control, levels, spinnerLabel.getValue().of(geodesicInterface), //
+        control, levels, spinnerLabel.getValue().of(geodesicDisplay), //
         CurveSubdivisionHelper.isDual(scheme), cyclic, geodesicInterface);
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);

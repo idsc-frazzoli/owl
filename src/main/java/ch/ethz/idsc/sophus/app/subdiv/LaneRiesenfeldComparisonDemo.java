@@ -140,7 +140,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    Tensor refined = StaticHelper.refine(control, levels, scheme.of(geodesicInterface), //
+    Tensor refined = StaticHelper.refine(control, levels, scheme.of(geodesicDisplay), //
         CurveSubdivisionHelper.isDual(scheme), false, geodesicInterface);
     // ---
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
