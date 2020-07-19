@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
       SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
-      return BSpline4CurveSubdivision.dynSharon(splitInterface);
+      return BSpline4CurveSubdivision.split2lo(splitInterface);
     }
   },
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
@@ -86,7 +86,7 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
       SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
-      return BSpline4CurveSubdivision.split2(splitInterface);
+      return BSpline4CurveSubdivision.split2hi(splitInterface);
     }
   },
   /** Hakenberg 2018 that uses 3 binary averages */

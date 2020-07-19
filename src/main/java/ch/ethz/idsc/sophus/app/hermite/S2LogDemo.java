@@ -38,9 +38,10 @@ import ch.ethz.idsc.tensor.alg.Drop;
     S2GeodesicDisplay geodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
     Tensor points = getGeodesicControlPoints();
     if (0 < points.length()) {
-      Tensor x = points.get(0);
+      Tensor origin = points.get(0);
       Tensor sequence = Drop.head(points, 1);
-      LeversRender leversRender = LeversRender.of(geodesicDisplay, sequence, x, geometricLayer, graphics);
+      LeversRender leversRender = //
+          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       leversRender.renderLevers();
       leversRender.renderOrigin();
       leversRender.renderSequence();

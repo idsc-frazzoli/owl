@@ -37,8 +37,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public final class GeometricComponent {
+  private static final Scalar SCALE_FACTOR = Sqrt.FUNCTION.apply(RealScalar.of(2));
   private static final Font FONT_DEFAULT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final Scalar WHEEL_ANGLE = Degree.of(15);
   /** initial model to pixel matrix */
@@ -82,7 +84,7 @@ public final class GeometricComponent {
         mouseWheel += delta;
       else //
       if (isZoomable) {
-        Scalar factor = Power.of(RealScalar.of(2), delta);
+        Scalar factor = Power.of(SCALE_FACTOR, delta);
         Tensor scale = DiagonalMatrix.of(factor, factor, RealScalar.ONE);
         Tensor shift = Tensors.vector(event.getX(), event.getY());
         shift = shift.subtract(shift.multiply(factor));

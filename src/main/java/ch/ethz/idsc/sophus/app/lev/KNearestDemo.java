@@ -126,10 +126,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    LeversRender leversRender = LeversRender.of( //
-        geodesicDisplay, //
-        sequence, origin, //
-        geometricLayer, graphics);
+    LeversRender leversRender = //
+        LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
     leversRender.renderIndexX("x" + p);
     leversRender.renderIndexP("p" + p);
   }

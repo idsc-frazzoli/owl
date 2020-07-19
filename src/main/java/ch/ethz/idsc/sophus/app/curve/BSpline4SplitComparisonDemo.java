@@ -3,9 +3,12 @@ package ch.ethz.idsc.sophus.app.curve;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.Dual3PointCurveSubdivision;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.hs.BiinvariantMeanDefect;
+import ch.ethz.idsc.sophus.hs.MeanDefect;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -16,7 +19,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ enum BSpline4SplitComparisonDemo {
@@ -35,34 +37,49 @@ import ch.ethz.idsc.tensor.sca.Round;
     // System.out.println(weights_lo);
     // System.out.println(hi);
     Dual3PointCurveSubdivision d1 = //
-        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split3(Se2CoveringGeodesic.INSTANCE);
+        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split2lo(Se2CoveringGeodesic.INSTANCE);
     Dual3PointCurveSubdivision d2 = //
-        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.dynSharon(Se2CoveringGeodesic.INSTANCE);
+        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split3(Se2CoveringGeodesic.INSTANCE);
     Dual3PointCurveSubdivision d3 = //
-        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split2(Se2CoveringGeodesic.INSTANCE);
+        (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split2hi(Se2CoveringGeodesic.INSTANCE);
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     Distribution distribution = UniformDistribution.of(-Math.PI / 2, Math.PI / 2);
-    int[] wins = new int[3];
+    MeanDefect meanDefect = BiinvariantMeanDefect.of(Se2CoveringManifold.HS_EXP);
+    int[] wint = new int[3];
     Tensor ert = Array.zeros(3);
+    int[] winm = new int[3];
+    Tensor erm = Array.zeros(3);
     for (int count = 0; count < 10000; ++count) {
-      Tensor p = RandomVariate.of(distribution, 3);
-      Tensor q = RandomVariate.of(distribution, 3);
-      Tensor r = RandomVariate.of(distribution, 3);
+      final Tensor p = RandomVariate.of(distribution, 3);
+      final Tensor q = RandomVariate.of(distribution, 3);
+      final Tensor r = RandomVariate.of(distribution, 3);
+      final Tensor sequence = Unprotect.byRef(p, q, r);
       {
-        Tensor m = biinvariantMean.mean(Unprotect.byRef(p, q, r), weights_lo);
+        Tensor m = biinvariantMean.mean(sequence, weights_lo);
         Tensor m1 = d1.lo(p, q, r);
         Tensor m2 = d2.lo(p, q, r);
         Tensor m3 = d3.lo(p, q, r);
         // ---
+        {
+          Tensor v1 = meanDefect.defect(sequence, weights_lo, m1);
+          Tensor v2 = meanDefect.defect(sequence, weights_lo, m2);
+          Tensor v3 = meanDefect.defect(sequence, weights_lo, m3);
+          Tensor err = Tensors.of( //
+              Norm._2.ofVector(v1), //
+              Norm._2.ofVector(v2), //
+              Norm._2.ofVector(v3)); //
+          ++winm[ArgMin.of(err)];
+          erm = erm.add(err);
+        }
         Tensor err = Tensors.of( //
             Norm._2.between(m1, m), //
             Norm._2.between(m2, m), //
             Norm._2.between(m3, m));
+        ++wint[ArgMin.of(err)];
         ert = ert.add(err);
-        ++wins[ArgMin.of(err)];
       }
       {
-        Tensor m = biinvariantMean.mean(Unprotect.byRef(p, q, r), weights_hi);
+        Tensor m = biinvariantMean.mean(sequence, weights_hi);
         Tensor m1 = d1.hi(p, q, r);
         Tensor m2 = d2.hi(p, q, r);
         Tensor m3 = d3.hi(p, q, r);
@@ -72,13 +89,13 @@ import ch.ethz.idsc.tensor.sca.Round;
             Norm._2.between(m2, m), //
             Norm._2.between(m3, m));
         ert = ert.add(err);
-        ++wins[ArgMin.of(err)];
+        ++wint[ArgMin.of(err)];
       }
     }
     System.out.println("---");
-    Tensor result = Tensors.vectorInt(wins);
-    System.out.println("wins=" + result);
-    System.out.println(ert.map(Round._3));
-    System.out.println(Total.of(result));
+    System.out.println("wins             =" + Tensors.vectorInt(wint));
+    System.out.println("translation error=" + ert.map(Round._3));
+    System.out.println("wins             =" + Tensors.vectorInt(winm));
+    System.out.println("mean defect error=" + erm.map(Round._3));
   }
 }

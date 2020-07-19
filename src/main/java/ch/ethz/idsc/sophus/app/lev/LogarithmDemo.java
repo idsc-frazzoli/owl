@@ -73,10 +73,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
       Tensor origin = controlPointsAll.get(0);
       {
-        LeversRender leversRender = LeversRender.of( //
-            geodesicDisplay, //
-            sequence, origin, //
-            geometricLayer, graphics);
+        LeversRender leversRender = //
+            LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderOrigin();
         leversRender.renderIndexX();
         // ---

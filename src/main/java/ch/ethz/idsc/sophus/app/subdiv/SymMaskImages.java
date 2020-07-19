@@ -30,8 +30,8 @@ import ch.ethz.idsc.tensor.Tensor;
   BSPLINE3(BSpline3CurveSubdivision::new, 3, 1, 2), //
   BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::of, 3, 1, 2), //
   BSPLINE4(CurveSubdivisionHelper::of, 3, 2, 3), //
-  BSPLINE4DS(BSpline4CurveSubdivision::dynSharon, 3, 2, 3), //
-  BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
+  BSPLINE4DS(BSpline4CurveSubdivision::split2lo, 3, 2, 3), //
+  BSPLINE4S2(BSpline4CurveSubdivision::split2hi, 3, 2, 3), //
   BSPLINE5(BSpline5CurveSubdivision::new, 4, 2, 3), //
   LR1(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 1), 2, 0, 1), //
   LR2(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 2), 3, 0, 1), //

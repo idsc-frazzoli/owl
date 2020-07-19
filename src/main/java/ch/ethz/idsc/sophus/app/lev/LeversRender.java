@@ -72,7 +72,8 @@ public class LeversRender {
    * @param geometricLayer
    * @param graphics
    * @return */
-  public static LeversRender of(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
+  public static LeversRender of( //
+      GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     return new LeversRender( //
         geodesicDisplay, sequence, origin, //
@@ -133,24 +134,23 @@ public class LeversRender {
   }
 
   public void renderIndexX(String xlabel) {
+    if (Objects.isNull(origin))
+      return;
     Tensor shape = geodesicDisplay.shape();
     graphics.setFont(FONT_LABELS);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
     graphics.setColor(Color.BLACK);
-    if (Objects.nonNull(origin)) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
-      Rectangle rectangle = geometricLayer.toPath2D(shape, true).getBounds();
-      int pix = rectangle.x;
-      int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
-      {
-        String string = xlabel + " ";
-        pix -= fontMetrics.stringWidth(string);
-        graphics.drawString(string, pix, piy - fheight / 3);
-      }
-      // ---
-      geometricLayer.popMatrix();
+    geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
+    Rectangle rectangle = geometricLayer.toPath2D(shape, true).getBounds();
+    int pix = rectangle.x;
+    int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
+    {
+      String string = xlabel + " ";
+      pix -= fontMetrics.stringWidth(string);
+      graphics.drawString(string, pix, piy - fheight / 3);
     }
+    geometricLayer.popMatrix();
   }
 
   private boolean isSufficient() {

@@ -52,10 +52,8 @@ import ch.ethz.idsc.tensor.red.ArgMin;
     if (0 < controlPointsAll.length()) {
       Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
       Tensor origin = controlPointsAll.get(0);
-      LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay, //
-          sequence, //
-          origin, geometricLayer, graphics);
+      LeversRender leversRender = //
+          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       // ---
       leversRender.renderSequence();
       leversRender.renderOrigin();

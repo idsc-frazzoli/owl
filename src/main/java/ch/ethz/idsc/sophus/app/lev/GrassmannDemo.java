@@ -54,9 +54,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     if (0 < geodesicControlPoints.length()) {
       Tensor sequence = Drop.head(geodesicControlPoints, 1);
       Tensor origin = geodesicControlPoints.get(0);
-      LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay, //
-          sequence, origin, geometricLayer, graphics);
+      LeversRender leversRender = //
+          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
       LeversHud.render(biinvariant(), leversRender, colorDataGradient);
     } else {

@@ -66,10 +66,8 @@ import ch.ethz.idsc.tensor.Tensor;
     Tensor sequence = getGeodesicControlPoints();
     Tensor origin = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     Tensor weights = operator(sequence).apply(origin);
-    LeversRender leversRender = LeversRender.of( //
-        geodesicDisplay, //
-        sequence, origin, //
-        geometricLayer, graphics);
+    LeversRender leversRender = //
+        LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
     render(geometricLayer, graphics, leversRender, weights);
   }
 
