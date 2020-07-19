@@ -2,8 +2,6 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,27 +31,6 @@ import ch.ethz.idsc.tensor.alg.Transpose;
     super(addRemoveControlPoints, list, array);
     // ---
     timerFrame.jToolBar.add(jToggleAxes);
-    // ---
-    MouseAdapter mouseAdapter = new MouseAdapter() { // TODO code redundant to somewhere
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        switch (mouseEvent.getButton()) {
-        case MouseEvent.BUTTON1: // insert point
-          if (!isPositioningOngoing())
-            recompute();
-          break;
-        }
-      }
-
-      @Override
-      public void mouseMoved(MouseEvent e) {
-        if (true && isPositioningOngoing()) // TODO
-          recompute();
-      };
-    };
-    // ---
-    timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
-    timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
   }
 
   @Override

@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
@@ -16,7 +14,6 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -61,7 +58,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   private final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JButton jButtonShuffle = new JButton("shuffle");
-  private final JToggleButton jToggleButton = new JToggleButton("track");
   private final SpinnerLabel<Labels> spinnerLabels = SpinnerLabel.of(Labels.values());
   private final SpinnerLabel<ClassificationImage> spinnerImage = SpinnerLabel.of(ClassificationImage.values());
   private final JButton jButtonExport = new JButton("export");
@@ -110,10 +106,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       jButtonShuffle.addActionListener(e -> shuffle(spinnerCount.getValue()));
       timerFrame.jToolBar.add(jButtonShuffle);
     }
-    {
-      jToggleButton.setSelected(true);
-      timerFrame.jToolBar.add(jToggleButton);
-    }
     spinnerLabels.addSpinnerListener(v -> recompute());
     setLogWeighting(LogWeightings.DISTANCES);
     shuffle(spinnerCount.getValue());
@@ -124,27 +116,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       jButtonExport.addActionListener(this);
       timerFrame.jToolBar.add(jButtonExport);
     }
-    // ---
-    MouseAdapter mouseAdapter = new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        switch (mouseEvent.getButton()) {
-        case MouseEvent.BUTTON1: // insert point
-          if (!isPositioningOngoing())
-            recompute();
-          break;
-        }
-      }
-
-      @Override
-      public void mouseMoved(MouseEvent e) {
-        if (jToggleButton.isSelected() && isPositioningOngoing())
-          recompute();
-      };
-    };
-    // ---
-    timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
-    timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
   }
 
   private BufferedImage bufferedImage;

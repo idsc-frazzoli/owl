@@ -2,6 +2,8 @@
 package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,6 +84,27 @@ public abstract class LogWeightingDemo extends ControlPointsDemo {
       spinnerBeta.addSpinnerListener(v -> recompute());
     }
     timerFrame.jToolBar.addSeparator();
+    // ---
+    MouseAdapter mouseAdapter = new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent mouseEvent) {
+        switch (mouseEvent.getButton()) {
+        case MouseEvent.BUTTON1: // insert point
+          if (!isPositioningOngoing())
+            recompute();
+          break;
+        }
+      }
+
+      @Override
+      public void mouseMoved(MouseEvent e) {
+        if (isPositioningOngoing())
+          recompute();
+      };
+    };
+    // ---
+    timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
+    timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
   }
 
   protected final LogWeighting logWeighting() {

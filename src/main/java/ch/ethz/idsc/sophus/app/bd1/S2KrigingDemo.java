@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.red.Max;
 /* package */ class S2KrigingDemo extends A2KrigingDemo {
   public S2KrigingDemo() {
     super(GeodesicDisplays.S2_RP2);
-    // setControlPointsSe2(Tensors.fromString("{{0.01, 0, 1}, {0.2, 0, 0}, {0.21, 0.2, 0}, {0, 0.2, 0}}"));
     // ---
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));

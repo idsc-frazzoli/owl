@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -18,20 +19,15 @@ import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
@@ -41,6 +37,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private final JToggleButton jToggleButton = new JToggleButton("thres");
   private final JButton jButtonPrint = new JButton("print");
   private final JButton jButtonExport = new JButton("export");
+  // ---
+  private BufferedImage bufferedImage = null;
 
   public A2KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(geodesicDisplays);
@@ -52,11 +50,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     {
       spinnerColorData.setValue(ColorDataGradients.PARULA);
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
+      spinnerColorData.addSpinnerListener(v -> recompute());
     }
     {
       spinnerRes.setArray(20, 30, 50, 75, 100, 150, 200, 250);
       spinnerRes.setValue(30);
       spinnerRes.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "resolution");
+      spinnerRes.addSpinnerListener(v -> recompute());
     }
     {
       timerFrame.jToolBar.add(jToggleVarian);
@@ -80,7 +80,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       jButtonExport.addActionListener(e -> export());
       timerFrame.jToolBar.add(jButtonExport);
     }
-    // timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
+    addSpinnerListener(v -> recompute());
+    timerFrame.geometricComponent.jComponent.addMouseWheelListener(v -> recompute());
   }
 
   @Override
@@ -91,21 +92,33 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    try {
-      Tensor matrix = matrix(spinnerRes.getValue(), sequence, values);
-      BufferedImage bufferedImage = bufferedImage(matrix);
-      RenderQuality.setDefault(graphics);
+    if (Objects.isNull(bufferedImage))
+      recompute();
+    if (Objects.nonNull(bufferedImage)) {
+      RenderQuality.setDefault(graphics); // default so that raster becomes visible
       Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
-    } catch (Exception exception) {
-      System.out.println(exception);
-      exception.printStackTrace();
     }
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     LeversRender leversRender = //
         LeversRender.of(geodesicDisplay, sequence, values, geometricLayer, graphics);
     leversRender.renderWeights(values);
+  }
+
+  @Override
+  protected final void recompute() {
+    Tensor sequence = getGeodesicControlPoints();
+    Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
+    try {
+      Tensor matrix = matrix(spinnerRes.getValue(), sequence, values);
+      ColorDataGradient colorDataGradient = spinnerColorData.getValue();
+      bufferedImage = ImageFormat.of(matrix.map(colorDataGradient));
+    } catch (Exception exception) {
+      System.out.println(exception);
+      exception.printStackTrace();
+      bufferedImage = null;
+    }
   }
 
   private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
@@ -116,17 +129,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     if (jToggleButton.isSelected())
       matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
     return matrix;
-  }
-
-  private BufferedImage bufferedImage(Tensor matrix) {
-    Tensor tensor = ResourceData.of("/colorscheme/" + spinnerColorData.getValue().toString().toLowerCase() + ".csv");
-    ScalarUnaryOperator suo = s -> s.multiply(RationalScalar.HALF).add(RealScalar.of(127));
-    tensor.set(suo, Tensor.ALL, 0);
-    tensor.set(suo, Tensor.ALL, 1);
-    tensor.set(suo, Tensor.ALL, 2);
-    ColorDataGradient colorDataGradient = LinearColorDataGradient.of(tensor);
-    Tensor colorData = matrix.map(colorDataGradient);
-    return ImageFormat.of(colorData);
   }
 
   private void export() {
