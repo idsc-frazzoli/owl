@@ -30,17 +30,21 @@ import ch.ethz.idsc.tensor.sca.Round;
       List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     setMidpointIndicated(false);
+    spinnerLogWeighting.addSpinnerListener(v -> recompute());
     {
       spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
       spinnerRefine.setValue(20);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
+      spinnerRefine.addSpinnerListener(v -> recompute());
     }
     {
       spinnerMagnif.setList(Arrays.asList(1, 2, 3, 4));
       spinnerMagnif.setValue(2);
       spinnerMagnif.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
+      spinnerMagnif.addSpinnerListener(v -> recompute());
     }
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "color scheme");
+    spinnerColorData.addSpinnerListener(v -> recompute());
     {
       jToggleHeatmap.setSelected(true);
       timerFrame.jToolBar.add(jToggleHeatmap);

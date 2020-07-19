@@ -76,11 +76,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor sequence = controlPoints.extract(1, controlPoints.length());
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
       Tensor origin = controlPoints.get(0);
-      Tensor weights = tensorUnaryOperator.apply(origin);
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      leversRender.renderWeights(weights);
       LeversHud.render(biinvariant(), leversRender);
+      if (geodesicDisplay.dimensions() < controlPoints.length()) {
+        Tensor weights = tensorUnaryOperator.apply(origin);
+        leversRender.renderWeights(weights);
+      }
     }
   }
 

@@ -65,16 +65,8 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
       return new MSpline3CurveSubdivision(biinvariantMean);
     }
   },
-  /** Hakenberg 2018 that uses 3 binary averages */
-  BSPLINE4 {
-    @Override
-    public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
-      SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
-      return CurveSubdivisionHelper.of(splitInterface);
-    }
-  },
   /** Dyn/Sharon 2014 that uses 2 binary averages */
-  BSPLINE4DS {
+  BSPLINE4_S2LO {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
       SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
@@ -82,11 +74,19 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
     }
   },
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
-  BSPLINE4S2 {
+  BSPLINE4_S2HI {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
       SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
       return BSpline4CurveSubdivision.split2hi(splitInterface);
+    }
+  },
+  /** Hakenberg 2018 that uses 3 binary averages */
+  BSPLINE4_S3 {
+    @Override
+    public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
+      SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
+      return CurveSubdivisionHelper.of(splitInterface);
     }
   },
   /** Hakenberg 2018 that uses 3 binary averages */

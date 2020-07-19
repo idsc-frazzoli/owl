@@ -28,8 +28,11 @@ public enum LeversHud {
       leversRender.renderLeverLength();
       break;
     case TARGET:
-      leversRender.renderTangentsXtoP(false);
-      leversRender.renderMahalanobisFormX(false, colorDataGradient);
+      leversRender.renderTangentsXtoP(false); // boolean: no tangent plane
+      if (leversRender.getSequence().length() <= 2)
+        leversRender.renderMahalanobisFormXEV(colorDataGradient);
+      else
+        leversRender.renderMahalanobisEllipse();
       leversRender.renderLeverages();
       break;
     case ANCHOR:
@@ -37,8 +40,8 @@ public enum LeversHud {
       leversRender.renderLeverages();
       break;
     case GARDEN:
-      leversRender.renderTangentsPtoX(false);
-      leversRender.renderMahalanobisFormsP(false, colorDataGradient);
+      leversRender.renderTangentsPtoX(false); // boolean: no tangent planes
+      leversRender.renderMahalanobisEllipseP(); // no evs
       break;
     case HARBOR:
       leversRender.renderInfluenceX(colorDataGradient);

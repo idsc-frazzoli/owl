@@ -43,10 +43,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
       boolean lower = getControlPointsSe2().stream().anyMatch(r -> Sign.isNegative(r.Get(2)));
       jToggleLower.setSelected(lower);
     }
+    recompute();
   }
 
   @Override // from ExportCoordinateDemo
-  public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
+  public Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
     Tensor sX = Subdivide.of(-1.0, +1.0, refinement);
     Tensor sY = Subdivide.of(+1.0, -1.0, refinement);
     int n = sX.length();
@@ -60,10 +61,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
         Optional<Tensor> optionalP = S2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
         if (optionalP.isPresent()) {
           Tensor point = optionalP.get();
-          wgs.set(weightingInterface.apply(point), c1, c0);
+          wgs.set(tensorUnaryOperator.apply(point), c1, c0);
           if (lower) {
             point.set(Scalar::negate, 2);
-            wgs.set(weightingInterface.apply(point), n + c1, c0);
+            wgs.set(tensorUnaryOperator.apply(point), n + c1, c0);
           }
         }
         ++c1;

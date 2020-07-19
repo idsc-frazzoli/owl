@@ -33,6 +33,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class Se2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
+  private static final double RANGE = 3;
+  // ---
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public Se2ScatteredSetCoordinateDemo() {
@@ -86,9 +88,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   @Override
-  public Tensor compute(TensorUnaryOperator weightingInterface, int refinement) {
-    Tensor sX = Subdivide.of(-3.0, +3.0, refinement);
-    Tensor sY = Subdivide.of(+3.0, -3.0, refinement);
+  public Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
+    Tensor sX = Subdivide.of(-RANGE, +RANGE, refinement);
+    Tensor sY = Subdivide.of(+RANGE, -RANGE, refinement);
     Tensor sA = Drop.tail(Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 6), 1);
     int n = sX.length();
     Tensor origin = getGeodesicControlPoints(); // TODO
@@ -100,7 +102,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         int c1 = 0;
         for (Tensor y : sY) {
           Tensor point = Tensors.of(x, y, a);
-          wgs.set(weightingInterface.apply(point), ofs + c1, c0);
+          wgs.set(tensorUnaryOperator.apply(point), ofs + c1, c0);
           ++c1;
         }
         ofs += n;

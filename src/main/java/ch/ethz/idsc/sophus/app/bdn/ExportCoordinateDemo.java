@@ -77,5 +77,5 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     System.out.println("all done");
   }
 
-  abstract Tensor compute(TensorUnaryOperator weightingInterface, int refinement);
+  abstract Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement);
 }

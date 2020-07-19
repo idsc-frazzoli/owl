@@ -40,6 +40,8 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class R2ScatteredSetCoordinateDemo extends ScatteredSetCoordinateDemo {
+  private static final double RANGE = 5;
+  // ---
   private final JToggleButton jToggleButtonAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -102,11 +104,10 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       TensorUnaryOperator tensorUnaryOperator = operator(RnManifold.INSTANCE, domain);
       Tensor min = Entrywise.min().of(domain).map(RealScalar.of(0.01)::add);
       Tensor max = Entrywise.max().of(domain).map(RealScalar.of(0.01)::subtract).negate();
-      double rng = 5;
-      min = Tensors.vector(-rng, -rng);
-      max = Tensors.vector(+rng, +rng);
+      min = Tensors.vector(-RANGE, -RANGE);
+      max = Tensors.vector(+RANGE, +RANGE);
       {
-        Tensor sq = Tensors.matrixDouble(new double[][] { { -rng, -rng }, { rng, -rng }, { rng, rng }, { -rng, rng } });
+        Tensor sq = Tensors.matrixDouble(new double[][] { { -RANGE, -RANGE }, { RANGE, -RANGE }, { RANGE, RANGE }, { -RANGE, RANGE } });
         Path2D path2d = geometricLayer.toPath2D(sq, true);
         graphics.setColor(Color.GRAY);
         graphics.draw(path2d);

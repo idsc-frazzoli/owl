@@ -1,11 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.subdiv;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -15,22 +19,33 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.StandardMenu;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.Curvature2DRender;
+import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.curve.CurvatureDemo;
+import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.red.Nest;
 
-/** base class for split interface and biinvariant mean based curve subdivision */
-/* package */ abstract class AbstractCurveSubdivisionDemo extends CurvatureDemo {
+/** split interface and biinvariant mean based curve subdivision */
+public class CurveSubdivisionDemo extends CurvatureDemo {
+  private final PathRender pathRender = new PathRender(new Color(0, 255, 0, 128));
   final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
@@ -40,8 +55,8 @@ import ch.ethz.idsc.tensor.red.Mean;
   final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleHelp = new JToggleButton("help");
 
-  public AbstractCurveSubdivisionDemo(List<GeodesicDisplay> _list) {
-    super(_list);
+  public CurveSubdivisionDemo() {
+    super(GeodesicDisplays.ALL);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
@@ -127,5 +142,47 @@ import ch.ethz.idsc.tensor.red.Mean;
       timerFrame.jToolBar.add(jSlider);
     }
     timerFrame.configCoordinateOffset(100, 600);
+  }
+
+  @Override
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    //
+    if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
+      setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
+    // ---
+    if (jToggleSymi.isSelected()) {
+      Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
+      if (optional.isPresent()) {
+        BufferedImage image0 = optional.get().image0();
+        graphics.drawImage(image0, 0, 0, null);
+        BufferedImage image1 = optional.get().image1();
+        graphics.drawImage(image1, image0.getWidth() + 1, 0, null);
+      }
+    }
+    RenderQuality.setQuality(graphics);
+    // ---
+    final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
+    Tensor control = getGeodesicControlPoints();
+    int levels = spinnerRefine.getValue();
+    renderControlPoints(geometricLayer, graphics);
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Tensor refined = StaticHelper.refine( //
+        control, levels, spinnerLabel.getValue().of(geodesicDisplay), //
+        CurveSubdivisionHelper.isDual(scheme), cyclic, geodesicInterface);
+    if (jToggleLine.isSelected()) {
+      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);
+      pathRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
+    }
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    Curvature2DRender.of(render, cyclic, jToggleComb.isSelected(), geometricLayer, graphics);
+    if (levels < 5)
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
+    return refined;
+  }
+
+  public static void main(String[] args) {
+    new CurveSubdivisionDemo().setVisible(1200, 800);
   }
 }
