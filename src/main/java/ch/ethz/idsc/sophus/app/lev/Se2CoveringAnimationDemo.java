@@ -39,13 +39,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       jToggleAnimate.addActionListener(e -> {
         if (jToggleAnimate.isSelected()) {
           snapshotUncentered = getControlPointsSe2();
-          Tensor controlPointsAll = getGeodesicControlPoints();
-          if (0 < controlPointsAll.length()) {
+          Tensor sequence = getGeodesicControlPoints();
+          if (0 < sequence.length()) {
             GeodesicDisplay geodesicDisplay = geodesicDisplay();
             LieGroup lieGroup = geodesicDisplay.lieGroup();
             LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
-            Tensor origin = controlPointsAll.get(0);
-            snapshot = lieGroupOps.allLeft(controlPointsAll, lieGroup.element(origin).inverse().toCoordinate());
+            Tensor origin = sequence.get(0);
+            snapshot = lieGroupOps.allLeft(sequence, lieGroup.element(origin).inverse().toCoordinate());
           }
         } else
           setControlPointsSe2(snapshotUncentered);

@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Drop;
 
 /* package */ class S2LogDemo extends ControlPointsDemo {
   public S2LogDemo() {
@@ -36,10 +35,10 @@ import ch.ethz.idsc.tensor.alg.Drop;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     S2GeodesicDisplay geodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
-    Tensor points = getGeodesicControlPoints();
+    Tensor points = getGeodesicControlPoints(0, 1);
     if (0 < points.length()) {
       Tensor origin = points.get(0);
-      Tensor sequence = Drop.head(points, 1);
+      Tensor sequence = getGeodesicControlPoints(1, Integer.MAX_VALUE);
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       leversRender.renderLevers();

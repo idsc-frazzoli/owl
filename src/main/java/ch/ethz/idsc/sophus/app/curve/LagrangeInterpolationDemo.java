@@ -59,13 +59,13 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final Tensor control = getGeodesicControlPoints();
-    if (Tensors.isEmpty(control))
+    final Tensor sequence = getGeodesicControlPoints();
+    if (Tensors.isEmpty(sequence))
       return Tensors.empty();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
-        .multiply(RealScalar.of(control.length()));
+        .multiply(RealScalar.of(sequence.length()));
     if (jToggleSymi.isSelected()) {
-      Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
+      Tensor vector = Tensor.of(IntStream.range(0, sequence.length()).mapToObj(SymScalar::leaf));
       ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
       Scalar scalar = N.DOUBLE.apply(parameter);
       SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(scalar);
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.N;
     int levels = spinnerRefine.getValue();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), getGeodesicControlPoints());
-    Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
+    Tensor refined = Subdivide.of(0, sequence.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     Curvature2DRender.of(render, false, geometricLayer, graphics);
     {

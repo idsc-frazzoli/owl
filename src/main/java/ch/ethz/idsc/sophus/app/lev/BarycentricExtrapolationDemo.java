@@ -36,15 +36,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor control = getGeodesicControlPoints();
-    int length = control.length();
-    Tensor domain = Range.of(-control.length(), 0).map(Tensors::of).unmodifiable();
+    Tensor sequence = getGeodesicControlPoints();
+    int length = sequence.length();
+    Tensor domain = Range.of(-sequence.length(), 0).map(Tensors::of).unmodifiable();
     graphics.setColor(Color.GRAY);
     graphics.setStroke(STROKE);
     for (int index = 0; index < length; ++index) {
       Line2D line2d = geometricLayer.toLine2D( //
           domain.get(index).append(RealScalar.ZERO), //
-          geodesicDisplay.toPoint(control.get(index)));
+          geodesicDisplay.toPoint(sequence.get(index)));
       graphics.draw(line2d);
     }
     graphics.setStroke(new BasicStroke());
@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       TensorUnaryOperator tensorUnaryOperator = operator(RnManifold.INSTANCE, domain);
       Tensor curve = Tensor.of(samples.stream() //
           .map(tensorUnaryOperator) //
-          .map(weights -> biinvariantMean.mean(control, weights)));
+          .map(weights -> biinvariantMean.mean(sequence, weights)));
       new PathRender(Color.BLUE, 1.5f) //
           .setCurve(curve, false) //
           .render(geometricLayer, graphics);

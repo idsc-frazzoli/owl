@@ -39,8 +39,8 @@ import ch.ethz.idsc.tensor.io.Timing;
       jToggleAnimate.addActionListener(e -> {
         if (jToggleAnimate.isSelected()) {
           snapshotUncentered = getControlPointsSe2();
-          Tensor controlPointsAll = getGeodesicControlPoints();
-          if (0 < controlPointsAll.length()) {
+          Tensor sequence = getGeodesicControlPoints();
+          if (0 < sequence.length()) {
             snapshot = snapshotUncentered.copy();
           }
         } else

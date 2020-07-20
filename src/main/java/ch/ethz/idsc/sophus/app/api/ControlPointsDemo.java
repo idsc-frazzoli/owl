@@ -239,7 +239,18 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   /** @return control points for selected {@link GeodesicDisplay} */
   public final Tensor getGeodesicControlPoints() {
-    return Tensor.of(control.stream().map(geodesicDisplay()::project).map(N.DOUBLE::of));
+    return getGeodesicControlPoints(0, Integer.MAX_VALUE);
+  }
+
+  /** @param skip
+   * @param maxSize
+   * @return */
+  public final Tensor getGeodesicControlPoints(int skip, int maxSize) {
+    return Tensor.of(control.stream() //
+        .skip(skip) //
+        .limit(maxSize) //
+        .map(geodesicDisplay()::project) //
+        .map(N.DOUBLE::of));
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {

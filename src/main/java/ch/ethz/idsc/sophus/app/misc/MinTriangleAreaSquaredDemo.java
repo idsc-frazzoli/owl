@@ -42,15 +42,15 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor control = getGeodesicControlPoints();
-    pathRender.setCurve(control, true);
-    if (0 < control.length()) {
-      Tensor polygon = control.copy();
+    Tensor sequence = getGeodesicControlPoints();
+    pathRender.setCurve(sequence, true);
+    if (0 < sequence.length()) {
+      Tensor polygon = sequence.copy();
       polygon.stream().forEach(row -> row.append(RealScalar.ONE));
       Tensor weights = MinTriangleAreaSquared.weights(polygon);
       Tensor weiszfeld = weights.dot(polygon).extract(0, 2);
       LeversRender leversRender = //
-          LeversRender.of(geodesicDisplay, control, weiszfeld, geometricLayer, graphics);
+          LeversRender.of(geodesicDisplay, sequence, weiszfeld, geometricLayer, graphics);
       leversRender.renderWeights(weights);
       leversRender.renderOrigin();
       leversRender.renderLevers(weights);

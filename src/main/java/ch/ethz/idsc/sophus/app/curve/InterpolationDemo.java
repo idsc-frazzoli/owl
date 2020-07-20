@@ -30,11 +30,11 @@ import ch.ethz.idsc.tensor.red.Nest;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    Tensor control = getGeodesicControlPoints();
-    if (0 < control.length()) {
-      Tensor matrix = BSplineLimitMatrix.string(control.length(), 3);
+    Tensor sequence = getGeodesicControlPoints();
+    if (0 < sequence.length()) {
+      Tensor matrix = BSplineLimitMatrix.string(sequence.length(), 3);
       Tensor invers = Inverse.of(matrix);
-      Tensor tensor = Tensor.of(invers.stream().map(weights -> biinvariantMean.mean(control, weights)));
+      Tensor tensor = Tensor.of(invers.stream().map(weights -> biinvariantMean.mean(sequence, weights)));
       CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(geodesicDisplay.geodesicInterface());
       Tensor refine = Nest.of(curveSubdivision::string, tensor, 5);
       new PathRender(Color.BLUE).setCurve(refine, false).render(geometricLayer, graphics);

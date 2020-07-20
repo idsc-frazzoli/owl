@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ abstract class AbstractPlaceDemo extends LogWeightingDemo {
@@ -24,14 +23,14 @@ import ch.ethz.idsc.tensor.sca.Round;
     timerFrame.jToolBar.add(jButtonPrint);
   }
 
-  Optional<Tensor> getOrigin() {
-    Tensor geodesicControlPoints = getGeodesicControlPoints();
+  final Optional<Tensor> getOrigin() {
+    Tensor geodesicControlPoints = getGeodesicControlPoints(0, 1);
     return 0 < geodesicControlPoints.length() //
         ? Optional.of(geodesicControlPoints.get(0))
         : Optional.empty();
   }
 
-  Tensor getSequence() {
-    return Drop.head(getGeodesicControlPoints(), 1);
+  final Tensor getSequence() {
+    return getGeodesicControlPoints(1, Integer.MAX_VALUE);
   }
 }

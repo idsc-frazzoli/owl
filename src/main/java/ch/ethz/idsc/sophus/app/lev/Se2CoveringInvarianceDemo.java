@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.Tensors;
     if (0 < controlPointsAll.length()) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       {
-        Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
+        Tensor sequence = getGeodesicControlPoints(1, Integer.MAX_VALUE);
         Tensor origin = controlPointsAll.get(0);
         Tensor weights = new HsInfluence(vectorLogManifold.logAt(origin), sequence).leverages_sqrt();
         LeversRender leversRender = //
