@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
+import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.sophus.ply.PolygonArea;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +28,7 @@ public class Se2ClothoidDisplayTest extends TestCase {
   }
 
   public void testShapeArea() {
-    Scalar a1 = PolygonArea.FUNCTION.apply(Se2CoveringGeodesicDisplay.INSTANCE.shape());
+    Scalar a1 = PolygonArea.FUNCTION.apply(Arrowhead.of(0.4));
     Scalar a2 = PolygonArea.FUNCTION.apply(Se2ClothoidDisplay.INSTANCE.shape());
     Tolerance.CHOP.requireClose(a1, a2);
   }

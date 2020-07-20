@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor ARROWHEAD = Arrowhead.of(0.4).unmodifiable();
+  private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override // from GeodesicDisplay
   public final int dimensions() {

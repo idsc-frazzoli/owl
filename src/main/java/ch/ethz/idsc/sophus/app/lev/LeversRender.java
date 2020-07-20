@@ -11,17 +11,19 @@ import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.HsProjection;
+import ch.ethz.idsc.sophus.hs.HsInfluence;
+import ch.ethz.idsc.sophus.hs.TangentSpace;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.Mahalanobis;
-import ch.ethz.idsc.sophus.krg.Mahalanobis.Form;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -31,6 +33,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -40,12 +43,13 @@ import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.CyclicColorDataIndexed;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class LeversRender {
@@ -191,9 +195,9 @@ public class LeversRender {
       graphics.setFont(FONT_MATRIX);
       FontMetrics fontMetrics = graphics.getFontMetrics();
       int fheight = fontMetrics.getAscent();
-      for (Tensor p : sequence) {
-        Scalar d = tensorMetric.distance(origin, p);
-        ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, p);
+      for (Tensor point : sequence) {
+        Scalar d = tensorMetric.distance(origin, point);
+        ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(origin, point);
         Tensor ms = geodesicDisplay.toPoint(scalarTensorFunction.apply(RationalScalar.HALF));
         Point2D point2d = geometricLayer.toPoint2D(ms);
         String string = "" + d.map(Round._3);
@@ -208,17 +212,37 @@ public class LeversRender {
     }
   }
 
+  /***************************************************/
+  public void renderWeightsLength() {
+    TensorMetric tensorMetric = geodesicDisplay.parametricDistance();
+    if (Objects.nonNull(tensorMetric)) {
+      Tensor weights = Tensor.of(sequence.stream().map(point -> tensorMetric.distance(origin, point)));
+      renderWeights(weights);
+    }
+  }
+
+  public void renderWeightsLeveragesSqrt() {
+    if (Tensors.nonEmpty(sequence)) {
+      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
+      Tensor w1 = new Mahalanobis(tangentSpace, sequence).leverages_sqrt();
+      Tensor w2 = new HsInfluence(tangentSpace, sequence).leverages_sqrt();
+      Chop._05.requireClose(w1, w2);
+      renderWeights(w1);
+    }
+  }
+
   public void renderWeights(Tensor weights) {
     graphics.setFont(FONT_MATRIX);
     FontMetrics fontMetrics = graphics.getFontMetrics();
     int fheight = fontMetrics.getAscent();
-    int index = 0;
-    for (Tensor p : sequence) {
-      Tensor matrix = geodesicDisplay.matrixLift(p);
+    AtomicInteger atomicInteger = new AtomicInteger();
+    for (Tensor point : sequence) {
+      Tensor matrix = geodesicDisplay.matrixLift(point);
       geometricLayer.pushMatrix(matrix);
       Path2D path2d = geometricLayer.toPath2D(shape, true);
       Rectangle rectangle = path2d.getBounds();
-      Scalar rounded = Round._2.apply(weights.Get(index));
+      Scalar rounded = Round._2.apply(weights.Get(atomicInteger.getAndIncrement()));
       String string = " " + rounded.toString();
       int pix = rectangle.x + rectangle.width;
       int piy = rectangle.y + rectangle.height + (-rectangle.height + fheight) / 2;
@@ -230,7 +254,6 @@ public class LeversRender {
       graphics.setColor(Color.BLACK);
       graphics.drawString(string, pix, piy);
       geometricLayer.popMatrix();
-      ++index;
     }
   }
 
@@ -285,23 +308,26 @@ public class LeversRender {
   }
 
   /***************************************************/
-  private void renderMahalanobisMatrix(Tensor p, Form form, ColorDataGradient colorDataGradient) {
+  private void renderMahalanobisMatrix(Tensor p, Mahalanobis mahalanobis, ColorDataGradient colorDataGradient) {
     graphics.setFont(FONT_MATRIX);
     MatrixRender matrixRender = MatrixRender.arcTan(graphics, CONSTANT, colorDataGradient);
-    Tensor alt = Tensors.of(Eigensystem.ofSymmetric(form.sigma_inverse()).values());
-    // Tensor alt = Tensors.of(Eigensystem.ofSymmetric(form.sigma_n()).values());
+    Tensor alt = Tensors.of(Eigensystem.ofSymmetric(mahalanobis.sigma_n()).values());
     renderMatrix(p, matrixRender, Transpose.of(alt.map(Round._4)));
   }
 
   public static boolean form_shadow = false;
 
-  private void renderMahalanobisEllipse(Tensor p, Tensor sigma_inverse) {
+  private void renderEllipse(Tensor p, Tensor sigma_inverse) {
     Tensor vs = null;
     if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE))
       vs = CIRCLE;
     else //
     if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
       vs = CIRCLE.dot(S2GeodesicDisplay.tangentSpace(p));
+    else //
+    if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay) {
+      vs = Tensor.of(CIRCLE.stream().map(PadRight.zeros(3)));
+    }
     // ---
     if (Objects.nonNull(vs)) {
       vs = Tensor.of(vs.stream().map(sigma_inverse::dot));
@@ -327,46 +353,47 @@ public class LeversRender {
     }
   }
 
-  public void renderMahalanobisEllipse() {
+  public void renderEllipseMahalanobis() {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
-      Form form = mahalanobis.new Form(sequence, origin);
-      renderMahalanobisEllipse(origin, form.sigma_inverse());
+      TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
+      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      renderEllipse(origin, mahalanobis.sigma_inverse());
     }
+  }
+
+  public void renderEllipseIdentity() {
+    renderEllipse(origin, IdentityMatrix.of(origin.length()));
+  }
+
+  public void renderEllipseIdentityP() {
+    for (Tensor point : sequence)
+      renderEllipse(point, IdentityMatrix.of(point.length()));
   }
 
   public void renderMahalanobisFormXEV(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
-      Form form = mahalanobis.new Form(sequence, origin);
-      renderMahalanobisMatrix(origin, form, colorDataGradient);
+      TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
+      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      renderMahalanobisMatrix(origin, mahalanobis, colorDataGradient);
     }
   }
 
-  public void renderMahalanobisEllipseP() {
+  public void renderEllipseMahalanobisP() {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-    Mahalanobis mahalanobis = new Mahalanobis(vectorLogManifold);
-    for (Tensor p : sequence) {
-      Form form = mahalanobis.new Form(sequence, origin);
-      renderMahalanobisEllipse(p, form.sigma_inverse());
+    for (Tensor point : sequence) {
+      TangentSpace tangentSpace = vectorLogManifold.logAt(point);
+      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      renderEllipse(point, mahalanobis.sigma_inverse());
     }
   }
 
   /***************************************************/
-  public void renderLeverages() {
-    if (Tensors.nonEmpty(sequence)) {
-      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      renderWeights(Diagonal.of(new HsProjection(vectorLogManifold).new Matrix(sequence, origin).influence()));
-    }
-  }
-
   public void renderInfluenceX(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      HsProjection hsProjection = new HsProjection(vectorLogManifold);
-      Tensor influence = hsProjection.new Matrix(sequence, origin).influence();
+      Tensor influence = new HsInfluence(vectorLogManifold.logAt(origin), sequence).matrix();
       // ---
       graphics.setFont(FONT_MATRIX);
       MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
@@ -378,8 +405,9 @@ public class LeversRender {
   public void renderInfluenceP(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      HsProjection hsProjection = new HsProjection(vectorLogManifold);
-      Tensor projections = Tensor.of(sequence.stream().map(point -> hsProjection.new Matrix(sequence, point).influence()));
+      // HsProjection hsProjection = ;
+      Tensor projections = Tensor.of(sequence.stream() //
+          .map(point -> new HsInfluence(vectorLogManifold.logAt(point), sequence).matrix()));
       // ---
       graphics.setFont(FONT_MATRIX);
       int index = 0;

@@ -36,12 +36,12 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-/* package */ class OrderingDemo extends AbstractPlaceDemo {
+/* package */ class OrderingPlaceDemo extends AbstractPlaceDemo {
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("shuffle");
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
 
-  public OrderingDemo() {
+  public OrderingPlaceDemo() {
     super(GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     {
       spinnerLength.addSpinnerListener(v -> shuffleSnap());
@@ -123,6 +123,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   public static void main(String[] args) {
-    new OrderingDemo().setVisible(1200, 600);
+    new OrderingPlaceDemo().setVisible(1200, 600);
   }
 }

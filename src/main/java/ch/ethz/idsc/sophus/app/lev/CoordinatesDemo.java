@@ -9,7 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class CoordinatesDemo extends AbstractHoverDemo {
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
+    Tensor weights = operator(leversRender.getSequence()).apply(leversRender.getOrigin());
     leversRender.renderLevers(logWeighting().equals(LogWeightings.DISTANCES) //
         ? weights.negate()
         : weights);

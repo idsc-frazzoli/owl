@@ -57,11 +57,12 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender, Tensor weights) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();
     // ---
+    Tensor weights = operator(leversRender.getSequence()).apply(leversRender.getOrigin());
     leversRender.renderLevers(spinnerLabels.getValue().equals(Labels.ARG_MIN) //
         ? weights.negate()
         : weights);

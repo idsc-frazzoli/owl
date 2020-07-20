@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.lev;
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;
 
-public class OrderingDemoTest extends TestCase {
+public class OrderingPlaceDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.offscreen(new OrderingDemo());
+    AbstractDemoHelper.offscreen(new OrderingPlaceDemo());
   }
 }
