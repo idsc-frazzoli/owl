@@ -6,9 +6,9 @@ import java.util.List;
 
 import ch.ethz.idsc.sophus.gbc.InverseCoordinate;
 import ch.ethz.idsc.sophus.gbc.KrigingCoordinate;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
-import ch.ethz.idsc.sophus.krg.Biinvariant;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.Scalar;

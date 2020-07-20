@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import ch.ethz.idsc.sophus.krg.Biinvariant;
-import ch.ethz.idsc.sophus.krg.Biinvariants;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
+import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
