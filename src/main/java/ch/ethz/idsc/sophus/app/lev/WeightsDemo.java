@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
@@ -48,10 +49,10 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPointsAll = getGeodesicControlPoints();
-    if (0 < controlPointsAll.length()) {
-      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      Tensor origin = controlPointsAll.get(0);
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       // ---

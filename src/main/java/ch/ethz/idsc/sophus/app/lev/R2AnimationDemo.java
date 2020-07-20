@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
@@ -19,7 +20,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class R2AnimationDemo extends AbstractPlaceDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       });
       timerFrame.jToolBar.add(jToggleAnimate);
     }
-    setControlPointsSe2(R2PointCollection.SOME);
+    setControlPointsSe2(R2PointCollection.MISC);
     setBiinvariant(Biinvariants.GARDEN);
   }
 
@@ -64,8 +64,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPoints = getGeodesicControlPoints();
-    if (0 < controlPoints.length()) {
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
       if (jToggleAnimate.isSelected()) {
         Tensor vector = random(10 + timing.seconds() * 0.1, 0);
         Tensor vectorExp = Rodrigues.vectorExp(vector);
@@ -79,13 +79,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         setControlPointsSe2(list);
       }
       RenderQuality.setQuality(graphics);
-      Tensor sequence = controlPoints.extract(1, controlPoints.length());
-      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-      Tensor origin = controlPoints.get(0);
-      Tensor weights = tensorUnaryOperator.apply(origin);
-      LeversRender leversRender = //
-          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      leversRender.renderWeights(weights);
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       LeversHud.render(biinvariant(), leversRender);
     }
   }

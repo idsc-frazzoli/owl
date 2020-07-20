@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -69,10 +70,10 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    Tensor controlPointsAll = getGeodesicControlPoints();
-    if (0 < controlPointsAll.length()) {
-      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      Tensor origin = controlPointsAll.get(0);
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
       // ---
       render(geometricLayer, graphics, sequence, origin, "");
       LieGroupOps lieGroupOps = new LieGroupOps(Se2Group.INSTANCE);

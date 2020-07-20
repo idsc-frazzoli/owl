@@ -23,6 +23,7 @@ import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsInfluence;
 import ch.ethz.idsc.sophus.hs.TangentSpace;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.sophus.krg.Mahalanobis;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.Exponential;
@@ -95,7 +96,8 @@ public class LeversRender {
   private final GeometricLayer geometricLayer;
   private final Graphics2D graphics;
 
-  private LeversRender(GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
+  private LeversRender( //
+      GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
@@ -229,6 +231,14 @@ public class LeversRender {
       Tensor w2 = new HsInfluence(tangentSpace, sequence).leverages_sqrt();
       Chop._05.requireClose(w1, w2);
       renderWeights(w1);
+    }
+  }
+
+  public void renderWeightsGarden() {
+    if (Tensors.nonEmpty(sequence)) {
+      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      Tensor weights = Biinvariants.GARDEN.distances(vectorLogManifold, sequence).apply(origin);
+      renderWeights(weights);
     }
   }
 

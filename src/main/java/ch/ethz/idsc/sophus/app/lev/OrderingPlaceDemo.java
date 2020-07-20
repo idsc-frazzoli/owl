@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javax.swing.JButton;
 
@@ -71,10 +72,10 @@ import ch.ethz.idsc.tensor.sca.Clips;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPointsAll = getGeodesicControlPoints();
-    if (0 < controlPointsAll.length()) {
-      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      Tensor origin = controlPointsAll.get(0);
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       TensorUnaryOperator tensorUnaryOperator = //
           logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);

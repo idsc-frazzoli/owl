@@ -49,6 +49,7 @@ public enum LeversHud {
     case GARDEN:
       leversRender.renderTangentsPtoX(false); // boolean: no tangent planes
       leversRender.renderEllipseMahalanobisP(); // no evs
+      leversRender.renderWeightsGarden();
       break;
     case HARBOR:
       leversRender.renderInfluenceX(colorDataGradient);

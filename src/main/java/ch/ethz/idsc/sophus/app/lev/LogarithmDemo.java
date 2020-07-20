@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
@@ -41,6 +42,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ class LogarithmDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private static final GridRender GRID_RENDER = new GridRender(Tensors.vector(-1, 0, 1), Color.LIGHT_GRAY);
+  private static final Color DOMAIN_F = new Color(192, 192, 64, 64);
+  private static final Color DOMAIN_D = new Color(192, 192, 64, 192);
+  // ---
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("neutral");
 
@@ -51,7 +55,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       spinnerLength.setValueSafe(11);
       spinnerLength.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "number of points");
     }
-    // jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
     GeodesicDisplay geodesicDisplay = H2GeodesicDisplay.INSTANCE;
@@ -60,18 +63,15 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     addSpinnerListener(this);
   }
 
-  private static final Color DOMAIN_F = new Color(192, 192, 64, 64);
-  private static final Color DOMAIN_D = new Color(192, 192, 64, 192);
-
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    Tensor controlPointsAll = getGeodesicControlPoints();
-    if (0 < controlPointsAll.length()) {
-      Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
-      Tensor origin = controlPointsAll.get(0);
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
       {
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);

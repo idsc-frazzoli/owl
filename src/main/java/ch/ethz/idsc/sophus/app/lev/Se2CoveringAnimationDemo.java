@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
@@ -68,18 +69,18 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
-    Tensor controlPoints = getGeodesicControlPoints();
-    if (0 < controlPoints.length()) {
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
       if (jToggleAnimate.isSelected())
         setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
       RenderQuality.setQuality(graphics);
-      Tensor sequence = controlPoints.extract(1, controlPoints.length());
+      Tensor sequence = getSequence();
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);
-      Tensor origin = controlPoints.get(0);
+      Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       LeversHud.render(biinvariant(), leversRender);
-      if (geodesicDisplay.dimensions() < controlPoints.length()) {
+      if (geodesicDisplay.dimensions() < sequence.length() + 1) {
         Tensor weights = tensorUnaryOperator.apply(origin);
         leversRender.renderWeights(weights);
       }

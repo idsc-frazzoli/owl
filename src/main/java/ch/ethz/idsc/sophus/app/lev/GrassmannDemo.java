@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
@@ -21,7 +22,6 @@ import ch.ethz.idsc.sophus.krg.Biinvariants;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
@@ -50,10 +50,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor geodesicControlPoints = getGeodesicControlPoints();
-    if (0 < geodesicControlPoints.length()) {
-      Tensor sequence = Drop.head(geodesicControlPoints, 1);
-      Tensor origin = geodesicControlPoints.get(0);
+    Optional<Tensor> optional = getOrigin();
+    if (optional.isPresent()) {
+      Tensor sequence = getSequence();
+      Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
