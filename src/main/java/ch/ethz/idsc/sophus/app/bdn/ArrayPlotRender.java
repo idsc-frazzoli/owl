@@ -26,8 +26,11 @@ import ch.ethz.idsc.tensor.sca.Round;
 public class ArrayPlotRender implements RenderInterface {
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final Color FONT_COLOR = Color.BLACK;
-  // new Color(32, 32, 32);
 
+  /** @param tensor
+   * @param colorDataGradient
+   * @param magnify
+   * @return */
   public static ArrayPlotRender rescale(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
     Rescale rescale = new Rescale(tensor);
     ScalarSummaryStatistics scalarSummaryStatistics = rescale.scalarSummaryStatistics();
@@ -36,19 +39,18 @@ public class ArrayPlotRender implements RenderInterface {
         : null;
     return new ArrayPlotRender(rescale.result(), clip, colorDataGradient, magnify);
   }
+  // public static ArrayPlotRender uniform(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
+  // return new ArrayPlotRender(tensor, Clips.unit(), colorDataGradient, magnify);
+  // }
 
-  public static ArrayPlotRender uniform(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
-    return new ArrayPlotRender(tensor, Clips.unit(), colorDataGradient, magnify);
-  }
-
-  // ---
+  /***************************************************/
   private final BufferedImage bufferedImage;
   private final Clip clip;
   private final int width;
   private final int height;
   private final BufferedImage legend;
 
-  public ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
+  private ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
     bufferedImage = ImageFormat.of(tensor.map(colorDataGradient));
     this.clip = clip;
     width = bufferedImage.getWidth() * magnify;
@@ -96,8 +98,8 @@ public class ArrayPlotRender implements RenderInterface {
 
   public BufferedImage export() {
     BufferedImage bi = new BufferedImage( //
-        bufferedImage.getWidth() + 100, //
-        bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        width + 80, // magic constant corresponds to width of legend
+        height, BufferedImage.TYPE_INT_ARGB);
     render(null, bi.createGraphics());
     return bi;
   }

@@ -24,8 +24,8 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
-/* package */ class R1KrigingDemo extends A1KrigingDemo {
-  public R1KrigingDemo() {
+/* package */ class R1AveragingDemo extends A1AveragingDemo {
+  public R1AveragingDemo() {
     super(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 1, 1}, {2, 2, 0}}"));
     // ---
@@ -76,6 +76,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
   }
 
   public static void main(String[] args) {
-    new R1KrigingDemo().setVisible(1000, 800);
+    new R1AveragingDemo().setVisible(1000, 800);
   }
 }

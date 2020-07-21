@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -55,7 +56,7 @@ import ch.ethz.idsc.tensor.Tensors;
     if (0 < controlPointsAll.length()) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       {
-        Tensor sequence = getGeodesicControlPoints(1, Integer.MAX_VALUE);
+        Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
         Tensor origin = controlPointsAll.get(0);
         Tensor weights = new HsInfluence(vectorLogManifold.logAt(origin), sequence).leverages_sqrt();
         LeversRender leversRender = //
@@ -70,8 +71,10 @@ import ch.ethz.idsc.tensor.Tensors;
       }
       geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
       try {
-        Tensor allR = lieGroupOps.allRight(controlPointsAll, Tensors.fromString(jTextField.getText()));
-        Tensor result = lieGroupOps.allLeft(allR, lieGroup.element(allR.get(0)).inverse().toCoordinate());
+        TensorMapping lieGroupOR = lieGroupOps.actionR(Tensors.fromString(jTextField.getText()));
+        Tensor allR = lieGroupOR.slash(controlPointsAll);
+        TensorMapping lieGroupOp = lieGroupOps.actionL(lieGroup.element(allR.get(0)).inverse().toCoordinate());
+        Tensor result = lieGroupOp.slash(allR);
         Tensor sequence = result.extract(1, result.length());
         Tensor origin = result.get(0);
         Tensor weights = new HsInfluence(vectorLogManifold.logAt(origin), sequence).leverages_sqrt();

@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class R1RadialBasisFunctionDemo extends A1KrigingDemo {
+/* package */ class R1RadialBasisFunctionDemo extends A1AveragingDemo {
   public R1RadialBasisFunctionDemo() {
     super(R2GeodesicDisplay.INSTANCE);
   }

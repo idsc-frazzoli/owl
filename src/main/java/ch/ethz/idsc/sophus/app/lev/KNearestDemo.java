@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -79,20 +80,19 @@ import ch.ethz.idsc.tensor.sca.Clips;
       LieGroupOps lieGroupOps = new LieGroupOps(Se2Group.INSTANCE);
       try {
         Tensor shift = Tensors.fromString(jTextField.getText());
-        // ---
-        Tensor conj_seq = lieGroupOps.allConjugate(sequence, shift);
-        Tensor conj_ori = lieGroupOps.conjugate(shift).apply(origin);
-        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(8, 0)));
-        render(geometricLayer, graphics, conj_seq, conj_ori, "'");
-        geometricLayer.popMatrix();
-        // ---
-        Tensor invert = lieGroupOps.invert(shift);
-        // ---
-        Tensor invr_seq = lieGroupOps.allConjugate(sequence, invert);
-        Tensor invr_ori = lieGroupOps.conjugate(shift).apply(origin);
-        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(16, 0)));
-        render(geometricLayer, graphics, invr_seq, invr_ori, "\"");
-        geometricLayer.popMatrix();
+        {
+          geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(8, 0)));
+          TensorMapping lieGroupOp = lieGroupOps.conjugation(shift);
+          render(geometricLayer, graphics, lieGroupOp.slash(sequence), lieGroupOp.apply(origin), "'");
+          geometricLayer.popMatrix();
+        }
+        {
+          Tensor invert = lieGroupOps.inversion().apply(shift);
+          geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(16, 0)));
+          TensorMapping lieGroupOp = lieGroupOps.conjugation(invert);
+          render(geometricLayer, graphics, lieGroupOp.slash(sequence), lieGroupOp.apply(origin), "\"");
+          geometricLayer.popMatrix();
+        }
       } catch (Exception exception) {
         System.err.println(exception);
       }

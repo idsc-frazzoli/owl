@@ -41,11 +41,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           snapshotUncentered = getControlPointsSe2();
           Tensor sequence = getGeodesicControlPoints();
           if (0 < sequence.length()) {
-            GeodesicDisplay geodesicDisplay = geodesicDisplay();
-            LieGroup lieGroup = geodesicDisplay.lieGroup();
-            LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
             Tensor origin = sequence.get(0);
-            snapshot = lieGroupOps.allLeft(sequence, lieGroup.element(origin).inverse().toCoordinate());
+            LieGroup lieGroup = geodesicDisplay().lieGroup();
+            Tensor shift = lieGroup.element(origin).inverse().toCoordinate();
+            snapshot = new LieGroupOps(lieGroup).actionL(shift).slash(sequence);
           }
         } else
           setControlPointsSe2(snapshotUncentered);
@@ -72,7 +71,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       if (jToggleAnimate.isSelected())
-        setControlPointsSe2(lieGroupOps.allConjugate(snapshot, random(10 + timing.seconds() * 0.1, 0)));
+        setControlPointsSe2(lieGroupOps.conjugation(random(10 + timing.seconds() * 0.1, 0)).slash(snapshot));
       RenderQuality.setQuality(graphics);
       Tensor sequence = getSequence();
       TensorUnaryOperator tensorUnaryOperator = operator(sequence);

@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Max;
 
-/* package */ class S2KrigingDemo extends A2KrigingDemo {
-  public S2KrigingDemo() {
+/* package */ class S2AveragingDemo extends A2AveragingDemo {
+  public S2AveragingDemo() {
     super(GeodesicDisplays.S2_RP2);
     // ---
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
@@ -31,6 +31,6 @@ import ch.ethz.idsc.tensor.red.Max;
   }
 
   public static void main(String[] args) {
-    new S2KrigingDemo().setVisible(1400, 800);
+    new S2AveragingDemo().setVisible(1400, 800);
   }
 }

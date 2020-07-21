@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.bd1;
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;
 
-public class R1KrigingDemoTest extends TestCase {
+public class S1AveragingDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.offscreen(new R1KrigingDemo());
+    AbstractDemoHelper.offscreen(new S1AveragingDemo());
   }
 }

@@ -15,12 +15,12 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ abstract class A1KrigingDemo extends AnKrigingDemo {
+/* package */ abstract class A1AveragingDemo extends AnAveragingDemo {
   static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final Scalar MARGIN = RealScalar.of(2);
 
-  public A1KrigingDemo(GeodesicDisplay geodesicDisplay) {
+  public A1AveragingDemo(GeodesicDisplay geodesicDisplay) {
     super(Arrays.asList(geodesicDisplay));
   }
 

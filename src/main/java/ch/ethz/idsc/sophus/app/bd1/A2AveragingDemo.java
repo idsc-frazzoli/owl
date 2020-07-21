@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.bd1;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.bdn.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,28 +26,31 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ abstract class A2KrigingDemo extends AnKrigingDemo {
+/* package */ abstract class A2AveragingDemo extends AnAveragingDemo {
   private final SpinnerLabel<Scalar> spinnerCvar = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
-  private final JToggleButton jToggleButton = new JToggleButton("thres");
+  private final JToggleButton jToggleThresh = new JToggleButton("thresh");
   private final JButton jButtonPrint = new JButton("print");
-  private final JButton jButtonExport = new JButton("export");
-  // ---
-  private BufferedImage bufferedImage = null;
 
-  public A2KrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
+  public A2AveragingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(geodesicDisplays);
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerCvar.setIndex(0);
       spinnerCvar.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "error");
+    }
+    {
+      spinnerMagnif.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
+      spinnerMagnif.setValue(6);
+      spinnerMagnif.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "magnify");
+      spinnerMagnif.addSpinnerListener(v -> recompute());
     }
     {
       spinnerColorData.setValue(ColorDataGradients.PARULA);
@@ -60,7 +65,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     {
       timerFrame.jToolBar.add(jToggleVarian);
-      timerFrame.jToolBar.add(jToggleButton);
+      timerFrame.jToolBar.add(jToggleThresh);
     }
     {
       JButton jButton = new JButton("round");
@@ -76,12 +81,32 @@ import ch.ethz.idsc.tensor.sca.Round;
       jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2()));
       timerFrame.jToolBar.add(jButtonPrint);
     }
-    {
-      jButtonExport.addActionListener(e -> export());
-      timerFrame.jToolBar.add(jButtonExport);
-    }
     addSpinnerListener(v -> recompute());
     timerFrame.geometricComponent.jComponent.addMouseWheelListener(v -> recompute());
+  }
+
+  private BufferedImage bufferedImage = null;
+
+  @Override
+  protected final void recompute() {
+    Tensor sequence = getGeodesicControlPoints();
+    Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
+    try {
+      int resolution = spinnerRes.getValue();
+      TensorScalarFunction tensorScalarFunction = function(sequence, values);
+      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      Tensor matrix = geodesicArrayPlot.raster(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
+      // ---
+      if (jToggleThresh.isSelected())
+        matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
+      // ---
+      ColorDataGradient colorDataGradient = spinnerColorData.getValue();
+      bufferedImage = ArrayPlotRender.rescale(matrix, colorDataGradient, spinnerMagnif.getValue()).export();
+    } catch (Exception exception) {
+      System.out.println(exception);
+      exception.printStackTrace();
+      bufferedImage = null;
+    }
   }
 
   @Override
@@ -96,7 +121,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       recompute();
     if (Objects.nonNull(bufferedImage)) {
       RenderQuality.setDefault(graphics); // default so that raster becomes visible
-      Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
+      Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     }
     RenderQuality.setQuality(graphics);
@@ -104,66 +129,6 @@ import ch.ethz.idsc.tensor.sca.Round;
     LeversRender leversRender = //
         LeversRender.of(geodesicDisplay, sequence, values, geometricLayer, graphics);
     leversRender.renderWeights(values);
-  }
-
-  @Override
-  protected final void recompute() {
-    Tensor sequence = getGeodesicControlPoints();
-    Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    try {
-      Tensor matrix = matrix(spinnerRes.getValue(), sequence, values);
-      ColorDataGradient colorDataGradient = spinnerColorData.getValue();
-      bufferedImage = ImageFormat.of(matrix.map(colorDataGradient));
-    } catch (Exception exception) {
-      System.out.println(exception);
-      exception.printStackTrace();
-      bufferedImage = null;
-    }
-  }
-
-  private Tensor matrix(int resolution, Tensor sequence, Tensor values) {
-    TensorScalarFunction tensorScalarFunction = function(sequence, values);
-    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
-    Tensor matrix = geodesicArrayPlot.raster(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
-    // ---
-    if (jToggleButton.isSelected())
-      matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
-    return matrix;
-  }
-
-  private void export() {
-    // Tensor sequence = getGeodesicControlPoints();
-    // Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    // File folder = HomeDirectory.Pictures(getClass().getSimpleName(), spinnerColorData.getValue().toString());
-    // folder.mkdirs();
-    // System.out.println("exporting");
-    // int index = 0;
-    // ScalarUnaryOperator variogram = variogram();
-    // for (HsScalarFunction hsScalarFunction : spinnerKriging.getList()) {
-    // String format = String.format("%02d%s.png", index, hsScalarFunction);
-    // System.out.println(format);
-    // Tensor matrix = matrix( //
-    // 256, //
-    // geodesicDisplay().vectorLogManifold(), //
-    // hsScalarFunction, //
-    // variogram, //
-    // sequence, values);
-    // ArrayPlotRender arrayPlotRender = ArrayPlotRender.uniform(matrix, spinnerColorData.getValue(), 1);
-    // BufferedImage bufferedImage = arrayPlotRender.export();
-    // GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(geodesicDisplay().geodesicArrayPlot().pixel2model(arrayPlotRender.getDimension())));
-    // Graphics2D graphics = bufferedImage.createGraphics();
-    // RenderQuality.setQuality(graphics);
-    // renderControlPoints(geometricLayer, graphics);
-    // {
-    // graphics.setColor(Color.WHITE);
-    // graphics.drawString(hsScalarFunction.toString(), 0, 10);
-    // }
-    // try {
-    // ImageIO.write(bufferedImage, "png", new File(folder, format));
-    // } catch (Exception exception) {
-    // exception.printStackTrace();
-    // }
-    // }
   }
 
   void prepare() {

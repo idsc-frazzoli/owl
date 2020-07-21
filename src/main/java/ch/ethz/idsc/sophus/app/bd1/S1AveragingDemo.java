@@ -31,10 +31,10 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ class S1KrigingDemo extends AnKrigingDemo {
+/* package */ class S1AveragingDemo extends AnAveragingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
-  public S1KrigingDemo() {
+  public S1AveragingDemo() {
     super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
     timerFrame.configCoordinateOffset(500, 500);
@@ -90,6 +90,6 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public static void main(String[] args) {
-    new S1KrigingDemo().setVisible(1000, 800);
+    new S1AveragingDemo().setVisible(1000, 800);
   }
 }

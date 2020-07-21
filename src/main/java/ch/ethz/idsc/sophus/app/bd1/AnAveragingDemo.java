@@ -22,14 +22,14 @@ import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ abstract class AnKrigingDemo extends LogWeightingDemo {
+/* package */ abstract class AnAveragingDemo extends LogWeightingDemo {
   private static final int WIDTH = 480;
   private static final int HEIGHT = 360;
   // ---
   private final JToggleButton jToggleButton = new JToggleButton("varplot");
 
-  public AnKrigingDemo(List<GeodesicDisplay> geodesicDisplays) {
-    super(true, geodesicDisplays, LogWeightings.list());
+  public AnAveragingDemo(List<GeodesicDisplay> geodesicDisplays) {
+    super(true, geodesicDisplays, LogWeightings.averagings());
     setMidpointIndicated(false);
     spinnerLogWeighting.addSpinnerListener(v -> recompute());
     // ---
