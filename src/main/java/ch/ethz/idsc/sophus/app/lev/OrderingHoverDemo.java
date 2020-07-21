@@ -10,22 +10,23 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.bdn.ArrayPlotRender;
+import ch.ethz.idsc.sophus.app.bdn.LegendImage;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Ordering;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ColorFormat;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -92,17 +93,13 @@ import ch.ethz.idsc.tensor.sca.Clips;
       geometricLayer.popMatrix();
     }
     {
-      int height = 200;
-      BufferedImage legend = //
-          ImageFormat.of(Subdivide.decreasing(Clips.unit(), height - 1).map(Tensors::of).map(colorDataGradientD));
-      graphics.drawImage(legend, //
-          0, //
-          0, //
-          10, //
-          height, null);
-      ArrayPlotRender.renderLegendLabel(graphics, "far", "near", 10, height);
+      BufferedImage bufferedImage = LegendImage.of(colorDataGradientD, 300, "far", "near");
+      Tensor pixel2model = GeodesicArrayPlot.pixel2model( //
+          Tensors.of(Pi.VALUE.add(RealScalar.of(0.3)), Pi.VALUE.negate()), //
+          Tensors.of(Pi.TWO, Pi.TWO), //
+          new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
+      ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     }
-    RenderQuality.setQuality(graphics);
     {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
       Path2D path2d = geometricLayer.toPath2D(shape, true);

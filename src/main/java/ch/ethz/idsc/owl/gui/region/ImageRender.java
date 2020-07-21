@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.sca.N;
  * configuration influences the rendering when rotating the image. */
 public class ImageRender implements RenderInterface {
   private static final Color COLOR = new Color(0, 0, 255, 32);
+  public static boolean DRAW_BOX = false;
 
   /** @param bufferedImage
    * @param pixel2model with dimensions 3 x 3
@@ -70,8 +71,10 @@ public class ImageRender implements RenderInterface {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     geometricLayer.pushMatrix(pixel2model);
     graphics.drawImage(bufferedImage, AffineTransforms.toAffineTransform(geometricLayer.getMatrix()), null);
-    graphics.setColor(COLOR);
-    graphics.draw(geometricLayer.toPath2D(box, true));
+    if (DRAW_BOX) {
+      graphics.setColor(COLOR);
+      graphics.draw(geometricLayer.toPath2D(box, true));
+    }
     geometricLayer.popMatrix();
   }
 }

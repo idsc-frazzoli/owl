@@ -6,15 +6,12 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /* package */ class R2ArrayPlot implements GeodesicArrayPlot, Serializable {
   private final Scalar radius;
@@ -33,12 +30,8 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
   @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
-    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2)); // model
-    Tensor scale = Tensors.vector(dimension.width, dimension.height) //
-        .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
-    return Dot.of( //
-        Se2Matrix.translation(range.multiply(RationalScalar.HALF.negate())), //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), // pixel 2 model
-        Se2Matrix.flipY(dimension.height));
+    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2));
+    Tensor xy = range.multiply(RationalScalar.HALF.negate());
+    return GeodesicArrayPlot.pixel2model(xy, range, dimension);
   }
 }
