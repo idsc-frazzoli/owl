@@ -1,0 +1,75 @@
+// code by jph
+package ch.ethz.idsc.sophus.app.lev;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
+import java.util.stream.IntStream;
+
+import ch.ethz.idsc.owl.gui.region.ImageRender;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.bdn.LegendImage;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Ordering;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
+import ch.ethz.idsc.tensor.img.ColorFormat;
+import ch.ethz.idsc.tensor.opt.Pi;
+
+/* package */ enum OrderingHelper {
+  ;
+  public static void of( //
+      GeodesicDisplay geodesicDisplay, //
+      Tensor origin, Tensor sequence, Tensor weights, //
+      ColorDataGradient cdg, //
+      GeometricLayer geometricLayer, Graphics2D graphics) {
+    Integer[] integers = Ordering.INCREASING.of(weights);
+    ColorDataGradient colorDataGradientF = cdg.deriveWithOpacity(RationalScalar.HALF);
+    ColorDataGradient colorDataGradientD = cdg;
+    Tensor shape = geodesicDisplay.shape();
+    for (int index = 0; index < sequence.length(); ++index) {
+      Tensor point = sequence.get(integers[index]);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      Scalar ratio = RationalScalar.of(index, integers.length);
+      graphics.setColor(ColorFormat.toColor(colorDataGradientF.apply(ratio)));
+      graphics.fill(path2d);
+      graphics.setColor(ColorFormat.toColor(colorDataGradientD.apply(ratio)));
+      graphics.draw(path2d);
+      geometricLayer.popMatrix();
+    }
+    {
+      BufferedImage bufferedImage = LegendImage.of(colorDataGradientD, 300, "far", "near");
+      Tensor pixel2model = GeodesicArrayPlot.pixel2model( //
+          Tensors.of(Pi.VALUE.add(RealScalar.of(0.4)), Pi.VALUE.negate()), //
+          Tensors.of(Pi.TWO, Pi.TWO), //
+          new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
+      ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
+    }
+    {
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
+      Path2D path2d = geometricLayer.toPath2D(shape, true);
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.fill(path2d);
+      graphics.setColor(Color.BLACK);
+      graphics.draw(path2d);
+      geometricLayer.popMatrix();
+    }
+    {
+      LeversRender leversRender = LeversRender.of(geodesicDisplay, //
+          Tensor.of(IntStream.range(0, 8).limit(integers.length) //
+              .map(index -> integers[index]) //
+              .mapToObj(sequence::get)), //
+          origin, geometricLayer, graphics);
+      leversRender.renderLevers();
+      leversRender.renderIndexX();
+    }
+  }
+}

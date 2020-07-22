@@ -43,8 +43,8 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.CyclicColorDataIndexed;
 import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Hypot;
@@ -372,13 +372,16 @@ public class LeversRender {
     }
   }
 
+  private static final Scalar FACTOR = RealScalar.of(0.3);
+
   public void renderEllipseIdentity() {
-    renderEllipse(origin, IdentityMatrix.of(origin.length()));
+    renderEllipse(origin, DiagonalMatrix.of(origin.length(), FACTOR));
   }
 
   public void renderEllipseIdentityP() {
+    Tensor matrix = DiagonalMatrix.of(origin.length(), FACTOR);
     for (Tensor point : sequence)
-      renderEllipse(point, IdentityMatrix.of(point.length()));
+      renderEllipse(point, matrix);
   }
 
   public void renderMahalanobisFormXEV(ColorDataGradient colorDataGradient) {

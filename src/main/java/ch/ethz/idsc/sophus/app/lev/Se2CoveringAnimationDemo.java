@@ -18,7 +18,6 @@ import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO refactor with S2AnimationDemo
 /* package */ class Se2CoveringAnimationDemo extends AbstractPlaceDemo {
@@ -31,10 +30,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public Se2CoveringAnimationDemo() {
     super(GeodesicDisplays.SE2C_SE2, LogWeightings.list());
-    {
-      timerFrame.jToolBar.add(jToggleAxes);
-      jToggleAxes.setSelected(true);
-    }
+    timerFrame.jToolBar.add(jToggleAxes);
     {
       jToggleAnimate.addActionListener(e -> {
         if (jToggleAnimate.isSelected()) {
@@ -51,13 +47,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       });
       timerFrame.jToolBar.add(jToggleAnimate);
     }
-    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}, {-3, 0, 0.3}}"));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1.5, -1, -1}, {2, 1, 1}, {-0.5, 1.5, 2}, {-1, -1.5, -2}, {-1.5, 0, 0.3}}"));
   }
 
   private static Tensor random(double toc, int index) {
     return Tensors.vector( //
-        SimplexContinuousNoise.FUNCTION.at(toc, index, 0) * 2, //
-        SimplexContinuousNoise.FUNCTION.at(toc, index, 1) * 2, //
+        SimplexContinuousNoise.FUNCTION.at(toc, index, 0), //
+        SimplexContinuousNoise.FUNCTION.at(toc, index, 1), //
         SimplexContinuousNoise.FUNCTION.at(toc, index, 2));
   }
 
@@ -74,15 +70,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         setControlPointsSe2(lieGroupOps.conjugation(random(10 + timing.seconds() * 0.1, 0)).slash(snapshot));
       RenderQuality.setQuality(graphics);
       Tensor sequence = getSequence();
-      TensorUnaryOperator tensorUnaryOperator = operator(sequence);
       Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       LeversHud.render(biinvariant(), leversRender);
-      if (geodesicDisplay.dimensions() < sequence.length() + 1) {
-        Tensor weights = tensorUnaryOperator.apply(origin);
-        leversRender.renderWeights(weights);
-      }
     }
   }
 

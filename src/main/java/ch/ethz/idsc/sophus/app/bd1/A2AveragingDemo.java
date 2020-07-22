@@ -3,10 +3,13 @@ package ch.ethz.idsc.sophus.app.bd1;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -82,6 +85,12 @@ import ch.ethz.idsc.tensor.sca.Round;
       timerFrame.jToolBar.add(jButtonPrint);
     }
     addSpinnerListener(v -> recompute());
+    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent e) {
+        recompute();
+      }
+    });
     timerFrame.geometricComponent.jComponent.addMouseWheelListener(v -> recompute());
   }
 
@@ -95,7 +104,9 @@ import ch.ethz.idsc.tensor.sca.Round;
       int resolution = spinnerRes.getValue();
       TensorScalarFunction tensorScalarFunction = function(sequence, values);
       GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
-      Tensor matrix = geodesicArrayPlot.raster(resolution, tensorScalarFunction.andThen(Clips.unit()), DoubleScalar.INDETERMINATE);
+      Function<Tensor, Scalar> tsf = tensorScalarFunction.andThen(Clips.unit());
+      tsf = tensorScalarFunction;
+      Tensor matrix = geodesicArrayPlot.raster(resolution, tsf, DoubleScalar.INDETERMINATE);
       // ---
       if (jToggleThresh.isSelected())
         matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1

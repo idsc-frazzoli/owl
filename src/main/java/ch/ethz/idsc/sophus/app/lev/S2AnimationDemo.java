@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     }
     setControlPointsSe2(Tensors.matrix(new Number[][] { //
         { 0.000, 0.000, 0.000 }, { 0.699, -0.521, 0.000 }, { 0.641, 0.634, 0.000 }, //
-        { -0.320, 0.734, -0.524 }, { -0.067, -0.716, 0.000 }, { -0.768, 0.215, 0.000 } }));
+        { -0.320, 0.734, 0 }, { -0.067, -0.716, 0.000 }, { -0.768, 0.215, 0.000 } }));
   }
 
   private static Tensor random(double toc, int index) {
