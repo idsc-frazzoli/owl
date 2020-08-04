@@ -14,7 +14,6 @@ import ch.ethz.idsc.sophus.crv.subdiv.DodgsonSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.DualC2FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.EightPointCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.FarSixPointCurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeld3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -167,13 +166,6 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
     }
   },
   FOURPOINT {
-    @Override
-    public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
-      SplitInterface splitInterface = geodesicDisplay.geodesicInterface();
-      return new FourPointCurveSubdivision(splitInterface);
-    }
-  },
-  FOURPOINT2 {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
       SplitInterface splitInterface = geodesicDisplay.geodesicInterface();

@@ -25,6 +25,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ enum OrderingHelper {
   ;
+  static final Scalar FACTOR = RealScalar.of(0.3);
+
   public static void of( //
       GeodesicDisplay geodesicDisplay, //
       Tensor origin, Tensor sequence, Tensor weights, //
@@ -46,10 +48,13 @@ import ch.ethz.idsc.tensor.opt.Pi;
       geometricLayer.popMatrix();
     }
     {
-      BufferedImage bufferedImage = LegendImage.of(colorDataGradientD, 300, "far", "near");
+      // 100
+      BufferedImage bufferedImage = LegendImage.of(colorDataGradientD, 130, "far", "near");
+      Scalar dy = Pi.VALUE;
+      dy = FACTOR.multiply(Pi.VALUE);
       Tensor pixel2model = GeodesicArrayPlot.pixel2model( //
-          Tensors.of(Pi.VALUE.add(RealScalar.of(0.4)), Pi.VALUE.negate()), //
-          Tensors.of(Pi.TWO, Pi.TWO), //
+          Tensors.of(Pi.VALUE.add(RealScalar.of(0.4)), dy.negate()), //
+          Tensors.of(dy.add(dy), dy.add(dy)), //
           new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     }

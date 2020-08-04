@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class ClassificationDemo extends AbstractHoverDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_O = ColorDataLists._097.cyclic();
@@ -64,7 +65,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     // ---
     Tensor weights = operator(leversRender.getSequence()).apply(leversRender.getOrigin());
     leversRender.renderLevers(spinnerLabels.getValue().equals(Labels.ARG_MIN) //
-        ? weights.negate()
+        ? Sqrt.of(weights).negate()
         : weights);
     // ---
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.4));

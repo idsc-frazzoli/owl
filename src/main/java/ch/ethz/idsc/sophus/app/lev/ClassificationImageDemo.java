@@ -43,7 +43,8 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 /* package */ class ClassificationImageDemo extends LogWeightingDemo implements ActionListener {
-  static final Random RANDOM = new Random();
+  private static final int REFINEMENT = 160;
+  private static final Random RANDOM = new Random();
 
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
@@ -167,8 +168,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       ++index;
     }
   }
-
-  private static final int REFINEMENT = 250;
 
   @Override
   public final void actionPerformed(ActionEvent actionEvent) {

@@ -13,8 +13,10 @@ import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
+import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -47,6 +49,7 @@ import ch.ethz.idsc.tensor.io.Timing;
       });
       timerFrame.jToolBar.add(jToggleAnimate);
     }
+    setLogWeighting(LogWeightings.DISTANCES);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1.5, -1, -1}, {2, 1, 1}, {-0.5, 1.5, 2}, {-1, -1.5, -2}, {-1.5, 0, 0.3}}"));
   }
 
@@ -71,9 +74,13 @@ import ch.ethz.idsc.tensor.io.Timing;
       RenderQuality.setQuality(graphics);
       Tensor sequence = getSequence();
       Tensor origin = optional.get();
-      LeversRender leversRender = //
-          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      LeversHud.render(biinvariant(), leversRender);
+      LeversHud.render( //
+          Biinvariants.METRIC, //
+          LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics));
+      TensorMapping actionL = lieGroupOps.actionL(Tensors.vector(7, 0, 0));
+      LeversHud.render( //
+          biinvariant(), //
+          LeversRender.of(geodesicDisplay, actionL.slash(sequence), actionL.apply(origin), geometricLayer, graphics));
     }
   }
 

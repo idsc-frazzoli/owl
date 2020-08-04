@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
-  private static final int REFINEMENT = 60;
+  private static final int REFINEMENT = 120; // presentation 60
 
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //

@@ -18,8 +18,7 @@ import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,22 +26,20 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ class GrassmannDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class AffineDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
-  public GrassmannDemo() {
-    super(GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
+  public AffineDemo() {
+    super(GeodesicDisplays.R2_ONLY, LogWeightings.list());
     // ---
     spinnerColorData.setValue(ColorDataGradients.TEMPERATURE);
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
-    GeodesicDisplay geodesicDisplay = Se2CoveringGeodesicDisplay.INSTANCE;
-    geodesicDisplay = S2GeodesicDisplay.INSTANCE;
+    GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.TARGET);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     jToggleNeutral.setSelected(true);
@@ -59,7 +56,11 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
-      LeversHud.render(biinvariant(), leversRender, colorDataGradient);
+      leversRender.renderSequence();
+      leversRender.renderOrigin();
+      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      // Tensor weights = AffineCoordinate.of(vectorLogManifold).weights(sequence, origin);
+      // leversRender.renderWeights(weights);
       Tensor doma = Subdivide.of(0.0, 1.0, 11);
       for (int index = 0; index < sequence.length(); ++index) {
         Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   @Override
   public void actionPerformed(GeodesicDisplay geodesicDisplay) {
     if (geodesicDisplay instanceof R2GeodesicDisplay) {
-      setControlPointsSe2(R2PointCollection.SOME);
+      setControlPointsSe2(Tensors.fromString("{{0.3, 1, 0}, {0, 0, 0}, {1, 0, 0}}"));
     } else //
     if (geodesicDisplay instanceof S2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
@@ -96,6 +97,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   }
 
   public static void main(String[] args) {
-    new GrassmannDemo().setVisible(1200, 900);
+    new AffineDemo().setVisible(1200, 900);
   }
 }

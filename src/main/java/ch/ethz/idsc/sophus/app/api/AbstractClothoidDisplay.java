@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.sophus.ply.PolygonNormalize;
 import ch.ethz.idsc.sophus.ply.Spearhead;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor SPEARHEAD = PolygonNormalize.of( //
       Spearhead.of(Tensors.vector(-0.217, -0.183, 4.189), RealScalar.of(0.1)), RealScalar.of(0.08));
+  private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override
   public abstract ClothoidInterface geodesicInterface();

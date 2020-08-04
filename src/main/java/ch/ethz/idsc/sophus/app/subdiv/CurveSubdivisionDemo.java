@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
@@ -54,6 +53,8 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
   final JToggleButton jToggleSymi = new JToggleButton("graph");
   final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleHelp = new JToggleButton("help");
+  private static final Tensor OMEGA = Tensors.fromString("{-1/16, -1/36, 0, 1/72, 1/42, 1/36, 1/18, 1/16}");
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
   public CurveSubdivisionDemo() {
     super(GeodesicDisplays.ALL);
@@ -133,14 +134,20 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
             .collect(Collectors.toList()));
     spinnerMagicC.setValue(RationalScalar.HALF);
     spinnerMagicC.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    // ---
     {
-      JSlider jSlider = new JSlider(1, 999, 500);
-      jSlider.setPreferredSize(new Dimension(360, 28));
-      jSlider.addChangeListener(changeEvent -> //
-      CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
-      timerFrame.jToolBar.add(jSlider);
+      spinnerBeta.setList(OMEGA.stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setValue(RationalScalar.of(1, 16));
+      spinnerBeta.addSpinnerListener(l -> CurveSubdivisionHelper.OMEGA = spinnerBeta.getValue());
+      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }
+    // ---
+    // {
+    // JSlider jSlider = new JSlider(1, 999, 500);
+    // jSlider.setPreferredSize(new Dimension(360, 28));
+    // jSlider.addChangeListener(changeEvent -> //
+    // CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
+    // timerFrame.jToolBar.add(jSlider);
+    // }
     timerFrame.configCoordinateOffset(100, 600);
   }
 

@@ -44,7 +44,9 @@ import ch.ethz.idsc.tensor.Scalar;
     return BSpline4CurveSubdivision.split3(splitInterface, MAGIC_C);
   }
 
+  static Scalar OMEGA = RationalScalar.of(1, 16);
+
   static CurveSubdivision fps(SplitInterface splitInterface) {
-    return new FourPointCurveSubdivision(splitInterface, MAGIC_C.multiply(RationalScalar.of(125, 1000)));
+    return new FourPointCurveSubdivision(splitInterface, OMEGA);
   }
 }

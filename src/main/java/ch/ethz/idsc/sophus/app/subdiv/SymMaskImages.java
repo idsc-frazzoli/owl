@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.DualC2FourPointCurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeld3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -40,8 +39,7 @@ import ch.ethz.idsc.tensor.Tensor;
   LR5(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 5), 5, 2, 3), //
   LR6(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 6), 5, 2, 3), //
   THREEPOINT(HormannSabinCurveSubdivision::of, 5, 1, 2), //
-  FOURPOINT(FourPointCurveSubdivision::new, 6, 0, 3), //
-  FOURPOINT2(CurveSubdivisionHelper::fps, 6, 0, 3), //
+  FOURPOINT(CurveSubdivisionHelper::fps, 6, 0, 3), //
   C2CUBIC(DualC2FourPointCurveSubdivision::cubic, 6, 2, 3), //
   SIXPOINT(SixPointCurveSubdivision::new, 6, 0, 5);
 

@@ -54,6 +54,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private void shuffleSnap() {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
     Tensor sequence = RandomVariate.of(distribution, spinnerLength.getValue(), 3);
+    sequence.set(OrderingHelper.FACTOR::multiply, Tensor.ALL, 1);
     sequence.set(Scalar::zero, 0, Tensor.ALL);
     setControlPointsSe2(sequence);
   }
