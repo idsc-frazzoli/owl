@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.hs.sn.S2Manifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -48,7 +50,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   /** @param xyz normalized vector, point on 2-dimensional sphere
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
-  public static Tensor tangentSpace(Tensor xyz) {
+  /* package */ static Tensor tangentSpace(Tensor xyz) {
     return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
   }
 
@@ -98,5 +100,10 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public GeodesicArrayPlot geodesicArrayPlot() {
     return new S2ArrayPlot();
+  }
+
+  @Override // from GeodesicDisplay
+  public VectorLogManifold vectorLogManifold() {
+    return S2Manifold.INSTANCE;
   }
 }

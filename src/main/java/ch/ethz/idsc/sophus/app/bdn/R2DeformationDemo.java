@@ -10,7 +10,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   };
 
   R2DeformationDemo() {
-    super(GeodesicDisplays.R2_ONLY, RnBarycentricCoordinates.scattered());
+    super(GeodesicDisplays.R2_ONLY, MixedBarycentricCoordinates.scattered());
     // ---
     {
       jToggleRigidMotionFit.addActionListener(l -> recompute());

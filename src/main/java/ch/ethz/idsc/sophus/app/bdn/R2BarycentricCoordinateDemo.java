@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.RnBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final JToggleButton jToggleEntire = new JToggleButton("entire");
 
   public R2BarycentricCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2_SPD2_S2_Rn, RnBarycentricCoordinates.list());
+    super(true, GeodesicDisplays.SE2C_SE2_SPD2_S2_Rn, MixedBarycentricCoordinates.list());
     {
       timerFrame.jToolBar.add(jToggleEntire);
     }

@@ -333,7 +333,7 @@ public class LeversRender {
       vs = CIRCLE;
     else //
     if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE.dot(S2GeodesicDisplay.tangentSpace(p));
+      vs = CIRCLE;
     else //
     if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay) {
       vs = Tensor.of(CIRCLE.stream().map(PadRight.zeros(3)));
@@ -353,7 +353,7 @@ public class LeversRender {
       }
       // ---
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-      Tensor ellipse = Tensor.of(vs.stream().map(geodesicDisplay.tangentProjection(p))); // from 3d to 2d
+      Tensor ellipse = vs; // Tensor.of(vs.stream().map(geodesicDisplay.tangentProjection(p))); // from 3d to 2d
       Path2D path2d = geometricLayer.toPath2D(ellipse, true);
       graphics.setColor(new Color(64, 192, 64, 64));
       graphics.fill(path2d);
@@ -375,11 +375,11 @@ public class LeversRender {
   private static final Scalar FACTOR = RealScalar.of(0.3);
 
   public void renderEllipseIdentity() {
-    renderEllipse(origin, DiagonalMatrix.of(origin.length(), FACTOR));
+    renderEllipse(origin, DiagonalMatrix.of(geodesicDisplay.dimensions(), FACTOR));
   }
 
   public void renderEllipseIdentityP() {
-    Tensor matrix = DiagonalMatrix.of(origin.length(), FACTOR);
+    Tensor matrix = DiagonalMatrix.of(geodesicDisplay.dimensions(), FACTOR);
     for (Tensor point : sequence)
       renderEllipse(point, matrix);
   }

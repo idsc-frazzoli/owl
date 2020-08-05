@@ -6,25 +6,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
-import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnAffineCoordinate;
-import ch.ethz.idsc.sophus.lie.rn.RnManifold;
+import ch.ethz.idsc.sophus.lie.r2.D2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public enum RnBarycentricCoordinates implements LogWeighting {
+public enum MixedBarycentricCoordinates implements LogWeighting {
+  /** only for 2-dimensional tangent space */
   WACHSPRESS() {
     @Override
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return wrap(R2BarycentricCoordinate.of(Barycenter.WACHSPRESS), sequence);
+      return wrap(D2BarycentricCoordinate.of(vectorLogManifold, Barycenter.WACHSPRESS), sequence);
     }
 
     @Override
@@ -34,11 +35,12 @@ public enum RnBarycentricCoordinates implements LogWeighting {
       return null;
     }
   },
+  /** only for 2-dimensional tangent space */
   MEAN_VALUE() {
     @Override
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return wrap(R2BarycentricCoordinate.of(Barycenter.MEAN_VALUE), sequence);
+      return wrap(D2BarycentricCoordinate.of(vectorLogManifold, Barycenter.MEAN_VALUE), sequence);
     }
 
     @Override
@@ -49,11 +51,12 @@ public enum RnBarycentricCoordinates implements LogWeighting {
       return null;
     }
   },
+  /** only for 2-dimensional tangent space */
   DISCRETE_HARMONIC() {
     @Override
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return wrap(R2BarycentricCoordinate.of(Barycenter.DISCRETE_HARMONIC), sequence);
+      return wrap(D2BarycentricCoordinate.of(vectorLogManifold, Barycenter.DISCRETE_HARMONIC), sequence);
     }
 
     @Override
@@ -67,7 +70,8 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return RnAffineCoordinate.of(sequence); // precomputation
+      BarycentricCoordinate barycentricCoordinate = AffineCoordinate.of(vectorLogManifold);
+      return point -> barycentricCoordinate.weights(sequence, point); // precomputation
     }
 
     @Override
@@ -81,7 +85,7 @@ public enum RnBarycentricCoordinates implements LogWeighting {
     @Override
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, ScalarUnaryOperator variogram, Tensor sequence) {
-      return wrap(RadialBasisFunctionWeighting.of(biinvariant.distances(RnManifold.INSTANCE, sequence)), sequence);
+      return wrap(RadialBasisFunctionWeighting.of(biinvariant.distances(vectorLogManifold, sequence)), sequence);
     }
 
     @Override
