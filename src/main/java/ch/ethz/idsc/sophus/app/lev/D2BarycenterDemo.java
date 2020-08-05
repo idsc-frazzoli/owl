@@ -1,21 +1,19 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.D2BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
@@ -25,14 +23,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class D2BarycenterDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
-  protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = SpinnerLabel.of(MixedBarycentricCoordinates.values());
+/* package */ class D2BarycenterDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public D2BarycenterDemo() {
-    super(true, GeodesicDisplays.R2_H2_S2);
-    // ---
-    spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "barys");
+    super(true, GeodesicDisplays.R2_H2_S2, Arrays.asList(D2BarycentricCoordinates.values()));
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
@@ -57,8 +52,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       leversRender.renderIndexX();
       leversRender.renderIndexP();
       try {
-        TensorUnaryOperator tensorUnaryOperator = //
-            spinnerLogWeighting.getValue().operator(null, geodesicDisplay.vectorLogManifold(), s -> s, sequence);
+        TensorUnaryOperator tensorUnaryOperator = operator(sequence);
         Tensor weights = tensorUnaryOperator.apply(origin);
         leversRender.renderWeights(weights);
         BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();

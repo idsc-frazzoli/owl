@@ -1,13 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -24,8 +26,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class S2ScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo {
   private final JToggleButton jToggleLower = new JToggleButton("lower");
 
-  public S2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
+  public S2ScatteredSetCoordinateDemo(List<GeodesicDisplay> list, //
+      List<LogWeighting> array) {
+    super(true, list, array);
     {
       timerFrame.jToolBar.add(jToggleLower);
     }
@@ -54,6 +57,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     boolean lower = jToggleLower.isSelected();
     final Tensor origin = getGeodesicControlPoints();
     Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, lower ? n * 2 : n, n, origin.length());
+    Predicate<Tensor> predicate = isRenderable();
     IntStream.range(0, n).parallel().forEach(c0 -> {
       Scalar x = sX.Get(c0);
       int c1 = 0;
@@ -61,10 +65,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
         Optional<Tensor> optionalP = S2GeodesicDisplay.optionalZ(Tensors.of(x, y, RealScalar.ONE));
         if (optionalP.isPresent()) {
           Tensor point = optionalP.get();
-          wgs.set(tensorUnaryOperator.apply(point), c1, c0);
-          if (lower) {
-            point.set(Scalar::negate, 2);
-            wgs.set(tensorUnaryOperator.apply(point), n + c1, c0);
+          if (predicate.test(point)) {
+            wgs.set(tensorUnaryOperator.apply(point), c1, c0);
+            if (lower) {
+              point.set(Scalar::negate, 2);
+              wgs.set(tensorUnaryOperator.apply(point), n + c1, c0);
+            }
           }
         }
         ++c1;
@@ -73,7 +79,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return wgs;
   }
 
-  public static void main(String[] args) {
-    new S2ScatteredSetCoordinateDemo().setVisible(1300, 900);
+  Predicate<Tensor> isRenderable() {
+    return point -> true;
   }
 }

@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -16,9 +18,13 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.D2BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
+import ch.ethz.idsc.sophus.app.api.MixedLogWeightings;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
@@ -51,15 +57,25 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class R2BarycentricCoordinateDemo extends ScatteredSetCoordinateDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+
+  public static List<LogWeighting> list() {
+    List<LogWeighting> list = new ArrayList<>();
+    list.addAll(Arrays.asList(D2BarycentricCoordinates.values()));
+    list.addAll(LogWeightings.list());
+    list.addAll(Arrays.asList(MixedLogWeightings.values()));
+    return list;
+  }
+
   // ---
   private final JToggleButton jToggleEntire = new JToggleButton("entire");
 
   public R2BarycentricCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2_SPD2_S2_Rn, MixedBarycentricCoordinates.list());
+    super(true, GeodesicDisplays.SE2C_SE2_SPD2_S2_Rn, list());
     {
       timerFrame.jToolBar.add(jToggleEntire);
     }
     setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}}"));
   }
 

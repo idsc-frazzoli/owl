@@ -64,8 +64,11 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
     super(addRemoveControlPoints, list);
     {
       spinnerLogWeighting.setList(array);
-      spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
-      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(130, 28), "weights");
+      if (array.contains(LogWeightings.COORDINATE))
+        spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
+      else
+        spinnerLogWeighting.setIndex(0);
+      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "weights");
       spinnerLogWeighting.addSpinnerListener(spinnerListener);
     }
     {

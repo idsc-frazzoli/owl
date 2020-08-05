@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
-import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.MixedLogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final Scalar MARGIN = RealScalar.of(2);
 
   public R1BarycentricCoordinateDemo() {
-    super(MixedBarycentricCoordinates.scattered());
+    super(MixedLogWeightings.scattered());
   }
 
   @Override

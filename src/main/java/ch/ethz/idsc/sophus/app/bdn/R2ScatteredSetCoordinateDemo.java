@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.api.ArrayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   private Tensor snapshot;
 
   public R2ScatteredSetCoordinateDemo() {
-    super(true, GeodesicDisplays.SE2C_SE2, MixedBarycentricCoordinates.scattered());
+    super(true, GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     {
       jToggleButtonAxes.setSelected(true);
       timerFrame.jToolBar.add(jToggleButtonAxes);

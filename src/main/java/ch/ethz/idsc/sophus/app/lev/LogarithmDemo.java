@@ -19,7 +19,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
@@ -40,7 +39,7 @@ import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/* package */ class LogarithmDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class LogarithmDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private static final GridRender GRID_RENDER = new GridRender(Tensors.vector(-1, 0, 1), Color.LIGHT_GRAY);
   private static final Color DOMAIN_F = new Color(192, 192, 64, 64);
   private static final Color DOMAIN_D = new Color(192, 192, 64, 192);
@@ -49,7 +48,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   private final JToggleButton jToggleCtrl = new JToggleButton("neutral");
 
   public LogarithmDemo() {
-    super(true, GeodesicDisplays.R2_H2_S2, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_H2_S2);
     {
       spinnerLength.setList(Arrays.asList(5, 9, 10, 11, 12, 15, 20));
       spinnerLength.setValueSafe(11);

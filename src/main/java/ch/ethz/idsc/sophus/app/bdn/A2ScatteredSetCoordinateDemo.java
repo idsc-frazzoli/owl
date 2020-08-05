@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
   }
 
   @Override
-  public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);

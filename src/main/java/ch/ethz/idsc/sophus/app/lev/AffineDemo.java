@@ -14,24 +14,21 @@ import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ class AffineDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class AffineDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public AffineDemo() {
-    super(true, GeodesicDisplays.R2_ONLY, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_ONLY);
     // ---
     spinnerColorData.setValue(ColorDataGradients.TEMPERATURE);
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
@@ -55,10 +52,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
       leversRender.renderSequence();
       leversRender.renderOrigin();
-      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       // Tensor weights = AffineCoordinate.of(vectorLogManifold).weights(sequence, origin);
       // leversRender.renderWeights(weights);
       Tensor doma = Subdivide.of(0.0, 1.0, 11);

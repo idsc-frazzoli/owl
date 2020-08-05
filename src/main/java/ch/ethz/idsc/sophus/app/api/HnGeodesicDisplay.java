@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -76,7 +77,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return HnBiinvariantMean.INSTANCE;
+    return HnBiinvariantMean.of(Chop._08);
   }
 
   @Override

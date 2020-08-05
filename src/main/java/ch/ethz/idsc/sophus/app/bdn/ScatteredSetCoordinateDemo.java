@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     setMidpointIndicated(false);
     spinnerLogWeighting.addSpinnerListener(v -> recompute());
     {
-      spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50));
+      spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80));
       spinnerRefine.setValue(20);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
       spinnerRefine.addSpinnerListener(v -> recompute());

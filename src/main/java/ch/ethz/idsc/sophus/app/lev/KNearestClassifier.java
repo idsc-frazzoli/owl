@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.red.Tally;
         .limit(k) //
         .mapToInt(i -> labels[i]) //
         .toArray();
+    // TODO this is not finished yet!
     Map<Tensor, Long> map = Tally.of(Tensors.vectorInt(values));
     Scalar lab = null;
     int cmp = 0;
