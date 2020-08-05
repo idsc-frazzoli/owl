@@ -34,13 +34,13 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-/* package */ class KNearestDemo extends AbstractPlaceDemo {
+/* package */ class KNearestDemo extends LogWeightingDemo {
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("shuffle");
   private final JTextField jTextField = new JTextField();
 
   public KNearestDemo() {
-    super(GeodesicDisplays.MANIFOLDS, LogWeightings.list());
+    super(true, GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     {
       spinnerLength.addSpinnerListener(v -> shuffleSnap());
       spinnerLength.setList(Arrays.asList(9, 15, 20, 25, 50, 75));

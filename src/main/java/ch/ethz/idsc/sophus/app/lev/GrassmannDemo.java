@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.util.Optional;
 
 import javax.swing.JToggleButton;
@@ -23,16 +22,15 @@ import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ class GrassmannDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class GrassmannDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public GrassmannDemo() {
-    super(GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
+    super(true, GeodesicDisplays.SE2C_SE2_S2_H2_R2, LogWeightings.list());
     // ---
     spinnerColorData.setValue(ColorDataGradients.TEMPERATURE);
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
@@ -60,15 +58,15 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
       LeversHud.render(biinvariant(), leversRender, colorDataGradient);
-      Tensor doma = Subdivide.of(0.0, 1.0, 11);
-      for (int index = 0; index < sequence.length(); ++index) {
-        Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
-        Tensor next = sequence.get(index);
-        Tensor curve = doma.map(geodesicDisplay.geodesicInterface().curve(prev, next));
-        Tensor polygon = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
-        Path2D path2d = geometricLayer.toPath2D(polygon);
-        graphics.draw(path2d);
-      }
+      // Tensor doma = Subdivide.of(0.0, 1.0, 11);
+      // for (int index = 0; index < sequence.length(); ++index) {
+      // Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
+      // Tensor next = sequence.get(index);
+      // Tensor curve = doma.map(geodesicDisplay.geodesicInterface().curve(prev, next));
+      // Tensor polygon = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
+      // Path2D path2d = geometricLayer.toPath2D(polygon);
+      // graphics.draw(path2d);
+      // }
     } else {
       renderControlPoints(geometricLayer, graphics);
     }

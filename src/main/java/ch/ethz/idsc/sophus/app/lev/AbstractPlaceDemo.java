@@ -6,16 +6,16 @@ import java.util.Optional;
 
 import javax.swing.JButton;
 
+import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ abstract class AbstractPlaceDemo extends LogWeightingDemo {
+/* package */ abstract class AbstractPlaceDemo extends ControlPointsDemo {
   private final JButton jButtonPrint = new JButton("print");
 
-  public AbstractPlaceDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
-    super(true, list, array);
+  public AbstractPlaceDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
+    super(addRemoveControlPoints, list);
     setMidpointIndicated(false);
     // ---
     jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2().map(Round._3)));

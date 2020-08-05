@@ -27,13 +27,13 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-/* package */ class OrderingPlaceDemo extends AbstractPlaceDemo {
+/* package */ class OrderingPlaceDemo extends LogWeightingDemo {
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("shuffle");
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
 
   public OrderingPlaceDemo() {
-    super(GeodesicDisplays.MANIFOLDS, LogWeightings.list());
+    super(true, GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     {
       spinnerLength.addSpinnerListener(v -> shuffleSnap());
       spinnerLength.setList(Arrays.asList(50, 75, 100, 200, 300, 400, 500));

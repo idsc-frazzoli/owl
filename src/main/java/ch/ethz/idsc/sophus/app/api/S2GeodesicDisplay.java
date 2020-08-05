@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Optional;
 
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.hs.s2.S2Exponential;
 import ch.ethz.idsc.sophus.hs.s2.S2Manifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
@@ -12,12 +13,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.lie.Orthogonalize;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.CopySign;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -51,7 +49,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
   /** @param xyz normalized vector, point on 2-dimensional sphere
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
   /* package */ static Tensor tangentSpace(Tensor xyz) {
-    return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
+    return new S2Exponential(xyz).projection();
   }
 
   @Override // from GeodesicDisplay

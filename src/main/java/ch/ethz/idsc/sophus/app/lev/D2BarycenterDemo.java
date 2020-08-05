@@ -15,13 +15,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.MixedBarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -32,7 +30,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public D2BarycenterDemo() {
-    super(GeodesicDisplays.R2_H2_S2, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_H2_S2);
     // ---
     spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "barys");
     // ---
@@ -40,7 +38,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // ---
     GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.TARGET);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     jToggleNeutral.setSelected(true);

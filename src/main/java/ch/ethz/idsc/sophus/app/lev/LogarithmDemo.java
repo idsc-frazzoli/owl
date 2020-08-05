@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/* package */ class LogarithmDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class LogarithmDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
   private static final GridRender GRID_RENDER = new GridRender(Tensors.vector(-1, 0, 1), Color.LIGHT_GRAY);
   private static final Color DOMAIN_F = new Color(192, 192, 64, 64);
   private static final Color DOMAIN_D = new Color(192, 192, 64, 192);
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   private final JToggleButton jToggleCtrl = new JToggleButton("neutral");
 
   public LogarithmDemo() {
-    super(GeodesicDisplays.R2_H2_S2, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_H2_S2, LogWeightings.list());
     {
       spinnerLength.setList(Arrays.asList(5, 9, 10, 11, 12, 15, 20));
       spinnerLength.setValueSafe(11);
@@ -127,7 +127,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
             graphics.draw(line2d);
           }
         } catch (Exception exception) {
-          System.err.println(exception);
+          exception.printStackTrace();
         }
         geometricLayer.popMatrix();
         try {
@@ -139,7 +139,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
               geometricLayer, graphics);
           leversRender.renderLevers();
         } catch (Exception exception) {
-          System.err.println(exception);
+          exception.printStackTrace();
         }
       }
     }

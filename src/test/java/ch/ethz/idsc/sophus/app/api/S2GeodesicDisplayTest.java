@@ -17,8 +17,8 @@ import junit.framework.TestCase;
 
 public class S2GeodesicDisplayTest extends TestCase {
   public void testSimple() {
-    Tensor matrix = S2GeodesicDisplay.tangentSpace(Tensors.vector(1, 1, 1));
-    assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
+    Tensor tensor = S2GeodesicDisplay.tangentSpace(Tensors.vector(0, 1, 0));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3));
   }
 
   public void testInvariant() {
@@ -43,6 +43,15 @@ public class S2GeodesicDisplayTest extends TestCase {
       Tensor xyz = s2GeodesicDisplay.project(xya);
       Tensor tan = s2GeodesicDisplay.createTangent(xya);
       Tolerance.CHOP.requireAllZero(xyz.dot(tan));
+    }
+  }
+
+  public void testFail() {
+    try {
+      S2GeodesicDisplay.tangentSpace(Tensors.vector(1, 1, 1));
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

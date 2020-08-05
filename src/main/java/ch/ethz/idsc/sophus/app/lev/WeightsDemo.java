@@ -27,11 +27,11 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
-/* package */ class WeightsDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class WeightsDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
 
   public WeightsDemo() {
-    super(GeodesicDisplays.MANIFOLDS, LogWeightings.list());
+    super(true, GeodesicDisplays.MANIFOLDS, LogWeightings.list());
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }

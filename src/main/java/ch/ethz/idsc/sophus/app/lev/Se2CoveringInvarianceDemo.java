@@ -23,12 +23,12 @@ import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class Se2CoveringInvarianceDemo extends AbstractPlaceDemo {
+/* package */ class Se2CoveringInvarianceDemo extends LogWeightingDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JTextField jTextField = new JTextField();
 
   public Se2CoveringInvarianceDemo() {
-    super(GeodesicDisplays.SE2C_SE2, LogWeightings.list());
+    super(true, GeodesicDisplays.SE2C_SE2, LogWeightings.list());
     {
       timerFrame.jToolBar.add(jToggleAxes);
     }

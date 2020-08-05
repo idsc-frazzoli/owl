@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
@@ -26,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public abstract class LogWeightingDemo extends ControlPointsDemo {
+public abstract class LogWeightingDemo extends AbstractPlaceDemo {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
   protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();

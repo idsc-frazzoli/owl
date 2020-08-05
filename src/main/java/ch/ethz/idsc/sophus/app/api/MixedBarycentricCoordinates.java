@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.Barycenter;
 import ch.ethz.idsc.sophus.gbc.BarycentricCoordinate;
+import ch.ethz.idsc.sophus.gbc.D2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
-import ch.ethz.idsc.sophus.lie.r2.Barycenter;
-import ch.ethz.idsc.sophus.lie.r2.D2BarycentricCoordinate;
 import ch.ethz.idsc.sophus.math.WeightingInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;

@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 
-/* package */ class R2AnimationDemo extends AbstractPlaceDemo {
+/* package */ class R2AnimationDemo extends LogWeightingDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.io.Timing;
   private Tensor snapshot;
 
   public R2AnimationDemo() {
-    super(GeodesicDisplays.R2_ONLY, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_ONLY, LogWeightings.list());
     {
       timerFrame.jToolBar.add(jToggleAxes);
       jToggleAxes.setSelected(true);

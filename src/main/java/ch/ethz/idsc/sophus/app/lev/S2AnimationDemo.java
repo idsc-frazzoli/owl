@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class S2AnimationDemo extends AbstractPlaceDemo {
+/* package */ class S2AnimationDemo extends LogWeightingDemo {
   private final JToggleButton jToggleAnimate = new JToggleButton("animate");
   private final Timing timing = Timing.started();
   // ---
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Tensor snapshot;
 
   public S2AnimationDemo() {
-    super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
+    super(true, GeodesicDisplays.S2_ONLY, LogWeightings.list());
     {
       jToggleAnimate.addActionListener(e -> {
         if (jToggleAnimate.isSelected()) {

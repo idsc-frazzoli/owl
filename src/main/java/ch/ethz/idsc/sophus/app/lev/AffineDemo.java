@@ -26,12 +26,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ class AffineDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class AffineDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public AffineDemo() {
-    super(GeodesicDisplays.R2_ONLY, LogWeightings.list());
+    super(true, GeodesicDisplays.R2_ONLY, LogWeightings.list());
     // ---
     spinnerColorData.setValue(ColorDataGradients.TEMPERATURE);
     spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color scheme");
