@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,5 +28,10 @@ public class H1GeodesicDisplay extends HnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     return Se2Matrix.translation(p);
+  }
+
+  @Override // from GeodesicDisplay
+  public VectorLogManifold vectorLogManifold() {
+    return HnManifold.INSTANCE;
   }
 }

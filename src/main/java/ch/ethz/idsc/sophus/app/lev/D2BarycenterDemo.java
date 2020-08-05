@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.util.Optional;
 
 import javax.swing.JToggleButton;
@@ -12,7 +12,6 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
@@ -23,20 +22,19 @@ import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
-import ch.ethz.idsc.sophus.hs.sn.SnBiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ class S2BarycenterDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class D2BarycenterDemo extends AbstractPlaceDemo implements SpinnerListener<GeodesicDisplay> {
   protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = SpinnerLabel.of(MixedBarycentricCoordinates.values());
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
-  public S2BarycenterDemo() {
-    super(GeodesicDisplays.S2_ONLY, LogWeightings.list());
+  public D2BarycenterDemo() {
+    super(GeodesicDisplays.R2_H2_S2, LogWeightings.list());
     // ---
-    spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "barys");
+    spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "barys");
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
@@ -61,15 +59,28 @@ import ch.ethz.idsc.tensor.sca.Chop;
       leversRender.renderSequence();
       leversRender.renderIndexX();
       leversRender.renderIndexP();
-      TensorUnaryOperator tensorUnaryOperator = //
-          spinnerLogWeighting.getValue().operator(null, geodesicDisplay.vectorLogManifold(), s -> s, sequence);
-      Tensor weights = tensorUnaryOperator.apply(origin);
-      leversRender.renderWeights(weights);
-      BiinvariantMean biinvariantMean = SnBiinvariantMean.of(Chop._05);
-      Tensor mean = biinvariantMean.mean(sequence, weights);
-      new PointsRender(Color.BLACK, Color.BLACK) //
-          .show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), Tensors.of(mean)) //
-          .render(geometricLayer, graphics);
+      try {
+        TensorUnaryOperator tensorUnaryOperator = //
+            spinnerLogWeighting.getValue().operator(null, geodesicDisplay.vectorLogManifold(), s -> s, sequence);
+        Tensor weights = tensorUnaryOperator.apply(origin);
+        leversRender.renderWeights(weights);
+        BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
+        Tensor mean = biinvariantMean.mean(sequence, weights);
+        LeversRender.ORIGIN_RENDER_0 //
+            .show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), Tensors.of(mean)) //
+            .render(geometricLayer, graphics);
+      } catch (Exception e) {
+        System.err.println(e);
+      }
+      Tensor doma = Subdivide.of(0.0, 1.0, 11);
+      for (int index = 0; index < sequence.length(); ++index) {
+        Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
+        Tensor next = sequence.get(index);
+        Tensor curve = doma.map(geodesicDisplay.geodesicInterface().curve(prev, next));
+        Tensor polygon = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
+        Path2D path2d = geometricLayer.toPath2D(polygon);
+        graphics.draw(path2d);
+      }
     } else {
       renderControlPoints(geometricLayer, graphics);
     }
@@ -97,6 +108,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   public static void main(String[] args) {
-    new S2BarycenterDemo().setVisible(1200, 900);
+    new D2BarycenterDemo().setVisible(1200, 900);
   }
 }

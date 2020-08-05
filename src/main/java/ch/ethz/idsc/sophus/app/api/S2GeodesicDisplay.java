@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Optional;
 
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.hs.sn.S2Manifold;
+import ch.ethz.idsc.sophus.hs.s2.S2Manifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.RealScalar;

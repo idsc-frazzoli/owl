@@ -26,11 +26,11 @@ import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.FourPointCurveSubdivision;
+import ch.ethz.idsc.sophus.hs.TangentSpace;
 import ch.ethz.idsc.sophus.itp.ArcLengthParameterization;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.So2;
-import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -102,11 +102,11 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           graphics.setColor(DOMAIN_D);
           graphics.draw(path2d);
         }
-        Exponential exponential = geodesicDisplay.hsExponential().exponential(origin);
+        TangentSpace tangentSpace = geodesicDisplay.vectorLogManifold().logAt(origin);
         final Tensor domain = Drop.tail(Subdivide.of(0.0, 1.0, spinnerLength.getValue()), 1);
         geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         GRID_RENDER.render(geometricLayer, graphics);
-        Tensor planar = Tensor.of(refined.stream().map(exponential::log).map(r -> r.extract(0, 2)));
+        Tensor planar = Tensor.of(refined.stream().map(tangentSpace::vectorLog));
         {
           RenderQuality.setQuality(graphics);
           Path2D path2d = geometricLayer.toPath2D(planar, true);

@@ -61,7 +61,7 @@ public class LeversRender {
   private static final Scalar NEUTRAL_DEFAULT = RealScalar.of(0.33);
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
-  private static final PointsRender ORIGIN_RENDER_0 = //
+  public static final PointsRender ORIGIN_RENDER_0 = //
       new PointsRender(new Color(64, 128, 64, 128), new Color(64, 128, 64, 255));
   private static final Stroke STROKE_GEODESIC = //
       new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);

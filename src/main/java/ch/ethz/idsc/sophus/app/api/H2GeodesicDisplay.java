@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Random;
 
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.hs.h2.H2Manifold;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
@@ -26,6 +28,11 @@ public class H2GeodesicDisplay extends HnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     return HnWeierstrassCoordinate.toPoint(xya.extract(0, 2));
+  }
+
+  @Override // from GeodesicDisplay
+  public VectorLogManifold vectorLogManifold() {
+    return H2Manifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
