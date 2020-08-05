@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   @Override // from ExportCoordinateDemo
-  public Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
+  public final Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
     Tensor sX = Subdivide.of(-1.0, +1.0, refinement);
     Tensor sY = Subdivide.of(+1.0, -1.0, refinement);
     int n = sX.length();
