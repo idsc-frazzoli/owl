@@ -47,6 +47,18 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
+      // ---
+      leversRender.renderSurfaceP();
+      leversRender.renderSequence();
+      leversRender.renderOrigin();
+      leversRender.renderLbsS2();
+      leversRender.renderLevers();
+      leversRender.renderIndexX();
+      leversRender.renderIndexP();
+      // ---
+      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(3, 0)));
+      GeodesicDisplayRender.render_s2(geometricLayer, graphics);
+      // ---
       leversRender.renderSurfaceP();
       leversRender.renderSequence();
       leversRender.renderOrigin();
@@ -56,15 +68,6 @@ import ch.ethz.idsc.tensor.Tensors;
       leversRender.renderIndexX();
       leversRender.renderIndexP();
       // ---
-      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(3, 0)));
-      GeodesicDisplayRender.render_s2(geometricLayer, graphics);
-      leversRender.renderSurfaceP();
-      leversRender.renderSequence();
-      leversRender.renderOrigin();
-      leversRender.renderLbsS2();
-      leversRender.renderLevers();
-      leversRender.renderIndexX();
-      leversRender.renderIndexP();
       geometricLayer.popMatrix();
     } else {
       renderControlPoints(geometricLayer, graphics);
@@ -75,7 +78,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public void actionPerformed(GeodesicDisplay geodesicDisplay) {
     if (geodesicDisplay instanceof S2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-0.367, 0.242, 0.000}, {-0.683, -0.083, 0.000}, {-0.475, 0.608, 0.000}, {0.333, 0.483, 0.000}, {0.467, 0.000, 0.000}, {-0.300, -0.425, 0.000}}"));
+          "{{-0.314, 0.662, 0.000}, {-0.809, 0.426, 0.000}, {-0.261, 0.927, 0.000}, {0.564, 0.685, 0.000}, {0.694, 0.220, 0.000}}"));
     }
   }
 

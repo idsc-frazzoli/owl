@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Rescale;
@@ -346,7 +347,7 @@ public class LeversRender {
         Tensor point = p.multiply(factor);
         poly.append(point);
         graphics.setColor(new Color(255, 0, 0, 64));
-        graphics.draw(geometricLayer.toLine2D(p, point));
+        graphics.draw(geometricLayer.toLine2D(Array.zeros(2), point));
         graphics.setColor(COLOR_TANGENT);
         graphics.draw(geometricLayer.toLine2D(origin, point));
       }
