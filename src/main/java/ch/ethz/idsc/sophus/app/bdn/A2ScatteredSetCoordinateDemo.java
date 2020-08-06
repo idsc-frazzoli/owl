@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 
-/* package */ abstract class A2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
+/* package */ abstract class A2ScatteredSetCoordinateDemo extends ExportWeightingDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   // ---
   private RenderInterface renderInterface;

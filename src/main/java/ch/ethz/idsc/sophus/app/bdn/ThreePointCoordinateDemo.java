@@ -3,24 +3,42 @@ package ch.ethz.idsc.sophus.app.bdn;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.ArrayPlotRender;
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
+import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ArrayReshape;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class ThreePointCoordinateDemo extends A2ScatteredSetCoordinateDemo //
     implements SpinnerListener<GeodesicDisplay> {
+  private static final int REFINEMENT = 160; // presentation 60
   private static final Tensor DOMAIN = Drop.tail(Subdivide.of(0.0, 1.0, 10), 1);
 
   public ThreePointCoordinateDemo() {
@@ -55,24 +73,50 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   @Override
+  public void actionPerformed(ActionEvent actionEvent) {
+    File root = HomeDirectory.Pictures( //
+        getClass().getSimpleName(), //
+        geodesicDisplay().toString());
+    root.mkdirs();
+    for (LogWeighting logWeighting : ThreePointCoordinates.list()) {
+      Tensor sequence = getGeodesicControlPoints();
+      TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
+          Biinvariants.METRIC, //
+          geodesicDisplay().vectorLogManifold(), //
+          variogram(), //
+          sequence);
+      System.out.print("computing " + logWeighting);
+      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
+      Tensor wgs = geodesicArrayPlot.raster(REFINEMENT, tensorUnaryOperator, fallback);
+      List<Integer> dims = Dimensions.of(wgs);
+      Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+      ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgp, colorDataGradient(), 1);
+      BufferedImage bufferedImage = arrayPlotRender.export();
+      try {
+        File file = new File(root, logWeighting.toString() + ".png");
+        ImageIO.write(bufferedImage, "png", file);
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
+      System.out.println(" done");
+    }
+    System.out.println("all done");
+  }
+
+  @Override
   public void actionPerformed(GeodesicDisplay geodesicDisplay) {
     if (geodesicDisplay instanceof R2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
           "{{-1.017, -0.953, 0.000}, {-0.991, 0.113, 0.000}, {-0.644, 0.967, 0.000}, {0.509, 0.840, 0.000}, {0.689, 0.513, 0.000}, {0.956, -0.627, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
-      setControlPointsSe2(Tensors.fromString( //
-          "{{0.300, 0.092, 0.000}, {-0.563, -0.658, 0.262}, {-0.854, -0.200, 0.000}, {-0.746, 0.663, -0.262}, {0.467, 0.758, 0.262}, {0.446, -0.554, 0.262}}"));
-      setControlPointsSe2(Tensors.fromString( //
-          "{{-0.521, 0.621, 0.262}, {-0.863, 0.258, 0.000}, {-0.725, 0.588, -0.785}, {0.392, 0.646, 0.000}, {-0.375, 0.021, 0.000}, {-0.525, -0.392, 0.000}}"));
-      setControlPointsSe2(Tensors.fromString( //
-          "{{-0.583, 0.338, 0.000}, {-0.904, -0.258, 0.262}, {-0.513, 0.804, 0.000}, {0.646, 0.667, 0.000}, {0.704, -0.100, 0.000}, {0.396, -0.688, 0.000}}"));
-      setControlPointsSe2(Tensors.fromString( //
-          "{{-0.363, 0.388, 0.000}, {-0.825, -0.271, 0.000}, {-0.513, 0.804, 0.000}, {0.646, 0.667, 0.000}, {0.704, -0.100, 0.000}, {-0.075, -0.733, 0.000}}"));
-    } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-1.900, 1.783, 0.000}, {-0.083, 2.517, 0.000}, {2.300, 2.117, 0.000}, {2.833, 0.217, 0.000}, {1.000, -1.550, 0.000}, {-1.450, -1.650, 0.000}}"));
+          "{{-1.900, 1.783, 0.000}, {-0.867, 2.450, 0.000}, {2.300, 2.117, 0.000}, {2.567, 0.150, 0.000}, {1.600, -2.583, 0.000}, {-2.550, -1.817, 0.000}}"));
+    } else //
+    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+      setControlPointsSe2(Tensors.fromString( //
+          "{{-0.892, -0.300, 0.000}, {-0.583, 0.733, 0.000}, {0.800, 0.325, 0.000}, {0.817, -0.233, 0.000}, {-0.008, -0.808, 0.000}}"));
     }
   }
 

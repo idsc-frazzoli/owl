@@ -26,23 +26,12 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ abstract class ExportCoordinateDemo extends ScatteredSetCoordinateDemo implements ActionListener {
+/* package */ abstract class ExportWeightingDemo extends ScatteredSetWeightingDemo implements ActionListener {
   private static final int REFINEMENT = 120; // presentation 60
-
-  private static List<Biinvariant> distinct() {
-    return Arrays.asList( //
-        Biinvariants.METRIC, //
-        Biinvariants.TARGET, //
-        Biinvariants.GARDEN, //
-        Biinvariants.HARBOR);
-  }
-
   private final JButton jButtonExport = new JButton("export");
 
-  public ExportCoordinateDemo( //
-      boolean addRemoveControlPoints, //
-      List<GeodesicDisplay> list, //
-      List<LogWeighting> array) {
+  public ExportWeightingDemo( //
+      boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     {
       jButtonExport.addActionListener(this);
@@ -51,7 +40,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   @Override
-  public final void actionPerformed(ActionEvent actionEvent) {
+  public void actionPerformed(ActionEvent actionEvent) {
     LogWeighting logWeighting = logWeighting();
     File root = HomeDirectory.Pictures( //
         getClass().getSimpleName(), //
@@ -81,5 +70,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       System.out.println(" done");
     }
     System.out.println("all done");
+  }
+
+  private static List<Biinvariant> distinct() {
+    return Arrays.asList( //
+        Biinvariants.METRIC, //
+        Biinvariants.TARGET, //
+        Biinvariants.GARDEN, //
+        Biinvariants.HARBOR);
   }
 }

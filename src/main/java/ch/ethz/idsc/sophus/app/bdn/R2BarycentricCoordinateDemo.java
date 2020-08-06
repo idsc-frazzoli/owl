@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class R2BarycentricCoordinateDemo extends ScatteredSetCoordinateDemo {
+/* package */ class R2BarycentricCoordinateDemo extends ScatteredSetWeightingDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 

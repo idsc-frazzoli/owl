@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class Se2ScatteredSetCoordinateDemo extends ExportCoordinateDemo {
+/* package */ class Se2ScatteredSetCoordinateDemo extends ExportWeightingDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
   private static final double RANGE = 3;
   // ---

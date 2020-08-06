@@ -14,14 +14,14 @@ import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ abstract class ScatteredSetCoordinateDemo extends LogWeightingDemo {
+/* package */ abstract class ScatteredSetWeightingDemo extends LogWeightingDemo {
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
-  public ScatteredSetCoordinateDemo( //
+  public ScatteredSetWeightingDemo( //
       boolean addRemoveControlPoints, //
       List<GeodesicDisplay> list, //
       List<LogWeighting> array) {
