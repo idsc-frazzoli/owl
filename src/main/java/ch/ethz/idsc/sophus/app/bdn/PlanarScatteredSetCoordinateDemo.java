@@ -1,57 +1,25 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
-
 import ch.ethz.idsc.java.awt.SpinnerListener;
-import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Drop;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
-/* package */ class ThreePointCoordinateDemo extends A2ScatteredSetCoordinateDemo //
-    implements SpinnerListener<GeodesicDisplay> {
-  private static final Tensor DOMAIN = Drop.tail(Subdivide.of(0.0, 1.0, 10), 1);
-
-  public ThreePointCoordinateDemo() {
-    super(ThreePointCoordinates.list());
+/* package */ class PlanarScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo implements SpinnerListener<GeodesicDisplay> {
+  public PlanarScatteredSetCoordinateDemo() {
+    super(LogWeightings.list());
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     addSpinnerListener(l -> recompute());
     recompute();
-  }
-
-  @Override
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    super.render(geometricLayer, graphics);
-    // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor sequence = getGeodesicControlPoints();
-    Tensor all = Tensors.empty();
-    for (int index = 0; index < sequence.length(); ++index) {
-      Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
-      Tensor next = sequence.get(index);
-      DOMAIN.map(geodesicDisplay.geodesicInterface().curve(prev, next)).stream() //
-          .map(geodesicDisplay::toPoint) //
-          .forEach(all::append);
-    }
-    Path2D path2d = geometricLayer.toPath2D(all);
-    graphics.setColor(new Color(192, 192, 128, 64));
-    graphics.fill(path2d);
-    graphics.setColor(new Color(192, 192, 128, 192));
-    graphics.draw(path2d);
   }
 
   @Override
@@ -72,11 +40,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-1.900, 1.783, 0.000}, {-0.083, 2.517, 0.000}, {2.300, 2.117, 0.000}, {2.833, 0.217, 0.000}, {1.000, -1.550, 0.000}, {-1.450, -1.650, 0.000}}"));
+          "{{-1.900, 1.783, 0.000}, {-0.083, 2.517, 0.000}, {0.500, 1.400, 0.000}, {2.300, 2.117, 0.000}, {2.833, 0.217, 0.000}, {1.000, -1.550, 0.000}, {-0.283, -0.667, 0.000}, {-1.450, -1.650, 0.000}}"));
     }
   }
 
   public static void main(String[] args) {
-    new ThreePointCoordinateDemo().setVisible(1300, 900);
+    new PlanarScatteredSetCoordinateDemo().setVisible(1300, 900);
   }
 }

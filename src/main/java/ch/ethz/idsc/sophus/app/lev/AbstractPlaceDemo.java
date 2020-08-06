@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.sca.Round;
     setMidpointIndicated(false);
     // ---
     jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2().map(Round._3)));
-    // ---
     timerFrame.jToolBar.add(jButtonPrint);
   }
 

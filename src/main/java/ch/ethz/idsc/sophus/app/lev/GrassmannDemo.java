@@ -58,15 +58,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
       LeversHud.render(biinvariant(), leversRender, colorDataGradient);
-      // Tensor doma = Subdivide.of(0.0, 1.0, 11);
-      // for (int index = 0; index < sequence.length(); ++index) {
-      // Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
-      // Tensor next = sequence.get(index);
-      // Tensor curve = doma.map(geodesicDisplay.geodesicInterface().curve(prev, next));
-      // Tensor polygon = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
-      // Path2D path2d = geometricLayer.toPath2D(polygon);
-      // graphics.draw(path2d);
-      // }
     } else {
       renderControlPoints(geometricLayer, graphics);
     }

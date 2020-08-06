@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app;
 
 import java.awt.Color;
 import java.awt.Font;

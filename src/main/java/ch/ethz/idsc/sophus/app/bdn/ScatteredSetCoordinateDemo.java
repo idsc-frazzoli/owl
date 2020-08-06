@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -14,7 +13,6 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ abstract class ScatteredSetCoordinateDemo extends LogWeightingDemo {
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -22,7 +20,6 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
   final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
   final JToggleButton jToggleArrows = new JToggleButton("arrows");
-  private final JButton jButtonPrint = new JButton("print");
 
   public ScatteredSetCoordinateDemo( //
       boolean addRemoveControlPoints, //
@@ -51,8 +48,6 @@ import ch.ethz.idsc.tensor.sca.Round;
       jToggleArrows.setSelected(false);
       timerFrame.jToolBar.add(jToggleArrows);
     }
-    timerFrame.jToolBar.add(jButtonPrint);
-    jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2().map(Round._3)));
     // ---
     timerFrame.jToolBar.addSeparator();
   }

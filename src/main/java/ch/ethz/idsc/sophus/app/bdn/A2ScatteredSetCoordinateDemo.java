@@ -11,8 +11,10 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -27,13 +29,12 @@ import ch.ethz.idsc.tensor.alg.Transpose;
   // ---
   private RenderInterface renderInterface;
 
-  public A2ScatteredSetCoordinateDemo( //
-      boolean addRemoveControlPoints, //
-      List<GeodesicDisplay> list, //
-      List<LogWeighting> array) {
-    super(addRemoveControlPoints, list, array);
+  public A2ScatteredSetCoordinateDemo(List<LogWeighting> array) {
+    super(true, GeodesicDisplays.R2_H2_S2, array);
     // ---
     timerFrame.jToolBar.add(jToggleAxes);
+    jToggleHeatmap.setVisible(false);
+    jToggleArrows.setVisible(false);
   }
 
   @Override
