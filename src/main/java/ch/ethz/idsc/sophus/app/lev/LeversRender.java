@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -270,7 +271,9 @@ public class LeversRender {
   /***************************************************/
   private static final Stroke STROKE_TANGENT = new BasicStroke(1.5f);
   private static final Color COLOR_TANGENT = new Color(0, 0, 255, 192);
-  private static final Color COLOR_PLANE = new Color(192, 192, 192, 64);
+  private static final Color COLOR_POLYGON_DRAW = new Color(0, 255, 255, 192);
+  private static final Color COLOR_POLYGON_FILL = new Color(0, 255, 255, 64);
+  private static final Color COLOR_PLANE = new Color(0, 0, 0, 32);
   private static final Tensor CIRCLE = CirclePoints.of(41).unmodifiable();
 
   public void renderTangentsPtoX(boolean tangentPlane) {
@@ -315,6 +318,64 @@ public class LeversRender {
       }
     }
     geometricLayer.popMatrix();
+  }
+
+  public void renderPolygonXtoP() {
+    HsExponential hsExponential = geodesicDisplay.hsExponential();
+    Tensor vs = Tensor.of(sequence.stream().map(hsExponential.exponential(origin)::log));
+    geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
+    graphics.setStroke(STROKE_TANGENT);
+    TensorUnaryOperator tangentProjection = geodesicDisplay.tangentProjection(origin);
+    if (Objects.nonNull(tangentProjection)) {
+      Tensor poly = Tensor.of(vs.stream().map(tangentProjection));
+      Path2D path2d = geometricLayer.toPath2D(poly, true);
+      graphics.setColor(COLOR_POLYGON_FILL);
+      graphics.fill(path2d);
+      graphics.setColor(COLOR_POLYGON_DRAW);
+      graphics.draw(path2d);
+    }
+    geometricLayer.popMatrix();
+  }
+
+  public void renderLbsS2() {
+    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+      Tensor poly = Tensors.empty();
+      graphics.setStroke(STROKE_TANGENT);
+      for (Tensor p : sequence) {
+        Scalar factor = origin.dot(p).Get().reciprocal();
+        Tensor point = p.multiply(factor);
+        poly.append(point);
+        graphics.setColor(new Color(255, 0, 0, 64));
+        graphics.draw(geometricLayer.toLine2D(p, point));
+        graphics.setColor(COLOR_TANGENT);
+        graphics.draw(geometricLayer.toLine2D(origin, point));
+      }
+      {
+        Path2D path2d = geometricLayer.toPath2D(poly, true);
+        graphics.setColor(COLOR_POLYGON_FILL);
+        graphics.fill(path2d);
+        graphics.setColor(COLOR_POLYGON_DRAW);
+        graphics.draw(path2d);
+      }
+    }
+  }
+
+  private static final Tensor DOMAIN = Drop.tail(Subdivide.of(0.0, 1.0, 10), 1);
+
+  public void renderSurfaceP() {
+    Tensor all = Tensors.empty();
+    for (int index = 0; index < sequence.length(); ++index) {
+      Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
+      Tensor next = sequence.get(index);
+      DOMAIN.map(geodesicDisplay.geodesicInterface().curve(prev, next)).stream() //
+          .map(geodesicDisplay::toPoint) //
+          .forEach(all::append);
+    }
+    Path2D path2d = geometricLayer.toPath2D(all);
+    graphics.setColor(new Color(192, 192, 128, 64));
+    graphics.fill(path2d);
+    graphics.setColor(new Color(192, 192, 128, 192));
+    graphics.draw(path2d);
   }
 
   /***************************************************/

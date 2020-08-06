@@ -1,10 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -21,15 +19,13 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Drop;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -39,7 +35,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /* package */ class ThreePointCoordinateDemo extends A2ScatteredSetCoordinateDemo //
     implements SpinnerListener<GeodesicDisplay> {
   private static final int REFINEMENT = 160; // presentation 60
-  private static final Tensor DOMAIN = Drop.tail(Subdivide.of(0.0, 1.0, 10), 1);
 
   public ThreePointCoordinateDemo() {
     super(ThreePointCoordinates.list());
@@ -55,21 +50,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor sequence = getGeodesicControlPoints();
-    Tensor all = Tensors.empty();
-    for (int index = 0; index < sequence.length(); ++index) {
-      Tensor prev = sequence.get(Math.floorMod(index - 1, sequence.length()));
-      Tensor next = sequence.get(index);
-      DOMAIN.map(geodesicDisplay.geodesicInterface().curve(prev, next)).stream() //
-          .map(geodesicDisplay::toPoint) //
-          .forEach(all::append);
-    }
-    Path2D path2d = geometricLayer.toPath2D(all);
-    graphics.setColor(new Color(192, 192, 128, 64));
-    graphics.fill(path2d);
-    graphics.setColor(new Color(192, 192, 128, 192));
-    graphics.draw(path2d);
+    LeversRender leversRender = LeversRender.of( //
+        geodesicDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
+    leversRender.renderSurfaceP();
   }
 
   @Override
@@ -81,7 +64,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     for (LogWeighting logWeighting : ThreePointCoordinates.list()) {
       Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
-          Biinvariants.METRIC, //
+          null, //
           geodesicDisplay().vectorLogManifold(), //
           variogram(), //
           sequence);
