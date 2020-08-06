@@ -87,8 +87,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
   }
 
-  @Override
-  public Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
+  private Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement) {
     Tensor sX = Subdivide.of(-RANGE, +RANGE, refinement);
     Tensor sY = Subdivide.of(+RANGE, -RANGE, refinement);
     Tensor sA = Drop.tail(Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 6), 1);

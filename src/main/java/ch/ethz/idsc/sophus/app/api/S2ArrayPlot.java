@@ -23,11 +23,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Tensor dx = Subdivide.of(-RADIUS, +RADIUS, resolution);
     Tensor dy = Subdivide.of(+RADIUS, -RADIUS, resolution);
     return Tensor.of(dy.stream().parallel() //
-        .map(vy -> Tensor.of(dx.stream().map(vx -> {
-          Tensor point = Tensors.of(vx, vy); // in R2
-          Scalar z2 = RealScalar.ONE.subtract(Norm2Squared.ofVector(point));
-          return Sign.isPositive(z2) ? function.apply(point.append(Sqrt.FUNCTION.apply(z2))) : fallback;
-        }))));
+        .map(py -> Tensor.of(dx.stream() //
+            .map(px -> Tensors.of(px, py)) // in R2
+            .map(point -> {
+              Scalar z2 = RealScalar.ONE.subtract(Norm2Squared.ofVector(point));
+              return Sign.isPositive(z2) ? function.apply(point.append(Sqrt.FUNCTION.apply(z2))) : fallback;
+            }))));
   }
 
   @Override // from GeodesicArrayPlot

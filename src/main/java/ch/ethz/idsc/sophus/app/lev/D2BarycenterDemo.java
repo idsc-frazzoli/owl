@@ -11,12 +11,12 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.D2BarycentricCoordinates;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public D2BarycenterDemo() {
-    super(true, GeodesicDisplays.R2_H2_S2, Arrays.asList(D2BarycentricCoordinates.values()));
+    super(true, GeodesicDisplays.R2_H2_S2, Arrays.asList(ThreePointCoordinates.values()));
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---

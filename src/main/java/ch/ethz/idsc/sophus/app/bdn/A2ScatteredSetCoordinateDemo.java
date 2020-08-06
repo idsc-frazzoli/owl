@@ -11,11 +11,14 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 
@@ -38,7 +41,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     if (geodesicDisplay.dimensions() < sequence.length()) { // render basis functions
-      Tensor wgs = compute(operator(sequence), refinement());
+      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
+      Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
+      Tensor wgs = geodesicArrayPlot.raster(refinement(), operator(sequence), fallback);
       List<Integer> dims = Dimensions.of(wgs);
       Tensor wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       renderInterface = ArrayPlotRender.rescale(wgp, colorDataGradient(), magnification());

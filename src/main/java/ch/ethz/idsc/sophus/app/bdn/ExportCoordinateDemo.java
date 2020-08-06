@@ -11,12 +11,15 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
+import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
@@ -62,7 +65,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           variogram(), //
           sequence);
       System.out.print("computing " + biinvariant);
-      Tensor wgs = compute(tensorUnaryOperator, REFINEMENT);
+      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
+      Tensor wgs = geodesicArrayPlot.raster(REFINEMENT, tensorUnaryOperator, fallback);
       List<Integer> dims = Dimensions.of(wgs);
       Tensor _wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
       ArrayPlotRender arrayPlotRender = ArrayPlotRender.rescale(_wgp, colorDataGradient(), 1);
@@ -76,6 +81,4 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     System.out.println("all done");
   }
-
-  abstract Tensor compute(TensorUnaryOperator tensorUnaryOperator, int refinement);
 }

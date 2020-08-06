@@ -25,7 +25,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
     Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
     return Tensor.of(dy.stream().parallel() //
-        .map(vy -> Tensor.of(dx.stream().map(px -> Tensors.of(px, vy)).map(function))));
+        .map(py -> Tensor.of(dx.stream() //
+            .map(px -> Tensors.of(px, py)) //
+            .map(function))));
   }
 
   @Override // from GeodesicArrayPlot
