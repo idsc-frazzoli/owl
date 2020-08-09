@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.curve;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.Dual3PointCurveSubdivision;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.BiinvariantMeanDefect;
 import ch.ethz.idsc.sophus.hs.MeanDefect;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
@@ -44,7 +43,6 @@ import ch.ethz.idsc.tensor.sca.Round;
         (Dual3PointCurveSubdivision) BSpline4CurveSubdivision.split2hi(Se2CoveringGeodesic.INSTANCE);
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     Distribution distribution = UniformDistribution.of(-Math.PI / 2, Math.PI / 2);
-    MeanDefect meanDefect = BiinvariantMeanDefect.of(Se2CoveringManifold.HS_EXP);
     int[] wint = new int[3];
     Tensor ert = Array.zeros(3);
     int[] winm = new int[3];
@@ -61,9 +59,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         Tensor m3 = d3.lo(p, q, r);
         // ---
         {
-          Tensor v1 = meanDefect.defect(sequence, weights_lo, m1);
-          Tensor v2 = meanDefect.defect(sequence, weights_lo, m2);
-          Tensor v3 = meanDefect.defect(sequence, weights_lo, m3);
+          Tensor v1 = MeanDefect.tangent(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m1));
+          Tensor v2 = MeanDefect.tangent(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m2));
+          Tensor v3 = MeanDefect.tangent(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m3));
           Tensor err = Tensors.of( //
               Norm._2.ofVector(v1), //
               Norm._2.ofVector(v2), //

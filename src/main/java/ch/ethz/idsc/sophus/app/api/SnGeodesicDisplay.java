@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.sn.SnBiinvariantMean;
+import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.hs.sn.SnLineDistance;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
@@ -23,7 +23,6 @@ import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -77,7 +76,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return SnBiinvariantMean.of(Chop._05); // SnFastMean.INSTANCE;
+    return SnFastMean.INSTANCE; // SnBiinvariantMean.of(Chop._05); // SnFastMean.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
