@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -21,8 +21,8 @@ public class ClothoidCurvatureQuery implements TransitionRegionQuery, Serializab
   @Override // from TransitionRegionQuery
   public boolean isDisjoint(Transition transition) {
     ClothoidTransition clothoidTransition = (ClothoidTransition) transition;
-    HeadTailInterface headTailInterface = clothoidTransition.clothoid().curvature();
-    return clip.isInside(headTailInterface.head()) //
-        && clip.isInside(headTailInterface.tail());
+    LagrangeQuadraticD lagrangeQuadraticD = clothoidTransition.clothoid().curvature();
+    return clip.isInside(lagrangeQuadraticD.head()) //
+        && clip.isInside(lagrangeQuadraticD.tail());
   }
 }

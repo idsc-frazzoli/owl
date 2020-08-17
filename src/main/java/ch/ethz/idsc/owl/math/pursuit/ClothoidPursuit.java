@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -18,21 +18,21 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
 
   /***************************************************/
   /** first and last ratio/curvature in curve */
-  private final HeadTailInterface headTailInterface;
+  private final LagrangeQuadraticD lagrangeQuadraticD;
 
   private ClothoidPursuit(Tensor lookAhead) {
-    headTailInterface = Se2Clothoids.INSTANCE.curve(lookAhead.map(Scalar::zero), lookAhead).curvature();
+    lagrangeQuadraticD = Se2Clothoids.INSTANCE.curve(lookAhead.map(Scalar::zero), lookAhead).curvature();
   }
 
   @Override // from PursuitInterface
   public Optional<Scalar> firstRatio() {
-    return Optional.of(headTailInterface.head());
+    return Optional.of(lagrangeQuadraticD.head());
   }
 
   @Override // from PursuitInterface
   public Tensor ratios() {
     return Tensors.of( // all other ratios/curvatures lay between these two for reasonable inputs
-        headTailInterface.head(), //
-        headTailInterface.tail());
+        lagrangeQuadraticD.head(), //
+        lagrangeQuadraticD.tail());
   }
 }

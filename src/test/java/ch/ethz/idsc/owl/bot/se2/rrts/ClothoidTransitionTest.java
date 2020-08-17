@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,8 +21,8 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = Serialization.copy(ClothoidTransition.of(start, end));
-    HeadTailInterface headTailInterface = clothoidTransition.clothoid().curvature();
-    Scalar head = headTailInterface.head();
+    LagrangeQuadraticD lagrangeQuadraticD = clothoidTransition.clothoid().curvature();
+    Scalar head = lagrangeQuadraticD.head();
     Clips.interval(2.5, 2.6).requireInside(head);
   }
 

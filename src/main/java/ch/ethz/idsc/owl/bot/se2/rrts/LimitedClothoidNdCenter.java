@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
+import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,10 +30,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
   public Scalar ofVector(Tensor p) {
     Clothoid clothoid = clothoid(p);
     Scalar cost = clothoid.length();
-    HeadTailInterface headTailInterface = clothoid.curvature();
+    LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
     try {
-      if (clip.isInside(headTailInterface.head()) && //
-          clip.isInside(headTailInterface.tail()))
+      if (clip.isInside(lagrangeQuadraticD.head()) && //
+          clip.isInside(lagrangeQuadraticD.tail()))
         return cost;
     } catch (Exception exception) {
       // ---
