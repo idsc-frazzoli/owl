@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,7 +24,7 @@ public class HelperHangarMap {
   public final Region<Tensor> region;
 
   public HelperHangarMap(String string, CarEntity gokartEntity) {
-    final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
+    final Scalar scale = RealScalar.of(7.5); // meter_to_pixel
     Tensor tensor = ImageRegions.grayscale(ResourceData.of(string));
     bufferedImage = ImageFormat.of(tensor);
     tensor = ImageEdges.extrusion(tensor, 6); // == 0.73 * 7.5 == 5.475

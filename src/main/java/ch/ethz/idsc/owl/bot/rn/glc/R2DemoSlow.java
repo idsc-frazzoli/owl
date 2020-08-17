@@ -33,7 +33,6 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -65,7 +64,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   private static TrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) throws Exception {
     final Tensor stateRoot = Tensors.vector(-2.2, -2.2);
     final Tensor stateGoal = Tensors.vector(2, 3.5);
-    final Scalar radius = DoubleScalar.of(0.8);
+    final Scalar radius = RealScalar.of(0.8);
     // ---
     Tensor eta = Tensors.vector(1.5, 1.5);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //

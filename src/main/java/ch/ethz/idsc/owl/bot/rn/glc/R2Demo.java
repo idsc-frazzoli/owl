@@ -26,7 +26,6 @@ import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -54,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   private static TrajectoryPlanner simple(PlannerConstraint plannerConstraint) {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
-    final Scalar radius = DoubleScalar.of(0.25);
+    final Scalar radius = RealScalar.of(0.25);
     // ---
     Tensor eta = Tensors.vector(8, 8);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);

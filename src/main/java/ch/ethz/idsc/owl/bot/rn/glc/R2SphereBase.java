@@ -26,7 +26,6 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +35,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 /* package */ class R2SphereBase {
   private final Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(3, 3), Tensors.vector(2, 2));
   private final Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(2.5, 0), Tensors.vector(2, 1.5));
-  private final BallRegion ballRegion = new BallRegion(Tensors.vector(5, 0), DoubleScalar.of(0.5));
+  private final BallRegion ballRegion = new BallRegion(Tensors.vector(5, 0), RealScalar.of(0.5));
   private final TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant( //
       RegionUnion.wrap(Arrays.asList(region1, region2)));
 

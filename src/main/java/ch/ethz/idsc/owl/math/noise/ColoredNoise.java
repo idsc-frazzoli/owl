@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.noise;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariateInterface;
@@ -115,6 +115,6 @@ public class ColoredNoise implements Distribution, RandomVariateInterface {
 
   @Override
   public Scalar randomVariate(Random random) {
-    return DoubleScalar.of(nextValue(random));
+    return RealScalar.of(nextValue(random));
   }
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.EqualizingDistribution;
 import ch.ethz.idsc.tensor.pdf.InverseCDF;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -38,7 +39,7 @@ public class ClothoidTransition extends AbstractTransition {
   public static Tensor linearized(Clothoid clothoid, Scalar minResolution) {
     Sign.requirePositive(minResolution);
     LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
-    if (lagrangeQuadraticD.isZero())
+    if (lagrangeQuadraticD.isZero(Tolerance.CHOP))
       return Tensors.of(clothoid.apply(_0), clothoid.apply(_1));
     int intervals = Ceiling.FUNCTION.apply(clothoid.length().divide(minResolution)).number().intValue();
     Tensor uniform = Subdivide.of(_0, _1, Math.min(Math.max(1, intervals), MAX_INTERVALS));

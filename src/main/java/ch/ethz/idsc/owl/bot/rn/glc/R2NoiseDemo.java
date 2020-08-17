@@ -33,7 +33,6 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -55,7 +54,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Tensor> controls = r2Flows.getFlows(23);
     final Tensor center = Tensors.vector(10, 0);
-    final Scalar radius = DoubleScalar.of(0.2);
+    final Scalar radius = RealScalar.of(0.2);
     BallRegion ballRegion = new BallRegion(center, radius);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         new RnMinDistGoalManager(ballRegion), //

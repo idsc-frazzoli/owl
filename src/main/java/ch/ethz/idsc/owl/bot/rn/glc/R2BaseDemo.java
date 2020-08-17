@@ -30,7 +30,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -48,7 +47,7 @@ abstract class R2BaseDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 8), 4);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Tensor> controls = r2Flows.getFlows(20);
-    BallRegion ballRegion = new BallRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));
+    BallRegion ballRegion = new BallRegion(Tensors.vector(5, 5), RealScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     Region<Tensor> region = region(); //
     PlannerConstraint plannerConstraint = //

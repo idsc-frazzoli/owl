@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import ch.ethz.idsc.owl.math.ImageGradient;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -47,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     Tensor cost = cost_raw;
     // MeanFilter.of(cost_raw, 2);
     // ---
-    Tensor field_copy = ImageGradient.rotated(cost).multiply(DoubleScalar.of(1.0));
+    Tensor field_copy = ImageGradient.rotated(cost).multiply(RealScalar.of(1.0));
     System.out.println("field: " + Dimensions.of(field_copy));
     Tensor dx = field_copy.get(Tensor.ALL, Tensor.ALL, 0);
     Tensor dy = field_copy.get(Tensor.ALL, Tensor.ALL, 1);
