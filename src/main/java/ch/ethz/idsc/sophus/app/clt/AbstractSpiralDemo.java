@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

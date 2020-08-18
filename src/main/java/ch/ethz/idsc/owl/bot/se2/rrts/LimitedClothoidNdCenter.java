@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

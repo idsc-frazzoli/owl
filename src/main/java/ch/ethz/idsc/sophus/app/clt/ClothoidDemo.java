@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,9 +15,9 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.Se2CoveringClothoidBuilder;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       geometricLayer.popMatrix();
     }
     {
-      ScalarTensorFunction curve = Se2Clothoids.INSTANCE.curve(START, mouse);
+      ScalarTensorFunction curve = Se2ClothoidBuilder.INSTANCE.curve(START, mouse);
       Tensor points = DOMAIN.map(curve);
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           .render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
-      Clothoid clothoid = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
+      Clothoid clothoid = Se2CoveringClothoidBuilder.INSTANCE.curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

@@ -1,11 +1,11 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidIntegral;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTangentDefect;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadratic;
+import ch.ethz.idsc.sophus.clt.ClothoidIntegral;
+import ch.ethz.idsc.sophus.clt.ClothoidTangentDefect;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadratic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

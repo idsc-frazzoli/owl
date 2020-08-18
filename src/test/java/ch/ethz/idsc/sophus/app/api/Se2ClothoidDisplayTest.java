@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.sophus.ply.PolygonArea;
@@ -34,6 +34,6 @@ public class Se2ClothoidDisplayTest extends TestCase {
   }
 
   public void testInstance() {
-    assertEquals(Se2ClothoidDisplay.INSTANCE.geodesicInterface(), Se2Clothoids.INSTANCE);
+    assertEquals(Se2ClothoidDisplay.INSTANCE.geodesicInterface(), Se2ClothoidBuilder.INSTANCE);
   }
 }

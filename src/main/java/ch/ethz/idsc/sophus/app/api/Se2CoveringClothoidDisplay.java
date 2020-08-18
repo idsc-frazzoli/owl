@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidInterface;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.Se2CoveringClothoidBuilder;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2CoveringClothoidDisplay extends AbstractClothoidDisplay {
@@ -14,8 +14,8 @@ public final class Se2CoveringClothoidDisplay extends AbstractClothoidDisplay {
   }
 
   @Override // from AbstractClothoidDisplay
-  public ClothoidInterface geodesicInterface() {
-    return Se2CoveringClothoids.INSTANCE;
+  public ClothoidBuilder geodesicInterface() {
+    return Se2CoveringClothoidBuilder.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,9 +21,9 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.CurveVisualSet;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2CoveringClothoids;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.clt.Se2CoveringClothoidBuilder;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     // }
     {
-      Clothoid clothoid = Se2CoveringClothoids.INSTANCE.curve(START, mouse);
+      Clothoid clothoid = Se2CoveringClothoidBuilder.INSTANCE.curve(START, mouse);
       // LagrangeQuadraticD curvature = clothoid.curvature();
       Tensor points = ClothoidTransition.linearized(clothoid, RealScalar.of(0.1));
       // Subdivide.of(0.0, 1.0, 20).map(clothoid);

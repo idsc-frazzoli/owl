@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override
   public Scalar apply(Tensor xya) {
-    Clothoid clothoid = Se2Clothoids.INSTANCE.curve(xya.map(Scalar::zero), xya);
+    Clothoid clothoid = Se2ClothoidBuilder.INSTANCE.curve(xya.map(Scalar::zero), xya);
     LagrangeQuadraticD headTailInterface = clothoid.curvature();
     if (isCompliant.test(headTailInterface.head()) && //
         isCompliant.test(headTailInterface.tail()))

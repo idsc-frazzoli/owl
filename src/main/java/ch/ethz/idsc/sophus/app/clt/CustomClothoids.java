@@ -1,17 +1,17 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadratic;
+import ch.ethz.idsc.sophus.clt.AbstractClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadratic;
 import ch.ethz.idsc.sophus.math.ScalarBinaryOperator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class CustomClothoids extends Clothoids implements Serializable {
+/* package */ class CustomClothoids extends AbstractClothoidBuilder implements Serializable {
   private static final Scalar HALF = RealScalar.of(0.5);
 
   public static CustomClothoids of(Scalar lambda) {

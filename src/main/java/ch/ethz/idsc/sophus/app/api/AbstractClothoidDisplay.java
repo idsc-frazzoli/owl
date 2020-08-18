@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidInterface;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
@@ -26,7 +26,7 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override
-  public abstract ClothoidInterface geodesicInterface();
+  public abstract ClothoidBuilder geodesicInterface();
 
   @Override // from GeodesicDisplay
   public final int dimensions() {

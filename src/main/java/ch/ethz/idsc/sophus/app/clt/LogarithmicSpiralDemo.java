@@ -1,7 +1,7 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clothoid;
+package ch.ethz.idsc.sophus.app.clt;
 
-import ch.ethz.idsc.sophus.crv.clothoid.LogarithmicSpiral;
+import ch.ethz.idsc.sophus.crv.LogarithmicSpiral;
 
 /* package */ class LogarithmicSpiralDemo extends AbstractSpiralDemo {
   public LogarithmicSpiralDemo() {

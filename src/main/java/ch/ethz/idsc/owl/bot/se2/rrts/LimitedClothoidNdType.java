@@ -5,8 +5,8 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.rrts.adapter.NdType;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.Se2Clothoids;
+import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return Se2Clothoids.INSTANCE.curve(other, center);
+        return Se2ClothoidBuilder.INSTANCE.curve(other, center);
       }
     };
   }
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return Se2Clothoids.INSTANCE.curve(center, other);
+        return Se2ClothoidBuilder.INSTANCE.curve(center, other);
       }
     };
   }

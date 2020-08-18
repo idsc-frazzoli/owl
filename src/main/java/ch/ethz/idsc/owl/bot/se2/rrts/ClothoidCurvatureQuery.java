@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.crv.clothoid.LagrangeQuadraticD;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
