@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
     Tensor lbounds = Array.zeros(2).unmodifiable();
     Tensor ubounds = range.unmodifiable();
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     RrtsNodeCollection rrtsNodeCollection = Se2RrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));

@@ -22,7 +22,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.clt.Se2ClothoidDistance;
+import ch.ethz.idsc.sophus.clt.ClothoidDistance;
 import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.sophus.math.Distances;
@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.red.Mean;
         return;
       }
       {
-        Tensor distances = Distances.of(Se2ClothoidDistance.INSTANCE, tensor);
+        Tensor distances = Distances.of(ClothoidDistance.SE2_ANALYTIC, tensor);
         // Distances.of(geodesicDisplay::parametricDistance, control.get(Tensor.ALL, 0));
         if (0 < distances.length()) {
           Tensor scaling = Array.zeros(control.length());

@@ -36,7 +36,7 @@ public class Se2RrtsNodeCollectionsTest extends TestCase {
   }
 
   public void testClothoid() {
-    _check(ClothoidTransitionSpace.INSTANCE);
+    _check(ClothoidTransitionSpace.ANALYTIC);
   }
 
   public void testDubins() {

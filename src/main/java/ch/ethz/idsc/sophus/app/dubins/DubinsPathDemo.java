@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.red.Nest;
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw clothoid
-      ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse);
+      ClothoidTransition clothoidTransition = ClothoidTransition.analytic(START, mouse);
       Tensor tensor = clothoidTransition.linearized(RealScalar.of(0.1));
       pathRenderClothoid.setCurve(tensor, false).render(geometricLayer, graphics);
       // TODO

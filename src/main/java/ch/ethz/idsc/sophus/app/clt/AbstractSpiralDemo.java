@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderInterface.render(geometricLayer, graphics);
     Tensor points = SEPARATORS.map(scalarTensorFunction);
-    POINTS_RENDER.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.03), points) //
+    POINTS_RENDER.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.03), points) //
         .render(geometricLayer, graphics);
   }
 }

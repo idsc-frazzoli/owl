@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.clt;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.clt.ClothoidQuadratic;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadratic;
+import ch.ethz.idsc.sophus.clt.mid.ClothoidQuadratic;
 import ch.ethz.idsc.sophus.math.ScalarBinaryOperator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -35,7 +35,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testGeodesic() {
-    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(ClothoidBuilders.SE2);
+    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(ClothoidBuilders.SE2_ANALYTIC);
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point();
     assertTrue(waypoint.isPresent());

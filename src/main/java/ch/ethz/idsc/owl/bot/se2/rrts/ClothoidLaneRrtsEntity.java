@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             stateTime), //
         CarEntity.createPurePursuitControl(), //
         new LaneRrtsPlannerServer( //
-            ClothoidTransitionSpace.INSTANCE, //
+            ClothoidTransitionSpace.ANALYTIC, //
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL, //

@@ -97,7 +97,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
           .render(geometricLayer, graphics);
     }
     {
-      ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse);
+      ClothoidTransition clothoidTransition = ClothoidTransition.analytic(START, mouse);
       Clothoid clothoid = clothoidTransition.clothoid();
       LagrangeQuadraticD curvature = clothoid.curvature();
       Tensor points = clothoidTransition.linearized(RealScalar.of(geometricLayer.pixel2modelWidth(5)));

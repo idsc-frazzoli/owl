@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static final Scalar OVERHEAD = RealScalar.of(0.5);
   private static final Scalar MIN_RESOLUTION = RealScalar.of(0.1);
   // ---
-  private static final GeodesicDisplay GEODESIC_DISPLAY = Se2ClothoidDisplay.INSTANCE;
+  private static final GeodesicDisplay GEODESIC_DISPLAY = Se2ClothoidDisplay.ANALYTIC;
   private static final int DEGREE = 3;
   private static final int LEVELS = 5;
   private static final Scalar LANE_WIDTH = RealScalar.of(1.1);
@@ -158,7 +158,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       // TreeRender treeRender = new TreeRender();
       // treeRender.setCollection(Nodes.ofSubtree(last.get(0)));
       // treeRender.render(geometricLayer, graphics);
-      TransitionRender transitionRender = new TransitionRender(ClothoidTransitionSpace.INSTANCE);
+      TransitionRender transitionRender = new TransitionRender(ClothoidTransitionSpace.ANALYTIC);
       transitionRender.setCollection(Nodes.ofSubtree(last.get(0)));
       transitionRender.render(geometricLayer, graphics);
       render(first, geometricLayer, graphics, Color.ORANGE);
@@ -174,7 +174,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     while (iterator.hasNext()) {
       RrtsNode start = end;
       end = iterator.next();
-      ClothoidTransitionSpace.INSTANCE.connect(start.state(), end.state()).linearized(MIN_RESOLUTION).forEach(points::append);
+      ClothoidTransitionSpace.ANALYTIC.connect(start.state(), end.state()).linearized(MIN_RESOLUTION).forEach(points::append);
     }
     graphics2D.setColor(color);
     graphics2D.draw(geometricLayer.toPath2D(points));

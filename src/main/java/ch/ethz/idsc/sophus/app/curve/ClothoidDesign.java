@@ -15,6 +15,8 @@ import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -48,12 +50,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     graphics.setColor(Color.BLUE);
     graphics.setStroke(new BasicStroke(2));
     Scalar value = spinnerBeta.getValue();
+    GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
+    ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     for (int index = 0; index < sequence.length() - 2; index += 3) {
       Tensor cr = sequence.get(index + 0);
       Tensor l1 = sequence.get(index + 1);
       Tensor l2 = sequence.get(index + 2);
-      graphics.draw(geometricLayer.toPath2D(ClothoidTransition.of(cr, l1).linearized(value)));
-      graphics.draw(geometricLayer.toPath2D(ClothoidTransition.of(cr, l2).linearized(value)));
+      graphics.draw(geometricLayer.toPath2D(ClothoidTransition.of(clothoidBuilder, cr, l1).linearized(value)));
+      graphics.draw(geometricLayer.toPath2D(ClothoidTransition.of(clothoidBuilder, cr, l2).linearized(value)));
     }
     if (jToggleCtrl.isSelected())
       renderControlPoints(geometricLayer, graphics);

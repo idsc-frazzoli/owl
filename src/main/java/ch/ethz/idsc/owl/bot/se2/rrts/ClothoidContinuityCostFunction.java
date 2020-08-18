@@ -25,8 +25,8 @@ public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
 
   static Scalar transitionCost(Tensor p, Tensor q, Tensor r) {
     return AbsSquared.between( //
-        ClothoidBuilders.SE2.curve(p, q).curvature().tail(), //
-        ClothoidBuilders.SE2.curve(q, r).curvature().head());
+        ClothoidBuilders.SE2_ANALYTIC.curve(p, q).curvature().tail(), //
+        ClothoidBuilders.SE2_ANALYTIC.curve(q, r).curvature().head());
   }
 
   @Override // from TransitionCostFunction

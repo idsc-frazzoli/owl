@@ -65,6 +65,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   public static void main(String[] args) throws Exception {
     animate(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH));
-    animate(ClothoidTransitionSpace.INSTANCE);
+    animate(ClothoidTransitionSpace.ANALYTIC);
   }
 }

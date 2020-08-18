@@ -133,7 +133,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         ubounds.copy().append(Pi.VALUE));
     // ---
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
-        ClothoidTransitionSpace.INSTANCE, //
+        ClothoidTransitionSpace.ANALYTIC, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE, //

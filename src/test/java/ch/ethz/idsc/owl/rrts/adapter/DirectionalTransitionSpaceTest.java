@@ -29,7 +29,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   private static void _checkLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
-    Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)) //
+    Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.ANALYTIC)) //
         .connect(start, end);
     Chop._03.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
     assertEquals(start, transition.start());
@@ -44,7 +44,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   private static void _checkSamples(Tensor start, Tensor end) {
-    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.ANALYTIC) //
         .connect(start, end);
     {
       Scalar res = Quantity.of(0.5, "m");
@@ -71,7 +71,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap(Tensor start, Tensor end) {
-    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.ANALYTIC) //
         .connect(start, end);
     {
       Scalar res = Quantity.of(0.5, "m");

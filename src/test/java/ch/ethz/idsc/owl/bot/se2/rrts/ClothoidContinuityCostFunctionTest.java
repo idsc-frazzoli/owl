@@ -20,7 +20,7 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
     RrtsNode root = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ONE);
     Tensor connect = Tensors.vector(10, 3, 2);
     RrtsNode next = root.connectTo(connect, RealScalar.of(2));
-    Transition transition = ClothoidTransitionSpace.INSTANCE.connect(connect, Tensors.vector(20, 5, 4));
+    Transition transition = ClothoidTransitionSpace.ANALYTIC.connect(connect, Tensors.vector(20, 5, 4));
     Scalar scalar = ClothoidContinuityCostFunction.INSTANCE.cost(next, transition);
     Chop._01.requireClose(scalar, RealScalar.of(0.8087544412507175));
   }
@@ -29,7 +29,7 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
     RrtsNode root = RrtsNode.createRoot(Tensors.vector(1, 2, 0), RealScalar.ONE);
     Tensor connect = Tensors.vector(10, 2, 0);
     RrtsNode next = root.connectTo(connect, RealScalar.of(2));
-    Transition transition = ClothoidTransitionSpace.INSTANCE.connect(connect, Tensors.vector(20, 2, 0));
+    Transition transition = ClothoidTransitionSpace.ANALYTIC.connect(connect, Tensors.vector(20, 2, 0));
     Scalar scalar = ClothoidContinuityCostFunction.INSTANCE.cost(next, transition);
     Chop._12.requireClose(scalar, RealScalar.of(0));
   }
@@ -51,7 +51,7 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
   }
 
   public void testSingle() {
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     Rrts rrts = new DefaultRrts( //
         transitionSpace, //
         Se2RrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
@@ -62,7 +62,7 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
   }
 
   public void testMultiple() {
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     Rrts rrts = new DefaultRrts( //
         transitionSpace, //
         Se2RrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //

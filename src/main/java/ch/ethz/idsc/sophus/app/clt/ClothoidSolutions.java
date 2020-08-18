@@ -58,7 +58,7 @@ public class ClothoidSolutions {
         Scalar b0 = s1.add(s2);
         Scalar b1 = s1.subtract(s2);
         LagrangeQuadratic lagrangeQuadratic = CustomClothoidQuadratic.of(lambda).lagrangeQuadratic(b0, b1);
-        ClothoidIntegral clothoidIntegral = AnalyticClothoidIntegral.interp(lagrangeQuadratic);
+        ClothoidIntegral clothoidIntegral = AnalyticClothoidIntegral.of(lagrangeQuadratic);
         Scalar length = Abs.of(clothoidIntegral.one()).reciprocal();
         lengths.append(length);
       }

@@ -35,7 +35,8 @@ import ch.ethz.idsc.tensor.io.Serialization;
 
   public LaneConsumptionDemo(Collection<Consumer<LaneInterface>> consumers) {
     super(Arrays.asList( //
-        Se2ClothoidDisplay.INSTANCE, //
+        Se2ClothoidDisplay.ANALYTIC, //
+        Se2ClothoidDisplay.LEGENDRE, //
         Se2CoveringGeodesicDisplay.INSTANCE, //
         Se2GeodesicDisplay.INSTANCE));
     jToggleCurvature.setSelected(false);

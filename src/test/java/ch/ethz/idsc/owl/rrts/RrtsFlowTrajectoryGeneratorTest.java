@@ -127,7 +127,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   }
 
   public void testClothoid() {
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     Rrts rrts = new DefaultRrts( //
         transitionSpace, //
         Se2RrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
@@ -149,7 +149,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, //
         CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
-        generator.createTrajectory(ClothoidTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 16));
+        generator.createTrajectory(ClothoidTransitionSpace.ANALYTIC, sequence, RealScalar.ZERO, RationalScalar.of(1, 16));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
     assertEquals(44, trajectory.size());
     for (int i = 1; i < 33; i++) {
@@ -180,7 +180,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDirectionalClothoid() {
     Rrts rrts = new DefaultRrts( //
-        DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
+        DirectionalTransitionSpace.of(ClothoidTransitionSpace.ANALYTIC), //
         // no specific collection for directional clothoid
         new RnRrtsNodeCollection(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 0)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
@@ -201,7 +201,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, //
         CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
-        generator.createTrajectory(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), sequence, RealScalar.ZERO, RationalScalar.of(1, 16));
+        generator.createTrajectory(DirectionalTransitionSpace.of(ClothoidTransitionSpace.ANALYTIC), sequence, RealScalar.ZERO, RationalScalar.of(1, 16));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
     assertEquals(54, trajectory.size());
     for (int i = 1; i < 17; i++) {

@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
             stateTime), //
         CarEntity.createPurePursuitControl(), //
         new DefaultRrtsPlannerServer( //
-            ClothoidTransitionSpace.INSTANCE, //
+            ClothoidTransitionSpace.ANALYTIC, //
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL, //

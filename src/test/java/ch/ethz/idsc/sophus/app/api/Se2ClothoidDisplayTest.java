@@ -21,7 +21,7 @@ public class Se2ClothoidDisplayTest extends TestCase {
     // 4 2.564420707620397
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor q = Tensors.vector(0, 2, 0);
-    Scalar scalar = Se2ClothoidDisplay.INSTANCE.parametricDistance().distance(p, q);
+    Scalar scalar = Se2ClothoidDisplay.ANALYTIC.parametricDistance().distance(p, q);
     Clips.interval(2.542, 2.55).requireInside(scalar);
     Scalar result = Se2Parametric.INSTANCE.distance(p, q);
     assertEquals(result, RealScalar.of(2));
@@ -29,11 +29,11 @@ public class Se2ClothoidDisplayTest extends TestCase {
 
   public void testShapeArea() {
     Scalar a1 = PolygonArea.FUNCTION.apply(Arrowhead.of(0.4));
-    Scalar a2 = PolygonArea.FUNCTION.apply(Se2ClothoidDisplay.INSTANCE.shape());
+    Scalar a2 = PolygonArea.FUNCTION.apply(Se2ClothoidDisplay.ANALYTIC.shape());
     Tolerance.CHOP.requireClose(a1, a2);
   }
 
   public void testInstance() {
-    assertEquals(Se2ClothoidDisplay.INSTANCE.geodesicInterface(), ClothoidBuilders.SE2);
+    assertEquals(Se2ClothoidDisplay.ANALYTIC.geodesicInterface(), ClothoidBuilders.SE2_ANALYTIC);
   }
 }

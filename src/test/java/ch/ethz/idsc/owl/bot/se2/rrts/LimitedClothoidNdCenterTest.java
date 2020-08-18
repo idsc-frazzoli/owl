@@ -17,7 +17,7 @@ public class LimitedClothoidNdCenterTest extends TestCase {
         new LimitedClothoidNdCenter(center, Clips.absolute(1)) {
           @Override
           protected Clothoid clothoid(Tensor other) {
-            return ClothoidBuilders.SE2.curve(other, center);
+            return ClothoidBuilders.SE2_ANALYTIC.curve(other, center);
           }
         };
     Scalar scalar = limitedClothoidNdCenter.ofVector(Tensors.vector(0, 1, 0));

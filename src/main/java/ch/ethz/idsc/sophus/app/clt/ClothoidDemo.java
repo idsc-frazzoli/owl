@@ -59,19 +59,19 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       geometricLayer.popMatrix();
     }
     {
-      ScalarTensorFunction curve = ClothoidBuilders.SE2.curve(START, mouse);
+      ScalarTensorFunction curve = ClothoidBuilders.SE2_ANALYTIC.curve(START, mouse);
       Tensor points = DOMAIN.map(curve);
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_C.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_C.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
-      Clothoid clothoid = ClothoidBuilders.SE2_COVERING.curve(START, mouse);
+      Clothoid clothoid = ClothoidBuilders.SE2_LEGENDRE.curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_P.show(Se2ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
+      POINTS_RENDER_P.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
           .render(geometricLayer, graphics);
       {
         // Scalar addAngle = clothoid.addAngle(RealScalar.ZERO);

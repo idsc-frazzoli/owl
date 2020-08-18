@@ -2,14 +2,24 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** start and end points are from SE(2) */
 public enum ClothoidTransitionSpace implements TransitionSpace {
-  INSTANCE;
+  ANALYTIC(ClothoidBuilders.SE2_ANALYTIC), //
+  LEGENDRE(ClothoidBuilders.SE2_LEGENDRE), //
+  ;
+
+  private final ClothoidBuilder clothoidBuilder;
+
+  private ClothoidTransitionSpace(ClothoidBuilder clothoidBuilder) {
+    this.clothoidBuilder = clothoidBuilder;
+  }
 
   @Override // from TransitionSpace
   public ClothoidTransition connect(Tensor start, Tensor end) {
-    return ClothoidTransition.of(start, end);
+    return ClothoidTransition.of(clothoidBuilder, start, end);
   }
 }

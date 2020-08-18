@@ -7,15 +7,20 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
-  public static final GeodesicDisplay INSTANCE = new Se2ClothoidDisplay();
+  public static final GeodesicDisplay ANALYTIC = new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC, "ClA");
+  public static final GeodesicDisplay LEGENDRE = new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE, "ClL");
+  // ---
+  private final ClothoidBuilder clothoidBuilder;
+  private final String string;
 
-  private Se2ClothoidDisplay() {
-    // ---
+  private Se2ClothoidDisplay(ClothoidBuilder clothoidBuilder, String string) {
+    this.clothoidBuilder = clothoidBuilder;
+    this.string = string;
   }
 
   @Override // from AbstractClothoidDisplay
   public ClothoidBuilder geodesicInterface() {
-    return ClothoidBuilders.SE2;
+    return clothoidBuilder;
   }
 
   @Override // from GeodesicDisplay
@@ -27,6 +32,6 @@ public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
 
   @Override // from Object
   public String toString() {
-    return "Cl";
+    return string;
   }
 }

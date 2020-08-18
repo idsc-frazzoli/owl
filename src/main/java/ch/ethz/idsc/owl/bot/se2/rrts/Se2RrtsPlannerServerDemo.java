@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     Tensor ubounds = range.unmodifiable();
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     // ---
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         lbounds.copy().append(Pi.VALUE.negate()), //

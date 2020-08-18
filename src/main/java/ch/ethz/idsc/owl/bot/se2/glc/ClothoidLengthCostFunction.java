@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
-import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,10 +22,8 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override
   public Scalar apply(Tensor xya) {
-    Clothoid clothoid = ClothoidBuilders.SE2.curve(xya.map(Scalar::zero), xya);
-    LagrangeQuadraticD headTailInterface = clothoid.curvature();
-    if (isCompliant.test(headTailInterface.head()) && //
-        isCompliant.test(headTailInterface.tail()))
+    Clothoid clothoid = ClothoidBuilders.SE2_ANALYTIC.curve(xya.map(Scalar::zero), xya);
+    if (isCompliant.test(clothoid.curvature().absMax()))
       return clothoid.length();
     // TODO GJOEL filter out via collision check, units
     if (xya.Get(0) instanceof Quantity)

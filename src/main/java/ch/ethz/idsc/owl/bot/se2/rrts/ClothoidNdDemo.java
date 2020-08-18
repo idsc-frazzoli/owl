@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -35,14 +36,14 @@ public class ClothoidNdDemo extends ControlPointsDemo {
   private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
   // ---
   private final RrtsNodeCollection rrtsNodeCollection1 = //
-      Se2RrtsNodeCollections.of(ClothoidTransitionSpace.INSTANCE, LBOUNDS, UBOUNDS);
+      Se2RrtsNodeCollections.of(ClothoidTransitionSpace.ANALYTIC, LBOUNDS, UBOUNDS);
   private final RrtsNodeCollection rrtsNodeCollection2 = //
       ClothoidRrtsNodeCollections.of(RealScalar.ONE, LBOUNDS, UBOUNDS);
   private final JToggleButton jToggleButton = new JToggleButton("limit");
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
 
   public ClothoidNdDemo() {
-    super(false, GeodesicDisplays.SE2_ONLY);
+    super(false, GeodesicDisplays.CL_ONLY);
     // ---
     jToggleButton.setToolTipText("use limited curvature query");
     timerFrame.jToolBar.add(jToggleButton);
@@ -100,17 +101,18 @@ public class ClothoidNdDemo extends ControlPointsDemo {
         : rrtsNodeCollection1;
     int value = spinnerValue.getValue();
     graphics.setColor(new Color(255, 0, 0, 128));
+    ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicDisplay.geodesicInterface();
     Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(10));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
       Tensor other = rrtsNode.state();
-      Transition transition = ClothoidTransition.of(other, mouse);
+      Transition transition = ClothoidTransition.of(clothoidBuilder, other, mouse);
       graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
     }
     // ---
     graphics.setColor(new Color(0, 255, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(mouse, value)) {
       Tensor other = rrtsNode.state();
-      Transition transition = ClothoidTransition.of(mouse, other);
+      Transition transition = ClothoidTransition.of(clothoidBuilder, mouse, other);
       graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
     }
   }

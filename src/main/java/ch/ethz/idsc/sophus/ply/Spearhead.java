@@ -22,7 +22,7 @@ public enum Spearhead {
   public static Tensor of(Tensor p, Scalar width) {
     Tensor[] cp = { p, TIP, p.pmul(REF) };
     return Tensor.of(IntStream.range(0, 3) //
-        .mapToObj(index -> ClothoidTransition.of(cp[index], flip(cp[(index + 1) % 3])).linearized(width)) //
+        .mapToObj(index -> ClothoidTransition.analytic(cp[index], flip(cp[(index + 1) % 3])).linearized(width)) //
         .flatMap(Tensor::stream) //
         .map(Extract2D.FUNCTION));
   }

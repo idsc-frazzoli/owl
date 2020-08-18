@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 
 /* package */ enum Se2TransitionNdType {
   /** clothoid curves */
-  CLOTHOID(ClothoidTransitionSpace.INSTANCE), //
+  CLOTHOID(ClothoidTransitionSpace.ANALYTIC), //
   /** dubins paths */
   DUBINS(DubinsTransitionSpace.of(RealScalar.of(0.4), DubinsPathComparator.LENGTH)), //
   /** straight lines in R^2 that results from ignoring heading */

@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
     int index = 0;
     for (Tensor _lambda : lambdas()) {
       Scalar lambda = (Scalar) _lambda;
-      Clothoid clothoid = CustomClothoids.of(lambda, clothoidContext.p, clothoidContext.q);
+      Clothoid clothoid = CustomClothoids.of(lambda, clothoidContext.p(), clothoidContext.q());
       {
         Scalar length = clothoid.length().divide(DENOM);
         graphics.setColor(new Color(0, 128, 0));

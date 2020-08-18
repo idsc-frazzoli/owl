@@ -139,19 +139,19 @@ import ch.ethz.idsc.tensor.sca.Round;
         { 0, -30, 200 }, //
         { 0, 0, 1 } }));
     for (Tensor _lambda : clothoidDefectContainer.lambdas()) {
-      Clothoid clothoid = CustomClothoids.of((Scalar) _lambda, clothoidContext.p, clothoidContext.q);
+      Clothoid clothoid = CustomClothoids.of((Scalar) _lambda, clothoidContext.p(), clothoidContext.q());
       Tensor points = ClothoidSampler.of(clothoid);
       new PathRender(new Color(64, 255, 64, 64)).setCurve(points, false).render(geometricLayer, graphics);
     }
     try {
-      Tensor points = ClothoidSampler.of(CustomClothoids.of(lambda, clothoidContext.p, clothoidContext.q));
+      Tensor points = ClothoidSampler.of(CustomClothoids.of(lambda, clothoidContext.p(), clothoidContext.q()));
       PATH_RENDER.setCurve(points, false).render(geometricLayer, graphics);
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("===");
       System.out.println(lambda);
-      System.out.println(clothoidContext.p);
-      System.out.println(clothoidContext.q);
+      System.out.println(clothoidContext.p());
+      System.out.println(clothoidContext.q());
     }
     // ---
     renderControlPoints(geometricLayer, graphics);

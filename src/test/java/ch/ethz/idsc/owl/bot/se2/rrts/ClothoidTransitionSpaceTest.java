@@ -23,7 +23,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Tensor start = Tensors.fromString("{1[m], 1[m], 0}");
     Tensor end = Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF);
-    Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect(start, end);
+    Transition transition = Serialization.copy(ClothoidTransitionSpace.ANALYTIC).connect(start, end);
     Chop._04.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
     assertEquals(start, transition.start());
     assertEquals(end, transition.end());
@@ -32,7 +32,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
   public void testSamples() {
     Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
-    Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
+    Transition transition = ClothoidTransitionSpace.ANALYTIC.connect(start, end);
     {
       Scalar res = Quantity.of(0.5, "m");
       Tensor samples = transition.sampled(res);
@@ -53,7 +53,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
   public void testWrap() {
     Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
-    Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
+    Transition transition = ClothoidTransitionSpace.ANALYTIC.connect(start, end);
     {
       Scalar res = Quantity.of(0.5, "m");
       TransitionWrap wrap = transition.wrapped(res);

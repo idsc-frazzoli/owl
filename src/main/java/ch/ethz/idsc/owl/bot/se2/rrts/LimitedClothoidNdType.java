@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return ClothoidBuilders.SE2.curve(other, center);
+        return ClothoidBuilders.SE2_ANALYTIC.curve(other, center);
       }
     };
   }
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return ClothoidBuilders.SE2.curve(center, other);
+        return ClothoidBuilders.SE2_ANALYTIC.curve(center, other);
       }
     };
   }
