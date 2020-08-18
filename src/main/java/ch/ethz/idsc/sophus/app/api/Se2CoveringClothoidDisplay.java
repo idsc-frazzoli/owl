@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
-import ch.ethz.idsc.sophus.clt.Se2CoveringClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2CoveringClothoidDisplay extends AbstractClothoidDisplay {
@@ -15,7 +15,7 @@ public final class Se2CoveringClothoidDisplay extends AbstractClothoidDisplay {
 
   @Override // from AbstractClothoidDisplay
   public ClothoidBuilder geodesicInterface() {
-    return Se2CoveringClothoidBuilder.INSTANCE;
+    return ClothoidBuilders.SE2_COVERING;
   }
 
   @Override // from GeodesicDisplay

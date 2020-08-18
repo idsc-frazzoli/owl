@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
-import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -21,7 +21,7 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
   private final LagrangeQuadraticD lagrangeQuadraticD;
 
   private ClothoidPursuit(Tensor lookAhead) {
-    lagrangeQuadraticD = Se2ClothoidBuilder.INSTANCE.curve(lookAhead.map(Scalar::zero), lookAhead).curvature();
+    lagrangeQuadraticD = ClothoidBuilders.SE2.curve(lookAhead.map(Scalar::zero), lookAhead).curvature();
   }
 
   @Override // from PursuitInterface

@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
-import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,7 +30,7 @@ public class ClothoidTransition extends AbstractTransition {
    * @param end of the form {qx, qy, q_angle}
    * @return */
   public static ClothoidTransition of(Tensor start, Tensor end) {
-    return new ClothoidTransition(start, end, Se2ClothoidBuilder.INSTANCE.curve(start, end));
+    return new ClothoidTransition(start, end, ClothoidBuilders.SE2.curve(start, end));
   }
 
   /** @param clothoid

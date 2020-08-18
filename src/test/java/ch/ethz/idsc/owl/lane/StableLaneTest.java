@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.lane;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.clt.Se2ClothoidBuilder;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -18,7 +18,7 @@ public class StableLaneTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     LaneInterface laneInterface = Serialization.copy(StableLanes.of( //
         Tensors.fromString("{{0[m], 1[m], 2}, {2[m], 0[m], 4}, {-1[m],-3[m], -2}}"), //
-        LaneRiesenfeldCurveSubdivision.of(Se2ClothoidBuilder.INSTANCE, 1)::cyclic, 3, Quantity.of(1, "m")));
+        LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2, 1)::cyclic, 3, Quantity.of(1, "m")));
     assertEquals(laneInterface.controlPoints().length(), 3);
     MatrixQ.require(laneInterface.midLane());
     MatrixQ.require(laneInterface.leftBoundary());
@@ -29,7 +29,7 @@ public class StableLaneTest extends TestCase {
   public void testStraight() throws ClassNotFoundException, IOException {
     LaneInterface laneInterface = Serialization.copy(StableLanes.of( //
         Tensors.fromString("{{0[m], 0[m], 0}, {2[m], 0[m], 0}}"), //
-        LaneRiesenfeldCurveSubdivision.of(Se2ClothoidBuilder.INSTANCE, 1)::string, 3, Quantity.of(0.5, "m")));
+        LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2, 1)::string, 3, Quantity.of(0.5, "m")));
     assertEquals(laneInterface.margins().get(0), Quantity.of(0.5, "m"));
     {
       Tensor leftBoundary = MatrixQ.require(laneInterface.leftBoundary());

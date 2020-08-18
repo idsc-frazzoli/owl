@@ -3,9 +3,10 @@ package ch.ethz.idsc.sophus.app.clt;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.clt.ClothoidIntegral;
 import ch.ethz.idsc.sophus.clt.ClothoidTangentDefect;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadratic;
+import ch.ethz.idsc.sophus.clt.par.AnalyticClothoidIntegral;
+import ch.ethz.idsc.sophus.clt.par.ClothoidIntegral;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -56,8 +57,8 @@ public class ClothoidSolutions {
         lambdas.append(lambda);
         Scalar b0 = s1.add(s2);
         Scalar b1 = s1.subtract(s2);
-        LagrangeQuadratic lagrangeQuadratic = CustomClothoids.of(lambda).lagrangeQuadratic(b0, b1);
-        ClothoidIntegral clothoidIntegral = ClothoidIntegral.interp(lagrangeQuadratic);
+        LagrangeQuadratic lagrangeQuadratic = CustomClothoidQuadratic.of(lambda).lagrangeQuadratic(b0, b1);
+        ClothoidIntegral clothoidIntegral = AnalyticClothoidIntegral.interp(lagrangeQuadratic);
         Scalar length = Abs.of(clothoidIntegral.one()).reciprocal();
         lengths.append(length);
       }
