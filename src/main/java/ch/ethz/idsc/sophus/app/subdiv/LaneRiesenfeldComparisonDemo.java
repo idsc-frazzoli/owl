@@ -17,7 +17,6 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.CurveVisualSet;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -150,7 +149,6 @@ import ch.ethz.idsc.tensor.red.Quantile;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new LaneRiesenfeldComparisonDemo();
-    abstractDemo.setVisible(1200, 800);
+    new LaneRiesenfeldComparisonDemo().setVisible(1200, 800);
   }
 }

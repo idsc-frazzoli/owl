@@ -8,7 +8,8 @@ import junit.framework.TestCase;
 
 public class Se2TransitionNdTypeTest extends TestCase {
   public void testSimple() {
-    assertEquals(Se2TransitionNdType.fromString(Se2ClothoidDisplay.ANALYTIC.toString()), Se2TransitionNdType.CLOTHOID);
+    assertEquals(Se2TransitionNdType.fromString(Se2ClothoidDisplay.ANALYTIC.toString()), Se2TransitionNdType.CLOTHOID_ANALYTIC);
+    assertEquals(Se2TransitionNdType.fromString(Se2ClothoidDisplay.LEGENDRE.toString()), Se2TransitionNdType.CLOTHOID_LEGENDRE);
     assertEquals(Se2TransitionNdType.fromString(Se2GeodesicDisplay.INSTANCE.toString()), Se2TransitionNdType.DUBINS);
     assertEquals(Se2TransitionNdType.fromString(R2GeodesicDisplay.INSTANCE.toString()), Se2TransitionNdType.R2);
   }

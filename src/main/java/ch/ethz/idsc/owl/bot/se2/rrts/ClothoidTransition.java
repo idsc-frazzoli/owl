@@ -5,7 +5,6 @@ import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
-import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -27,16 +26,13 @@ public class ClothoidTransition extends AbstractTransition {
   private static final Scalar _1 = RealScalar.of(1.0);
   private static final int MAX_INTERVALS = 511;
 
-  public static ClothoidTransition of(ClothoidBuilder clothoidBuilder, Tensor start, Tensor end) {
-    return new ClothoidTransition(start, end, clothoidBuilder.curve(start, end));
-  }
-
-  /** @param start of the form {px, py, p_angle}
+  /** @param clothoidBuilder
+   * @param start of the form {px, py, p_angle}
    * @param end of the form {qx, qy, q_angle}
    * @return */
-  @Deprecated
-  public static ClothoidTransition analytic(Tensor start, Tensor end) {
-    return of(ClothoidBuilders.SE2_ANALYTIC, start, end);
+  public static ClothoidTransition of(ClothoidBuilder clothoidBuilder, Tensor start, Tensor end) {
+    Clothoid clothoid = clothoidBuilder.curve(start, end);
+    return new ClothoidTransition(start, end, clothoid);
   }
 
   /** @param clothoid

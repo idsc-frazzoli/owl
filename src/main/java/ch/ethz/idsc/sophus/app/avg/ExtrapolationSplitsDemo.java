@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.avg;
 
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
@@ -20,7 +19,6 @@ public class ExtrapolationSplitsDemo extends KernelSplitsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ExtrapolationSplitsDemo();
-    abstractDemo.setVisible(1000, 600);
+    new ExtrapolationSplitsDemo().setVisible(1000, 600);
   }
 }

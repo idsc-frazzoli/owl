@@ -5,7 +5,6 @@ import java.awt.Dimension;
 
 import javax.swing.JSlider;
 
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.BezierFunction;
@@ -39,7 +38,6 @@ public class BezierFunctionSplitsDemo extends GeodesicSplitsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new BezierFunctionSplitsDemo();
-    abstractDemo.setVisible(1000, 600);
+    new BezierFunctionSplitsDemo().setVisible(1000, 600);
   }
 }

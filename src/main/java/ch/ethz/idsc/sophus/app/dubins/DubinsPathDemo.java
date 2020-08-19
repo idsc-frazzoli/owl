@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
@@ -79,7 +80,8 @@ import ch.ethz.idsc.tensor.red.Nest;
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw clothoid
-      ClothoidTransition clothoidTransition = ClothoidTransition.analytic(START, mouse);
+      ClothoidTransition clothoidTransition = //
+          ClothoidTransition.of(ClothoidBuilders.SE2_ANALYTIC, START, mouse);
       Tensor tensor = clothoidTransition.linearized(RealScalar.of(0.1));
       pathRenderClothoid.setCurve(tensor, false).render(geometricLayer, graphics);
       // TODO

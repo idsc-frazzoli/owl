@@ -24,10 +24,8 @@ public enum GeodesicDisplays {
       He1GeodesicDisplay.INSTANCE, //
       St1GeodesicDisplay.INSTANCE);
   // ---
+  /** requires biinvariant mean */
   public static final List<GeodesicDisplay> METRIC = Arrays.asList( //
-      Se2ClothoidDisplay.ANALYTIC, //
-      Se2ClothoidDisplay.LEGENDRE, //
-      Se2CoveringClothoidDisplay.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       Spd2GeodesicDisplay.INSTANCE, //
