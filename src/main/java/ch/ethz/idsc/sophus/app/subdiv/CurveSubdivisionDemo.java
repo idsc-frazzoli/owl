@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** split interface and biinvariant mean based curve subdivision */
-public class CurveSubdivisionDemo extends CurvatureDemo {
+/* package */ class CurveSubdivisionDemo extends CurvatureDemo {
   private final PathRender pathRender = new PathRender(new Color(0, 255, 0, 128));
   final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

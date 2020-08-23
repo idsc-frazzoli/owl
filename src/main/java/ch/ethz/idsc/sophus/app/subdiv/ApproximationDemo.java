@@ -37,22 +37,21 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 /* package */ class ApproximationDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
+  private static final Scalar MARKER_SCALE = RealScalar.of(0.1);
   private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
   private static final List<CurveSubdivisionSchemes> SCHEMES = Arrays.asList( //
       CurveSubdivisionSchemes.BSPLINE1, //
       CurveSubdivisionSchemes.BSPLINE2, //
       CurveSubdivisionSchemes.BSPLINE3, //
-      CurveSubdivisionSchemes.BSPLINE4_S2LO
-  // , //
-  // CurveSubdivisionSchemes.FOURPOINT, //
-  // CurveSubdivisionSchemes.SIXPOINT
-  );
+      CurveSubdivisionSchemes.BSPLINE4_S2LO, //
+      CurveSubdivisionSchemes.FOURPOINT, //
+      CurveSubdivisionSchemes.SIXPOINT);
 
   private static class Container {
-    final GeodesicDisplay geodesicDisplay;
-    final Tensor tracked;
-    final Tensor control;
-    final Tensor refined;
+    private final GeodesicDisplay geodesicDisplay;
+    private final Tensor tracked;
+    private final Tensor control;
+    private final Tensor refined;
 
     public Container(GeodesicDisplay geodesicDisplay, Tensor tracked, Tensor control, Tensor refined) {
       this.geodesicDisplay = geodesicDisplay;
@@ -71,6 +70,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
   private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
+  // ---
   private Container _container = null;
 
   public ApproximationDemo(GokartPoseData gokartPoseData) {
@@ -113,7 +113,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     updateState();
   }
 
-  void updateState() {
+  private void updateState() {
     Tensor rawdata = gokartPoseData.getPose(spinnerLabelString.getValue(), spinnerLabelLimit.getValue());
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay.geodesicInterface(), GaussianWindow.FUNCTION);
@@ -145,7 +145,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     {
       Tensor control = container.control;
       int level = spinnerLabelLevel.getIndex();
-      final Tensor shape = geodesicDisplay.shape().multiply(markerScale().multiply(RealScalar.of(1 + level)));
+      final Tensor shape = geodesicDisplay.shape().multiply(MARKER_SCALE.multiply(RealScalar.of(1 + level)));
       for (Tensor point : control) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
@@ -159,7 +159,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     }
     {
       Tensor refined = container.refined;
-      final Tensor shape = geodesicDisplay.shape().multiply(markerScale().multiply(RealScalar.of(0.5)));
+      final Tensor shape = geodesicDisplay.shape().multiply(MARKER_SCALE.multiply(RealScalar.of(0.5)));
       pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
       for (Tensor point : refined) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
@@ -173,10 +173,6 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
       }
     }
     RenderQuality.setDefault(graphics);
-  }
-
-  public Scalar markerScale() {
-    return RealScalar.of(0.1);
   }
 
   public static void main(String[] args) {

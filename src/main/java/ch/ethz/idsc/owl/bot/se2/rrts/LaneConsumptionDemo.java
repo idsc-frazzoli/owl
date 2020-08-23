@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.owl.lane.StableLanes;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2CoveringClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.curve.BaseCurvatureDemo;
@@ -37,18 +38,18 @@ import ch.ethz.idsc.tensor.io.Serialization;
     super(Arrays.asList( //
         Se2ClothoidDisplay.ANALYTIC, //
         Se2ClothoidDisplay.LEGENDRE, //
+        Se2CoveringClothoidDisplay.INSTANCE, //
         Se2CoveringGeodesicDisplay.INSTANCE, //
         Se2GeodesicDisplay.INSTANCE));
     jToggleCurvature.setSelected(false);
-    {
-      timerFrame.jToolBar.addSeparator();
-      JButton jButtonRun = new JButton("run");
-      jButtonRun.addActionListener(l -> {
-        if (Objects.nonNull(lane))
-          consumers.forEach(consumer -> consumer.accept(lane));
-      });
-      timerFrame.jToolBar.add(jButtonRun);
-    }
+    // ---
+    timerFrame.jToolBar.addSeparator();
+    JButton jButtonRun = new JButton("run");
+    jButtonRun.addActionListener(l -> {
+      if (Objects.nonNull(lane))
+        consumers.forEach(consumer -> consumer.accept(lane));
+    });
+    timerFrame.jToolBar.add(jButtonRun);
   }
 
   @Override
@@ -60,7 +61,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
         levels, width().multiply(RationalScalar.HALF));
     try {
       this.lane = Serialization.copy(lane);
-    } catch (Exception e) {
+    } catch (Exception exception) {
       // ---
     }
     laneRender.setLane(lane, false);

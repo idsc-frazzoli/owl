@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class GeodesicDemo extends AbstractDemo implements DemoInterface {
+/* package */ class GeodesicDemo extends AbstractDemo implements DemoInterface {
   private static final Color COLOR = new Color(128, 128, 128, 128);
   private static final int SPLITS = 20;
   // ---

@@ -19,10 +19,12 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /** class is used in other projects outside of owl */
 public abstract class CurvatureDemo extends ControlPointsDemo {
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   // ---
@@ -56,36 +58,12 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
     }
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-    if (jToggleCurvature.isSelected() && 1 < refined.length()) {
+    if (jToggleCurvature.isSelected() && //
+        1 < refined.length()) {
       Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-      VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
+      VisualSet visualSet = new VisualSet(COLOR_DATA_INDEXED);
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature(visualSet);
-      // if (2 < refined.get(0).length())
-      // curveVisualSet.addArcTan(refined);
-      // VisualSet visualSet = curveVisualSet.visualSet();
-      {
-        // {
-        // Tensor domain = Range.of(0, phase.length());
-        // VisualRow visualRow = visualSet.add(domain, phase);
-        // visualRow.setLabel("phase diff");
-        // visualRow.setStroke(PLOT_STROKE);
-        // }
-        // {
-        // Tensor domain = Range.of(0, dpntlnXY.length());
-        // VisualRow visualRow = visualSet.add(domain, dpntlnXY);
-        // visualRow.setLabel("arclen");
-        // visualRow.setStroke(PLOT_STROKE);
-        // }
-        // {
-        // Tensor div = phase.pmul(dpntlnXY.map(InvertUnlessZero.FUNCTION));
-        // Tensor domain = Range.of(0, div.length());
-        // Tensor values = div.multiply(RealScalar.of(-1));
-        // VisualRow visualRow = visualSet.add(domain, values);
-        // visualRow.setLabel("phase/arclen");
-        // visualRow.setStroke(PLOT_STROKE);
-        // }
-      }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     }

@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-public class GeodesicBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
+/* package */ class GeodesicBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 

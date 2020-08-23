@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class GeodesicCenterSplitsDemo extends KernelSplitsDemo {
+/* package */ class GeodesicCenterSplitsDemo extends KernelSplitsDemo {
   public GeodesicCenterSplitsDemo() {
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {2, 2, 1}, {5, 0, 2}}"));
   }
