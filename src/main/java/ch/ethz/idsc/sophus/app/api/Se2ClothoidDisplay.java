@@ -7,12 +7,10 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
-  public static final String ANALYTIC_STRING = "ClA";
-  public static final String LEGENDRE_STRING = "Cl3";
   public static final GeodesicDisplay ANALYTIC = //
-      new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC, ANALYTIC_STRING);
+      new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC, "ClA");
   public static final GeodesicDisplay LEGENDRE = //
-      new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE, LEGENDRE_STRING);
+      new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE, "Cl3");
   // ---
   private final ClothoidBuilder clothoidBuilder;
   private final String string;

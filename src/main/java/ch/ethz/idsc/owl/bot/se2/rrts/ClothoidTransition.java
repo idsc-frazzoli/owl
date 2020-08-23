@@ -35,22 +35,6 @@ public class ClothoidTransition extends AbstractTransition {
     return new ClothoidTransition(start, end, clothoid);
   }
 
-  /** @param clothoid
-   * @param minResolution
-   * @return */
-  public static Tensor linearized(Clothoid clothoid, Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
-    if (lagrangeQuadraticD.isZero(Tolerance.CHOP))
-      return Tensors.of(clothoid.apply(_0), clothoid.apply(_1));
-    int intervals = Ceiling.FUNCTION.apply(clothoid.length().divide(minResolution)).number().intValue();
-    Tensor uniform = Subdivide.of(_0, _1, Math.min(Math.max(1, intervals), MAX_INTERVALS));
-    InverseCDF inverseCDF = //
-        (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Abs.FUNCTION));
-    Tensor inverse = uniform.map(inverseCDF::quantile).divide(DoubleScalar.of(uniform.length()));
-    return inverse.map(clothoid);
-  }
-
   /***************************************************/
   private final Clothoid clothoid;
 
@@ -79,7 +63,16 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return linearized(clothoid, minResolution);
+    Sign.requirePositive(minResolution);
+    LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
+    if (lagrangeQuadraticD.isZero(Tolerance.CHOP))
+      return Tensors.of(clothoid.apply(_0), clothoid.apply(_1));
+    int intervals = Ceiling.FUNCTION.apply(clothoid.length().divide(minResolution)).number().intValue();
+    Tensor uniform = Subdivide.of(_0, _1, Math.min(Math.max(1, intervals), MAX_INTERVALS));
+    InverseCDF inverseCDF = //
+        (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Abs.FUNCTION));
+    Tensor inverse = uniform.map(inverseCDF::quantile).divide(DoubleScalar.of(uniform.length()));
+    return inverse.map(clothoid);
   }
 
   public Clothoid clothoid() {

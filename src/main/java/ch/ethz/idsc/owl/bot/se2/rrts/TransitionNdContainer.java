@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class TransitionNdContainer {
-  private final Map<Se2TransitionNdType, RrtsNodeCollection> map = new EnumMap<>(Se2TransitionNdType.class);
+  private final Map<TransitionNdTypes, RrtsNodeCollection> map = new EnumMap<>(TransitionNdTypes.class);
   private final PointsRender pointsRender = //
       new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 255));
   private final Tensor tensor;
@@ -51,8 +51,8 @@ public class TransitionNdContainer {
         ubounds.copy().append(Pi.VALUE));
     tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
-      Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
-      RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
+      TransitionNdTypes se2TransitionNdType = TransitionNdTypes.fromString(geodesicDisplay);
+      RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(TransitionNdTypes.RN) //
           ? new RnRrtsNodeCollection(lbounds, ubounds)
           : Se2RrtsNodeCollections.of( //
               se2TransitionNdType.transitionSpace(), lbounds, ubounds);
@@ -69,7 +69,7 @@ public class TransitionNdContainer {
       Graphics2D graphics, //
       Tensor mouse) {
     RenderQuality.setQuality(graphics);
-    Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
+    TransitionNdTypes se2TransitionNdType = TransitionNdTypes.fromString(geodesicDisplay);
     RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
     Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));
     Tensor shape = geodesicDisplay.shape().multiply(sqrt);

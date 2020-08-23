@@ -19,7 +19,10 @@ public class SimpleLaneConsumer implements LaneConsumer {
   private final PlannerConstraint plannerConstraint;
   private final GoalConsumer goalConsumer;
 
-  public SimpleLaneConsumer(TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, Collection<? extends PlannerCallback> plannerCallbacks) {
+  public SimpleLaneConsumer( //
+      TrajectoryEntity trajectoryEntity, //
+      PlannerConstraint plannerConstraint, //
+      Collection<? extends PlannerCallback> plannerCallbacks) {
     this.trajectoryEntity = trajectoryEntity;
     this.plannerConstraint = plannerConstraint;
     goalConsumer = new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, plannerCallbacks);

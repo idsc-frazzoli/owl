@@ -5,10 +5,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidContext;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,7 +42,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
     int index = 0;
     for (Tensor _lambda : lambdas()) {
       Scalar lambda = (Scalar) _lambda;
-      Clothoid clothoid = CustomClothoids.of(lambda, clothoidContext.p(), clothoidContext.q());
+      ClothoidBuilder clothoidBuilder = CustomClothoidBuilder.of(lambda);
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, clothoidContext.p(), clothoidContext.q());
+      Clothoid clothoid = clothoidTransition.clothoid();
       {
         Scalar length = clothoid.length().divide(DENOM);
         graphics.setColor(new Color(0, 128, 0));

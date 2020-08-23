@@ -17,13 +17,14 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidContext;
 import ch.ethz.idsc.sophus.clt.mid.MidpointTangentApproximation;
 import ch.ethz.idsc.sophus.clt.mid.MidpointTangentOrder2;
@@ -49,6 +50,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JTextField jTextField = new JTextField(10);
   private final JLabel jLabel = new JLabel();
   private final SpinnerLabel<Integer> spinnerSolution = SpinnerLabel.of(0, 1, 2, 3, 4, 5, 6, 7, 8);
+  private static final Scalar MIN_RESOLUTION = RealScalar.of(0.1);
   // ---
   private ClothoidDefectContainer clothoidDefectContainer = null;
 
@@ -139,12 +141,15 @@ import ch.ethz.idsc.tensor.sca.Round;
         { 0, -30, 200 }, //
         { 0, 0, 1 } }));
     for (Tensor _lambda : clothoidDefectContainer.lambdas()) {
-      Clothoid clothoid = CustomClothoids.of((Scalar) _lambda, clothoidContext.p(), clothoidContext.q());
-      Tensor points = ClothoidSampler.of(clothoid);
+      ClothoidBuilder clothoidBuilder = CustomClothoidBuilder.of((Scalar) _lambda);
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, clothoidContext.p(), clothoidContext.q());
+      Tensor points = clothoidTransition.linearized(MIN_RESOLUTION);
       new PathRender(new Color(64, 255, 64, 64)).setCurve(points, false).render(geometricLayer, graphics);
     }
     try {
-      Tensor points = ClothoidSampler.of(CustomClothoids.of(lambda, clothoidContext.p(), clothoidContext.q()));
+      ClothoidBuilder clothoidBuilder = CustomClothoidBuilder.of(lambda);
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, clothoidContext.p(), clothoidContext.q());
+      Tensor points = clothoidTransition.linearized(MIN_RESOLUTION);
       PATH_RENDER.setCurve(points, false).render(geometricLayer, graphics);
     } catch (Exception e) {
       e.printStackTrace();

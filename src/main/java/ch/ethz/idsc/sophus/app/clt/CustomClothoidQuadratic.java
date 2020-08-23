@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Scalar;
     this.scalarBinaryOperator = scalarBinaryOperator;
   }
 
-  @Override // from Clothoids
+  @Override // from ClothoidQuadratic
   public LagrangeQuadratic lagrangeQuadratic(Scalar b0, Scalar b1) {
     Scalar s1 = b0.add(b1).multiply(HALF);
     Scalar s2 = b0.subtract(b1).multiply(HALF);

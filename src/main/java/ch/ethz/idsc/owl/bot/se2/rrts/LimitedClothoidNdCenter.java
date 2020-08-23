@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.sophus.clt.Clothoid;
-import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,18 +26,12 @@ import ch.ethz.idsc.tensor.sca.Clip;
   }
 
   @Override // from ClothoidNdCenter
-  public Scalar ofVector(Tensor p) {
+  public final Scalar ofVector(Tensor p) {
     Clothoid clothoid = clothoid(p);
     Scalar cost = clothoid.length();
-    LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
-    try {
-      if (clip.isInside(lagrangeQuadraticD.head()) && //
-          clip.isInside(lagrangeQuadraticD.tail()))
-        return cost;
-    } catch (Exception exception) {
-      // ---
-    }
-    return infinity(cost);
+    return clip.isInside(clothoid.curvature().absMax()) //
+        ? cost
+        : infinity(cost);
   }
 
   /** @param other

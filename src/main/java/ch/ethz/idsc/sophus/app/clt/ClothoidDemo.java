@@ -16,6 +16,7 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -24,7 +25,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, degree)
  * in order to connect two points p and q, then the (odd) degree has little influence on the
@@ -36,8 +36,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final Tensor ARROWS = Subdivide.of(0.0, 1.0, 10);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
-  private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
-  private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 255, 128, 64));
+  private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
   // ---
   private final JToggleButton jToggleButton = new JToggleButton("all");
 
@@ -58,26 +57,15 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(0.3)));
       geometricLayer.popMatrix();
     }
-    {
-      ScalarTensorFunction curve = ClothoidBuilders.SE2_ANALYTIC.curve(START, mouse);
-      Tensor points = DOMAIN.map(curve);
-      new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-          .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_C.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
-          .render(geometricLayer, graphics);
-    }
-    if (jToggleButton.isSelected()) {
-      Clothoid clothoid = ClothoidBuilders.SE2_COVERING.curve(START, mouse);
+    int index = 0;
+    for (ClothoidBuilder clothoidBuilder : ClothoidBuilders.VALUES) {
+      Clothoid clothoid = clothoidBuilder.curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
-      new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+      new PathRender(COLOR_DATA_INDEXED.getColor(index), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_P.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
+      POINTS_RENDER_C.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
           .render(geometricLayer, graphics);
-      {
-        // Scalar addAngle = clothoid.addAngle(RealScalar.ZERO);
-        // graphics.setColor(Color.BLACK);
-        // graphics.drawString("" + addAngle, 0, 10);
-      }
+      ++index;
     }
   }
 
