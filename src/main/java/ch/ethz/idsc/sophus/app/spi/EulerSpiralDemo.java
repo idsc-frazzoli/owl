@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.clt;
+package ch.ethz.idsc.sophus.app.spi;
 
 import ch.ethz.idsc.sophus.crv.EulerSpiral;
 

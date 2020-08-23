@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
           .render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
-      Clothoid clothoid = ClothoidBuilders.SE2_LEGENDRE.curve(START, mouse);
+      Clothoid clothoid = ClothoidBuilders.SE2_COVERING.curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

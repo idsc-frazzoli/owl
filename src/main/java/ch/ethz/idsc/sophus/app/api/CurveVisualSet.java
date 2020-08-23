@@ -14,13 +14,11 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.FoldList;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class CurveVisualSet {
   private static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
   // ---
-  private final VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
   private final Tensor differences;
   private final Tensor differencesNorm;
   private final Tensor curvature;
@@ -36,23 +34,18 @@ public class CurveVisualSet {
     arcLength1 = FoldList.of(Tensor::add, RealScalar.ZERO, differencesNorm);
   }
 
-  public VisualRow addCurvature() {
+  public VisualRow addCurvature(VisualSet visualSet) {
     VisualRow visualRow = visualSet.add(getArcLength1(), curvature);
-    visualRow.setLabel("curvature");
     visualRow.setStroke(PLOT_STROKE);
     return visualRow;
   }
 
-  public void addArcTan(Tensor refined) {
+  public void addArcTan(VisualSet visualSet, Tensor refined) {
     Tensor arcTan2D = Tensor.of(differences.stream().map(ArcTan2D::of));
     Tensor extract = refined.get(Tensor.ALL, 2).extract(0, arcTan2D.length());
     VisualRow visualRow = visualSet.add(arcLength0, arcTan2D.subtract(extract).map(So2.MOD));
     visualRow.setLabel("arcTan[dx, dy] - phase");
     visualRow.setStroke(PLOT_STROKE);
-  }
-
-  public VisualSet visualSet() {
-    return visualSet;
   }
 
   public Tensor getArcLength1() {

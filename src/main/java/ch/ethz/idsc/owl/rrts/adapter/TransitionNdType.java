@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** Remark: TensorDifference would be sufficient but that would result in an inconvenience. */
 public class TransitionNdType implements NdType, Serializable {
   private final TransitionSpace transitionSpace;
 

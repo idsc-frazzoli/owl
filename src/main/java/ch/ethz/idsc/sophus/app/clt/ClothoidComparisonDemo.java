@@ -12,6 +12,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
@@ -22,7 +23,6 @@ import ch.ethz.idsc.sophus.app.api.CurveVisualSet;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringClothoidDisplay;
 import ch.ethz.idsc.sophus.clt.Clothoid;
-import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -66,60 +66,35 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
     }
-    {
-      graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
-      graphics.drawString("original", 0, 20);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-      graphics.drawString("extended", 0, 34);
-    }
-    // {
-    // CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(PolarClothoids.INSTANCE, 3);
-    // Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 7);
-    // new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-    // .setCurve(points, false).render(geometricLayer, graphics);
-    //
-    // Tensor tensor = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
-    // CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
-    // curveVisualSet.addCurvature();
-    // VisualSet visualSet = curveVisualSet.visualSet();
-    // JFreeChart jFreeChart = ListPlot.of(visualSet);
-    // Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-    // jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
-    // }
-    {
-      Clothoid clothoid = ClothoidBuilders.SE2_COVERING.curve(START, mouse);
-      // LagrangeQuadraticD curvature = clothoid.curvature();
-      Tensor points = ClothoidTransition.linearized(clothoid, RealScalar.of(0.1));
-      // Subdivide.of(0.0, 1.0, 20).map(clothoid);
-      new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-          .setCurve(points, false) //
-          .render(geometricLayer, graphics);
-    }
-    {
-      ClothoidTransition clothoidTransition = ClothoidTransition.of(ClothoidBuilders.SE2_ANALYTIC, START, mouse);
+    VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
+    for (ClothoidTransitionSpace clothoidTransitionSpace : ClothoidTransitionSpace.values()) {
+      int ordinal = clothoidTransitionSpace.ordinal();
+      Color color = COLOR_DATA_INDEXED.getColor(ordinal);
+      {
+        graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 14));
+        graphics.setColor(color);
+        graphics.drawString(clothoidTransitionSpace.name(), 0, 24 + ordinal * 14);
+      }
+      ClothoidTransition clothoidTransition = clothoidTransitionSpace.connect(START, mouse);
       Clothoid clothoid = clothoidTransition.clothoid();
-      LagrangeQuadraticD curvature = clothoid.curvature();
       Tensor points = clothoidTransition.linearized(RealScalar.of(geometricLayer.pixel2modelWidth(5)));
-      new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f) //
-          .setCurve(points, false) //
-          .render(geometricLayer, graphics);
+      new PathRender(color, 1.5f).setCurve(points, false).render(geometricLayer, graphics);
       // ---
       Tensor tensor = Tensor.of(points.stream().map(geodesicDisplay::toPoint));
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
-      curveVisualSet.addCurvature();
-      VisualSet visualSet = curveVisualSet.visualSet();
+      curveVisualSet.addCurvature(visualSet);
       {
+        LagrangeQuadraticD curvature = clothoid.curvature();
         Tensor domain = curveVisualSet.getArcLength1();
         visualSet.add(domain, ConstantArray.of(curvature.head(), domain.length()));
         visualSet.add(domain, ConstantArray.of(curvature.tail(), domain.length()));
         visualSet.add(domain, Subdivide.of(0.0, 1.0, domain.length() - 1).map(curvature));
         visualSet.add(domain, Subdivide.of(0.0, 1.0, domain.length() - 1).map(clothoid::addAngle));
       }
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-      jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     }
+    JFreeChart jFreeChart = ListPlot.of(visualSet);
+    Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+    jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
   }
 
   @Override // from DemoInterface

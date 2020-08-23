@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /** class is used in other projects outside of owl */
 public abstract class CurvatureDemo extends ControlPointsDemo {
@@ -57,11 +58,12 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCurvature.isSelected() && 1 < refined.length()) {
       Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+      VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
-      curveVisualSet.addCurvature();
+      curveVisualSet.addCurvature(visualSet);
       // if (2 < refined.get(0).length())
       // curveVisualSet.addArcTan(refined);
-      VisualSet visualSet = curveVisualSet.visualSet();
+      // VisualSet visualSet = curveVisualSet.visualSet();
       {
         // {
         // Tensor domain = Range.of(0, phase.length());

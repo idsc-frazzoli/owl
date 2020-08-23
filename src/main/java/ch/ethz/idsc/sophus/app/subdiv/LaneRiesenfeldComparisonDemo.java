@@ -88,9 +88,10 @@ import ch.ethz.idsc.tensor.red.Quantile;
       Tensor refined = curve(geometricLayer, graphics, i);
       if (jToggleCurvature.isSelected() && 1 < refined.length()) {
         Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+        VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
         CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
-        curveVisualSet.addCurvature();
-        Tensor curvature = curveVisualSet.visualSet().getVisualRow(0).points();
+        VisualRow visualRow = curveVisualSet.addCurvature(visualSet);
+        Tensor curvature = visualRow.points();
         // ---
         Tensor curvatureRy = Tensor.of(Differences.of(curvature).stream().map(t -> t.Get(1).divide(t.Get(0))));
         Tensor curvatureRx = Tensor.of(IntStream.range(1, curvature.length()).mapToObj(j -> {

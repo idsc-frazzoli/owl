@@ -6,10 +6,11 @@ import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** start and end points are from SE(2) */
+/** start and end points are from SE(2) or SE(2) Covering */
 public enum ClothoidTransitionSpace implements TransitionSpace {
   ANALYTIC(ClothoidBuilders.SE2_ANALYTIC), //
   LEGENDRE(ClothoidBuilders.SE2_LEGENDRE), //
+  COVERING(ClothoidBuilders.SE2_COVERING), //
   ;
 
   private final ClothoidBuilder clothoidBuilder;
