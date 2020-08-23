@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import ch.ethz.idsc.owl.rrts.adapter.NdType;
 import ch.ethz.idsc.owl.rrts.adapter.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,9 +19,8 @@ public enum ClothoidRrtsNodeCollections {
     return of(LimitedClothoidNdType.with(max), lbounds, ubounds);
   }
 
-  private static RrtsNodeCollection of( //
-      LimitedClothoidNdType limitedClothoidNdType, Tensor lbounds, Tensor ubounds) {
-    return NdTypeRrtsNodeCollection.of(limitedClothoidNdType, //
+  private static RrtsNodeCollection of(NdType ndType, Tensor lbounds, Tensor ubounds) {
+    return NdTypeRrtsNodeCollection.of(ndType, //
         VectorQ.requireLength(lbounds, 2).copy().append(RealScalar.of(0.0)), //
         VectorQ.requireLength(ubounds, 2).copy().append(RealScalar.of(0.0)));
   }
