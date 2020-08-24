@@ -21,6 +21,7 @@ import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -46,7 +47,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
-    final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
+    final Scalar parameter = sliderRatio().multiply(RealScalar.of(upper));
     Tensor knots = Range.of(0, 2 * upper);
     bufferedImage = symLinkImage(knots, control.length(), parameter).bufferedImage();
     // ---

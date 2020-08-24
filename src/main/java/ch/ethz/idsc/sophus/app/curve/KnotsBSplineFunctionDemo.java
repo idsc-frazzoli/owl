@@ -55,8 +55,8 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
     Tensor knots = KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), exponent).apply(control);
-    final Scalar upper = Last.of(knots);
-    final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
+    Scalar upper = Last.of(knots);
+    Scalar parameter = sliderRatio().multiply(upper);
     // ---
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, control);
@@ -84,7 +84,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
     return refined;
   }
 
-  @Override
+  @Override // from BufferedImageSupplier
   public BufferedImage bufferedImage() {
     return bufferedImage;
   }

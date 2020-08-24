@@ -27,7 +27,6 @@ import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.LieGroupBSplineInterpolation;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -55,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
-    final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
+    final Scalar parameter = sliderRatio().multiply(RealScalar.of(upper));
     bufferedImage = symLinkImage(degree, upper + 1, parameter).bufferedImage();
     // ---
     RenderQuality.setQuality(graphics);

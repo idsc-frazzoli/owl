@@ -10,7 +10,6 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
@@ -24,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ class Regularization2StepDemo extends UniformDatasetFilterDemo implements BufferedImageSupplier {
+/* package */ final class Regularization2StepDemo extends UniformDatasetFilterDemo implements BufferedImageSupplier {
   /** regularization parameter in the interval [0, 1] */
   private final JSlider jSlider = new JSlider(0, 1000, 600);
 
@@ -36,26 +35,25 @@ import ch.ethz.idsc.tensor.sca.N;
     updateState();
   }
 
-  @Override // from RenderInterface
+  @Override // from AbstractDatasetFilterDemo
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final Scalar factor = factor();
-    // ---
-    return Regularization2Step.string(geodesicDisplay.geodesicInterface(), N.DOUBLE.apply(factor)).apply(control());
+    return Regularization2Step.string( //
+        geodesicDisplay().geodesicInterface(), //
+        N.DOUBLE.apply(sliderRatio())).apply(control());
   }
 
-  @Override // from DatasetFilterDemo
+  @Override // from UniformDatasetFilterDemo
   protected String plotLabel() {
-    return "Regularization2Step " + factor();
+    return "Regularization2Step " + sliderRatio();
   }
 
-  private Scalar factor() {
+  private Scalar sliderRatio() {
     return RationalScalar.of(jSlider.getValue(), jSlider.getMaximum());
   }
 
   @Override // from BufferedImageSupplier
   public BufferedImage bufferedImage() {
-    Scalar factor = factor();
+    Scalar factor = sliderRatio();
     TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(SymGeodesic.INSTANCE, factor);
     Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);

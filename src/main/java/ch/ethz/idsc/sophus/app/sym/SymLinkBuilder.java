@@ -4,11 +4,14 @@ package ch.ethz.idsc.sophus.app.sym;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SymLinkBuilder {
+  /** @param control
+   * @param symScalar
+   * @return */
   public static SymLink of(Tensor control, SymScalar symScalar) {
     return new SymLinkBuilder(control).build(symScalar);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor control;
 
   private SymLinkBuilder(Tensor control) {

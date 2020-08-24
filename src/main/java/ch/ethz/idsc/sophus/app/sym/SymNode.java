@@ -10,7 +10,8 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
 /** characterized by {@link #isNode()} == true */
 /* package */ class SymNode extends SymLink {
   private final Scalar scalar;
-  public Tensor position;
+  /** position is assigned in sym link builder */
+  Tensor position;
 
   /* package */ SymNode(Scalar scalar) {
     super(null, null, null);

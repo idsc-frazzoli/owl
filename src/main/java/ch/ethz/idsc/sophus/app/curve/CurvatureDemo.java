@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import org.jfree.chart.JFreeChart;
-
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -28,7 +26,7 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   // ---
-  private final JToggleButton jToggleSymi = new JToggleButton("graph");
+  private final JToggleButton jToggleGraph = new JToggleButton("graph");
   public final JToggleButton jToggleCurvature = new JToggleButton("crvtp");
 
   public CurvatureDemo() {
@@ -43,8 +41,8 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
     timerFrame.jToolBar.add(jToggleCurvature);
     // ---
     if (this instanceof BufferedImageSupplier) {
-      jToggleSymi.setSelected(true);
-      timerFrame.jToolBar.add(jToggleSymi);
+      jToggleGraph.setSelected(true);
+      timerFrame.jToolBar.add(jToggleGraph);
     }
   }
 
@@ -52,20 +50,19 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor refined = protected_render(geometricLayer, graphics);
-    if (this instanceof BufferedImageSupplier && jToggleSymi.isSelected()) {
+    if (this instanceof BufferedImageSupplier && //
+        jToggleGraph.isSelected()) {
       BufferedImageSupplier bufferedImageSupplier = (BufferedImageSupplier) this;
       graphics.drawImage(bufferedImageSupplier.bufferedImage(), 0, 0, null);
     }
-    // ---
-    Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCurvature.isSelected() && //
         1 < refined.length()) {
       Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       VisualSet visualSet = new VisualSet(COLOR_DATA_INDEXED);
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature(visualSet);
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+      Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+      ListPlot.of(visualSet).draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     }
   }
 

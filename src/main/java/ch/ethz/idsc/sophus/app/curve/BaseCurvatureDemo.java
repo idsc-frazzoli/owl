@@ -12,6 +12,8 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -20,7 +22,7 @@ public abstract class BaseCurvatureDemo extends CurvatureDemo {
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  protected final JSlider jSlider = new JSlider(0, 1000, 500);
+  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public BaseCurvatureDemo() {
     this(GeodesicDisplays.ALL);
@@ -51,4 +53,8 @@ public abstract class BaseCurvatureDemo extends CurvatureDemo {
 
   protected abstract Tensor protected_render( //
       GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control);
+
+  public final Scalar sliderRatio() {
+    return RationalScalar.of(jSlider.getValue(), jSlider.getMaximum());
+  }
 }

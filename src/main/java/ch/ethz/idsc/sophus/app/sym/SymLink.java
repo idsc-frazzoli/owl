@@ -21,7 +21,7 @@ public class SymLink {
     return new SymLink(build(symScalar.getP()), build(symScalar.getQ()), symScalar.ratio());
   }
 
-  // ---
+  /***************************************************/
   public final SymLink lP;
   public final SymLink lQ;
   public final Scalar lambda;
