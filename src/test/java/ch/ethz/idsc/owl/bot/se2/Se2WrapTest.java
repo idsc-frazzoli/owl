@@ -45,7 +45,7 @@ public class Se2WrapTest extends TestCase {
     Tensor q = Tensors.fromString("{21[m], -48[m]}").append(RealScalar.of(+2 * Math.PI + 0.1));
     Tensor d1 = Se2Wrap.INSTANCE.difference(p1, q);
     Tensor d2 = Se2Wrap.INSTANCE.difference(p2, q);
-    assertTrue(Chop._08.close(d1, d2));
+    Chop._08.requireClose(d1, d2);
   }
 
   public void testEndPoints() {
@@ -58,7 +58,7 @@ public class Se2WrapTest extends TestCase {
       Chop._14.requireClose(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
       Tensor r = Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
       if (!Chop._14.close(q, r))
-        assertTrue(Chop._10.allZero(Se2Wrap.INSTANCE.difference(q, r)));
+        Chop._10.requireAllZero(Se2Wrap.INSTANCE.difference(q, r));
     }
   }
 

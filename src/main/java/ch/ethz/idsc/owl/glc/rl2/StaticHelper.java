@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar nextMerit = next.merit();
     return relaxedPriorityQueue.collection().stream() //
         .map(GlcNode::merit) //
-        .anyMatch(merit -> CHOP.close(merit, nextMerit)); //
+        .anyMatch(merit -> CHOP.isClose(merit, nextMerit)); //
   }
 
   /** Returns number of nodes with similar merits to best merit within domain queue.
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar bestMerit = relaxedPriorityQueue.peekBest().merit();
     return (int) relaxedPriorityQueue.collection().stream() //
         .map(GlcNode::merit) //
-        .filter(merit -> CHOP.close(merit, bestMerit)) //
+        .filter(merit -> CHOP.isClose(merit, bestMerit)) //
         .count();
   }
 }

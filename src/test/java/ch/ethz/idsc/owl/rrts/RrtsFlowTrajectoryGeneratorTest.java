@@ -103,9 +103,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(37, trajectory.size());
     for (int i = 1; i < 21; i++) {
       TrajectorySample sample = trajectory.get(i);
-      assertTrue(Chop._15.close(sample.stateTime().time(), RationalScalar.of(i, 10)));
-      assertTrue(Chop._15.close(sample.stateTime().state(), Tensors.of(sample.stateTime().time(), RealScalar.ZERO, RealScalar.ZERO)));
-      assertTrue(Chop._14.close(sample.getFlow().get(), Tensors.vector(1, 0, 0)));
+      Chop._15.requireClose(sample.stateTime().time(), RationalScalar.of(i, 10));
+      Chop._15.requireClose(sample.stateTime().state(), Tensors.of(sample.stateTime().time(), RealScalar.ZERO, RealScalar.ZERO));
+      Chop._14.requireClose(sample.getFlow().get(), Tensors.vector(1, 0, 0));
     }
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());

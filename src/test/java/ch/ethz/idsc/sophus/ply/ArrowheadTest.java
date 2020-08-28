@@ -33,6 +33,6 @@ public class ArrowheadTest extends TestCase {
 
   public void testMean() {
     Tensor tensor = Mean.of(Arrowhead.of(2));
-    assertTrue(Chop.NONE.allZero(tensor));
+    Chop.NONE.requireAllZero(tensor);
   }
 }

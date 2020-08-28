@@ -18,7 +18,7 @@ public class Se2CarIntegratorTest extends TestCase {
     Se2StateSpaceModel.INSTANCE.f(x, flow);
     Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
     Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
-    assertTrue(Chop._10.close(impl, expl));
+    Chop._10.requireClose(impl, expl);
   }
 
   public void testRotate1() {
@@ -27,7 +27,7 @@ public class Se2CarIntegratorTest extends TestCase {
     Tensor flow = Se2CarFlows.singleton(RealScalar.ONE, RealScalar.ONE);
     Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
     Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
-    assertTrue(Chop._10.close(impl, expl));
+    Chop._10.requireClose(impl, expl);
   }
 
   public void testRotate2() {
@@ -37,7 +37,7 @@ public class Se2CarIntegratorTest extends TestCase {
     Se2StateSpaceModel.INSTANCE.f(x, flow);
     Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
     Tensor imp1 = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
-    assertTrue(Chop._07.close(imp1, expl));
+    Chop._07.requireClose(imp1, expl);
   }
 
   public void testRotateHN() {
@@ -47,7 +47,7 @@ public class Se2CarIntegratorTest extends TestCase {
     Se2StateSpaceModel.INSTANCE.f(x, flow);
     Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
     Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
-    assertTrue(Chop._07.close(impl, expl));
+    Chop._07.requireClose(impl, expl);
   }
 
   public void testRotateUN() {
@@ -56,6 +56,6 @@ public class Se2CarIntegratorTest extends TestCase {
     Tensor flow = Se2CarFlows.singleton(RealScalar.of(-0.8), RealScalar.of(2));
     Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
     Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, h);
-    assertTrue(Chop._07.close(impl, expl));
+    Chop._07.requireClose(impl, expl);
   }
 }

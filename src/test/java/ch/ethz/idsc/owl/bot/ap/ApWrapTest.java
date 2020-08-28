@@ -11,7 +11,7 @@ public class ApWrapTest extends TestCase {
     double pa = 2 * Math.PI;
     Tensor toBeTested = Tensors.vector(100, 20, -30, 6.6);
     Tensor expected = Tensors.vector(100, 20, -30, 6.6 - pa);
-    assertTrue(Chop._12.close(expected, ApWrap.INSTANCE.represent(toBeTested)));
-    assertTrue(Chop._14.allZero(ApWrap.INSTANCE.difference(expected, toBeTested)));
+    Chop._12.requireClose(expected, ApWrap.INSTANCE.represent(toBeTested));
+    Chop._14.requireAllZero(ApWrap.INSTANCE.difference(expected, toBeTested));
   }
 }

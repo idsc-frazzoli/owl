@@ -27,10 +27,10 @@ public class Se2ControlsTest extends TestCase {
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(45));
     Collection<Tensor> controls = carFlows.getFlows(6);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
-    assertTrue(Chop._13.close(maxSpeed, RealScalar.ONE));
+    Chop._13.requireClose(maxSpeed, RealScalar.ONE);
     Scalar maxTurn = Se2Controls.maxTurning(controls);
-    assertTrue(Chop._13.close(maxTurn, RealScalar.of(45 * Math.PI / 180)));
-    assertTrue(Chop._13.close(maxTurn, Degree.of(45)));
+    Chop._13.requireClose(maxTurn, RealScalar.of(45 * Math.PI / 180));
+    Chop._13.requireClose(maxTurn, Degree.of(45));
   }
 
   public void testMaxRate() {

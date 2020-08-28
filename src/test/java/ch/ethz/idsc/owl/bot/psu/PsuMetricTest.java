@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 
 public class PsuMetricTest extends TestCase {
   public void testPeriod() {
-    assertTrue(Chop._12.allZero(PsuMetric.INSTANCE.distance(Tensors.vector(0, 0), Tensors.vector(2 * Math.PI, 0))));
-    assertTrue(Chop._12.allZero(PsuMetric.INSTANCE.distance(Tensors.vector(0, 0), Tensors.vector(4 * Math.PI, 0))));
+    Chop._12.requireZero(PsuMetric.INSTANCE.distance(Tensors.vector(0, 0), Tensors.vector(2 * Math.PI, 0)));
+    Chop._12.requireZero(PsuMetric.INSTANCE.distance(Tensors.vector(0, 0), Tensors.vector(4 * Math.PI, 0)));
   }
 
   public void testLinear() {

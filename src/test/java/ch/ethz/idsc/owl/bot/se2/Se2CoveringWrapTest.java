@@ -14,7 +14,7 @@ public class Se2CoveringWrapTest extends TestCase {
     Tensor p = Tensors.vector(20, -30, pa);
     Tensor q = Tensors.vector(20, -30, qa);
     Tensor tensor = Se2CoveringWrap.INSTANCE.difference(p, q);
-    assertTrue(Chop._12.allZero(tensor.extract(0, 2)));
-    assertTrue(Chop._14.close(tensor.Get(2), RealScalar.of(qa - pa)));
+    Chop._12.requireAllZero(tensor.extract(0, 2));
+    Chop._14.requireClose(tensor.Get(2), RealScalar.of(qa - pa));
   }
 }

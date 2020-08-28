@@ -17,7 +17,7 @@ public class Se2FlowIntegratorTest extends TestCase {
     Tensor flow = Tensors.fromString("{1[m*s^-1], 0, 2[rad*s^-1]}").map(UnitSystem.SI());
     Tensor x = Tensors.fromString("{1[m], 2[m], 3[rad]}").map(UnitSystem.SI());
     Tensor r = Se2FlowIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow, Quantity.of(2, "s"));
-    assertTrue(Chop._10.close(r, //
-        Tensors.fromString("{1.2579332953294609[m], 1.128052624528125[m], " + So2.MOD.apply(RealScalar.of(7)) + "}")));
+    Chop._10.requireClose(r, //
+        Tensors.fromString("{1.2579332953294609[m], 1.128052624528125[m], " + So2.MOD.apply(RealScalar.of(7)) + "}"));
   }
 }

@@ -218,7 +218,7 @@ public final class GeometricComponent {
     this.model2pixel = model2pixel.copy(); // set matrix regardless of conditions
     // ---
     Scalar det = Det.of(model2pixel);
-    if (Chop._08.allZero(det))
+    if (Chop._08.isZero(det))
       System.err.println("model2pixel must not be singular");
     Sign.requirePositive(det.negate());
   }

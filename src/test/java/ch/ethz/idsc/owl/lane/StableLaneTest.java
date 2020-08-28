@@ -34,12 +34,12 @@ public class StableLaneTest extends TestCase {
     {
       Tensor leftBoundary = MatrixQ.require(laneInterface.leftBoundary());
       assertEquals(leftBoundary.get(Tensor.ALL, 1), laneInterface.margins());
-      assertTrue(Chop._12.allZero(leftBoundary.get(Tensor.ALL, 2)));
+      Chop._12.requireAllZero(leftBoundary.get(Tensor.ALL, 2));
     }
     {
       Tensor rightBoundary = MatrixQ.require(laneInterface.rightBoundary());
       assertEquals(rightBoundary.get(Tensor.ALL, 1), laneInterface.margins().negate());
-      assertTrue(Chop._12.allZero(rightBoundary.get(Tensor.ALL, 2)));
+      Chop._12.requireAllZero(rightBoundary.get(Tensor.ALL, 2));
     }
   }
 }

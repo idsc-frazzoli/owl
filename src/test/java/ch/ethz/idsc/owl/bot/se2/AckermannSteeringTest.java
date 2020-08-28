@@ -43,6 +43,6 @@ public class AckermannSteeringTest extends TestCase {
     AckermannSteering asL = new AckermannSteering(suo.apply(Quantity.of(1, "m")), suo.apply(Quantity.of(+40, "cm")));
     Scalar delta = RealScalar.of(0.2);
     Tensor pair = asL.pair(delta);
-    assertTrue(Chop._12.close(pair, Tensors.vector(0.21711959572073944, 0.1853540110207382)));
+    Chop._12.requireClose(pair, Tensors.vector(0.21711959572073944, 0.1853540110207382));
   }
 }

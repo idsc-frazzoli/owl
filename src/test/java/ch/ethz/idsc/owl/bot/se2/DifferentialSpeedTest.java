@@ -20,9 +20,9 @@ public class DifferentialSpeedTest extends TestCase {
     Scalar speed = RealScalar.of(+4.0);
     Scalar angle = RealScalar.of(+0.3);
     // confirmed with mathematica
-    assertTrue(Chop._10.close(ds.get(speed.divide(Cos.FUNCTION.apply(angle)), angle), RealScalar.of(3.4844395839839613)));
+    Chop._10.requireClose(ds.get(speed.divide(Cos.FUNCTION.apply(angle)), angle), RealScalar.of(3.4844395839839613));
     assertEquals(ds.get(speed, RealScalar.ZERO), speed);
-    assertTrue(Chop._10.close(ds.get(speed.divide(Cos.FUNCTION.apply(angle)), angle.negate()), RealScalar.of(4.515560416016039)));
+    Chop._10.requireClose(ds.get(speed.divide(Cos.FUNCTION.apply(angle)), angle.negate()), RealScalar.of(4.515560416016039));
   }
 
   public void testQuantityForward() {
@@ -129,7 +129,7 @@ public class DifferentialSpeedTest extends TestCase {
     Scalar beta = Pi.HALF;
     Scalar rL = dsL.get(v, beta);
     Scalar rR = dsR.get(v, beta);
-    assertTrue(Chop._12.close(rL, rR.negate()));
+    Chop._12.requireClose(rL, rR.negate());
   }
 
   public void testInverted() {
@@ -137,9 +137,9 @@ public class DifferentialSpeedTest extends TestCase {
     Scalar v = RealScalar.of(4);
     Scalar beta = RealScalar.of(+.3);
     // confirmed with mathematica
-    assertTrue(Chop._10.close(ds.get(v.divide(Cos.FUNCTION.apply(beta)), beta), RealScalar.of(4.515560416016039)));
+    Chop._10.requireClose(ds.get(v.divide(Cos.FUNCTION.apply(beta)), beta), RealScalar.of(4.515560416016039));
     assertEquals(ds.get(v, RealScalar.ZERO), v);
-    assertTrue(Chop._10.close(ds.get(v.divide(Cos.FUNCTION.apply(beta)), beta.negate()), RealScalar.of(3.4844395839839613)));
+    Chop._10.requireClose(ds.get(v.divide(Cos.FUNCTION.apply(beta)), beta.negate()), RealScalar.of(3.4844395839839613));
   }
 
   public void testFail() {

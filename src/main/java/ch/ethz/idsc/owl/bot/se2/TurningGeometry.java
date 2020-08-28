@@ -15,7 +15,7 @@ public enum TurningGeometry {
   /** @param ratio with unit "m^-1"
    * @return radius with unit "m" */
   public static Optional<Scalar> offset_y(Scalar ratio) {
-    return CHOP.allZero(ratio) //
+    return CHOP.isZero(ratio) //
         ? Optional.empty()
         : Optional.of(ratio.reciprocal());
   }
@@ -28,7 +28,7 @@ public enum TurningGeometry {
    * except when the vehicle is headed straight, in which case
    * Optional.empty() is returned */
   public static Optional<Scalar> offset_y(Scalar x_front, Scalar angle) {
-    return CHOP.allZero(angle) //
+    return CHOP.isZero(angle) //
         ? Optional.empty()
         : Optional.of(x_front.divide(Tan.FUNCTION.apply(angle)));
   }

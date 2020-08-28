@@ -39,7 +39,7 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
         Tensors.fromString("{0[m], 0[m], 0}"), //
         Tensors.fromString("{1[m], 1[m], " + Math.PI / 2 + "}"), //
         Tensors.fromString("{0[m], 2[m], " + Math.PI + "}"));
-    assertTrue(Chop._12.allZero(cost));
+    Chop._12.requireZero(cost);
   }
 
   public void testFunction2() {
