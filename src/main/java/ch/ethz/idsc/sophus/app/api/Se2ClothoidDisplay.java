@@ -8,9 +8,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
   public static final GeodesicDisplay ANALYTIC = //
-      new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC, "ClA");
+      new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), "ClA");
   public static final GeodesicDisplay LEGENDRE = //
-      new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE, "Cl3");
+      new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE.clothoidBuilder(), "Cl3");
   // ---
   private final ClothoidBuilder clothoidBuilder;
   private final String string;

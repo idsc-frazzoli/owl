@@ -8,9 +8,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** start and end points are from SE(2) or SE(2) Covering */
 public enum ClothoidTransitionSpace implements TransitionSpace {
-  ANALYTIC(ClothoidBuilders.SE2_ANALYTIC), //
-  LEGENDRE(ClothoidBuilders.SE2_LEGENDRE), //
-  COVERING(ClothoidBuilders.SE2_COVERING), //
+  ANALYTIC(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder()), //
+  LEGENDRE(ClothoidBuilders.SE2_LEGENDRE.clothoidBuilder()), //
+  COVERING(ClothoidBuilders.SE2_COVERING.clothoidBuilder()), //
   ;
 
   private final ClothoidBuilder clothoidBuilder;

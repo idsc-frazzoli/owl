@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -21,6 +22,7 @@ import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class ArgMinVariableTest extends TestCase {
+  private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
   private static final int DEPTH = 5;
 
   public void testInterpolation() {
@@ -41,7 +43,7 @@ public class ArgMinVariableTest extends TestCase {
 
   public void testGeodesic() {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
-    TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(ClothoidBuilders.SE2_ANALYTIC);
+    TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(CLOTHOID_BUILDER);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));

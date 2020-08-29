@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.rrts.adapter.NdType;
 import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -17,6 +18,8 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class LimitedClothoidNdType implements NdType, Serializable {
+  private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
+
   /** @param max curvature non-negative
    * @return */
   public static NdType with(Scalar max) {
@@ -42,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return ClothoidBuilders.SE2_ANALYTIC.curve(other, center);
+        return CLOTHOID_BUILDER.curve(other, center);
       }
     };
   }
@@ -52,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     return new LimitedClothoidNdCenter(center) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return ClothoidBuilders.SE2_ANALYTIC.curve(center, other);
+        return CLOTHOID_BUILDER.curve(center, other);
       }
     };
   }

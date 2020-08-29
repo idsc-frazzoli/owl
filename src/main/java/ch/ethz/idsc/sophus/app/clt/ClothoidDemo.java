@@ -14,15 +14,18 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.clt.Clothoid;
-import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
+import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.sca.Round;
 
 /** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, degree)
  * in order to connect two points p and q, then the (odd) degree has little influence on the
@@ -49,14 +52,18 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       geometricLayer.popMatrix();
     }
     int index = 0;
-    for (ClothoidBuilder clothoidBuilder : ClothoidBuilders.VALUES) {
-      Clothoid clothoid = clothoidBuilder.curve(START, mouse);
+    for (ClothoidBuilders clothoidBuilders : ClothoidBuilders.values()) {
+      Clothoid clothoid = clothoidBuilders.clothoidBuilder().curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
-      new PathRender(COLOR_DATA_INDEXED.getColor(index), 1.5f) //
+      Color color = COLOR_DATA_INDEXED.getColor(index);
+      new PathRender(color, 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
       POINTS_RENDER_C.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
           .render(geometricLayer, graphics);
       ++index;
+      graphics.setColor(color);
+      Scalar angle = ArcTan2D.of(clothoid.apply(RealScalar.of(1e-8)));
+      graphics.drawString(angle.map(Round._5) + "  " + clothoid.toString(), 0, index * 20);
     }
   }
 

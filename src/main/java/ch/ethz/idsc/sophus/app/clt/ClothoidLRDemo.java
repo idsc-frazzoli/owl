@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     }
     int index = 0;
     for (ClothoidBuilder clothoidBuilder : new ClothoidBuilder[] { //
-        ClothoidBuilders.SE2_ANALYTIC, ClothoidBuilders.SE2_LEGENDRE }) {
+        ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), ClothoidBuilders.SE2_LEGENDRE.clothoidBuilder() }) {
       Clothoid clothoid = clothoidBuilder.curve(START, mouse);
       Tensor points = DOMAIN.map(clothoid);
       new PathRender(COLOR_DATA_INDEXED.getColor(index), 1.5f) //
@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.red.Nest;
       ++index;
     }
     {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_LEGENDRE, 1);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_LEGENDRE.clothoidBuilder(), 1);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 2); // length == 129
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 2.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.red.Nest;
           .render(geometricLayer, graphics);
     }
     {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_ANALYTIC, 1);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), 1);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 2); // length == 129
       new PathRender(COLOR_DATA_INDEXED.getColor(2), 2.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

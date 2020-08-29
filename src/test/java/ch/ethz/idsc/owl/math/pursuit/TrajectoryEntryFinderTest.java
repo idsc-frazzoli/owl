@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class TrajectoryEntryFinderTest extends TestCase {
+  private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
   /* package */ static final Tensor WAYPOINTS = Tensors.of( //
       Tensors.vector(0, 0, 0), //
       Tensors.vector(1, 0.5, Math.PI / 4), //
@@ -35,7 +37,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testGeodesic() {
-    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(ClothoidBuilders.SE2_ANALYTIC);
+    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(CLOTHOID_BUILDER);
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point();
     assertTrue(waypoint.isPresent());

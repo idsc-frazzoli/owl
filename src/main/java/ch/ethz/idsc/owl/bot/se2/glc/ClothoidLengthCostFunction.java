@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import ch.ethz.idsc.sophus.clt.Clothoid;
+import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,6 +15,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** only applied in {@link ClothoidPursuitControl} resp. {@link Se2Letter5Demo} */
 /* package */ class ClothoidLengthCostFunction implements TensorScalarFunction {
+  private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
   private final Predicate<Scalar> isCompliant;
 
   public ClothoidLengthCostFunction(Predicate<Scalar> isCompliant) {
@@ -22,7 +24,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override
   public Scalar apply(Tensor xya) {
-    Clothoid clothoid = ClothoidBuilders.SE2_ANALYTIC.curve(xya.map(Scalar::zero), xya);
+    Clothoid clothoid = CLOTHOID_BUILDER.curve(xya.map(Scalar::zero), xya);
     if (isCompliant.test(clothoid.curvature().absMax()))
       return clothoid.length();
     // TODO GJOEL filter out via collision check, units
