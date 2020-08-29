@@ -20,7 +20,7 @@ public class ArgMinVariable implements TensorScalarFunction {
     return new ArgMinVariable(trajectoryEntryFinder, mapping, maxLevel);
   }
 
-  // ---
+  /***************************************************/
   private final TrajectoryEntryFinder trajectoryEntryFinder;
   private final TensorScalarFunction mapping;
   private final int maxLevel;

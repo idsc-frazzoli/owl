@@ -13,11 +13,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 public class ComboTransitionCostFunction implements TransitionCostFunction, Serializable {
-  public static TransitionCostFunction of(TransitionCostFunction... costFunctions) {
-    return new ComboTransitionCostFunction(Arrays.stream(costFunctions).collect(Collectors.toMap(f -> f, f -> RealScalar.ONE)));
+  /** @param transitionCostFunctions
+   * @return */
+  public static TransitionCostFunction of(TransitionCostFunction... transitionCostFunctions) {
+    return new ComboTransitionCostFunction(Arrays.stream(transitionCostFunctions) //
+        .collect(Collectors.toMap(f -> f, f -> RealScalar.ONE)));
   }
 
-  // ---
+  /***************************************************/
   private final Map<TransitionCostFunction, Scalar> map;
   private final int influence;
 

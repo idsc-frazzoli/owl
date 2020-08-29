@@ -9,7 +9,7 @@ import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** used in se2 animation demo to check if footprint of vehicle intersects with obstacle region */
-class Se2PointsVsRegion implements Region<Tensor>, Serializable {
+/* package */ class Se2PointsVsRegion implements Region<Tensor>, Serializable {
   private final Tensor points;
   private final Region<Tensor> region;
 

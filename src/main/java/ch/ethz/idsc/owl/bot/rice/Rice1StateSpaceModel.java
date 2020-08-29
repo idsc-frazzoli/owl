@@ -28,11 +28,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
  * Lipschitz L == |lambda| */
 public class Rice1StateSpaceModel implements StateSpaceModel, Serializable {
+  /** @param mu
+   * @return */
   public static StateSpaceModel of(Scalar mu) {
     return new Rice1StateSpaceModel(Exp.of(mu));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar lambda;
 
   /** @param lambda strictly positive friction coefficient */

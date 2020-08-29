@@ -1,7 +1,6 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
-import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -23,14 +22,16 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * the descent rate should be z_dot <= V * sin(gamma) in final landing phase
  * 
  * The values always are to be found in {@link ApStateSpaceModel} */
-/* package */ class ApPlannerConstraint implements PlannerConstraint, Serializable {
+/* package */ enum ApPlannerConstraint implements PlannerConstraint {
+  INSTANCE;
+
   private static final Clip CLIP_GAMMA = //
       Clips.interval(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
   private static final Clip CLIP_VELOCITY = //
       Clips.interval(ApStateSpaceModel.STALL_SPEED, ApStateSpaceModel.MAX_SPEED);
 
   @Override // from PlannerConstraint
-  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
+  public final boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     Tensor state = glcNode.state();
     // boolean xConstraint = Sign.isPositiveOrZero(state.Get(0));
     // if (!xConstraint)

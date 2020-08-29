@@ -16,11 +16,13 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ReversalTransitionSpace implements TransitionSpace, Serializable {
+  /** @param transitionSpace
+   * @return */
   public static TransitionSpace of(TransitionSpace transitionSpace) {
     return new ReversalTransitionSpace(transitionSpace);
   }
 
-  // ---
+  /***************************************************/
   private final TransitionSpace transitionSpace;
 
   private ReversalTransitionSpace(TransitionSpace transitionSpace) {

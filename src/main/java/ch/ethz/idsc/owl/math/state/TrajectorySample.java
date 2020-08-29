@@ -15,7 +15,7 @@ public class TrajectorySample implements Serializable {
     return new TrajectorySample(stateTime, null);
   }
 
-  // ---
+  /***************************************************/
   private final StateTime stateTime;
   private final Tensor flow;
 

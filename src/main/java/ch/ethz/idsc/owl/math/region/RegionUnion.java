@@ -25,7 +25,7 @@ public class RegionUnion<T> implements Region<T>, Serializable {
     return new RegionUnion<>(Objects.requireNonNull(collection));
   }
 
-  // ---
+  /***************************************************/
   private final Collection<Region<T>> collection;
 
   private RegionUnion(Collection<Region<T>> collection) {

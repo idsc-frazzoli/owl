@@ -26,7 +26,7 @@ public class Se2SphereRandomSample implements RandomSampleInterface, Serializabl
     return new Se2SphereRandomSample(apex, radius, UniformDistribution.of(Clips.absolute(heading)));
   }
 
-  // ---
+  /***************************************************/
   private final Se2GroupElement se2GroupElement;
   private final RandomSampleInterface randomSampleInterface;
   private final Distribution distribution;

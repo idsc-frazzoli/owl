@@ -17,7 +17,7 @@ public class ModifiedMidpointIntegrator implements Integrator, Serializable {
     return new ModifiedMidpointIntegrator(Integers.requirePositive(n));
   }
 
-  // ---
+  /***************************************************/
   private final int n;
 
   private ModifiedMidpointIntegrator(int n) {

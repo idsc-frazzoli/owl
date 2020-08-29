@@ -22,7 +22,7 @@ public class StableLane implements LaneInterface, Serializable {
     return new StableLane(controlPoints, refined, halfWidth);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor controlPoints;
   private final Tensor refined;
   private final Tensor lbound;

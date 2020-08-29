@@ -21,7 +21,7 @@ public class Tse2CarFlows implements FlowsInterface, Serializable {
     return new Tse2CarFlows(rate_max, accelerations);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar rate_max;
   private final Tensor accelerations;
 

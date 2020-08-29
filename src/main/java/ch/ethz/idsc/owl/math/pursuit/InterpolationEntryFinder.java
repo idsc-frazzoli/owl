@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -11,10 +12,10 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class InterpolationEntryFinder extends TrajectoryEntryFinder {
+public class InterpolationEntryFinder extends TrajectoryEntryFinder implements Serializable {
   public static final TrajectoryEntryFinder INSTANCE = new InterpolationEntryFinder();
 
-  // ---
+  /***************************************************/
   private InterpolationEntryFinder() {
     // ---
   }

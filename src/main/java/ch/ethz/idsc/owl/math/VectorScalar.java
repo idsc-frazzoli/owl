@@ -66,7 +66,7 @@ public class VectorScalar extends AbstractScalar implements //
     return new VectorScalar(Tensor.of(stream));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor vector;
 
   private VectorScalar(Tensor vector) {

@@ -15,22 +15,19 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** trajectory integration with fixed step size over given time period */
 public class FixedStateIntegrator implements StateIntegrator, Serializable {
   /** @param integrator
-   * @param timeStep
-   * @param trajectorySize
+   * @param timeStep non-negative period of one step
+   * @param trajectorySize number of steps
    * @return */
   public static FixedStateIntegrator create(Integrator integrator, StateSpaceModel stateSpaceModel, Scalar timeStep, int trajectorySize) {
     return new FixedStateIntegrator(integrator, stateSpaceModel, timeStep, trajectorySize);
   }
 
-  // ---
+  /***************************************************/
   private final Integrator integrator;
   private final StateSpaceModel stateSpaceModel;
   private final Scalar timeStep;
   private final int trajectorySize;
 
-  /** @param integrator
-   * @param timeStep non-negative period of one step
-   * @param trajectorySize number of steps */
   private FixedStateIntegrator(Integrator integrator, StateSpaceModel stateSpaceModel, Scalar timeStep, int trajectorySize) {
     this.integrator = integrator;
     this.stateSpaceModel = stateSpaceModel;

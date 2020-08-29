@@ -16,15 +16,21 @@ import java.util.Objects;
  * 
  * @param <T> type of elements to compare */
 public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
+  /** @param <T>
+   * @param orderComparator
+   * @return */
   public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new NegTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
 
+  /** @param <T>
+   * @param orderComparator
+   * @return */
   public static <T> MinTracker<T> withSet(OrderComparator<T> orderComparator) {
     return new NegTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
-  // ---
+  /***************************************************/
   private final OrderComparator<T> orderComparator;
   private final Collection<T> collection;
 

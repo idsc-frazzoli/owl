@@ -23,7 +23,7 @@ public class ConstraintViolationCost implements CostFunction, Serializable {
     return new ConstraintViolationCost(plannerConstraint, unit);
   }
 
-  // ---
+  /***************************************************/
   private final PlannerConstraint plannerConstraint;
   private final Scalar unit;
   private final Scalar unit_zero;

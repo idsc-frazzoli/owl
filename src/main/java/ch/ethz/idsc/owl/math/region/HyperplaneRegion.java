@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializable {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
-  // ---
   /** orthogonal is normalized to have Euclidean length 1
    * 
    * @param orthogonal is orthogonal to hyperplane pointing outside
@@ -25,7 +24,7 @@ public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializ
     return new HyperplaneRegion(NORMALIZE.apply(orthogonal), distanceFromZero);
   }
 
-  // ---
+  /***************************************************/
   /** orthogonal to hyperplane pointing outside */
   private final Tensor normal;
   private final Scalar distanceFromZero;

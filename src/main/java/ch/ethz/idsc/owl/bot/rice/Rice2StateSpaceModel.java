@@ -30,11 +30,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * implementation for n-dimensional position and velocity */
 public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
+  /** @param mu
+   * @return */
   public static StateSpaceModel of(Scalar mu) {
     return new Rice2StateSpaceModel(Exp.of(mu));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar lambda;
 
   /** @param lambda strictly positive friction coefficient */

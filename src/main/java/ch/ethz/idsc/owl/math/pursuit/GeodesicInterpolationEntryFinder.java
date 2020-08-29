@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -13,7 +14,7 @@ import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
+public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder implements Serializable {
   private final BinaryAverage binaryAverage;
 
   /** @param binaryAverage non-null */

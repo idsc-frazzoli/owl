@@ -14,7 +14,7 @@ public class EuclideanNdCenter implements NdCenterInterface, Serializable {
     return new EuclideanNdCenter(center.copy().unmodifiable());
   }
 
-  // ---
+  /***************************************************/
   private final Tensor center;
 
   private EuclideanNdCenter(Tensor center) {

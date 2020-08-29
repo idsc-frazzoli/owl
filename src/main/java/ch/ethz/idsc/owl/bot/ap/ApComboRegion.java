@@ -21,11 +21,12 @@ import ch.ethz.idsc.tensor.Tensor;
         So2Region.periodic(goal.Get(2), radiusVector.Get(2)));
   }
 
+  /***************************************************/
   private final LinearRegion zRegion;
   private final LinearRegion vRegion;
   private final So2Region gammaRegion;
 
-  ApComboRegion(LinearRegion zRegion, LinearRegion vRegion, So2Region gammaRegion) {
+  /* package */ ApComboRegion(LinearRegion zRegion, LinearRegion vRegion, So2Region gammaRegion) {
     this.zRegion = Objects.requireNonNull(zRegion);
     this.vRegion = Objects.requireNonNull(vRegion);
     this.gammaRegion = Objects.requireNonNull(gammaRegion);
@@ -40,7 +41,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from Region
-  public boolean isMember(Tensor tensor) { // {x, z, velocity, pathAngle}
+  public final boolean isMember(Tensor tensor) { // {x, z, velocity, pathAngle}
     return zRegion.isMember(tensor.get(1)) //
         && vRegion.isMember(tensor.get(2)) //
         && gammaRegion.isMember(tensor.get(3));

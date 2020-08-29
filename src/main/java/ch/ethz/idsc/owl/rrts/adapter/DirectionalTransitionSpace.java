@@ -9,11 +9,13 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class DirectionalTransitionSpace implements TransitionSpace, Serializable {
+  /** @param transitionSpace
+   * @return */
   public static TransitionSpace of(TransitionSpace transitionSpace) {
     return new DirectionalTransitionSpace(transitionSpace);
   }
 
-  // ---
+  /***************************************************/
   private final TransitionSpace forwardTransitionSpace;
   private final TransitionSpace backwardTransitionSpace;
 

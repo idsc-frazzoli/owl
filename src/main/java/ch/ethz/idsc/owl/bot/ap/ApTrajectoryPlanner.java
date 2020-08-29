@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     ApComboRegion apComboRegion = ApComboRegion.createApRegion(GOAL, RADIUS_VECTOR);
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, ApStateSpaceModel.Z_DOT_FLIGHT_MAX);
     GoalInterface goalInterface = apMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint apPlannerConstraint = new ApPlannerConstraint();
+    PlannerConstraint apPlannerConstraint = ApPlannerConstraint.INSTANCE;
     return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, apPlannerConstraint, goalInterface);
   }
 }

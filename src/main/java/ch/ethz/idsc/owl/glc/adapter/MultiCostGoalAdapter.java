@@ -31,7 +31,7 @@ public final class MultiCostGoalAdapter implements GoalInterface, Serializable {
     return new MultiCostGoalAdapter(goalInterface, list);
   }
 
-  // ---
+  /***************************************************/
   private final TrajectoryRegionQuery trajectoryRegionQuery;
   private final Collection<CostFunction> collection;
 

@@ -24,7 +24,7 @@ public class DubinsTransitionSpace implements TransitionSpace, Serializable {
         Objects.requireNonNull(comparator));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar radius;
   private final Comparator<DubinsPath> comparator;
 

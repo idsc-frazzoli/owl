@@ -29,7 +29,7 @@ public class SimpleRelabelDecision implements RelabelDecision, Serializable {
     return new SimpleRelabelDecision(Chop.below(Sign.requirePositive(slack).number().doubleValue()));
   }
 
-  // ---
+  /***************************************************/
   private final Chop chop;
 
   public SimpleRelabelDecision(Chop chop) {

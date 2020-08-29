@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
@@ -15,10 +16,10 @@ import ch.ethz.idsc.tensor.alg.Last;
   /** @param midpointInterface
    * @return */
   public static CurveSubdivision of(MidpointInterface midpointInterface) {
-    return new ControlMidpoints(midpointInterface);
+    return new ControlMidpoints(Objects.requireNonNull(midpointInterface));
   }
 
-  // ---
+  /***************************************************/
   private final MidpointInterface midpointInterface;
 
   private ControlMidpoints(MidpointInterface midpointInterface) {

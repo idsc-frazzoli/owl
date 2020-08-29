@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -36,7 +37,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5, 6, 6).unmodifiable();
   private static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { { .3, 0, 1 }, { -.1, -.1, 1 }, { -.1, +.1, 1 } }).unmodifiable();
-  private static final SatelliteStateSpaceModel SATELLITE_MODEL = new SatelliteStateSpaceModel();
+  private static final StateSpaceModel STATE_SPACE_MODEL = SatelliteStateSpaceModel.INSTANCE;
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   // ---
   private final Collection<Tensor> controls;
@@ -45,7 +46,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** @param state initial position of entity */
   public SatelliteEntity(Tensor state, TrajectoryControl trajectoryControl, Collection<Tensor> controls) {
     super( //
-        new SimpleEpisodeIntegrator(SATELLITE_MODEL, INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
+        new SimpleEpisodeIntegrator(STATE_SPACE_MODEL, INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
     add(FallbackControl.of(Array.zeros(2)));
     this.controls = controls;
@@ -64,7 +65,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(INTEGRATOR, SATELLITE_MODEL, RationalScalar.of(1, 12), 4);
+        FixedStateIntegrator.create(INTEGRATOR, STATE_SPACE_MODEL, RationalScalar.of(1, 12), 4);
     Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), Array.zeros(2));
     GoalInterface goalInterface = SatelliteGoalManager.create( //
         center, Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));

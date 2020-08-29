@@ -8,4 +8,13 @@ public class InvertedRegionTest extends TestCase {
     assertTrue(new InvertedRegion<>(Regions.emptyRegion()).isMember(null));
     assertFalse(new InvertedRegion<>(Regions.completeRegion()).isMember(null));
   }
+
+  public void testNullFail() {
+    try {
+      new InvertedRegion<>(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

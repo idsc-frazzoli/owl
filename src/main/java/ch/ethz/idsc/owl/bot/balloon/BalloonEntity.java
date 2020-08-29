@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /***************************************************/
   public BalloonEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel) {
     super(episodeIntegrator, trajectoryControl);
-    add(new BalloonFallbackControl());
+    add(BalloonFallbackControl.INSTANCE);
     this.stateSpaceModel = stateSpaceModel;
     bufferedImage = ResourceData.bufferedImage("/graphics/hotairballoon.png");
   }

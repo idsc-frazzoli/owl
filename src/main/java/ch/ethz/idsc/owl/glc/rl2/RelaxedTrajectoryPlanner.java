@@ -25,7 +25,9 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   private final RelaxedDomainQueueMap domainQueueMap;
   private final RelaxedPriorityQueue goalDomainQueue;
 
-  // ---
+  /** @param stateTimeRaster
+   * @param heuristicFunction
+   * @param slacks */
   protected RelaxedTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction, Tensor slacks) {
     this.stateTimeRaster = stateTimeRaster;

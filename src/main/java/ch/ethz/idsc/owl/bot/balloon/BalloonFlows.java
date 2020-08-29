@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.N;
     return new BalloonFlows(u_max);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar u_max;
 
   private BalloonFlows(Scalar u_max) {

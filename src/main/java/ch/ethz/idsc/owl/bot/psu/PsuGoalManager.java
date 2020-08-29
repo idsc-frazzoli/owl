@@ -19,6 +19,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class PsuGoalManager implements Region<Tensor>, CostFunction, Serializable {
+  /** @param coordinateWrap
+   * @param center
+   * @param radius
+   * @return */
   public static GoalInterface of(TensorMetric coordinateWrap, Tensor center, Tensor radius) {
     PsuGoalManager psuGoalManager = new PsuGoalManager(coordinateWrap, center, radius);
     return new GoalAdapter( //
@@ -26,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         psuGoalManager);
   }
 
-  // ---
+  /***************************************************/
   private final TensorMetric coordinateWrap;
   private final Tensor center;
   private final Tensor radius;

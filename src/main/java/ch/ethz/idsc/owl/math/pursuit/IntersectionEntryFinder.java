@@ -1,7 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
-import java.util.function.Function;
+import java.io.Serializable;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -15,13 +15,13 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
+public final class IntersectionEntryFinder extends TrajectoryEntryFinder implements Serializable {
   public static final TrajectoryEntryFinder SPHERE_RN = new IntersectionEntryFinder(SphereCurveIntersection::new);
   public static final TrajectoryEntryFinder SPHERE_SE2 = new IntersectionEntryFinder(SphereSe2CurveIntersection::new);
   // ---
-  private final Function<Scalar, AssistedCurveIntersection> function;
+  private final ScalarAssistedCurveIntersectionFunction function;
 
-  public IntersectionEntryFinder(Function<Scalar, AssistedCurveIntersection> function) {
+  public IntersectionEntryFinder(ScalarAssistedCurveIntersectionFunction function) {
     this.function = function;
   }
 

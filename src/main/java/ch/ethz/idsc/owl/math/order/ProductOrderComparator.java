@@ -11,6 +11,7 @@ import java.util.List;
 public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
   private final List<OrderComparator<? extends Object>> orderComparators;
 
+  /** @param orderComparators */
   public ProductOrderComparator(List<OrderComparator<? extends Object>> orderComparators) {
     this.orderComparators = orderComparators;
   }

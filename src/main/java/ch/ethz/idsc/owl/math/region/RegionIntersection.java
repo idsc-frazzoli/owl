@@ -25,7 +25,7 @@ public class RegionIntersection<T> implements Region<T>, Serializable {
     return new RegionIntersection<>(Objects.requireNonNull(collection));
   }
 
-  // ---
+  /***************************************************/
   private final Collection<Region<T>> collection;
 
   private RegionIntersection(Collection<Region<T>> collection) {

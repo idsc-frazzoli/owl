@@ -45,8 +45,8 @@ public class Se2CarFlows implements FlowsInterface, Serializable {
   public static FlowsInterface of(Tensor speeds, Scalar rate_max) {
     return new Se2CarFlows(speeds, rate_max);
   }
-  // ---
 
+  /***************************************************/
   private final Tensor speeds;
   private final Scalar rate_max;
 

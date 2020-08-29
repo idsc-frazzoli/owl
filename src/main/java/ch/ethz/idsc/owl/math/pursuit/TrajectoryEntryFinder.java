@@ -1,14 +1,13 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
-import java.io.Serializable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class TrajectoryEntryFinder implements Serializable {
+public abstract class TrajectoryEntryFinder {
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
   public final Function<Scalar, TrajectoryEntry> on(Tensor waypoints) {

@@ -43,7 +43,7 @@ public class EtaRaster implements StateTimeRaster, Serializable {
     return new EtaRaster(eta.copy().append(ExactScalarQ.require(dt).reciprocal()), represent);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor eta;
   private final StateTimeTensorFunction represent;
 

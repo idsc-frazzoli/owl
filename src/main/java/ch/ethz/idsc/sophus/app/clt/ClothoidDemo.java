@@ -15,8 +15,10 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
+import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,8 +38,10 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final Tensor ARROWS = Subdivide.of(0.0, 1.0, 10);
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
-  private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = //
+      ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  private static final PointsRender POINTS_RENDER = //
+      new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -58,12 +62,20 @@ import ch.ethz.idsc.tensor.sca.Round;
       Color color = COLOR_DATA_INDEXED.getColor(index);
       new PathRender(color, 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
-      POINTS_RENDER_C.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
+      POINTS_RENDER.show(Se2ClothoidDisplay.ANALYTIC::matrixLift, Arrowhead.of(0.3), ARROWS.map(clothoid)) //
           .render(geometricLayer, graphics);
       ++index;
       graphics.setColor(color);
-      Scalar angle = ArcTan2D.of(clothoid.apply(RealScalar.of(1e-8)));
-      graphics.drawString(angle.map(Round._5) + "  " + clothoid.toString(), 0, index * 20);
+      {
+        Scalar angle = ArcTan2D.of(clothoid.apply(RealScalar.of(1e-8)));
+        graphics.drawString(angle.map(Round._5) + "  " + clothoid.toString(), 0, index * 20);
+        graphics.draw(geometricLayer.toLine2D(AngleVector.of(angle)));
+      }
+      {
+        LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
+        Scalar angle = lagrangeQuadraticD.head();
+        graphics.draw(geometricLayer.toLine2D(AngleVector.of(angle).multiply(RealScalar.of(2))));
+      }
     }
   }
 

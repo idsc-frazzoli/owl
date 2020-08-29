@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -8,10 +9,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public final class NaiveEntryFinder extends TrajectoryEntryFinder {
+public final class NaiveEntryFinder extends TrajectoryEntryFinder implements Serializable {
   public static final TrajectoryEntryFinder INSTANCE = new NaiveEntryFinder();
 
-  // ---
   private NaiveEntryFinder() {
     // ---
   }

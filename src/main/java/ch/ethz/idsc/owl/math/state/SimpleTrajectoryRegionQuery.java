@@ -19,7 +19,7 @@ public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, Seria
     return new SimpleTrajectoryRegionQuery(new TimeInvariantRegion(region));
   }
 
-  // ---
+  /***************************************************/
   protected final Region<StateTime> region;
 
   /** @param region non-null */

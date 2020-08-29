@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -14,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -25,25 +27,25 @@ public class ArgMinVariableTest extends TestCase {
   private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
   private static final int DEPTH = 5;
 
-  public void testInterpolation() {
+  public void testInterpolation() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}");
-    TrajectoryEntryFinder entryFinder = InterpolationEntryFinder.INSTANCE;
+    TrajectoryEntryFinder entryFinder = Serialization.copy(InterpolationEntryFinder.INSTANCE);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(N.DOUBLE).map(Chop._06));
   }
 
-  public void testIntersection() {
+  public void testIntersection() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
-    TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.SPHERE_SE2;
+    TrajectoryEntryFinder entryFinder = Serialization.copy(IntersectionEntryFinder.SPHERE_SE2);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
     assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 
-  public void testGeodesic() {
+  public void testGeodesic() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
-    TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(CLOTHOID_BUILDER);
+    TrajectoryEntryFinder entryFinder = Serialization.copy(new GeodesicInterpolationEntryFinder(CLOTHOID_BUILDER));
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));

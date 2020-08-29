@@ -10,12 +10,12 @@ import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator, Serializable {
+/* package */ abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator, Serializable {
   protected final StateSpaceModel stateSpaceModel;
   /* package */ final Integrator integrator;
   private StateTime stateTime;
 
-  AbstractEpisodeIntegrator(StateSpaceModel stateSpaceModel, Integrator integrator, StateTime stateTime) {
+  public AbstractEpisodeIntegrator(StateSpaceModel stateSpaceModel, Integrator integrator, StateTime stateTime) {
     this.stateSpaceModel = stateSpaceModel;
     this.integrator = integrator;
     this.stateTime = stateTime;

@@ -24,7 +24,7 @@ public class BoundedBoxRegion implements Region<Tensor>, Serializable {
         .collect(Collectors.toList()));
   }
 
-  // ---
+  /***************************************************/
   private final List<Clip> list;
 
   private BoundedBoxRegion(List<Clip> list) {

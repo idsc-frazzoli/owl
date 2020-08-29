@@ -14,7 +14,7 @@ public class RegionDifference<T> implements Region<T>, Serializable {
         Objects.requireNonNull(butNot));
   }
 
-  // ---
+  /***************************************************/
   private final Region<T> belongs;
   private final Region<T> butNot;
 

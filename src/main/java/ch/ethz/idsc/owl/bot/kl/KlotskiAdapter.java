@@ -7,10 +7,19 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiAdapter implements KlotskiProblem, Serializable {
+  /** @param board
+   * @param name
+   * @param stateTimeRaster
+   * @param size
+   * @param goal
+   * @param frame
+   * @param border
+   * @return */
   public static KlotskiProblem create(Tensor board, String name, StateTimeRaster stateTimeRaster, Tensor size, Tensor goal, Tensor frame, Tensor border) {
     return new KlotskiAdapter(board, name, stateTimeRaster, size, goal, frame, border);
   }
 
+  /***************************************************/
   private final Tensor board;
   private final String name;
   private final StateTimeRaster stateTimeRaster;

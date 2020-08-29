@@ -31,7 +31,7 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
         : new RnPointcloudRegion(points, radius);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor points;
   private final Scalar radius;
   private final NdMap<Void> ndMap;

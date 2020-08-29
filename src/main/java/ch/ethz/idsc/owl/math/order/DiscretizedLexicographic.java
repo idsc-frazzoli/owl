@@ -16,11 +16,13 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * 
  * returns -1 if t1 < t2 */
 public class DiscretizedLexicographic implements Comparator<Tensor>, Serializable {
+  /** @param slack
+   * @return */
   public static final DiscretizedLexicographic of(Tensor slack) {
     return new DiscretizedLexicographic(slack);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor slack;
 
   private DiscretizedLexicographic(Tensor slack) {

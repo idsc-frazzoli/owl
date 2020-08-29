@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.red.ArgMin;
 /** Hint:
  * does not implement {@link Serializable} because {@link Optional} does not implement {@link Serializable} */
 /* package */ class ArgMinValue {
+  /** @param tensor
+   * @return */
   public static ArgMinValue of(Tensor tensor) {
     int index = ArgMin.of(tensor);
     return new ArgMinValue(index, 0 <= index //
@@ -19,7 +21,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
         : Optional.empty());
   }
 
-  // ---
+  /***************************************************/
   private final int index;
   private final Optional<Scalar> value;
 

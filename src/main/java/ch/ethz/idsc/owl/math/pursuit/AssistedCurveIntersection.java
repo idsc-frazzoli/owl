@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
 import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
-public abstract class AssistedCurveIntersection extends SimpleCurveIntersection implements AssistedCurveIntersectionInterface {
+public abstract class AssistedCurveIntersection extends SimpleCurveIntersection //
+    implements AssistedCurveIntersectionInterface {
   /** @param radius non-negative
    * @param binaryAverage
    * @throws Exception if given radius is negative */

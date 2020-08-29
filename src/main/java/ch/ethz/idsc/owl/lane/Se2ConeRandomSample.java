@@ -30,7 +30,7 @@ public class Se2ConeRandomSample implements RandomSampleInterface, Serializable 
         UniformDistribution.of(Clips.positive(depth)));
   }
 
-  // ---
+  /***************************************************/
   private final Se2GroupElement se2GroupElement;
   private final Distribution distributionDepth;
   private final Distribution distributionAngle;

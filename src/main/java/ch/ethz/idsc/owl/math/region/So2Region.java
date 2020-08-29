@@ -26,7 +26,7 @@ public final class So2Region extends ImplicitRegionWithDistance implements Seria
     return new So2Region(center, radius);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar center;
   private final Scalar radius;
   private final ScalarUnaryOperator mod;

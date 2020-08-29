@@ -1,7 +1,6 @@
 // code by jph, astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.ani.api.EntityControl;
@@ -11,7 +10,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class BalloonFallbackControl implements EntityControl, Serializable {
+/* package */ enum BalloonFallbackControl implements EntityControl {
+  INSTANCE;
+
   @Override
   public Optional<Tensor> control(StateTime tail, Scalar now) {
     return Optional.of(Tensors.vector(0));

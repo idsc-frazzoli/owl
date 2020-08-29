@@ -21,7 +21,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
     return new LaneRandomSample(laneInterface, distribution);
   }
 
-  // ---
+  /***************************************************/
   private final LaneInterface laneInterface;
   private final Distribution distribution;
 
