@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
-import ch.ethz.idsc.sophus.srf.subdiv.GeodesicCatmullClarkSubdivision;
+import ch.ethz.idsc.sophus.ref.d2.GeodesicCatmullClarkSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

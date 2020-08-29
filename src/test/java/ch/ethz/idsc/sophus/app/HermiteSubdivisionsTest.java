@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app;
 
-import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
@@ -12,6 +11,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.sophus.ref.d1h.HermiteSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

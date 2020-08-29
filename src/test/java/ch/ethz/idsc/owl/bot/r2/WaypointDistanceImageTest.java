@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.ref.d1.BSpline1CurveSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;

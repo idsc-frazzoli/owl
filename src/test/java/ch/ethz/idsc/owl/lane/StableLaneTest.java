@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.lane;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.MatrixQ;

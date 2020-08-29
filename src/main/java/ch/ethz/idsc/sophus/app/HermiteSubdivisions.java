@@ -1,13 +1,13 @@
 // code by jph
 package ch.ethz.idsc.sophus.app;
 
-import ch.ethz.idsc.sophus.crv.hermite.Hermite1Subdivisions;
-import ch.ethz.idsc.sophus.crv.hermite.Hermite2Subdivisions;
-import ch.ethz.idsc.sophus.crv.hermite.Hermite3Subdivisions;
-import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.ref.d1h.Hermite1Subdivisions;
+import ch.ethz.idsc.sophus.ref.d1h.Hermite2Subdivisions;
+import ch.ethz.idsc.sophus.ref.d1h.Hermite3Subdivisions;
+import ch.ethz.idsc.sophus.ref.d1h.HermiteSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 

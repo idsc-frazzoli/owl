@@ -1,13 +1,13 @@
 package ch.ethz.idsc.sophus.app.curve;
 
-import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.Dual3PointCurveSubdivision;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.MeanDefect;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
+import ch.ethz.idsc.sophus.ref.d1.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.Dual3PointCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;

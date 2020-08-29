@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.api;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
+import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;

@@ -6,10 +6,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.SplitInterface;
+import ch.ethz.idsc.sophus.ref.d1.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.FourPointCurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 

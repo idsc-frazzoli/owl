@@ -5,8 +5,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
+import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Nest;

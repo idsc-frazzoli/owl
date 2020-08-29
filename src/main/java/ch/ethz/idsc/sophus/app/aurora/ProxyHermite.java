@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
@@ -15,6 +14,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.sophus.ref.d1h.HermiteSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
