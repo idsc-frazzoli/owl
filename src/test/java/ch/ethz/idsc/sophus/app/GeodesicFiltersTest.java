@@ -42,7 +42,7 @@ public class GeodesicFiltersTest extends TestCase {
       Tensor diff = map.get(lieGroupFilters).subtract(map.get(GeodesicFilters.BIINVARIANT_MEAN));
       diff.set(So2.MOD, Tensor.ALL, 2);
       Scalar norm = Norm.INFINITY.ofMatrix(diff);
-      Chop._02.requireAllZero(norm);
+      Chop._02.requireZero(norm);
     }
   }
 

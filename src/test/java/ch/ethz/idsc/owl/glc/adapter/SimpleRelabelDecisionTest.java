@@ -45,6 +45,6 @@ public class SimpleRelabelDecisionTest extends TestCase {
   }
 
   public void testChop() {
-    Chop._05.requireAllZero(Quantity.of(1e-7, "USD"));
+    Chop._05.requireZero(Quantity.of(1e-7, "USD"));
   }
 }

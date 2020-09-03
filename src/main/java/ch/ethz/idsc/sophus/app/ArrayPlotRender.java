@@ -7,13 +7,12 @@ import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.math.ClipCover;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Clips;
 
 public class ArrayPlotRender implements RenderInterface {
   /** @param tensor
@@ -22,11 +21,10 @@ public class ArrayPlotRender implements RenderInterface {
    * @return */
   public static ArrayPlotRender rescale(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
     Rescale rescale = new Rescale(tensor);
-    ScalarSummaryStatistics scalarSummaryStatistics = rescale.scalarSummaryStatistics();
-    Clip clip = 0 < scalarSummaryStatistics.getCount() //
-        ? Clips.interval(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax())
-        : null;
-    return new ArrayPlotRender(rescale.result(), clip, colorDataGradient, magnify);
+    return new ArrayPlotRender( //
+        rescale.result(), //
+        ClipCover.of(rescale.scalarSummaryStatistics()), //
+        colorDataGradient, magnify);
   }
 
   /***************************************************/
@@ -35,7 +33,7 @@ public class ArrayPlotRender implements RenderInterface {
   private final int height;
   private final BufferedImage legend;
 
-  private ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
+  public ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
     bufferedImage = ImageFormat.of(tensor.map(colorDataGradient));
     width = bufferedImage.getWidth() * magnify;
     height = bufferedImage.getHeight() * magnify;

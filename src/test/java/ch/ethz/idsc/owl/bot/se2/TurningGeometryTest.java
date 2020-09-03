@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 public class TurningGeometryTest extends TestCase {
   public void test90() {
     Optional<Scalar> offsetY = TurningGeometry.offset_y(RealScalar.ONE, RealScalar.of(Math.PI / 2));
-    Chop._10.requireAllZero(offsetY.get());
+    Chop._10.requireZero(offsetY.get());
   }
 
   public void test45() {
