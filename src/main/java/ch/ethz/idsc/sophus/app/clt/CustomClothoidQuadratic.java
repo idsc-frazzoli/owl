@@ -2,10 +2,10 @@
 package ch.ethz.idsc.sophus.app.clt;
 
 import java.io.Serializable;
+import java.util.function.BinaryOperator;
 
 import ch.ethz.idsc.sophus.clt.LagrangeQuadratic;
 import ch.ethz.idsc.sophus.clt.mid.ClothoidQuadratic;
-import ch.ethz.idsc.sophus.math.ScalarBinaryOperator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.Scalar;
   }
 
   /***************************************************/
-  private final ScalarBinaryOperator scalarBinaryOperator;
+  private final BinaryOperator<Scalar> scalarBinaryOperator;
 
   /** @param scalarBinaryOperator mapping (s1, s2) -> lambda */
-  public CustomClothoidQuadratic(ScalarBinaryOperator scalarBinaryOperator) {
+  public CustomClothoidQuadratic(BinaryOperator<Scalar> scalarBinaryOperator) {
     this.scalarBinaryOperator = scalarBinaryOperator;
   }
 

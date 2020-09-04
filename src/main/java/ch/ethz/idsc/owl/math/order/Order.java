@@ -2,14 +2,15 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.io.Serializable;
+import java.util.function.BiPredicate;
 
 /** See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures" */
 public final class Order<T> implements OrderComparator<T>, Serializable {
-  private final BinaryRelation<T> binaryRelation;
+  private final BiPredicate<T, T> binaryRelation;
 
   /** @param binaryRelation reflexive and transitive
    * @return */
-  public Order(BinaryRelation<T> binaryRelation) {
+  public Order(BiPredicate<T, T> binaryRelation) {
     this.binaryRelation = binaryRelation;
   }
 

@@ -1,6 +1,9 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.Serializable;
+
+import ch.ethz.idsc.owl.math.order.BinaryRelation;
 import ch.ethz.idsc.owl.math.order.Order;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
 
@@ -41,5 +44,7 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
    * <td>Different colors and neither is "Trumpf"</td>
    * </tr>
    * </table> */
-  public static final OrderComparator<JassCard> INSTANCE = new Order<>(JassCard::isLess);
+  public static final OrderComparator<JassCard> INSTANCE = new Order<>( //
+      (BinaryRelation<JassCard> & Serializable) //
+      JassCard::isLess);
 }

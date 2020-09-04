@@ -2,9 +2,9 @@
 package ch.ethz.idsc.owl.glc.adapter;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,14 +24,16 @@ import ch.ethz.idsc.tensor.sca.Floor;
 public class EtaRaster implements StateTimeRaster, Serializable {
   /** @param eta
    * @return uniform raster for {@link StateTime#state()} */
+  @SuppressWarnings("unchecked")
   public static StateTimeRaster state(Tensor eta) {
-    return new EtaRaster(eta, StateTime::state);
+    return new EtaRaster(eta, (Function<StateTime, Tensor> & Serializable) StateTime::state);
   }
 
   /** @param eta
    * @return uniform raster for {@link StateTime#joined()} */
+  @SuppressWarnings("unchecked")
   public static StateTimeRaster joined(Tensor eta) {
-    return new EtaRaster(eta, StateTime::joined);
+    return new EtaRaster(eta, (Function<StateTime, Tensor> & Serializable) StateTime::joined);
   }
 
   /** @param eta
@@ -39,15 +41,15 @@ public class EtaRaster implements StateTimeRaster, Serializable {
    * @param represent for instance StateTime::joined
    * @return
    * @throws Exception if dt is not in exact precision */
-  public static StateTimeRaster timeDependent(Tensor eta, Scalar dt, StateTimeTensorFunction represent) {
+  public static StateTimeRaster timeDependent(Tensor eta, Scalar dt, Function<StateTime, Tensor> represent) {
     return new EtaRaster(eta.copy().append(ExactScalarQ.require(dt).reciprocal()), represent);
   }
 
   /***************************************************/
   private final Tensor eta;
-  private final StateTimeTensorFunction represent;
+  private final Function<StateTime, Tensor> represent;
 
-  public EtaRaster(Tensor eta, StateTimeTensorFunction represent) {
+  public EtaRaster(Tensor eta, Function<StateTime, Tensor> represent) {
     this.eta = eta.copy();
     this.represent = represent;
   }

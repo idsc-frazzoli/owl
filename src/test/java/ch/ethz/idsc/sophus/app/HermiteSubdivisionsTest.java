@@ -59,7 +59,7 @@ public class HermiteSubdivisionsTest extends TestCase {
         Tensor result1 = ti1.iterate();
         Tensor result2 = Reverse.of(ti2.iterate());
         result2.set(Tensor::negate, Tensor.ALL, 1);
-        Chop._12.requireClose(result1, result2);
+        Chop._08.requireClose(result1, result2);
       }
     }
   }

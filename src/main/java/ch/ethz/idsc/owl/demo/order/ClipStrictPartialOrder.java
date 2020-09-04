@@ -1,6 +1,8 @@
 // code by jph, astoll
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.order.BinaryRelation;
 import ch.ethz.idsc.owl.math.order.Order;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
@@ -24,6 +26,7 @@ public enum ClipStrictPartialOrder {
   ;
   /** binary relation
    * irreflexive */
-  private static final BinaryRelation<Clip> BINARY_RELATION = (x, y) -> Scalars.lessThan(x.max(), y.min());
+  private static final BinaryRelation<Clip> BINARY_RELATION = (BinaryRelation<Clip> & Serializable) //
+  (x, y) -> Scalars.lessThan(x.max(), y.min());
   public static final OrderComparator<Clip> INSTANCE = new Order<>(BINARY_RELATION);
 }

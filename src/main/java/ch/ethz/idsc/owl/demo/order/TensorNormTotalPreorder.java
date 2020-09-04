@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.order.BinaryRelation;
 import ch.ethz.idsc.owl.math.order.Order;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
@@ -14,7 +16,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * using Scalars.lessEquals as a binary relation
  * 
  * binary relation that is reflexive and transitive, but not antisymmetric */
-public class TensorNormTotalPreorder implements BinaryRelation<Tensor> {
+public class TensorNormTotalPreorder implements BinaryRelation<Tensor>, Serializable {
   private final Norm norm;
 
   public TensorNormTotalPreorder(Norm norm) {

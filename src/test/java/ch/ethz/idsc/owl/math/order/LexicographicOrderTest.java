@@ -2,9 +2,11 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
@@ -93,12 +95,15 @@ public class LexicographicOrderTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(Abs.of(x), Abs.of(y)));
+    @SuppressWarnings("unchecked")
+    OrderComparator<Scalar> comparator1 = new Order<>( //
+        (BiPredicate<Scalar, Scalar> & Serializable) (x, y) -> Scalars.divides(Abs.of(x), Abs.of(y)));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
-    LexicographicOrder<Scalar> lexicographicOrder = Serialization.copy(new LexicographicOrder<>(comparatorList));
+    LexicographicOrder<Scalar> lexicographicOrder = Serialization.copy( //
+        new LexicographicOrder<>(comparatorList));
     List<Scalar> x = Tensors.vector(2, -5, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     List<Scalar> y = Tensors.vector(6, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(x, x));

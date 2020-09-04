@@ -1,12 +1,15 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class EtaRasterTest extends TestCase {
@@ -17,12 +20,12 @@ public class EtaRasterTest extends TestCase {
     ExactTensorQ.require(tensor);
   }
 
-  public void testJoined() {
+  public void testJoined() throws ClassNotFoundException, IOException {
     StateTimeRaster stateTimeRaster = EtaRaster.joined(Tensors.vector(2., 3., 4.));
     Tensor tensor = stateTimeRaster.convertToKey(new StateTime(Tensors.vector(100, 100), RealScalar.of(97)));
     assertEquals(tensor, Tensors.vector(200, 300, 97 * 4));
     ExactTensorQ.require(tensor);
-    EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
+    EtaRaster etaRaster = Serialization.copy((EtaRaster) stateTimeRaster);
     assertEquals(etaRaster.eta(), Tensors.vector(2, 3, 4));
   }
 

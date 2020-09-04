@@ -31,7 +31,7 @@ public class SingleEboTracker<K> extends AbstractEboTracker<K> {
     return new SingleEboTracker<>(slacks, new HashSet<>());
   }
 
-  // ---
+  /***************************************************/
   private final ProductOrderComparator productOrderComparator;
 
   private SingleEboTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {

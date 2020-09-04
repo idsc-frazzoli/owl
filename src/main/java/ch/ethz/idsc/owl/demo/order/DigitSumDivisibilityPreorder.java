@@ -1,6 +1,8 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.order.BinaryRelation;
 import ch.ethz.idsc.owl.math.order.Order;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
@@ -23,11 +25,13 @@ public enum DigitSumDivisibilityPreorder {
   }
 
   private static final BinaryRelation<Scalar> BINARY_RELATION_SCALAR = //
+      (BinaryRelation<Scalar> & Serializable) //
       (x, y) -> Scalars.divides(totalDigits(x), totalDigits(y));
   /** for scalar */
   public static final OrderComparator<Scalar> SCALAR = new Order<>(BINARY_RELATION_SCALAR);
   // ---
   private static final BinaryRelation<Integer> BINARY_RELATION_INTEGER = //
+      (BinaryRelation<Integer> & Serializable) //
       (x, y) -> Scalars.divides(totalDigits(RealScalar.of(x)), totalDigits(RealScalar.of(y)));
   /** for integers */
   public static final OrderComparator<Integer> INTEGER = new Order<>(BINARY_RELATION_INTEGER);
