@@ -23,9 +23,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Q[Sqrt[n]] */
 public class RootScalar extends AbstractScalar implements //
-    // ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExpInterface, //
-    // LogInterface, PowerInterface, RoundingInterface, SqrtInterface, TrigonometryInterface, //
-    // ChopInterface,
     AbsInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
   /** creator with package visibility
    * 
@@ -107,6 +104,11 @@ public class RootScalar extends AbstractScalar implements //
   @Override // from AbsInterface
   public Scalar abs() { // "complex modulus"
     return Abs.FUNCTION.apply(re.add(im.multiply(Sqrt.of(ba))));
+  }
+
+  @Override // from AbsInterface
+  public Scalar absSquared() {
+    return Abs.FUNCTION.apply(multiply(this));
   }
 
   @Override // from ExactNumberInterface

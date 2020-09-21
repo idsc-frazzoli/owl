@@ -68,6 +68,11 @@ public final class AnyScalar extends AbstractScalar implements //
     return this;
   }
 
+  @Override
+  public Scalar absSquared() {
+    return this;
+  }
+
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     return this;

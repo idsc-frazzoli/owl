@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public final class GeometricComponent {
-  private static final Scalar SCALE_FACTOR = Sqrt.FUNCTION.apply(RealScalar.of(2));
+  private static final Scalar SCALE_FACTOR = Sqrt.FUNCTION.apply(RealScalar.TWO);
   private static final Font FONT_DEFAULT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final Scalar WHEEL_ANGLE = Degree.of(15);
   /** initial model to pixel matrix */

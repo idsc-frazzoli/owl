@@ -14,10 +14,10 @@ import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
-import ch.ethz.idsc.sophus.lie.so3.So3Group;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
-import ch.ethz.idsc.sophus.lie.so3.So3Transport;
+import ch.ethz.idsc.sophus.lie.son.SonGroup;
+import ch.ethz.idsc.sophus.lie.son.SonTransport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -81,7 +81,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return So3Group.INSTANCE;
+    return SonGroup.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -91,7 +91,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return So3Transport.INSTANCE;
+    return SonTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

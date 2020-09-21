@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
-    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2));
+    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.TWO);
     Tensor xy = range.multiply(RationalScalar.HALF.negate());
     return GeodesicArrayPlot.pixel2model(xy, range, dimension);
   }

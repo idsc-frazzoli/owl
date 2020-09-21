@@ -1,8 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.sym;
 
+import java.util.OptionalInt;
+
 import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
 import ch.ethz.idsc.tensor.sca.SqrtInterface;
@@ -153,9 +153,12 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override // from PowerInterface
   public JetScalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent) && //
-        Sign.isPositiveOrZero(exponent)) // TODO exponent == zero!?
-      return new JetScalar(power(vector, Scalars.intValueExact(exponent)));
+    OptionalInt optionalInt = Scalars.optionalInt(exponent);
+    if (optionalInt.isPresent()) {
+      int expInt = optionalInt.getAsInt();
+      if (0 <= expInt) // TODO exponent == zero!?
+        return new JetScalar(power(vector, expInt));
+    }
     return chain(vector, Power.function(exponent), //
         scalar -> Power.function(exponent.subtract(RealScalar.ONE)).apply(scalar).multiply(exponent));
   }

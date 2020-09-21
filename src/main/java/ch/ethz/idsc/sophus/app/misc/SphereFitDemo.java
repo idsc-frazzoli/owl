@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
-import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
+import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -74,11 +74,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
       new PathRender(Color.GRAY).setCurve(CIRCLE, true).render(geometricLayer, graphics);
       Tensor matrix = Tensors.matrix((i, j) -> //
       Norm._2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
-      HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
-      int[] matching = hungarianAlgorithm.matching();
+      BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
+      int[] matching = bipartiteMatching.matching();
       graphics.setColor(Color.RED);
       for (int index = 0; index < matching.length; ++index)
-        if (matching[index] != HungarianAlgorithm.UNASSIGNED) {
+        if (matching[index] != BipartiteMatching.UNASSIGNED) {
           Path2D path2d = geometricLayer.toPath2D(Tensors.of(control.get(index), CIRCLE.get(matching[index])));
           graphics.draw(path2d);
         }

@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class AccMaxClassifier extends Classifier {
-  private static final Scalar TWO = RealScalar.of(2);
-
   /** @param labels */
   public AccMaxClassifier(Tensor labels) {
     super(Primitives.toIntArray(labels));
@@ -27,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
         .forEach(index -> arguments.set(weights.get(index)::add, labels[index]));
     int label = ArgMax.of(arguments);
     Scalar confidence = //
-        Clips.unit().apply(TWO.subtract(Total.ofVector(arguments).divide(arguments.Get(label))));
+        Clips.unit().apply(RealScalar.TWO.subtract(Total.ofVector(arguments).divide(arguments.Get(label))));
     return new ClassificationResult(label, confidence);
   }
 }

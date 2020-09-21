@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.twd;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -17,7 +17,7 @@ public abstract class TwdFlows implements FlowsInterface, Serializable {
   /** @param maxSpeed [m*s^-1]
    * @param halfWidth [m*rad^-1] */
   public TwdFlows(Scalar maxSpeed, Scalar halfWidth) {
-    maxSpeedHalf = maxSpeed.divide(RealScalar.of(2));
+    maxSpeedHalf = maxSpeed.multiply(RationalScalar.HALF);
     this.halfWidth = halfWidth;
   }
 

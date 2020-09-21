@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
   @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
-    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.of(2)); // model
+    Tensor range = Tensors.of(radius, radius).multiply(RealScalar.TWO); // model
     Tensor scale = Tensors.vector(dimension.width, dimension.height) //
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //

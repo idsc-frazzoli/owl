@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from GeodesicArrayPlot
   public Tensor pixel2model(Dimension dimension) {
-    Tensor range = Tensors.vector(RADIUS, RADIUS).multiply(RealScalar.of(2)); // model
+    Tensor range = Tensors.vector(RADIUS, RADIUS).multiply(RealScalar.TWO); // model
     Tensor xy = range.multiply(RationalScalar.HALF.negate());
     return GeodesicArrayPlot.pixel2model(xy, range, dimension);
   }

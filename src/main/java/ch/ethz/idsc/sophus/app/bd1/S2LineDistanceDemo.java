@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private Tensor pixel2model(BufferedImage bufferedImage) {
     double rad = rad();
-    Tensor range = Tensors.vector(rad, rad).multiply(RealScalar.of(2)); // model
+    Tensor range = Tensors.vector(rad, rad).multiply(RealScalar.TWO); // model
     Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //
