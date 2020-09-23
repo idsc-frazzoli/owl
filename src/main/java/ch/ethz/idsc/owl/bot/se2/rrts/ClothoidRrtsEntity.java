@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
@@ -60,8 +61,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
           @Override
           protected RandomSampleInterface spaceSampler(Tensor state) {
             return BoxRandomSample.of( //
-                lbounds.copy().append(Pi.HALF.negate()), //
-                ubounds.copy().append(Pi.HALF));
+                Append.of(lbounds, Pi.HALF.negate()), //
+                Append.of(ubounds, Pi.HALF));
           }
 
           @Override

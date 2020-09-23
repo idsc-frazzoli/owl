@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 
 /* package */ enum StaticHelper {
   ;
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
     case 0:
       return ZEROS;
     case 1:
-      return vector.copy().append(RealScalar.ZERO);
+      return Append.of(vector, RealScalar.ZERO);
     case 2:
       return vector;
     default:

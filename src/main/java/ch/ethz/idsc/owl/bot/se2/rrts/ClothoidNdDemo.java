@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
@@ -55,8 +56,8 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     // ---
     Random random = new Random();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        LBOUNDS.copy().append(Pi.VALUE.negate()), //
-        UBOUNDS.copy().append(Pi.VALUE));
+        Append.of(LBOUNDS, Pi.VALUE.negate()), //
+        Append.of(UBOUNDS, Pi.VALUE));
     Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), SIZE);
     for (Tensor state : tensor) {
       rrtsNodeCollection1.insert(RrtsNode.createRoot(state, RealScalar.ZERO));

@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 
 /** distinguishes the first 2 coordinates of StateTime::state */
 class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializable {
@@ -23,7 +24,7 @@ class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializa
   public void notify_isMember(StateTime stateTime) {
     Tensor x = stateTime.state();
     Tensor key = 1 == x.length() //
-        ? x.copy().append(RealScalar.ZERO)
+        ? Append.of(x, RealScalar.ZERO)
         : Extract2D.FUNCTION.apply(x);
     rasterMap.put(key, stateTime);
   }

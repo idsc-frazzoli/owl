@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
@@ -133,7 +134,7 @@ public final class GeometricComponent {
               model2pixel.set(RealScalar.of(dy)::add, 1, 2);
             } else {
               Tensor t1 = Se2Matrix.translation(center.negate());
-              Tensor t2 = Se2Matrix.of(center.copy().append(a2.subtract(a1)));
+              Tensor t2 = Se2Matrix.of(Append.of(center, a2.subtract(a1)));
               model2pixel = model2pixel.dot(t2).dot(t1);
             }
             jComponent.repaint();
@@ -204,7 +205,7 @@ public final class GeometricComponent {
   /** @return {px, py, angle} in model space */
   public Tensor getMouseSe2CState() {
     Scalar scalar = RealScalar.of(mouseWheel).multiply(WHEEL_ANGLE);
-    return mouseLocation.copy().append(scalar);
+    return Append.of(mouseLocation, scalar);
   }
 
   public void addRenderInterfaceBackground(RenderInterface renderInterface) {

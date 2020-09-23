@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** nearest-neighbor query heuristic backed by NdTreeMap */
@@ -25,7 +26,7 @@ public enum Se2RrtsNodeCollections {
   public static RrtsNodeCollection of(TransitionSpace transitionSpace, Tensor lbounds, Tensor ubounds) {
     return NdTypeRrtsNodeCollection.of( //
         new TransitionNdType(transitionSpace), //
-        VectorQ.requireLength(lbounds, 2).copy().append(ZERO), //
-        VectorQ.requireLength(ubounds, 2).copy().append(ZERO));
+        Append.of(VectorQ.requireLength(lbounds, 2), ZERO), //
+        Append.of(VectorQ.requireLength(ubounds, 2), ZERO));
   }
 }

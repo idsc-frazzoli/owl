@@ -28,6 +28,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
@@ -64,7 +65,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
 
   @Override
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
-    Tensor goal = VectorQ.requireLength(_goal, 3).copy().append(goalVelocity);
+    Tensor goal = Append.of(VectorQ.requireLength(_goal, 3), goalVelocity);
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     //  ---

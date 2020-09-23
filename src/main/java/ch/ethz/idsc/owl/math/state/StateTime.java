@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Append;
 
 /** StateTime is immutable, contents of instance do not change after construction */
 public final class StateTime implements Serializable {
@@ -32,7 +33,7 @@ public final class StateTime implements Serializable {
 
   /** @return concatenation of state and time as vector */
   public Tensor joined() {
-    return x.copy().append(time);
+    return Append.of(x, time);
   }
 
   public String toInfoString() {

@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
@@ -111,7 +112,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from TrajectoryEntity
   public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.copy().append(goalVelocity);
+    goal = Append.of(goal, goalVelocity);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     Tse2MinTimeGoalManager tse2MinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);

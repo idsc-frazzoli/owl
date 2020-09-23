@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -47,8 +48,8 @@ public class TransitionNdContainer {
     VectorQ.requireLength(ubounds, 2);
     Random random = new Random(1);
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        lbounds.copy().append(Pi.VALUE.negate()), //
-        ubounds.copy().append(Pi.VALUE));
+        Append.of(lbounds, Pi.VALUE.negate()), //
+        Append.of(ubounds, Pi.VALUE));
     tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
       TransitionNdTypes se2TransitionNdType = TransitionNdTypes.fromString(geodesicDisplay);

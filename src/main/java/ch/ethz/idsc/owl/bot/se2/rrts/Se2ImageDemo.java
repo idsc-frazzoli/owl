@@ -23,6 +23,7 @@ import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -51,8 +52,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        lbounds.copy().append(Pi.VALUE.negate()), //
-        ubounds.copy().append(Pi.VALUE));
+        Append.of(lbounds, Pi.VALUE.negate()), //
+        Append.of(ubounds, Pi.VALUE));
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)

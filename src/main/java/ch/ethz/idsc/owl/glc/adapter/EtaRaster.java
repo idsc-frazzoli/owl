@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.sca.Floor;
 
 /** mapping from state time to domain coordinates according to the standard projection
@@ -42,7 +43,7 @@ public class EtaRaster implements StateTimeRaster, Serializable {
    * @return
    * @throws Exception if dt is not in exact precision */
   public static StateTimeRaster timeDependent(Tensor eta, Scalar dt, Function<StateTime, Tensor> represent) {
-    return new EtaRaster(eta.copy().append(ExactScalarQ.require(dt).reciprocal()), represent);
+    return new EtaRaster(Append.of(eta, ExactScalarQ.require(dt).reciprocal()), represent);
   }
 
   /***************************************************/

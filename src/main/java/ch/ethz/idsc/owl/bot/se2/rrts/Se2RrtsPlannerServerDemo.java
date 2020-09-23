@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
@@ -53,8 +54,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     TransitionSpace transitionSpace = ClothoidTransitionSpace.ANALYTIC;
     // ---
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        lbounds.copy().append(Pi.VALUE.negate()), //
-        ubounds.copy().append(Pi.VALUE));
+        Append.of(lbounds, Pi.VALUE.negate()), //
+        Append.of(ubounds, Pi.VALUE));
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         transitionSpace, //
         transitionRegionQuery, //
@@ -86,7 +87,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    StateTime stateTime = new StateTime(lbounds.copy().append(RealScalar.ZERO), RealScalar.ZERO);
+    StateTime stateTime = new StateTime(Append.of(lbounds, RealScalar.ZERO), RealScalar.ZERO);
     Tensor goal = randomSampleInterface.randomSample(RANDOM);
     Tensor trajectory = Tensors.empty();
     int frame = 0;

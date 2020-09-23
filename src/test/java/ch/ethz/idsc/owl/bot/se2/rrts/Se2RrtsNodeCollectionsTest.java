@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
@@ -25,8 +26,8 @@ public class Se2RrtsNodeCollectionsTest extends TestCase {
         Se2RrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
     Random random = new Random();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        lbounds.copy().append(Pi.VALUE.negate()), //
-        ubounds.copy().append(Pi.VALUE));
+        Append.of(lbounds, Pi.VALUE.negate()), //
+        Append.of(ubounds, Pi.VALUE));
     for (int count = 0; count < 30; ++count) {
       Tensor tensor = randomSampleInterface.randomSample(random);
       rrtsNodeCollection.insert(RrtsNode.createRoot(tensor, RealScalar.ONE));
