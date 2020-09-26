@@ -153,4 +153,9 @@ public enum GeodesicDisplays {
       Se2ClothoidDisplay.ANALYTIC, //
       Se2ClothoidDisplay.LEGENDRE //
   );
+  public static final List<GeodesicDisplay> CLC_ONLY = Arrays.asList( //
+      Se2CoveringClothoidDisplay.INSTANCE, //
+      Se2ClothoidDisplay.ANALYTIC, //
+      Se2ClothoidDisplay.LEGENDRE //
+  );
 }

@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** symmetric positive definite 2 x 2 matrices */
 public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
+  private static final Tensor ID3 = IdentityMatrix.of(3);
   // ---
   public static final GeodesicDisplay INSTANCE = new Rp2GeodesicDisplay();
 
@@ -37,7 +38,7 @@ public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
   /** @param xyz normalized vector
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
   /* package */ static Tensor tangentSpace(Tensor xyz) {
-    return Orthogonalize.of(Join.of(Tensors.of(xyz), IdentityMatrix.of(3))).extract(1, 3);
+    return Orthogonalize.of(Join.of(Tensors.of(xyz), ID3)).extract(1, 3);
   }
 
   @Override // from GeodesicDisplay

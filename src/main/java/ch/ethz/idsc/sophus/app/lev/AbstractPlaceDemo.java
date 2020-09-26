@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ abstract class AbstractPlaceDemo extends ControlPointsDemo {
+public abstract class AbstractPlaceDemo extends ControlPointsDemo {
   private final JButton jButtonPrint = new JButton("print");
 
   public AbstractPlaceDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {

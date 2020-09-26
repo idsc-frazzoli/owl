@@ -17,18 +17,18 @@ import ch.ethz.idsc.tensor.Scalar;
   }
 
   /***************************************************/
-  private final BinaryOperator<Scalar> scalarBinaryOperator;
+  private final BinaryOperator<Scalar> binaryOperator;
 
-  /** @param scalarBinaryOperator mapping (s1, s2) -> lambda */
-  public CustomClothoidQuadratic(BinaryOperator<Scalar> scalarBinaryOperator) {
-    this.scalarBinaryOperator = scalarBinaryOperator;
+  /** @param binaryOperator mapping (s1, s2) -> lambda */
+  public CustomClothoidQuadratic(BinaryOperator<Scalar> binaryOperator) {
+    this.binaryOperator = binaryOperator;
   }
 
   @Override // from ClothoidQuadratic
   public LagrangeQuadratic lagrangeQuadratic(Scalar b0, Scalar b1) {
     Scalar s1 = b0.add(b1).multiply(HALF);
     Scalar s2 = b0.subtract(b1).multiply(HALF);
-    Scalar lambda = scalarBinaryOperator.apply(s1, s2);
+    Scalar lambda = binaryOperator.apply(s1, s2);
     Scalar bm = lambda.add(s1);
     return LagrangeQuadratic.interp(b0, bm, b1);
   }
