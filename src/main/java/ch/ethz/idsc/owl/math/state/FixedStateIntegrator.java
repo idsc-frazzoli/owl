@@ -18,7 +18,8 @@ public class FixedStateIntegrator implements StateIntegrator, Serializable {
    * @param timeStep non-negative period of one step
    * @param trajectorySize number of steps
    * @return */
-  public static FixedStateIntegrator create(Integrator integrator, StateSpaceModel stateSpaceModel, Scalar timeStep, int trajectorySize) {
+  public static FixedStateIntegrator create( //
+      Integrator integrator, StateSpaceModel stateSpaceModel, Scalar timeStep, int trajectorySize) {
     return new FixedStateIntegrator(integrator, stateSpaceModel, timeStep, trajectorySize);
   }
 
