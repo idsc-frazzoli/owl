@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
+import ch.ethz.idsc.sophus.app.clt.ClothoidSolutions.Search;
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.ClothoidContext;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -17,15 +18,19 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class ClothoidDefectContainer implements RenderInterface {
+  private static final Clip RANGE = Clips.absolute(15.0);
   private static final Scalar DENOM = RealScalar.of(5.0);
+  private static final ClothoidSolutions CLOTHOID_SOLUTIONS = ClothoidSolutions.of(RANGE);
   // ---
-  public final ClothoidSolutions clothoidSolutions;
+  public final Search search;
   public final ClothoidContext clothoidContext;
 
   public ClothoidDefectContainer(ClothoidContext clothoidContext) {
-    clothoidSolutions = new ClothoidSolutions(clothoidContext.s1(), clothoidContext.s2());
+    search = CLOTHOID_SOLUTIONS.new Search(clothoidContext.s1(), clothoidContext.s2());
     this.clothoidContext = clothoidContext;
   }
 
@@ -37,11 +42,11 @@ import ch.ethz.idsc.tensor.alg.Transpose;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     PathRender pathRender = new PathRender(new Color(0, 0, 0, 128));
-    Tensor tensor = Transpose.of(Tensors.of(ClothoidSolutions.LAMBDAS, clothoidSolutions.defects_real));
+    Tensor tensor = Transpose.of(Tensors.of(CLOTHOID_SOLUTIONS.probes, search.defects_real));
     pathRender.setCurve(tensor, false);
     pathRender.render(geometricLayer, graphics);
-    Tensor lambdas = clothoidSolutions.lambdas();
-    List<Clothoid> clothoids = clothoidSolutions.stream(clothoidContext).collect(Collectors.toList());
+    Tensor lambdas = search.lambdas();
+    List<Clothoid> clothoids = ClothoidEmit.stream(clothoidContext, lambdas).collect(Collectors.toList());
     for (int index = 0; index < lambdas.length(); ++index) {
       Scalar lambda = lambdas.Get(index);
       Clothoid clothoid = clothoids.get(index);

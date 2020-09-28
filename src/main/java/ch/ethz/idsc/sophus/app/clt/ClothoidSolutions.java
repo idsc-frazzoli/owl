@@ -1,77 +1,72 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.clt;
 
-import java.util.stream.Stream;
-import java.util.stream.Stream.Builder;
+import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.clt.Clothoid;
-import ch.ethz.idsc.sophus.clt.ClothoidBuilderImpl;
-import ch.ethz.idsc.sophus.clt.ClothoidContext;
 import ch.ethz.idsc.sophus.clt.ClothoidTangentDefect;
-import ch.ethz.idsc.sophus.clt.mid.ClothoidQuadratic;
-import ch.ethz.idsc.sophus.clt.par.ClothoidIntegration;
-import ch.ethz.idsc.sophus.clt.par.ClothoidIntegrations;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Real;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** function is s1 odd
- * function is s2 even */
-public class ClothoidSolutions {
-  /** -min == max for tests to pass */
-  public static final Tensor LAMBDAS = Subdivide.of(-15.0, 15.0, 1001).unmodifiable();
+public class ClothoidSolutions implements Serializable {
+  private static final Chop CHOP = Chop._08;
 
-  public static ClothoidSolutions of(Scalar s1, Scalar s2) {
-    return new ClothoidSolutions(s1, s2);
+  /** @param clip
+   * @return */
+  public static ClothoidSolutions of(Clip clip) {
+    return of(clip, 101);
   }
 
-  public static ClothoidSolutions of(Number s1, Number s2) {
-    return of(RealScalar.of(s1), RealScalar.of(s2));
+  /** @param clip
+   * @param n
+   * @return */
+  public static ClothoidSolutions of(Clip clip, int n) {
+    return new ClothoidSolutions(Subdivide.increasing(clip, n));
   }
 
   /***************************************************/
-  protected final ClothoidTangentDefect clothoidTangentDefect;
-  private final Tensor defects;
-  protected final Tensor defects_real;
-  protected final Tensor defects_imag;
-  private final Tensor lambdas = Tensors.empty();
+  /** -min == max for tests to pass */
+  final Tensor probes;
 
-  public ClothoidSolutions(Scalar s1, Scalar s2) {
-    clothoidTangentDefect = ClothoidTangentDefect.of(s1, s2);
-    defects = LAMBDAS.map(clothoidTangentDefect);
-    defects_real = defects.map(Real.FUNCTION);
-    defects_imag = defects.map(Imag.FUNCTION);
-    for (int index = 1; index < LAMBDAS.length(); ++index) {
-      boolean prev = Sign.isPositive(defects_real.Get(index - 1));
-      boolean next = Sign.isPositive(defects_real.Get(index));
-      if (prev && !next) {
-        Scalar lambda = RootDegree1.of( //
-            LAMBDAS.Get(index - 1), //
-            LAMBDAS.Get(index), //
-            defects_real.Get(index - 1), //
-            defects_real.Get(index));
-        lambdas.append(lambda);
+  public ClothoidSolutions(Tensor probes) {
+    this.probes = probes.unmodifiable();
+  }
+
+  /** function is s1 odd
+   * function is s2 even */
+  public class Search implements Serializable {
+    private final Tensor lambdas = Tensors.empty();
+    public final Tensor defects_real;
+
+    public Search(Scalar s1, Scalar s2) {
+      ClothoidTangentDefect clothoidTangentDefect = ClothoidTangentDefect.of(s1, s2);
+      ScalarUnaryOperator function = s -> Real.FUNCTION.apply(clothoidTangentDefect.apply(s));
+      FindZero findZero = new FindZero(function, Sign::isPositive, CHOP);
+      Tensor defects = probes.map(clothoidTangentDefect);
+      defects_real = defects.map(Real.FUNCTION);
+      // Tensor defects_imag = defects.map(Imag.FUNCTION);
+      // ---
+      boolean prev = Sign.isPositive(defects_real.Get(0));
+      for (int index = 1; index < probes.length(); ++index) {
+        boolean next = Sign.isPositive(defects_real.Get(index));
+        if (prev && !next)
+          lambdas.append(findZero.between( //
+              probes.Get(index - 1), //
+              probes.Get(index), //
+              defects_real.Get(index - 1), //
+              defects_real.Get(index)));
+        prev = next;
       }
     }
-  }
 
-  public Tensor lambdas() {
-    return lambdas.copy();
-  }
-
-  public Stream<Clothoid> stream(ClothoidContext clothoidContext) {
-    Builder<Clothoid> builder = Stream.builder();
-    for (Tensor _lambda : lambdas) {
-      ClothoidQuadratic clothoidQuadratic = CustomClothoidQuadratic.of(_lambda.Get());
-      ClothoidIntegration clothoidIntegration = ClothoidIntegrations.ANALYTIC;
-      ClothoidBuilderImpl clothoidBuilderImpl = new ClothoidBuilderImpl(clothoidQuadratic, clothoidIntegration);
-      builder.accept(clothoidBuilderImpl.from(clothoidContext));
+    public Tensor lambdas() {
+      return lambdas.unmodifiable();
     }
-    return builder.build();
   }
 }

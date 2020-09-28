@@ -12,8 +12,9 @@ import ch.ethz.idsc.tensor.Scalar;
 /* package */ class CustomClothoidQuadratic implements ClothoidQuadratic, Serializable {
   private static final Scalar HALF = RealScalar.of(0.5);
 
+  @SuppressWarnings("unchecked")
   public static ClothoidQuadratic of(Scalar lambda) {
-    return new CustomClothoidQuadratic((s1, s2) -> lambda);
+    return new CustomClothoidQuadratic((BinaryOperator<Scalar> & Serializable) (s1, s2) -> lambda);
   }
 
   /***************************************************/

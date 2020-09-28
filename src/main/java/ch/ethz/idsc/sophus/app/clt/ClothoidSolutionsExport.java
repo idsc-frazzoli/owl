@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import ch.ethz.idsc.java.util.DisjointSets;
+import ch.ethz.idsc.sophus.app.clt.ClothoidSolutions.Search;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -17,6 +18,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class ClothoidSolutionsExport {
   private static final Scalar LAMBDA_THRES = RealScalar.of(1.0);
@@ -55,13 +57,14 @@ import ch.ethz.idsc.tensor.sca.Abs;
     System.out.println(S1.length());
     System.out.println(S2.length());
     sols = new Sol[S1.length()][S2.length()][];
+    ClothoidSolutions clothoidSolutions = ClothoidSolutions.of(Clips.absolute(15.0));
     for (int ind1 = 0; ind1 < S1.length(); ++ind1) {
       Scalar s1 = S1.Get(ind1);
       System.out.println(s1);
       for (int ind2 = 0; ind2 < S2.length(); ++ind2) {
         Scalar s2 = S2.Get(ind2);
-        ClothoidSolutions clothoidSolutions = ClothoidSolutions.of(s1, s2);
-        Tensor lambdas = clothoidSolutions.lambdas();
+        Search search = clothoidSolutions.new Search(s1, s2);
+        Tensor lambdas = search.lambdas();
         // ---
         sols[ind1][ind2] = new Sol[lambdas.length()];
         for (int ind3 = 0; ind3 < sols[ind1][ind2].length; ++ind3) {

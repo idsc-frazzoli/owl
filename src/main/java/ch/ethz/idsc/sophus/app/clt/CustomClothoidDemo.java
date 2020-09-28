@@ -37,12 +37,14 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ class CustomClothoidDemo extends ControlPointsDemo implements ChangeListener {
   private static final Tensor CONFIG = Tensors.fromString("{{0, 0}, {3, 0}}");
   private static final PathRender PATH_RENDER = new PathRender(new Color(0, 0, 255, 128), 2f);
-  private static final Tensor LAMBDAS = ClothoidSolutions.LAMBDAS;
+  private static final ClothoidSolutions CLOTHOID_SOLUTIONS = ClothoidSolutions.of(Clips.absolute(20.0));
+  private static final Tensor LAMBDAS = CLOTHOID_SOLUTIONS.probes;
   private static final Tensor POINTER = Tensors.fromString("{{0, 0}, {-0.2, -1}, {+0.2, -1}}");
   // ---
   private final JSlider jSlider = new JSlider(0, LAMBDAS.length() - 1, LAMBDAS.length() / 2);
@@ -74,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       timerFrame.jToolBar.add(jButton);
     }
     spinnerSolution.addSpinnerListener(index -> {
-      Tensor lambdas2 = clothoidDefectContainer.clothoidSolutions.lambdas();
+      Tensor lambdas2 = clothoidDefectContainer.search.lambdas();
       try {
         setLambda(lambdas2.Get(index));
       } catch (Exception exception) {
@@ -142,7 +144,7 @@ import ch.ethz.idsc.tensor.sca.Round;
         { 30, 0, dimension.width / 2 }, //
         { 0, -30, 200 }, //
         { 0, 0, 1 } }));
-    for (Tensor _lambda : clothoidDefectContainer.clothoidSolutions.lambdas()) {
+    for (Tensor _lambda : clothoidDefectContainer.search.lambdas()) {
       ClothoidBuilder clothoidBuilder = CustomClothoidBuilder.of((Scalar) _lambda);
       ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, clothoidContext.p(), clothoidContext.q());
       Tensor points = clothoidTransition.linearized(MIN_RESOLUTION);
