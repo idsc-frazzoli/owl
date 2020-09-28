@@ -78,7 +78,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._15.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._05.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
   public void testDubins() {
@@ -120,7 +120,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._14.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._05.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
   public void testClothoid() {
@@ -165,7 +165,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._15.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._05.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
   // TODO GJOEL design test for rerunning expansion
 }
