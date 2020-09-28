@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.RnGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.tensor.RealScalar;
 
 /* package */ enum TransitionNdTypes {
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.RealScalar;
   CLOTHOID_LEGENDRE(ClothoidTransitionSpace.LEGENDRE),
   /** dubins paths */
   // TODO magic const
-  DUBINS(DubinsTransitionSpace.of(RealScalar.of(0.4), DubinsPathComparator.LENGTH)),
+  DUBINS(DubinsTransitionSpace.of(RealScalar.of(0.4), DubinsPathComparators.LENGTH)),
   /** straight lines in R^2 that results from ignoring heading */
   RN(RnTransitionSpace.INSTANCE), //
   ;

@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.ConstantRandomSample;
@@ -89,7 +89,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
-        DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH), //
+        DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparators.LENGTH), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE, //

@@ -7,7 +7,7 @@ import java.util.Random;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -41,6 +41,6 @@ public class Se2RrtsNodeCollectionsTest extends TestCase {
   }
 
   public void testDubins() {
-    _check(DubinsTransitionSpace.of(Quantity.of(2, "m"), DubinsPathComparator.LENGTH));
+    _check(DubinsTransitionSpace.of(Quantity.of(2, "m"), DubinsPathComparators.LENGTH));
   }
 }

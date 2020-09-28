@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.clt;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 import ch.ethz.idsc.java.util.DisjointSets;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -77,9 +76,10 @@ import ch.ethz.idsc.tensor.sca.Abs;
         // ---
         for (Tensor lambda : lambdas)
           tableBuilder.appendRow(s1, s2, lambda);
-        Optional<Scalar> optional = clothoidSolutions.shortest();
-        if (optional.isPresent())
-          tableShortes.appendRow(s1, s2, optional.get());
+        // FIXME
+        // Optional<Scalar> optional = clothoidSolutions.shortest();
+        // if (optional.isPresent())
+        // tableShortes.appendRow(s1, s2, optional.get());
       }
     }
     map = disjointSets.createMap(TableBuilder::new);

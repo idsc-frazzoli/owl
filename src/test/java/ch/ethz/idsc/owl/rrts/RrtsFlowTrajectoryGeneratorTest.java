@@ -28,7 +28,7 @@ import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -78,7 +78,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
-        DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH), //
+        DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparators.LENGTH), //
         new RnRrtsNodeCollection(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 0)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
@@ -98,7 +98,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, //
         CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
-        generator.createTrajectory(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
+        generator.createTrajectory(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparators.LENGTH), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
     assertEquals(37, trajectory.size());
     for (int i = 1; i < 21; i++) {

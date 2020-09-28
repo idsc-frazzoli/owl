@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -75,9 +74,12 @@ import ch.ethz.idsc.tensor.sca.Round;
       timerFrame.jToolBar.add(jButton);
     }
     spinnerSolution.addSpinnerListener(index -> {
-      Optional<Scalar> optional = clothoidDefectContainer.getSolution(spinnerSolution.getIndex());
-      if (optional.isPresent())
-        setLambda(optional.get());
+      Tensor lambdas2 = clothoidDefectContainer.clothoidSolutions.lambdas();
+      try {
+        setLambda(lambdas2.Get(index));
+      } catch (Exception exception) {
+        // ---
+      }
     });
     spinnerSolution.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "sol. index");
     {
@@ -140,7 +142,7 @@ import ch.ethz.idsc.tensor.sca.Round;
         { 30, 0, dimension.width / 2 }, //
         { 0, -30, 200 }, //
         { 0, 0, 1 } }));
-    for (Tensor _lambda : clothoidDefectContainer.lambdas()) {
+    for (Tensor _lambda : clothoidDefectContainer.clothoidSolutions.lambdas()) {
       ClothoidBuilder clothoidBuilder = CustomClothoidBuilder.of((Scalar) _lambda);
       ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, clothoidContext.p(), clothoidContext.q());
       Tensor points = clothoidTransition.linearized(MIN_RESOLUTION);

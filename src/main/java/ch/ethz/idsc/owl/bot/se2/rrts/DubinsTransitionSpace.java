@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +17,7 @@ public class DubinsTransitionSpace implements TransitionSpace, Serializable {
   /** @param radius positive
    * @param comparator
    * @return
-   * @see DubinsPathComparator */
+   * @see DubinsPathComparators */
   public static TransitionSpace of(Scalar radius, Comparator<DubinsPath> comparator) {
     return new DubinsTransitionSpace( //
         Sign.requirePositive(radius), //
@@ -39,6 +39,6 @@ public class DubinsTransitionSpace implements TransitionSpace, Serializable {
   }
 
   private DubinsPath dubinsPath(Tensor start, Tensor end) {
-    return FixedRadiusDubins.of(start, end, radius).allValid().min(comparator).get();
+    return FixedRadiusDubins.of(start, end, radius).stream().min(comparator).get();
   }
 }

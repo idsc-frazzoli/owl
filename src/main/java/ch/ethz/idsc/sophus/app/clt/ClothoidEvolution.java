@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     Tensor beg = sequence.get(0);
-    double time = jToggleAnimate.isSelected() ? timing.seconds()*0.2 : 0;
+    double time = jToggleAnimate.isSelected() ? timing.seconds() * 0.2 : 0;
     for (int index = 1; index < sequence.length(); ++index) {
       Tensor end = sequence.get(index);
       ClothoidTransition clothoidTransition = ClothoidTransition.of(clothoidBuilder, beg, end);

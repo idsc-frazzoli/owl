@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   private static Scalar function(int y, int x) {
     Tensor xya = Tensors.of(RE.Get(x), IM.Get(y), ALPHA);
-    DubinsPath dubinsPath = FixedRadiusDubins.of(xya, RADIUS).allValid().min(DubinsPathComparator.LENGTH).get();
+    DubinsPath dubinsPath = FixedRadiusDubins.of(xya, RADIUS).stream().min(DubinsPathComparators.LENGTH).get();
     int ordinal = dubinsPath.type().ordinal();
     return dubinsPath.totalCurvature().add(RealScalar.of(ordinal));
   }

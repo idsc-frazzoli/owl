@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws Exception {
-    animate(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH));
+    animate(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparators.LENGTH));
     animate(ClothoidTransitionSpace.ANALYTIC);
   }
 }

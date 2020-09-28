@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
     DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
-    List<DubinsPath> list = dubinsPathGenerator.allValid().collect(Collectors.toList());
+    List<DubinsPath> list = dubinsPathGenerator.stream().collect(Collectors.toList());
     {
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1f));
@@ -59,11 +59,11 @@ import ch.ethz.idsc.tensor.red.Nest;
     { // draw shortest path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
       graphics.setStroke(new BasicStroke(2f));
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.LENGTH).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparators.LENGTH).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
     {
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.LENGTH).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparators.LENGTH).get();
       ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(START);
       Tensor params = PadLeft.zeros(4).apply(dubinsPath.segments());
       graphics.setColor(new Color(128, 128, 128, 128));
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
       graphics.setStroke(new BasicStroke(2f));
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.TOTAL_CURVATURE).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparators.TOTAL_CURVATURE).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
   }
