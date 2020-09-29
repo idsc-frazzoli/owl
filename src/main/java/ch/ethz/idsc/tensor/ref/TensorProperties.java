@@ -71,28 +71,10 @@ public class TensorProperties {
   }
 
   public static enum Type {
-    TENSOR(Tensor.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return Tensors.fromString(string);
-      }
-    },
-    SCALAR(Scalar.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return Scalars.fromString(string);
-      }
-    },
     STRING(String.class::equals) {
       @Override
       public Object toObject(Class<?> cls, String string) {
         return string;
-      }
-    },
-    FILE(File.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return new File(string);
       }
     },
     BOOLEAN(Boolean.class::equals) {
@@ -109,7 +91,26 @@ public class TensorProperties {
             .findFirst() //
             .orElse(null);
       }
-    };
+    },
+    FILE(File.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return new File(string);
+      }
+    },
+    TENSOR(Tensor.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return Tensors.fromString(string);
+      }
+    },
+    SCALAR(Scalar.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return Scalars.fromString(string);
+      }
+    }, //
+    ;
 
     private final Predicate<Class<?>> predicate;
 

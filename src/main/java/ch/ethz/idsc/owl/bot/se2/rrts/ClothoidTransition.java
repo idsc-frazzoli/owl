@@ -35,6 +35,14 @@ public class ClothoidTransition extends AbstractTransition {
     return new ClothoidTransition(start, end, clothoid);
   }
 
+  /** @param start
+   * @param end
+   * @param clothoid
+   * @return */
+  public static ClothoidTransition of(Tensor start, Tensor end, Clothoid clothoid) {
+    return new ClothoidTransition(start, end, clothoid);
+  }
+
   /***************************************************/
   private final Clothoid clothoid;
 

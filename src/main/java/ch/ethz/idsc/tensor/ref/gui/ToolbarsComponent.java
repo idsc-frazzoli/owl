@@ -61,7 +61,7 @@ public class ToolbarsComponent {
     addPair(west, center, HEIGHT);
   }
 
-  private void addPair(JComponent west, JComponent center, int height) {
+  public void addPair(JComponent west, JComponent center, int height) {
     int width;
     // width = west.getPreferredSize().width;
     west.setPreferredSize(new Dimension(WEST_WIDTH, height));

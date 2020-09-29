@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransition;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
@@ -20,9 +21,9 @@ import ch.ethz.idsc.sophus.clt.ClothoidContext;
 import ch.ethz.idsc.sophus.clt.ClothoidEmit;
 import ch.ethz.idsc.sophus.clt.ClothoidSolutions;
 import ch.ethz.idsc.sophus.clt.ClothoidSolutions.Search;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -34,7 +35,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * Therefore, for simplicity in algorithms we use degree == 1. */
 /* package */ class ClothoidEmitDemo extends AbstractDemo implements DemoInterface {
   private static final Tensor START = Array.zeros(3).unmodifiable();
-  private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = //
       ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final ClothoidSolutions CLOTHOID_SOLUTIONS = ClothoidSolutions.of(Clips.absolute(15.0), 101);
@@ -49,15 +49,20 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Search search = CLOTHOID_SOLUTIONS.new Search(clothoidContext.s1(), clothoidContext.s2());
     List<Clothoid> list = ClothoidEmit.stream(clothoidContext, search.lambdas()).collect(Collectors.toList());
     int index = 0;
-    for (Clothoid clothoid : list)
+    for (Clothoid clothoid : list) {
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse, clothoid);
+      Tensor points = clothoidTransition.linearized(RealScalar.of(0.1));
       new PathRender(COLOR_DATA_INDEXED.getColor(index++), 1.5f) //
-          .setCurve(DOMAIN.map(clothoid), false).render(geometricLayer, graphics);
+          .setCurve(points, false).render(geometricLayer, graphics);
+    }
     // ---
     Optional<Clothoid> optional = list.stream().min(ClothoidComparators.CURVATURE_HEAD);
     if (optional.isPresent()) {
       Clothoid clothoid = optional.get();
+      ClothoidTransition clothoidTransition = ClothoidTransition.of(START, mouse, clothoid);
+      Tensor points = clothoidTransition.linearized(RealScalar.of(0.1));
       new PathRender(Color.BLACK, 2.5f) //
-          .setCurve(DOMAIN.map(clothoid), false).render(geometricLayer, graphics);
+          .setCurve(points, false).render(geometricLayer, graphics);
     }
   }
 
