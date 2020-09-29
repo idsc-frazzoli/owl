@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidContext;
+import ch.ethz.idsc.sophus.clt.ClothoidSolutions;
 import ch.ethz.idsc.sophus.clt.mid.MidpointTangentApproximation;
 import ch.ethz.idsc.sophus.clt.mid.MidpointTangentOrder2;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

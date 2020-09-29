@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import ch.ethz.idsc.java.util.DisjointSets;
-import ch.ethz.idsc.sophus.app.clt.ClothoidSolutions.Search;
+import ch.ethz.idsc.sophus.clt.ClothoidSolutions;
+import ch.ethz.idsc.sophus.clt.ClothoidSolutions.Search;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
