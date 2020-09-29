@@ -4,22 +4,20 @@ package ch.ethz.idsc.tensor.ref;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.io.TensorProperties;
 import junit.framework.TestCase;
 
 public class FieldSubdivideTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    ParamContainer paramContainer = new ParamContainer();
+    AnnotatedContainer paramContainer = new AnnotatedContainer();
     TensorProperties tensorProperties = TensorProperties.wrap(paramContainer);
     int ignored = 0;
-    for (Field field : tensorProperties.fields().collect(Collectors.toList())) {
+    for (Field field : tensorProperties.fields().keySet()) {
       FieldSubdivide fieldSubdivide = field.getAnnotation(FieldSubdivide.class);
       Serialization.copy(fieldSubdivide);
       Optional<Tensor> optional = TensorReflection.of(fieldSubdivide);

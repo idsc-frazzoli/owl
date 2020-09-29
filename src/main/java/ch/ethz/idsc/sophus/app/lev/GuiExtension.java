@@ -1,45 +1,34 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.lev;
 
-import java.awt.Graphics2D;
+import java.io.File;
 
 import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
-import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.ref.gui.ParametersComponent;
 
-public class GuiExtension extends ControlPointsDemo {
-  public Tensor tensor = Tensors.fromString("");
-
-  public GuiExtension() {
-    super(true, GeodesicDisplays.R2_ONLY);
-  }
-
-  @Override
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // TODO Auto-generated method stub
-  }
+public class GuiExtension {
+  public Tensor tensor = Tensors.fromString("{1, 2}");
+  public File file = HomeDirectory.file();
+  public String string = "abc";
+  public Scalar scalar = Quantity.of(3, "m*s^-1");
+  public Pivots pivots = Pivots.ARGMAX_ABS;
+  public Boolean status = true;
 
   public static void main(String[] args) {
     GuiExtension guiExtension = new GuiExtension();
-    guiExtension.setVisible(800, 600);
-    System.out.println("here");
-    try {
-      JDialog jDialog = new JDialog();
-      jDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-      ParametersComponent parametersComponent = new ParametersComponent(guiExtension);
-      jDialog.setContentPane(parametersComponent.getScrollPane());
-      jDialog.setBounds(800, 200, 300, 300);
-      jDialog.setVisible(true);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
-    // TensorProperties tensorProperties = TensorProperties.wrap(guiExtension);
-    // tensorProperties.fields().forEach(System.out::println);
+    JDialog jDialog = new JDialog();
+    jDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    ParametersComponent parametersComponent = new ParametersComponent(guiExtension, new GuiExtension());
+    jDialog.setContentPane(parametersComponent.getScrollPane());
+    jDialog.setBounds(800, 200, 500, 300);
+    jDialog.setVisible(true);
   }
 }
