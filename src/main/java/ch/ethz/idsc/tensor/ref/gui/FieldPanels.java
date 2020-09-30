@@ -9,15 +9,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ref.FieldType;
 import ch.ethz.idsc.tensor.ref.ObjectProperties;
 
 public class FieldPanels {
+  public static FieldPanels of(Object object, Object reference) {
+    return new FieldPanels(object, reference);
+  }
+
+  /***************************************************/
   private final Map<Field, FieldPanel> map = new LinkedHashMap<>();
 
-  public FieldPanels(Object object, Object reference) {
+  private FieldPanels(Object object, Object reference) {
     ObjectProperties objectProperties = ObjectProperties.wrap(object);
     Map<Field, FieldType> fieldMap = objectProperties.fields();
     for (Entry<Field, FieldType> entry : fieldMap.entrySet()) {
@@ -42,20 +45,18 @@ public class FieldPanels {
     map.values().stream().forEach(fieldPanel -> fieldPanel.addListener(consumer));
   }
 
-  private static FieldPanel factor(Field field, FieldType type, Object value) {
-    switch (type) {
+  private static FieldPanel factor(Field field, FieldType fieldType, Object value) {
+    switch (fieldType) {
     case STRING:
-      return new StringPanel((String) value);
+    case TENSOR:
+    case SCALAR:
+      return new StringPanel(field, fieldType, value);
     case BOOLEAN:
       return new BooleanPanel((Boolean) value);
     case ENUM:
       return new EnumPanel(field.getType().getEnumConstants(), value);
     case FILE:
-      return new FilePanel((File) value);
-    case TENSOR:
-      return new TensorPanel((Tensor) value);
-    case SCALAR:
-      return new ScalarPanel(field, (Scalar) value);
+      return new FilePanel(field, fieldType, (File) value);
     }
     throw new RuntimeException();
   }

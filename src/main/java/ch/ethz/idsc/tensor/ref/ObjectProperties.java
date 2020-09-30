@@ -170,8 +170,8 @@ public class ObjectProperties {
 
   // helper function
   private void consume(BiConsumer<String, String> biConsumer) {
-    fields().entrySet().forEach(e -> {
-      Field field = e.getKey();
+    fields().entrySet().forEach(entry -> {
+      Field field = entry.getKey();
       try {
         Object value = field.get(object); // may throw Exception
         if (Objects.nonNull(value))
@@ -185,7 +185,7 @@ public class ObjectProperties {
   public void setIfValid(Field field, FieldType fieldType, String string) {
     try {
       Object value = fieldType.toObject(field.getType(), string);
-      if (fieldType.isValidValue(value))
+      if (fieldType.isValidValue(field, value))
         field.set(object, value);
     } catch (Exception exception) {
       exception.printStackTrace();

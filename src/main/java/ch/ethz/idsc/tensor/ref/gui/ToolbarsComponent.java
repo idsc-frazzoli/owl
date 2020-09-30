@@ -46,13 +46,16 @@ public class ToolbarsComponent {
   protected JToolBar createRow(String title, int height) {
     JToolBar jToolBar1 = new JToolBar();
     JToolBar jToolBar2 = new JToolBar();
-    jToolBar1.setFloatable(false);
-    jToolBar1.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 0));
-    JLabel jLabel = new JLabel(title);
-    jLabel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width, height));
-    jToolBar1.add(jLabel);
-    jToolBar2.setFloatable(false);
-    jToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 0));
+    {
+      jToolBar1.setFloatable(false);
+      jToolBar1.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 0));
+      JLabel jLabel = new JLabel(title);
+      jToolBar1.add(jLabel);
+    }
+    {
+      jToolBar2.setFloatable(false);
+      jToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 0));
+    }
     addPair(jToolBar1, jToolBar2, height);
     return jToolBar2;
   }
@@ -62,14 +65,17 @@ public class ToolbarsComponent {
   }
 
   public void addPair(JComponent west, JComponent center, int height) {
-    int width;
-    // width = west.getPreferredSize().width;
-    west.setPreferredSize(new Dimension(WEST_WIDTH, height));
-    west.setSize(new Dimension(WEST_WIDTH, height));
+    {
+      Dimension dimension = west.getPreferredSize();
+      dimension.height = height;
+      west.setPreferredSize(dimension);
+    }
     rowTitle.add(west);
-    // ---
-    width = center.getPreferredSize().width;
-    center.setPreferredSize(new Dimension(width, height));
+    {
+      Dimension dimension = center.getPreferredSize();
+      dimension.height = height;
+      center.setPreferredSize(dimension);
+    }
     rowActor.add(center);
   }
 

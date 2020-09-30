@@ -2,15 +2,11 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Arrays;
 import java.util.Random;
 
-import javax.swing.JToggleButton;
-
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -29,6 +25,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.ref.FieldClip;
+import ch.ethz.idsc.tensor.ref.FieldIntegerQ;
+import ch.ethz.idsc.tensor.ref.gui.FieldPanels;
+import ch.ethz.idsc.tensor.ref.gui.ParametersComponent;
 
 public class ClothoidNdDemo extends ControlPointsDemo {
   private static final int SIZE = 400;
@@ -39,18 +39,20 @@ public class ClothoidNdDemo extends ControlPointsDemo {
       Se2RrtsNodeCollections.of(ClothoidTransitionSpace.ANALYTIC, LBOUNDS, UBOUNDS);
   private final RrtsNodeCollection rrtsNodeCollection2 = //
       ClothoidRrtsNodeCollections.of(RealScalar.ONE, LBOUNDS, UBOUNDS);
-  private final JToggleButton jToggleButton = new JToggleButton("limit");
-  private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
+  // ---
+  public Boolean limit = true;
+  @FieldIntegerQ
+  @FieldClip(min = "1", max = "50")
+  public Scalar value = RealScalar.of(3);
 
   public ClothoidNdDemo() {
     super(false, GeodesicDisplays.CL_ONLY);
     // ---
-    jToggleButton.setToolTipText("use limited curvature query");
-    timerFrame.jToolBar.add(jToggleButton);
+    Container container = timerFrame.jFrame.getContentPane();
+    FieldPanels fieldPanels = FieldPanels.of(this, null);
+    ParametersComponent parametersComponent = new ParametersComponent(fieldPanels);
+    container.add("West", parametersComponent.getScrollPane());
     // ---
-    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 10, 20, 50));
-    spinnerValue.setValue(10);
-    spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---
@@ -96,21 +98,21 @@ public class ClothoidNdDemo extends ControlPointsDemo {
       geometricLayer.popMatrix();
     }
     // ---
-    RrtsNodeCollection rrtsNodeCollection = jToggleButton.isSelected() //
+    RrtsNodeCollection rrtsNodeCollection = limit //
         ? rrtsNodeCollection2
         : rrtsNodeCollection1;
-    int value = spinnerValue.getValue();
+    int _value = value.number().intValue();
     graphics.setColor(new Color(255, 0, 0, 128));
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicDisplay.geodesicInterface();
     Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(10));
-    for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
+    for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, _value)) {
       Tensor other = rrtsNode.state();
       Transition transition = ClothoidTransition.of(clothoidBuilder, other, mouse);
       graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
     }
     // ---
     graphics.setColor(new Color(0, 255, 0, 128));
-    for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(mouse, value)) {
+    for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(mouse, _value)) {
       Tensor other = rrtsNode.state();
       Transition transition = ClothoidTransition.of(clothoidBuilder, mouse, other);
       graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));

@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.lev.AbstractPlaceDemo;
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidComparators;
-import ch.ethz.idsc.sophus.clt.ClothoidFirst;
+import ch.ethz.idsc.sophus.clt.PriorityClothoid;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     Tensor beg = sequence.get(0);
-    ClothoidBuilder clothoidBuilder2 = ClothoidFirst.of(ClothoidComparators.CURVATURE_HEAD);
+    ClothoidBuilder clothoidBuilder2 = PriorityClothoid.of(ClothoidComparators.CURVATURE_HEAD);
     double time = jToggleAnimate.isSelected() ? timing.seconds() * 0.2 : 0;
     for (int index = 1; index < sequence.length(); ++index) {
       Tensor end = sequence.get(index);

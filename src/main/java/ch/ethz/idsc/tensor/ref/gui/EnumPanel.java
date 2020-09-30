@@ -13,7 +13,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
   public EnumPanel(Object[] objects, Object object) {
     JLabel jLabel = spinnerLabel.getLabelComponent();//
     System.out.println(jLabel.getForeground());
-    jLabel.setFont(StringPanel.FONT);
+    jLabel.setFont(FieldPanel.FONT);
     jLabel.setHorizontalAlignment(SwingConstants.LEFT);
     spinnerLabel.setArray(objects);
     spinnerLabel.setValueSafe(object);

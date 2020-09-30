@@ -2,10 +2,12 @@
 package ch.ethz.idsc.tensor.ref;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -47,7 +49,7 @@ public enum FieldType {
     }
 
     @Override
-    boolean isValidValue(Object object) {
+    public boolean isValidValue(Field field, Object object) {
       return object instanceof Tensor //
           && !StringScalarQ.any((Tensor) object);
     }
@@ -59,9 +61,14 @@ public enum FieldType {
     }
 
     @Override
-    boolean isValidValue(Object object) {
-      return object instanceof Scalar //
-          && !StringScalarQ.of((Scalar) object);
+    public boolean isValidValue(Field field, Object object) {
+      if (object instanceof Scalar) {
+        Scalar scalar = (Scalar) object;
+        boolean valid = !StringScalarQ.of(scalar);
+        valid &= Objects.isNull(field.getAnnotation(FieldIntegerQ.class)) || IntegerQ.of(scalar);
+        return valid;
+      }
+      return false;
     }
   }, //
   ;
@@ -78,7 +85,11 @@ public enum FieldType {
 
   /* package */ abstract Object toObject(Class<?> cls, String string);
 
-  /* package */ boolean isValidValue(Object object) {
+  public boolean isValidString(Field field, String string) {
+    return isValidValue(field, toObject(field.getClass(), string));
+  }
+
+  public boolean isValidValue(Field field, Object object) {
     return Objects.nonNull(object) //
         && predicate.test(object.getClass()); // default implementation
   }

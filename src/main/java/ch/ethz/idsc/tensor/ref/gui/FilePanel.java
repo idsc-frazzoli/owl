@@ -5,17 +5,20 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.Field;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
-class FilePanel extends StringPanel {
-  private final JButton jButton = new JButton("a");
+import ch.ethz.idsc.tensor.ref.FieldType;
 
-  public FilePanel(File file) {
-    super(file.toString());
+/* package */ class FilePanel extends StringPanel {
+  private final JButton jButton = new JButton("?");
+
+  public FilePanel(Field field, FieldType fieldType, File file) {
+    super(field, fieldType, file);
     jButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {

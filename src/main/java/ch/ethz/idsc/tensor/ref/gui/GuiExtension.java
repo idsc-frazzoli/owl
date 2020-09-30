@@ -39,7 +39,7 @@ public class GuiExtension {
     jDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     // ObjectProperties.wrap(guiExtension).fields().entrySet().stream().forEach(System.out::println);
     // ObjectProperties.wrap(guiExtension).fields().keySet().stream().forEach(System.out::println);
-    FieldPanels fieldPanels = new FieldPanels(guiExtension, new GuiExtension());
+    FieldPanels fieldPanels = FieldPanels.of(guiExtension, new GuiExtension());
     ParametersComponent parametersComponent = new ParametersComponent(fieldPanels);
     JPanel jPanel = new JPanel(new BorderLayout());
     jPanel.add("North", parametersComponent.getScrollPane());
