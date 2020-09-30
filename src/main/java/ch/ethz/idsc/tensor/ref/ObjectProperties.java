@@ -15,13 +15,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Import;
 
 /** manages configurable parameters by introspection of a given instance
@@ -30,7 +27,6 @@ import ch.ethz.idsc.tensor.io.Import;
  * {@link Tensor}, {@link Scalar}, {@link String}, {@link File}, {@link Boolean},
  * {@link Enum}
  * are stored in, and retrieved from files in the {@link Properties} format */
-// TODO rename
 public class ObjectProperties {
   private static final int MASK_FILTER = Modifier.PUBLIC;
   private static final int MASK_TESTED = //
@@ -55,7 +51,7 @@ public class ObjectProperties {
    * @return new instance of class that was constructed from given string
    * @throws Exception if given class is not supported */
   /* package */ static Object parse(Class<?> cls, String string) {
-    for (Type type : Type.values())
+    for (FieldType type : FieldType.values())
       if (type.isTracking(cls))
         return type.toObject(cls, string);
     throw new UnsupportedOperationException(cls + " " + string);
@@ -66,70 +62,9 @@ public class ObjectProperties {
   /* package */ static boolean isTracked(Field field) {
     if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
       Class<?> cls = field.getType();
-      return Stream.of(Type.values()).anyMatch(type -> type.isTracking(cls));
+      return Stream.of(FieldType.values()).anyMatch(type -> type.isTracking(cls));
     }
     return false;
-  }
-
-  public static enum Type {
-    STRING(String.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return string;
-      }
-    },
-    BOOLEAN(Boolean.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return BooleanParser.orNull(string);
-      }
-    },
-    ENUM(Enum.class::isAssignableFrom) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return Stream.of(cls.getEnumConstants()) //
-            .filter(object -> ((Enum<?>) object).name().equals(string)) //
-            .findFirst() //
-            .orElse(null);
-      }
-    },
-    FILE(File.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return new File(string);
-      }
-    },
-    TENSOR(Tensor.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return Tensors.fromString(string);
-      }
-    },
-    SCALAR(Scalar.class::equals) {
-      @Override
-      public Object toObject(Class<?> cls, String string) {
-        return Scalars.fromString(string);
-      }
-    }, //
-    ;
-
-    private final Predicate<Class<?>> predicate;
-
-    private Type(Predicate<Class<?>> predicate) {
-      this.predicate = predicate;
-    }
-
-    /* package */ final boolean isTracking(Class<?> cls) {
-      return predicate.test(cls);
-    }
-
-    /* package */ abstract Object toObject(Class<?> cls, String string);
-
-    /* package */ static String toString(Class<?> cls, Object object) {
-      return Enum.class.isAssignableFrom(cls) //
-          ? ((Enum<?>) object).name()
-          : object.toString();
-    }
   }
 
   /***************************************************/
@@ -141,12 +76,12 @@ public class ObjectProperties {
 
   /** @return map of tracked fields of given object
    * in the order in which they appear top to bottom in the class */
-  public Map<Field, Type> fields() {
-    Map<Field, Type> map = new LinkedHashMap<>();
+  public Map<Field, FieldType> fields() {
+    Map<Field, FieldType> map = new LinkedHashMap<>();
     for (Field field : object.getClass().getFields()) {
       if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
         Class<?> cls = field.getType();
-        Optional<Type> optional = Stream.of(Type.values()).filter(type -> type.isTracking(cls)).findFirst();
+        Optional<FieldType> optional = Stream.of(FieldType.values()).filter(type -> type.isTracking(cls)).findFirst();
         if (optional.isPresent())
           map.put(field, optional.get());
       }
@@ -160,13 +95,13 @@ public class ObjectProperties {
    * @throws Exception if properties is null */
   @SuppressWarnings("unchecked")
   public <T> T set(Properties properties) {
-    fields().entrySet().forEach(e -> {
-      Field field = e.getKey();
-      Type type = e.getValue();
+    fields().entrySet().forEach(entry -> {
+      Field field = entry.getKey();
+      FieldType fieldType = entry.getValue();
       String string = properties.getProperty(field.getName());
       if (Objects.nonNull(string))
         try {
-          field.set(object, type.toObject(field.getType(), string));
+          field.set(object, fieldType.toObject(field.getType(), string));
         } catch (Exception exception) {
           exception.printStackTrace();
         }
@@ -240,10 +175,20 @@ public class ObjectProperties {
       try {
         Object value = field.get(object); // may throw Exception
         if (Objects.nonNull(value))
-          biConsumer.accept(field.getName(), Type.toString(field.getType(), value));
+          biConsumer.accept(field.getName(), FieldType.toString(field.getType(), value));
       } catch (Exception exception) {
         exception.printStackTrace();
       }
     });
+  }
+
+  public void setIfValid(Field field, FieldType fieldType, String string) {
+    try {
+      Object value = fieldType.toObject(field.getType(), string);
+      if (fieldType.isValidValue(value))
+        field.set(object, value);
+    } catch (Exception exception) {
+      exception.printStackTrace();
+    }
   }
 }

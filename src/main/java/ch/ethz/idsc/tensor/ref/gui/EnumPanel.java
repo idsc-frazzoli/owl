@@ -17,15 +17,11 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
     jLabel.setHorizontalAlignment(SwingConstants.LEFT);
     spinnerLabel.setArray(objects);
     spinnerLabel.setValueSafe(object);
+    spinnerLabel.addSpinnerListener(value -> notifyListeners(value.toString()));
   }
 
   @Override
   public JComponent getComponent() {
     return spinnerLabel.getLabelComponent();
-  }
-
-  @Override
-  public String getText() {
-    return spinnerLabel.getValue().toString();
   }
 }

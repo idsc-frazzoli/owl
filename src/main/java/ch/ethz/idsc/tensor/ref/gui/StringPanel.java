@@ -16,15 +16,11 @@ import javax.swing.JTextField;
     jTextField = new JTextField(string);
     jTextField.setFont(FONT);
     jTextField.setForeground(LABEL);
+    jTextField.addActionListener(l -> notifyListeners(jTextField.getText()));
   }
 
   @Override
   public JComponent getComponent() {
     return jTextField;
-  }
-
-  @Override
-  public String getText() {
-    return jTextField.getText();
   }
 }

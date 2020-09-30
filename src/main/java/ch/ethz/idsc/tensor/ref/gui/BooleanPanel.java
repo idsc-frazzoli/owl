@@ -21,8 +21,7 @@ import javax.swing.JComponent;
     return jCheckBox;
   }
 
-  @Override
-  public String getText() {
+  private String getText() {
     return "" + jCheckBox.isSelected();
   }
 }

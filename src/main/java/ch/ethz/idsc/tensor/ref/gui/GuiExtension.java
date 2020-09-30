@@ -37,7 +37,10 @@ public class GuiExtension {
     GuiExtension guiExtension = new GuiExtension();
     JDialog jDialog = new JDialog();
     jDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    ParametersComponent parametersComponent = new ParametersComponent(guiExtension, new GuiExtension());
+    // ObjectProperties.wrap(guiExtension).fields().entrySet().stream().forEach(System.out::println);
+    // ObjectProperties.wrap(guiExtension).fields().keySet().stream().forEach(System.out::println);
+    FieldPanels fieldPanels = new FieldPanels(guiExtension, new GuiExtension());
+    ParametersComponent parametersComponent = new ParametersComponent(fieldPanels);
     JPanel jPanel = new JPanel(new BorderLayout());
     jPanel.add("North", parametersComponent.getScrollPane());
     JTextArea jTextArea = new JTextArea();
@@ -45,7 +48,8 @@ public class GuiExtension {
       String text = ObjectProperties.wrap(guiExtension).strings().stream().collect(Collectors.joining("\n"));
       jTextArea.setText(text);
     };
-    parametersComponent.addListener(consumer);
+    consumer.accept(null);
+    fieldPanels.addUniversalListener(consumer);
     jPanel.add("Center", jTextArea);
     jDialog.setContentPane(jPanel);
     jDialog.setBounds(500, 200, 500, 500);

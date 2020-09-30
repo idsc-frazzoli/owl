@@ -17,10 +17,9 @@ import ch.ethz.idsc.tensor.io.StringScalarQ;
     jTextField.addKeyListener(new KeyAdapter() {
       @Override
       public void keyReleased(KeyEvent keyEvent) {
-        Tensor tensor = Tensors.fromString(getText());
+        Tensor tensor = Tensors.fromString(jTextField.getText());
         boolean isOk = !StringScalarQ.any(tensor);
         jTextField.setBackground(isOk ? Color.WHITE : FAIL);
-        notifyListeners(jTextField.getText());
       }
     });
   }

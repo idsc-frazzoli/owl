@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
   }
 
   public boolean isOk() {
-    Scalar scalar = Scalars.fromString(getText());
+    Scalar scalar = Scalars.fromString(jTextField.getText());
     boolean isOk = !StringScalarQ.of(scalar);
     if (!isOk)
       jTextField.setToolTipText("not a valid scalar");

@@ -19,6 +19,4 @@ import javax.swing.JComponent;
   }
 
   abstract JComponent getComponent();
-
-  abstract String getText();
 }
