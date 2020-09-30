@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ class ParamContainer {
-  public static final ParamContainer INSTANCE = TensorProperties.wrap(new ParamContainer()) //
+  public static final ParamContainer INSTANCE = ObjectProperties.wrap(new ParamContainer()) //
       .set(ResourceData.properties("/io/ParamContainer.properties"));
   // ---
   public String string;

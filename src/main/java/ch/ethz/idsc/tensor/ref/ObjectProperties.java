@@ -30,7 +30,8 @@ import ch.ethz.idsc.tensor.io.Import;
  * {@link Tensor}, {@link Scalar}, {@link String}, {@link File}, {@link Boolean},
  * {@link Enum}
  * are stored in, and retrieved from files in the {@link Properties} format */
-public class TensorProperties {
+// TODO rename
+public class ObjectProperties {
   private static final int MASK_FILTER = Modifier.PUBLIC;
   private static final int MASK_TESTED = //
       Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT | MASK_FILTER;
@@ -38,8 +39,8 @@ public class TensorProperties {
   /** @param object non-null
    * @return
    * @throws Exception if given object is null */
-  public static TensorProperties wrap(Object object) {
-    return new TensorProperties(object);
+  public static ObjectProperties wrap(Object object) {
+    return new ObjectProperties(object);
   }
 
   /** @param field
@@ -61,7 +62,7 @@ public class TensorProperties {
   }
 
   /** @param field
-   * @return if field is managed by {@link TensorProperties} */
+   * @return if field is managed by {@link ObjectProperties} */
   /* package */ static boolean isTracked(Field field) {
     if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
       Class<?> cls = field.getType();
@@ -134,7 +135,7 @@ public class TensorProperties {
   /***************************************************/
   private final Object object;
 
-  private TensorProperties(Object object) {
+  private ObjectProperties(Object object) {
     this.object = Objects.requireNonNull(object);
   }
 
@@ -226,7 +227,7 @@ public class TensorProperties {
     return false;
   }
 
-  /* package */ List<String> strings() {
+  public List<String> strings() {
     List<String> list = new LinkedList<>();
     consume((field, value) -> list.add(field + "=" + value));
     return list;

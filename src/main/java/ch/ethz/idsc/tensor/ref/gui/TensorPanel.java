@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.io.StringScalarQ;
         Tensor tensor = Tensors.fromString(getText());
         boolean isOk = !StringScalarQ.any(tensor);
         jTextField.setBackground(isOk ? Color.WHITE : FAIL);
+        notifyListeners(jTextField.getText());
       }
     });
   }

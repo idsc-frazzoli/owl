@@ -21,10 +21,10 @@ public class ParamContainerTest extends TestCase {
   public void testFile() {
     ParamContainerFile paramContainerFile = new ParamContainerFile();
     paramContainerFile.file = HomeDirectory.file("file.txt");
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerFile);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerFile);
     Properties properties = tensorProperties.get();
     ParamContainerFile copy = new ParamContainerFile();
-    TensorProperties wrap = TensorProperties.wrap(copy);
+    ObjectProperties wrap = ObjectProperties.wrap(copy);
     wrap.set(properties);
     assertEquals(copy.file, paramContainerFile.file);
   }
@@ -34,10 +34,10 @@ public class ParamContainerTest extends TestCase {
     paramContainerFile.text = "abc";
     paramContainerFile.tensor = Tensors.vector(1, 2, 3);
     paramContainerFile.file = HomeDirectory.file("file.txt");
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerFile);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerFile);
     File storage = TestFile.withExtension("properties");
     tensorProperties.save(storage);
-    ParamContainerFile loaded = TensorProperties.wrap(new ParamContainerFile()).tryLoad(storage);
+    ParamContainerFile loaded = ObjectProperties.wrap(new ParamContainerFile()).tryLoad(storage);
     assertEquals(loaded.file, paramContainerFile.file);
     assertEquals(loaded.tensor, paramContainerFile.tensor);
     assertEquals(loaded.text, paramContainerFile.text);
@@ -50,12 +50,12 @@ public class ParamContainerTest extends TestCase {
       ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
       paramContainerEnum.pivots = Pivots.FIRST_NON_ZERO;
       paramContainerEnum.nameString = NameString.SECOND;
-      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerEnum);
       properties = tensorProperties.get();
     }
     {
       ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
-      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerEnum);
       tensorProperties.set(properties);
       assertEquals(paramContainerEnum.pivots, Pivots.FIRST_NON_ZERO);
       assertEquals(paramContainerEnum.nameString, NameString.SECOND);
@@ -66,13 +66,13 @@ public class ParamContainerTest extends TestCase {
     Properties properties;
     {
       ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
-      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerEnum);
       properties = tensorProperties.get();
     }
     properties.setProperty("nameString", NameString.THIRD.name());
     {
       ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
-      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerEnum);
       tensorProperties.set(properties);
       assertNull(paramContainerEnum.pivots);
       assertEquals(paramContainerEnum.nameString, NameString.THIRD);

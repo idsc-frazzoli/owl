@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class FieldSubdivideTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     AnnotatedContainer paramContainer = new AnnotatedContainer();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainer);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainer);
     int ignored = 0;
     for (Field field : tensorProperties.fields().keySet()) {
       FieldSubdivide fieldSubdivide = field.getAnnotation(FieldSubdivide.class);

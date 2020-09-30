@@ -2,18 +2,19 @@
 package ch.ethz.idsc.tensor.ref.gui;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 
-/* package */ class EnumPanel implements FieldPanel {
-  // Object[] objects = ;
-  private final SpinnerLabel spinnerLabel = new SpinnerLabel();
+/* package */ class EnumPanel extends FieldPanel {
+  private final SpinnerLabel<Object> spinnerLabel = new SpinnerLabel<>();
 
-  // s.setArray(objects);
-  // s.setValueSafe(value);
-  // JToolBar jToolBar = createRow(field.getName(), BUTTON + 2);
-  // s.addToComponentReduced(jToolBar, new Dimension(200, 20), "tooltip");
   public EnumPanel(Object[] objects, Object object) {
+    JLabel jLabel = spinnerLabel.getLabelComponent();//
+    System.out.println(jLabel.getForeground());
+    jLabel.setFont(StringPanel.FONT);
+    jLabel.setHorizontalAlignment(SwingConstants.LEFT);
     spinnerLabel.setArray(objects);
     spinnerLabel.setValueSafe(object);
   }

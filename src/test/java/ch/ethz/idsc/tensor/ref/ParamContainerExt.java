@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ class ParamContainerExt extends ParamContainer {
-  public static final ParamContainerExt INSTANCE = TensorProperties.wrap(new ParamContainerExt()) //
+  public static final ParamContainerExt INSTANCE = ObjectProperties.wrap(new ParamContainerExt()) //
       .set(ResourceData.properties("/io/ParamContainerExt.properties"));
   // ---
   public Tensor onlyInExt = Tensors.vector(1, 2, 3);

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class FieldClipTest extends TestCase {
   public void testSimple() {
     AnnotatedContainer paramContainer = new AnnotatedContainer();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainer);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainer);
     int ignored = 0;
     for (Field field : tensorProperties.fields().keySet()) {
       FieldClip fieldClip = field.getAnnotation(FieldClip.class);

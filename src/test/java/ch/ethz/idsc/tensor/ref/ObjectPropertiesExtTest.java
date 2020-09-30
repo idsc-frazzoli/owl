@@ -19,10 +19,10 @@ import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
-public class TensorPropertiesExtTest extends TestCase {
+public class ObjectPropertiesExtTest extends TestCase {
   public void testListSize1() throws Exception {
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerExt);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerExt);
     paramContainerExt.string = "some string, no new line please";
     paramContainerExt.onlyInExt = Scalars.fromString("3.13[m*s^2]");
     List<String> list = tensorProperties.strings();
@@ -31,7 +31,7 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testListSize2() throws Exception {
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerExt);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerExt);
     paramContainerExt.shape = Tensors.fromString("{1,2,3}");
     paramContainerExt.abc = RealScalar.ONE;
     paramContainerExt.maxTor = Scalars.fromString("3.13[m*s^2]");
@@ -42,7 +42,7 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testBoolean() throws Exception {
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerExt);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerExt);
     paramContainerExt.status = true;
     assertEquals(tensorProperties.strings().size(), 3);
     Properties properties = tensorProperties.get();
@@ -65,7 +65,7 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testStore() throws Exception {
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerExt);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerExt);
     paramContainerExt.string = "some string, no new line please";
     assertEquals(tensorProperties.strings().size(), 2);
     paramContainerExt.maxTor = Scalars.fromString("3.13[m*s^2]");
@@ -76,7 +76,7 @@ public class TensorPropertiesExtTest extends TestCase {
     Properties properties = tensorProperties.get();
     {
       ParamContainerExt pc = new ParamContainerExt();
-      TensorProperties tensorProperties2 = TensorProperties.wrap(pc);
+      ObjectProperties tensorProperties2 = ObjectProperties.wrap(pc);
       tensorProperties2.set(properties);
       assertEquals(paramContainerExt.string, pc.string);
       assertEquals(paramContainerExt.maxTor, pc.maxTor);
@@ -85,7 +85,7 @@ public class TensorPropertiesExtTest extends TestCase {
     }
     {
       ParamContainerExt pc = new ParamContainerExt();
-      TensorProperties tensorProperties2 = TensorProperties.wrap(pc);
+      ObjectProperties tensorProperties2 = ObjectProperties.wrap(pc);
       tensorProperties2.set(properties);
       assertEquals(paramContainerExt.string, pc.string);
       assertEquals(paramContainerExt.maxTor, pc.maxTor);
@@ -127,7 +127,7 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testFields() {
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerExt);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(paramContainerExt);
     List<String> list = tensorProperties.fields().keySet().stream() //
         .map(Field::getName).collect(Collectors.toList());
     assertEquals(list.get(0), "onlyInExt");
@@ -140,11 +140,11 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testManifest() throws IOException {
     File file = TestFile.withExtension("properties");
-    TensorProperties tensorProperties = TensorProperties.wrap(ParamContainerExt.INSTANCE);
+    ObjectProperties tensorProperties = ObjectProperties.wrap(ParamContainerExt.INSTANCE);
     tensorProperties.save(file);
     assertTrue(file.isFile());
     ParamContainerExt paramContainerExt = new ParamContainerExt();
-    TensorProperties.wrap(paramContainerExt).load(file);
+    ObjectProperties.wrap(paramContainerExt).load(file);
     assertTrue(file.delete());
     assertEquals(paramContainerExt.shape, Tensors.fromString("{-9, 2, 3  [m*s^-3], 8, 4}"));
     assertEquals(paramContainerExt.maxTor, Tensors.fromString("10[m*s]"));
@@ -158,7 +158,7 @@ public class TensorPropertiesExtTest extends TestCase {
 
   public void testTrySave() {
     File file = TestFile.withExtension("properties");
-    TensorProperties tensorProperties = TensorProperties.wrap(new ParamContainerExt());
+    ObjectProperties tensorProperties = ObjectProperties.wrap(new ParamContainerExt());
     assertTrue(tensorProperties.trySave(file));
     assertTrue(file.isFile());
     assertTrue(file.delete());

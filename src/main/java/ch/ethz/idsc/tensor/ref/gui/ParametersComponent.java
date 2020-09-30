@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.ref.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,15 +21,14 @@ import javax.swing.JToolBar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.StringScalarQ;
-import ch.ethz.idsc.tensor.ref.TensorProperties;
-import ch.ethz.idsc.tensor.ref.TensorProperties.Type;
+import ch.ethz.idsc.tensor.ref.ObjectProperties;
+import ch.ethz.idsc.tensor.ref.ObjectProperties.Type;
 
 /** component that generically inspects a given object for fields of type
  * {@link Tensor} and {@link Scalar}. For each such field, a text field
  * is provided that allows the modification of the value. */
 // TODO JPH file is getting too long
 public class ParametersComponent extends ToolbarsComponent {
-  private static final Font FONT = new Font(Font.DIALOG_INPUT, Font.BOLD, 20);
   private static final Color FAIL = new Color(255, 192, 192);
   private static final Color SYNC = new Color(255, 255, 192);
   private static final int BUTTON = 56;
@@ -44,7 +43,7 @@ public class ParametersComponent extends ToolbarsComponent {
     Properties properties = new Properties();
     for (Entry<Field, FieldPanel> entry : map.entrySet())
       properties.setProperty(entry.getKey().getName(), entry.getValue().getText());
-    TensorProperties.wrap(object).set(properties);
+    ObjectProperties.wrap(object).set(properties);
   }
 
   private JButton create(String string, JTextField jTextField, Tensor subdivide, Field field, int increment) {
@@ -88,7 +87,7 @@ public class ParametersComponent extends ToolbarsComponent {
       }
     }
     addSeparator();
-    Map<Field, Type> fieldMap = TensorProperties.wrap(object).fields();
+    Map<Field, Type> fieldMap = ObjectProperties.wrap(object).fields();
     for (Entry<Field, Type> entry : fieldMap.entrySet()) {
       Field field = entry.getKey();
       Type type = entry.getValue();
@@ -110,6 +109,7 @@ public class ParametersComponent extends ToolbarsComponent {
         // ---
       }
     }
+    addListener(s -> updateInstance());
   }
 
   FieldPanel factor(Field field, Type type, Object value) {
@@ -121,65 +121,14 @@ public class ParametersComponent extends ToolbarsComponent {
     case ENUM:
       return new EnumPanel(field.getType().getEnumConstants(), value);
     case FILE:
-      return new StringPanel(((File) value).toString());
+      return new FilePanel((File) value);
     case TENSOR:
       return new TensorPanel((Tensor) value);
     case SCALAR:
-      return new ScalarPanel((Tensor) value);
-    default:
-      break;
+      return new ScalarPanel(field, (Scalar) value);
     }
-    return new StringPanel(value.toString());
-    // switch (type) {
-    // // case TENSOR:
-    // // break;
-    // case STRING: {
-    // JTextField jTextField = createEditing(field.getName());
-    // jTextField.addKeyListener(new KeyAdapter() {
-    // @Override
-    // public void keyReleased(KeyEvent keyEvent) {
-    // updateBackground(jTextField, field);
-    // checkFields();
-    // }
-    // });
-    // jTextField.addActionListener(actionEvent -> {
-    // if (checkFields())
-    // updateInstance();
-    // });
-    // break;
-    // }
-    // case FILE: {
-    // JToolBar jToolBar = createRow(field.getName(), BUTTON + 2);
-    // JLabel jLabel = new JLabel();
-    // jLabel.setPreferredSize(new Dimension(250, BUTTON));
-    // jLabel.setFont(FONT);
-    // jLabel.setText(value.toString());
-    // jLabel.addMouseListener(new MouseAdapter() {
-    // @Override
-    // public void mouseClicked(MouseEvent e) {
-    // System.out.println("HERE");
-    // File f = (File) value;
-    // JFileChooser jFileChooser = new JFileChooser(f);
-    // jFileChooser.setBounds(100, 100, 600, 600);
-    // int openDialog = jFileChooser.showOpenDialog(null);
-    // System.out.println(openDialog);
-    // }
-    // });
-    // jToolBar.add(jLabel);
-    // break;
-    // }
-    // case ENUM: {
-    // Object[] objects = field.getType().getEnumConstants();
-    // SpinnerLabel s = new SpinnerLabel();
-    // s.setArray(objects);
-    // s.setValueSafe(value);
-    // JToolBar jToolBar = createRow(field.getName(), BUTTON + 2);
-    // s.addToComponentReduced(jToolBar, new Dimension(200, 20), "tooltip");
-    // break;
-    // }
-    // default:
+    throw new RuntimeException();
     // Optional<Tensor> optional = TensorReflection.of(field.getAnnotation(FieldSubdivide.class));
-    // // TODO JPH check if annotations can be restricted to fields of certain class
     // final JTextField jTextField;
     // if (optional.isPresent() && value instanceof Tensor) {
     // Tensor tensor = optional.get();
@@ -191,35 +140,7 @@ public class ParametersComponent extends ToolbarsComponent {
     // jToolBar.add(jTextField);
     // jToolBar.add(create(">", jTextField, tensor, field, +1));
     // } else //
-    // if (value instanceof Boolean) {
-    // // TODO JPH indicate if value is different from default value
-    // jTextField = new JTextField();
-    // JToolBar jToolBar = createRow(field.getName(), BUTTON + 2);
-    // JToggleButton jToggleButton = new JToggleButton(value.toString());
-    // jToggleButton.setPreferredSize(new Dimension(250, BUTTON));
-    // jToggleButton.setSelected((Boolean) value);
-    // jToggleButton.addActionListener(actionEvent -> {
-    // String text = "" + jToggleButton.isSelected();
-    // jTextField.setText(text);
-    // jToggleButton.setText(text);
-    // if (checkFields())
-    // updateInstance();
-    // });
-    // jToolBar.add(jToggleButton);
     // } else {
-    // jTextField = createEditing(field.getName());
-    // jTextField.addKeyListener(new KeyAdapter() {
-    // @Override
-    // public void keyReleased(KeyEvent keyEvent) {
-    // updateBackground(jTextField, field);
-    // checkFields();
-    // }
-    // });
-    // jTextField.addActionListener(actionEvent -> {
-    // if (checkFields())
-    // updateInstance();
-    // });
-    // }
     // jTextField.setFont(FONT);
     // jTextField.setText(value.toString());
     // updateBackground(jTextField, field);
@@ -233,7 +154,7 @@ public class ParametersComponent extends ToolbarsComponent {
     if (isOk)
       try {
         Object compare = field.get(reference);
-        Object object = TensorProperties.parse(field, string);
+        Object object = ObjectProperties.parse(field, string);
         if (!compare.equals(object))
           jTextField.setBackground(SYNC);
       } catch (Exception exception) {
@@ -253,9 +174,13 @@ public class ParametersComponent extends ToolbarsComponent {
   }
 
   private static boolean isOk(Field field, String string) {
-    Object object = TensorProperties.parse(field, string);
+    Object object = ObjectProperties.parse(field, string);
     if (object instanceof Tensor)
       return !StringScalarQ.any((Tensor) object);
     return Objects.nonNull(object);
+  }
+
+  public void addListener(Consumer<String> consumer) {
+    map.values().stream().forEach(fp -> fp.addListener(consumer));
   }
 }

@@ -6,13 +6,14 @@ import java.util.Objects;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
-/* package */ class BooleanPanel implements FieldPanel {
+/* package */ class BooleanPanel extends FieldPanel {
   private final JCheckBox jCheckBox;
 
   public BooleanPanel(Boolean value) {
     jCheckBox = new JCheckBox();
     if (Objects.nonNull(value))
       jCheckBox.setSelected(value);
+    jCheckBox.addActionListener(event -> notifyListeners(getText()));
   }
 
   @Override
