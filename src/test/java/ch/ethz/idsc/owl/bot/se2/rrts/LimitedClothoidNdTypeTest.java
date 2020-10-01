@@ -2,11 +2,11 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.adapter.NdType;
-import ch.ethz.idsc.sophus.data.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 

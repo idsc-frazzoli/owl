@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
-import ch.ethz.idsc.sophus.data.nd.NdEntry;
-import ch.ethz.idsc.sophus.data.nd.NdMap;
-import ch.ethz.idsc.sophus.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.nd.NdEntry;
+import ch.ethz.idsc.tensor.opt.nd.NdMap;
+import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on NdType */
