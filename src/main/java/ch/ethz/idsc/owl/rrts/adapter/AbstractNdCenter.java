@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.nd.NdCenterInterface;
 
-public abstract class AbstractNdCenter implements NdCenterInterface, Serializable {
+/* package */ abstract class AbstractNdCenter implements NdCenterInterface, Serializable {
   private final Tensor center;
 
   public AbstractNdCenter(Tensor center) {

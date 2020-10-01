@@ -4,7 +4,7 @@ package ch.ethz.idsc.demo.math3;
 import org.apache.commons.math3.analysis.MultivariateFunction;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMeans;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.red.Hypot;
   @Override // from MultivariateFunction
   public double value(double[] point) {
     Tensor weights = AffineAppend.of(Tensors.vectorDouble(point));
-    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.LINEAR, weights);
+    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMeans.LINEAR, weights);
     Scalar sum = RealScalar.ZERO;
     for (int index = 0; index < data.length; ++index) {
       Tensor pqr = data[index];

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -52,7 +52,7 @@ public class HermiteSubdivisionsTest extends TestCase {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
           Se2Manifold.HS_EXP, //
           Se2CoveringTransport.INSTANCE, //
-          Se2BiinvariantMean.LINEAR);
+          Se2BiinvariantMeans.LINEAR);
       TensorIteration ti1 = hermiteSubdivision.string(RealScalar.ONE, cp1);
       TensorIteration ti2 = hermiteSubdivision.string(RealScalar.ONE, Reverse.of(cp2));
       for (int count = 0; count < 3; ++count) {
@@ -70,7 +70,7 @@ public class HermiteSubdivisionsTest extends TestCase {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
           Se2Manifold.HS_EXP, //
           Se2CoveringTransport.INSTANCE, //
-          Se2BiinvariantMean.LINEAR);
+          Se2BiinvariantMeans.LINEAR);
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
       Tensor iterate = Do.of(tensorIteration::iterate, 2);
       Chop._13.requireAllZero(iterate.get(Tensor.ALL, 1));
@@ -91,7 +91,7 @@ public class HermiteSubdivisionsTest extends TestCase {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
           Se2Manifold.HS_EXP, //
           Se2CoveringTransport.INSTANCE, //
-          Se2BiinvariantMean.LINEAR);
+          Se2BiinvariantMeans.LINEAR);
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
       Tensor iterate = Do.of(tensorIteration::iterate, 2);
       for (Tensor rv : iterate.get(Tensor.ALL, 1))

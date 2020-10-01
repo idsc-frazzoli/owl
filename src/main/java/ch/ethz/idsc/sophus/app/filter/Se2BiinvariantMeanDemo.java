@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.so2.So2FilterBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2PhongBiinvariantMean;
@@ -20,20 +20,20 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/** demo of {@link Se2BiinvariantMean}
+/** demo of {@link Se2BiinvariantMeans}
  * 
  * illustration of three ways to average the angular component:
  * {@link So2LinearBiinvariantMean}
  * {@link So2FilterBiinvariantMean}
  * {@link So2PhongBiinvariantMean} */
 /* package */ class Se2BiinvariantMeanDemo extends AbstractDatasetKernelDemo {
-  private final SpinnerLabel<Se2BiinvariantMean> spinnerFilters = new SpinnerLabel<>();
+  private final SpinnerLabel<Se2BiinvariantMeans> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   public Se2BiinvariantMeanDemo() {
     super(GeodesicDisplays.SE2_ONLY, GokartPoseDataV2.INSTANCE);
     {
-      spinnerFilters.setArray(Se2BiinvariantMean.values());
+      spinnerFilters.setArray(Se2BiinvariantMeans.values());
       spinnerFilters.setIndex(0);
       spinnerFilters.addToComponentReduced(timerFrame.jToolBar, new Dimension(90, 28), "se2 biinvariant mean");
       spinnerFilters.addSpinnerListener(type -> updateState());
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
-    Se2BiinvariantMean se2BiinvariantMean = spinnerFilters.getValue();
+    Se2BiinvariantMeans se2BiinvariantMean = spinnerFilters.getValue();
     TensorUnaryOperator tensorUnaryOperator = BiinvariantMeanCenter.of(se2BiinvariantMean, smoothingKernel);
     return Nest.of( //
         CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //

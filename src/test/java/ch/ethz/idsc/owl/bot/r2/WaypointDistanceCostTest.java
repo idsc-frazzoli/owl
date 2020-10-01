@@ -3,12 +3,12 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Dimension;
 
-import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import junit.framework.TestCase;
 
 public class WaypointDistanceCostTest extends TestCase {

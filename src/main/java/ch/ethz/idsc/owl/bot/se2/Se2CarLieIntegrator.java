@@ -2,12 +2,12 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.sophus.lie.LieIntegrator;
-import ch.ethz.idsc.sophus.lie.so2.RotationMatrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.lie.r2.RotationMatrix;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 

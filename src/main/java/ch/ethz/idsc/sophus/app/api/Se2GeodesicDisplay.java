@@ -6,7 +6,7 @@ import java.util.Random;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.so2.So2;
@@ -51,7 +51,7 @@ public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return Se2BiinvariantMean.FILTER;
+    return Se2BiinvariantMeans.FILTER;
   }
 
   @Override // from GeodesicDisplay

@@ -14,12 +14,12 @@ import ch.ethz.idsc.sophus.hs.rpn.RpnRandomSample;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializable {

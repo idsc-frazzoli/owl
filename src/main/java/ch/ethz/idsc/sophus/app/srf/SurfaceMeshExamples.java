@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.srf;
 
-import ch.ethz.idsc.sophus.lie.so2.CirclePoints;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 /** Hint:
  * implementation exists only for evaluation purposes

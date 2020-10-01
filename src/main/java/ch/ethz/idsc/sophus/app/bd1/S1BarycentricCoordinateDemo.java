@@ -2,10 +2,10 @@
 package ch.ethz.idsc.sophus.app.bd1;
 
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
-import ch.ethz.idsc.sophus.lie.so2.AngleVector;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.lie.r2.AngleVector;
 import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ class S1BarycentricCoordinateDemo extends A1BarycentricCoordinateDemo {

@@ -6,7 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.hs.BiinvariantMeans;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
         Tensor wpq = Tensors.of(wp, wq);
         Scalar wr = RealScalar.ONE.subtract(Total.ofVector(wpq));
         Tensor weights = wpq.append(wr);
-        TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.FILTER, weights);
+        TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMeans.FILTER, weights);
         for (Tensor sequence : pqr_t) {
           Tensor pqr = sequence.extract(0, 3);
           Tensor t_prediction = tensorUnaryOperator.apply(pqr);

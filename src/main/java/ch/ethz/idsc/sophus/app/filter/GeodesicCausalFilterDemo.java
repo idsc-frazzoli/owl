@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     final int radius = spinnerRadius.getValue();
     if (0 < radius) {
       SmoothingKernel smoothingKernel = spinnerKernel.getValue();
-      Se2BiinvariantMean se2BiinvariantMean = Se2BiinvariantMean.FILTER;
+      Se2BiinvariantMeans se2BiinvariantMean = Se2BiinvariantMeans.FILTER;
       GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // ---
