@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Export;
@@ -16,7 +17,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
 
 /** the quaternions in the data set have norm of approximately

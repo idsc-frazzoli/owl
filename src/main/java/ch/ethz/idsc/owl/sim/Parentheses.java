@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.sim;
 
 import java.util.Stack;
 
-public class Parentheses {
+/* package */ class Parentheses {
   /** Check parentheses:
    * aaa(bb)ccc[(dd)e]{} // OK
    * ff((gg)h]xxx // NOK

@@ -1,7 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.sim;
 
-public class TargetSum {
+/* package */ enum TargetSum {
+  ;
+  /** @param array
+   * @param target sum
+   * @return whether there exists a subset of array
+   * elements that sums up to given target sum */
   public static boolean check(int[] array, int target) {
     return check(array, target, 0);
   }
@@ -9,12 +14,7 @@ public class TargetSum {
   private static boolean check(int[] array, int target, int index) {
     if (array.length == index)
       return target == 0;
-    int value = array[index];
-    if (value % 5 == 0)
-      return index == array.length - 1 || array[index + 1] != 1 //
-          ? check(array, target - value, index + 1) // force
-          : check(array, target, index + 1); // prohibit
-    return check(array, target - value, index + 1) //
+    return check(array, target - array[index], index + 1) //
         || check(array, target, index + 1);
   }
 }

@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class AbstractShadowConstraintTest extends TestCase {
   public void testNumeric() {
     Tensor tensor = AbstractShadowConstraint.DIR;
-    assertFalse(ExactScalarQ.of(tensor.get(0)));
-    assertFalse(ExactScalarQ.of(tensor.get(1)));
+    assertFalse(ExactScalarQ.of(tensor.Get(0)));
+    assertFalse(ExactScalarQ.of(tensor.Get(1)));
   }
 }

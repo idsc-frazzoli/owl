@@ -3,13 +3,13 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.data.nd.EuclideanNdCenter;
-import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.owl.data.nd.NdCluster;
-import ch.ethz.idsc.owl.data.nd.NdMap;
-import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.Regions;
+import ch.ethz.idsc.sophus.data.nd.EuclideanNdCenter;
+import ch.ethz.idsc.sophus.data.nd.NdCenterInterface;
+import ch.ethz.idsc.sophus.data.nd.NdCluster;
+import ch.ethz.idsc.sophus.data.nd.NdMap;
+import ch.ethz.idsc.sophus.data.nd.NdTreeMap;
 import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum Anagrams {
+/* package */ enum Anagrams {
   ;
   private static List<Character> represent(char[] text) {
     List<Character> list = new ArrayList<>();

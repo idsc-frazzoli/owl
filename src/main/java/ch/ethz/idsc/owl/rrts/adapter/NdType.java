@@ -1,7 +1,7 @@
 // code by gjoel, jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
-import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
+import ch.ethz.idsc.sophus.data.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.Tensor;
 
 public interface NdType {

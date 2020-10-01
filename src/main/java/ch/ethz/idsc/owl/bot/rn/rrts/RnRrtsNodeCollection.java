@@ -4,13 +4,13 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.nd.EuclideanNdCenter;
-import ch.ethz.idsc.owl.data.nd.NdCluster;
-import ch.ethz.idsc.owl.data.nd.NdEntry;
-import ch.ethz.idsc.owl.data.nd.NdMap;
-import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.sophus.data.nd.EuclideanNdCenter;
+import ch.ethz.idsc.sophus.data.nd.NdCluster;
+import ch.ethz.idsc.sophus.data.nd.NdEntry;
+import ch.ethz.idsc.sophus.data.nd.NdMap;
+import ch.ethz.idsc.sophus.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class RnRrtsNodeCollection implements RrtsNodeCollection {

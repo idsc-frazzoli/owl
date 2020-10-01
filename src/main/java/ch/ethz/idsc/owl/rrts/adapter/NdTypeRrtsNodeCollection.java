@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.nd.NdEntry;
-import ch.ethz.idsc.owl.data.nd.NdMap;
-import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.sophus.data.nd.NdEntry;
+import ch.ethz.idsc.sophus.data.nd.NdMap;
+import ch.ethz.idsc.sophus.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** collection of rrts nodes backed by a n-dimensional uniform tree

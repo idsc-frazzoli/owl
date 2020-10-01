@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.nd.AbstractNdCenter;
-import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.data.nd.AbstractNdCenter;
+import ch.ethz.idsc.sophus.data.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
