@@ -40,7 +40,6 @@ import ch.ethz.idsc.tensor.sca.N;
   private final JButton jButton = new JButton("snap");
   private final JToggleButton jToggleTarget = new JToggleButton("target");
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
-  private final JButton jButtonPrint = new JButton("print");
   // ---
   /** in coordinate specific to geodesic display */
   private Tensor movingOrigin;
@@ -66,10 +65,6 @@ import ch.ethz.idsc.tensor.sca.N;
     {
       jButton.addActionListener(l -> snap());
       timerFrame.jToolBar.add(jButton);
-    }
-    {
-      jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2()));
-      timerFrame.jToolBar.add(jButtonPrint);
     }
   }
 

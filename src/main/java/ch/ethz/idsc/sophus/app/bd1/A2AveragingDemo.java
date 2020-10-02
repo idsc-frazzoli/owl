@@ -40,7 +40,6 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final SpinnerLabel<Integer> spinnerRes = new SpinnerLabel<>();
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleThresh = new JToggleButton("thresh");
-  private final JButton jButtonPrint = new JButton("print");
 
   public A2AveragingDemo(List<GeodesicDisplay> geodesicDisplays) {
     super(geodesicDisplays);
@@ -80,10 +79,6 @@ import ch.ethz.idsc.tensor.sca.Round;
       timerFrame.jToolBar.add(jButton);
     }
     timerFrame.jToolBar.addSeparator();
-    {
-      jButtonPrint.addActionListener(l -> System.out.println(getControlPointsSe2()));
-      timerFrame.jToolBar.add(jButtonPrint);
-    }
     addSpinnerListener(v -> recompute());
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override

@@ -31,9 +31,4 @@ public class Se2ClothoidDisplayTest extends TestCase {
     Scalar a2 = PolygonArea.FUNCTION.apply(Se2ClothoidDisplay.ANALYTIC.shape());
     Tolerance.CHOP.requireClose(a1, a2);
   }
-
-  public void testInstance() {
-    // FIXME
-    // assertEquals(Se2ClothoidDisplay.ANALYTIC.geodesicInterface(), ClothoidBuilders.SE2_ANALYTIC);
-  }
 }

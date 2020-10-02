@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ReadLine;
-import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
+import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
 
 /** text file with values separated by space with first line as
  * <pre>

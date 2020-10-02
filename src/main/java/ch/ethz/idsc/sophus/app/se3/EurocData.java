@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */
