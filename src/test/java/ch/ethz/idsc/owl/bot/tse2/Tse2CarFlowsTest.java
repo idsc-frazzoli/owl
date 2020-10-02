@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.tse2;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -47,11 +48,6 @@ public class Tse2CarFlowsTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Tse2CarFlows.of(Quantity.of(1, "m^-1"), Quantity.of(2, "m*s^-2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tse2CarFlows.of(Quantity.of(1, "m^-1"), Quantity.of(2, "m*s^-2")));
   }
 }

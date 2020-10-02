@@ -1,15 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class MultiConstraintAdapterTest extends TestCase {
   public void testFailNull() {
-    try {
-      MultiConstraintAdapter.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MultiConstraintAdapter.of(null));
   }
 }

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -31,12 +32,8 @@ public class PurePursuitTest extends TestCase {
 
   public void testMatch2() {
     Tensor curve = Tensors.fromString("{{-0.4}, {0.6}, {1.4}, {2.2}}");
-    try {
-      PurePursuit.fromTrajectory(curve, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(()->
+      PurePursuit.fromTrajectory(curve, RealScalar.ONE));
   }
 
   public void testDistanceFail() {

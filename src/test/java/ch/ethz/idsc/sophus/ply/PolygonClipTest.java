@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.ply;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -88,12 +89,7 @@ public class PolygonClipTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      PolygonClip.of(HilbertMatrix.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PolygonClip.of(HilbertMatrix.of(2, 3)));
   }
 
   public void testLine() {
@@ -107,15 +103,10 @@ public class PolygonClipTest extends TestCase {
   }
 
   public void testSingular() {
-    try {
-      PolygonClip.intersection( //
-          Tensors.vector(1, 0), //
-          Tensors.vector(2, 0), //
-          Tensors.vector(4, 0), //
-          Tensors.vector(9, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PolygonClip.intersection( //
+        Tensors.vector(1, 0), //
+        Tensors.vector(2, 0), //
+        Tensors.vector(4, 0), //
+        Tensors.vector(9, 0)));
   }
 }

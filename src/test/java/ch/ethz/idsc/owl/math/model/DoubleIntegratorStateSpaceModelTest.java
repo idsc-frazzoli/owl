@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.model;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -15,17 +16,7 @@ public class DoubleIntegratorStateSpaceModelTest extends TestCase {
 
   public void testFail() {
     Tensor x = Tensors.vector(1, 2, 3, 4);
-    try {
-      DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3, 4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3)));
+    AssertFail.of(() -> DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3, 4, 3)));
   }
 }

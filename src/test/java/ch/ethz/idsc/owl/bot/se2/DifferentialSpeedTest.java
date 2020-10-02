@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -143,11 +144,7 @@ public class DifferentialSpeedTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(0.5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(0.5)));
   }
 }

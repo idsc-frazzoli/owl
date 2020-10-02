@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app;
 
 import java.util.function.Function;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -82,35 +83,20 @@ public class SmoothingKernelTest extends TestCase {
 
   public void testZeroFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      try {
-        Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
-        uniformWindowSampler.apply(0);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
+      AssertFail.of(() -> uniformWindowSampler.apply(0));
     }
   }
 
   public void testAllFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       Function<Integer, Tensor> centerWindowSampler = UniformWindowSampler.of(smoothingKernel);
-      try {
-        centerWindowSampler.apply(-1);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> centerWindowSampler.apply(-1));
     }
   }
 
   public void testAllFailQuantity() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
-      try {
-        smoothingKernel.apply(Quantity.of(1, "s"));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> smoothingKernel.apply(Quantity.of(1, "s")));
   }
 }

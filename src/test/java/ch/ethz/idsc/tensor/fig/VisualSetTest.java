@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -72,43 +73,18 @@ public class VisualSetTest extends TestCase {
 
   public void testFailScalar() {
     VisualSet visualSet = new VisualSet();
-    try {
-      visualSet.add(RealScalar.ZERO, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> visualSet.add(RealScalar.ZERO, RealScalar.ONE));
   }
 
   public void testFailVector() {
     VisualSet visualSet = new VisualSet();
-    try {
-      visualSet.add(Tensors.vector(1, 2, 3, 4), Tensors.vector(1, 2, 3, 4, 5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> visualSet.add(Tensors.vector(1, 2, 3, 4), Tensors.vector(1, 2, 3, 4, 5)));
   }
 
   public void testFailUnstructured() {
     VisualSet visualSet = new VisualSet();
-    try {
-      visualSet.add(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}, {3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      visualSet.add(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}, 4}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      visualSet.add(Tensors.fromString("{{1, 2, 3}, {3, 4, 2}, {5, 6, 3}, {3, 5, 3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> visualSet.add(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}, {3}}")));
+    AssertFail.of(() -> visualSet.add(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}, 4}")));
+    AssertFail.of(() -> visualSet.add(Tensors.fromString("{{1, 2, 3}, {3, 4, 2}, {5, 6, 3}, {3, 5, 3}}")));
   }
 }

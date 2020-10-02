@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -55,11 +56,6 @@ public class HyperplaneRegionTest extends TestCase {
 
   public void testDistanceFail() {
     ImplicitFunctionRegion ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
-    try {
-      ifr.signedDistance(Array.zeros(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ifr.signedDistance(Array.zeros(3)));
   }
 }

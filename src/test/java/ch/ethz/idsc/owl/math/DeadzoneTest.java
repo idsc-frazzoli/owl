@@ -16,20 +16,10 @@ public class DeadzoneTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Deadzone.of(0, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Deadzone.of(0, -1));
   }
 
   public void testNullFail() {
-    try {
-      Deadzone.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Deadzone.of(null));
   }
 }

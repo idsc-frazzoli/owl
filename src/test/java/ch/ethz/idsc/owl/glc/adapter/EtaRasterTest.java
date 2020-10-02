@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -38,11 +39,6 @@ public class EtaRasterTest extends TestCase {
 
   public void testFail() {
     EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1), StateTime::joined);
-    try {
-      EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1.), StateTime::joined);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1.), StateTime::joined));
   }
 }

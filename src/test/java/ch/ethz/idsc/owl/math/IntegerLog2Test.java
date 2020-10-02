@@ -23,20 +23,10 @@ public class IntegerLog2Test extends TestCase {
   }
 
   public void testFailZero() {
-    try {
-      IntegerLog2.ceiling(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerLog2.ceiling(0));
   }
 
   public void testFailNegative() {
-    try {
-      IntegerLog2.ceiling(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerLog2.ceiling(-1));
   }
 }

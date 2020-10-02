@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.order;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -66,12 +67,7 @@ public class TensorProductOrderTest extends TestCase {
     ProductOrderComparator productOrderComparator = TensorProductOrder.comparator(3);
     Tensor tensorX = Tensors.fromString("{1, 2}");
     Tensor tensorY = Tensors.fromString("{2, 3}");
-    try {
-      productOrderComparator.compare(tensorX, tensorY);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> productOrderComparator.compare(tensorX, tensorY));
   }
 
   public void testZero() {
@@ -79,11 +75,6 @@ public class TensorProductOrderTest extends TestCase {
   }
 
   public void testFailNegative() {
-    try {
-      TensorProductOrder.comparator(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorProductOrder.comparator(-1));
   }
 }

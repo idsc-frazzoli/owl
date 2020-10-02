@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -49,17 +50,7 @@ public class RnTransitionTest extends TestCase {
     Tensor end = Tensors.vector(10, 2);
     RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(start, end);
     rnTransition.sampled(RealScalar.of(100));
-    try {
-      rnTransition.sampled(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      rnTransition.sampled(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> rnTransition.sampled(RealScalar.ZERO));
+    AssertFail.of(() -> rnTransition.sampled(RealScalar.of(-0.1)));
   }
 }

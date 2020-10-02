@@ -1,6 +1,7 @@
 // code by jph 
 package ch.ethz.idsc.owl.bot.rn;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -40,20 +41,12 @@ public class RnPointcloudRegionTest extends TestCase {
 
   public void testRadiusFail() {
     RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(1.0));
-    try {
-      RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(-1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(-1.0)));
   }
 
   public void testNonMatrix() {
-    try {
-      RnPointcloudRegion.of(Array.zeros(3, 3, 3), RealScalar.of(1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      RnPointcloudRegion.of(Array.zeros(3, 3, 3), RealScalar.of(1.0)));
   }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -33,15 +34,11 @@ public class BoundedEpisodeIntegratorTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
+    AssertFail.of(()->
       new BoundedEpisodeIntegrator( //
           SingleIntegratorStateSpaceModel.INSTANCE, //
           EulerIntegrator.INSTANCE, //
           new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), //
-          RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+          RealScalar.of(-1)));
   }
 }

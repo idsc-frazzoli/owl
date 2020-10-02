@@ -50,12 +50,7 @@ public class VectorScalarTest extends TestCase {
   public void testMultiply() {
     Scalar a = VectorScalar.of(1, 2, 3);
     Scalar b = VectorScalar.of(0, 3, 6);
-    try {
-      a.multiply(b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> a.multiply(b));
     Scalar c = Quantity.of(2, "Apples");
     Scalar d = a.multiply(c);
     assertEquals(d.toString(), "[2[Apples], 4[Apples], 6[Apples]]");
@@ -101,36 +96,16 @@ public class VectorScalarTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      VectorScalar.of(Tensors.empty()).number();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      VectorScalar.of(Tensors.empty().add(RealScalar.ONE));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorScalar.of(Tensors.empty()).number());
+    AssertFail.of(() -> VectorScalar.of(Tensors.empty().add(RealScalar.ONE)));
   }
 
   public void testFailNested() {
     Scalar a = VectorScalar.of(Tensors.vector(1, -1, 2));
-    try {
-      VectorScalar.of(Tensors.of(RealScalar.ONE, a));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorScalar.of(Tensors.of(RealScalar.ONE, a)));
   }
 
   public void testFailScalar() {
-    try {
-      VectorScalar.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorScalar.of(RealScalar.ONE));
   }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.tse2;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -70,11 +71,6 @@ public class LinearVelocity2MinTimeTest extends TestCase {
     Scalar v_max = Quantity.of(10, "m*s^-1");
     Scalar a_max = Quantity.of(2, "m*s^-2");
     LinearVelocity2MinTime linearVelocity2MinTime = new LinearVelocity2MinTime(v_max, a_max);
-    try {
-      linearVelocity2MinTime.timeDistToV_max(Quantity.of(11, "m*s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> linearVelocity2MinTime.timeDistToV_max(Quantity.of(11, "m*s^-1")));
   }
 }

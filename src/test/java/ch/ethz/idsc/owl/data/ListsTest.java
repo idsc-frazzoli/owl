@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.data;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class ListsTest extends TestCase {
@@ -12,11 +13,7 @@ public class ListsTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Lists.getLast(new LinkedList<>());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      Lists.getLast(new LinkedList<>()));
   }
 }

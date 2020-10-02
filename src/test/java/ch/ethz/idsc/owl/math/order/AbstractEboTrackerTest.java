@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
@@ -49,29 +50,14 @@ public class AbstractEboTrackerTest extends TestCase {
     Tensor slackVector = Tensors.vector(1, 2, 0.5);
     EboTracker<Integer> lexicographicSemiorderMinTracker = //
         SetEboTracker.<Integer>withSet(slackVector);
-    try {
-      lexicographicSemiorderMinTracker.pollBestKey();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> lexicographicSemiorderMinTracker.pollBestKey());
   }
 
   public void testMatrixSlackFail() {
-    try {
-      SetEboTracker.withSet(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SetEboTracker.withSet(HilbertMatrix.of(3)));
   }
 
   public void testScalarSlackFail() {
-    try {
-      SetEboTracker.withSet(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SetEboTracker.withSet(Pi.VALUE));
   }
 }

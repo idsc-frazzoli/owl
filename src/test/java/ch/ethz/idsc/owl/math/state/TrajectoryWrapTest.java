@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.Collections;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -14,23 +15,11 @@ public class TrajectoryWrapTest extends TestCase {
     TrajectoryWrap trajectoryWrap = TrajectoryWrap.of(Collections.singletonList(trajectorySample));
     assertTrue(trajectoryWrap.isRelevant(RealScalar.of(3)));
     assertFalse(trajectoryWrap.isDefined(RealScalar.of(4)));
-    try {
-      trajectoryWrap.getControl(RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      trajectoryWrap.getSample(RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      trajectoryWrap.getSample(RealScalar.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(()->
+      trajectoryWrap.getControl(RealScalar.of(3)));
+    AssertFail.of(()->
+      trajectoryWrap.getSample(RealScalar.of(3)));
+    AssertFail.of(()->
+      trajectoryWrap.getSample(RealScalar.of(4)));
   }
 }

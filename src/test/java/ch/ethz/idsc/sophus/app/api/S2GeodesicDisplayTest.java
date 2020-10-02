@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -47,11 +48,6 @@ public class S2GeodesicDisplayTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      S2GeodesicDisplay.tangentSpace(Tensors.vector(1, 1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> S2GeodesicDisplay.tangentSpace(Tensors.vector(1, 1, 1)));
   }
 }

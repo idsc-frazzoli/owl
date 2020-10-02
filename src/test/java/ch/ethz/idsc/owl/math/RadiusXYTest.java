@@ -11,17 +11,7 @@ public class RadiusXYTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      RadiusXY.requireSame(Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RadiusXY.requireSame(Tensors.vector(1, 2, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RadiusXY.requireSame(Tensors.vector(1, 2)));
+    AssertFail.of(() -> RadiusXY.requireSame(Tensors.vector(1, 2, 1)));
   }
 }

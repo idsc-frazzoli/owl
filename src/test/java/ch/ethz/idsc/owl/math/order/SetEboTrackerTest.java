@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -90,12 +91,7 @@ public class SetEboTrackerTest extends TestCase {
     Tensor slacks = Tensors.vector(1, 1, 1);
     EboTracker<Integer> lexSemiMinTracker = SetEboTracker.withList(slacks);
     Tensor x = Tensors.vector(1, 2, 2, 3);
-    try {
-      lexSemiMinTracker.digest(1, x);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> lexSemiMinTracker.digest(1, x));
   }
 
   public void testGetMinElements() {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class InvertedRegionTest extends TestCase {
@@ -10,11 +11,7 @@ public class InvertedRegionTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      new InvertedRegion<>(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(()->
+      new InvertedRegion<>(null));
   }
 }

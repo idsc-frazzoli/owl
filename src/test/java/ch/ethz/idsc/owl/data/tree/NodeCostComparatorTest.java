@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.data.tree;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -15,11 +16,7 @@ public class NodeCostComparatorTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      NodeCostComparator.INSTANCE.compare(null, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      NodeCostComparator.INSTANCE.compare(null, null));
   }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -39,17 +40,7 @@ public class LinearRegionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new LinearRegion(null, RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      new LinearRegion(RealScalar.of(2), RealScalar.of(-3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new LinearRegion(null, RealScalar.of(2)));
+    AssertFail.of(() -> new LinearRegion(RealScalar.of(2), RealScalar.of(-3)));
   }
 }

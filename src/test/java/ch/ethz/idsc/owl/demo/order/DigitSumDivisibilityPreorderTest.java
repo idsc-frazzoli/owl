@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.RealScalar;
 import junit.framework.TestCase;
@@ -56,17 +57,7 @@ public class DigitSumDivisibilityPreorderTest extends TestCase {
   }
 
   public void testNegativeAndZeroCase() {
-    try {
-      DigitSumDivisibilityPreorder.INTEGER.compare(0, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DigitSumDivisibilityPreorder.INTEGER.compare(-3, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DigitSumDivisibilityPreorder.INTEGER.compare(0, 3));
+    AssertFail.of(() -> DigitSumDivisibilityPreorder.INTEGER.compare(-3, 3));
   }
 }

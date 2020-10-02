@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -33,11 +34,6 @@ public class RelaxedPriorityQueueTest extends TestCase {
 
   public void testPollThrows() {
     RelaxedPriorityQueue relaxedPriorityQueue = RelaxedDomainQueue.empty(Tensors.vector(1, 2, 3));
-    try {
-      relaxedPriorityQueue.pollBest();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> relaxedPriorityQueue.pollBest());
   }
 }

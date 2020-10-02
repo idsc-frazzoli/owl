@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -72,11 +73,6 @@ public class RLQueueTest extends TestCase {
   }
 
   public void testFailCollectionsMinEmpty() {
-    try {
-      Collections.min(Arrays.asList());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Collections.min(Arrays.asList()));
   }
 }

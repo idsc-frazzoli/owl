@@ -12,7 +12,6 @@ public class PathRenderTest extends TestCase {
     pathRender.setCurve(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}"), false);
     try {
       pathRender.render(null, null);
-      fail();
     } catch (Exception exception) {
       // ---
     }

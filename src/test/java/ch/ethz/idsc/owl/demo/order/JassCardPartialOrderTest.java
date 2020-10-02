@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.demo.order;
 
 import ch.ethz.idsc.owl.demo.order.JassCard.Color;
 import ch.ethz.idsc.owl.demo.order.JassCard.Type;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import junit.framework.TestCase;
 
@@ -49,11 +50,6 @@ public class JassCardPartialOrderTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      JassCardPartialOrder.INSTANCE.compare(D, D);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> JassCardPartialOrder.INSTANCE.compare(D, D));
   }
 }

@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -51,11 +52,7 @@ public class ImageAreaTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      ImageArea.fromImage(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      ImageArea.fromImage(null));
   }
 }

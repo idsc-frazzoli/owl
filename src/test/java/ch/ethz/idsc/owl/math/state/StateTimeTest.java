@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -28,17 +29,7 @@ public class StateTimeTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new StateTime(Tensors.vector(1, 2), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      new StateTime(null, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new StateTime(Tensors.vector(1, 2), null));
+    AssertFail.of(() -> new StateTime(null, RealScalar.ZERO));
   }
 }

@@ -1,6 +1,7 @@
 // code by gjoel, jph
 package ch.ethz.idsc.tensor.fig;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -22,27 +23,12 @@ public class VisualRowTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      new VisualSet(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new VisualSet(null));
   }
 
   public void testPointNonMatrix() {
     VisualSet visualSet = new VisualSet();
-    try {
-      visualSet.add(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      visualSet.add(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> visualSet.add(Tensors.vector(1, 2, 3, 4)));
+    AssertFail.of(() -> visualSet.add(RealScalar.ZERO));
   }
 }

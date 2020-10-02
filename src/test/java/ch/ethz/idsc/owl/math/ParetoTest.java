@@ -16,13 +16,8 @@ public class ParetoTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Tensor a = Tensors.vector(1, 1);
-      Tensor b = Tensors.vector(2, 2, 3);
-      Pareto.isDominated(a, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor a = Tensors.vector(1, 1);
+    Tensor b = Tensors.vector(2, 2, 3);
+    AssertFail.of(() -> Pareto.isDominated(a, b));
   }
 }

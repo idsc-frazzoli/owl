@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.sym;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -15,11 +16,6 @@ public class SymScalarTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      SymScalar.of(SymScalar.leaf(2), RealScalar.of(3), RationalScalar.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SymScalar.of(SymScalar.leaf(2), RealScalar.of(3), RationalScalar.HALF));
   }
 }

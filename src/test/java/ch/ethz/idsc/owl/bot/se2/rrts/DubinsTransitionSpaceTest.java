@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
@@ -80,27 +81,12 @@ public class DubinsTransitionSpaceTest extends TestCase {
   }
 
   public void testRadiusFail() {
-    try {
-      DubinsTransitionSpace.of(RealScalar.of(0.0), DubinsPathComparators.LENGTH);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DubinsTransitionSpace.of(RealScalar.of(-0.1), DubinsPathComparators.LENGTH);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DubinsTransitionSpace.of(RealScalar.of(0.0), DubinsPathComparators.LENGTH));
+    AssertFail.of(() -> DubinsTransitionSpace.of(RealScalar.of(-0.1), DubinsPathComparators.LENGTH));
   }
 
   public void testComparatorFail() {
     DubinsTransitionSpace.of(RealScalar.of(1.0), DubinsPathComparators.LENGTH);
-    try {
-      DubinsTransitionSpace.of(RealScalar.of(1.0), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DubinsTransitionSpace.of(RealScalar.of(1.0), null));
   }
 }

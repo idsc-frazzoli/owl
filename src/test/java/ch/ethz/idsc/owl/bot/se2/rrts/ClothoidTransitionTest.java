@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
@@ -75,29 +76,9 @@ public class ClothoidTransitionTest extends TestCase {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(CLOTHOID_BUILDER, start, end);
-    try {
-      clothoidTransition.sampled(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      clothoidTransition.sampled(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      clothoidTransition.wrapped(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      clothoidTransition.linearized(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clothoidTransition.sampled(RealScalar.of(-0.1)));
+    AssertFail.of(() -> clothoidTransition.sampled(RealScalar.ZERO));
+    AssertFail.of(() -> clothoidTransition.wrapped(RealScalar.ZERO));
+    AssertFail.of(() -> clothoidTransition.linearized(RealScalar.ZERO));
   }
 }

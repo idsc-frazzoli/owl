@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.Regions;
@@ -18,12 +19,8 @@ public class Se2PointsVsRegionsTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Se2PointsVsRegions.line(Tensors.vector(-2, 1, 0, 5), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      Se2PointsVsRegions.line(Tensors.vector(-2, 1, 0, 5), null));
   }
 
   public void testFootprint() {

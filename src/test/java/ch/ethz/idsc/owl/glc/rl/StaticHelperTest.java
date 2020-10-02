@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import junit.framework.TestCase;
 
@@ -15,11 +16,6 @@ public class StaticHelperTest extends TestCase {
   }
 
   public void testFailGetMinEmpty() {
-    try {
-      StaticHelper.getMin(Collections.emptyList(), 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StaticHelper.getMin(Collections.emptyList(), 2));
   }
 }

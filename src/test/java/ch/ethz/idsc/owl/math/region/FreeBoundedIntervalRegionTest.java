@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -26,11 +27,6 @@ public class FreeBoundedIntervalRegionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new FreeBoundedIntervalRegion(0, RealScalar.of(10), RealScalar.of(10));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new FreeBoundedIntervalRegion(0, RealScalar.of(10), RealScalar.of(10)));
   }
 }

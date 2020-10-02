@@ -57,14 +57,8 @@ public class GeometricLayerTest extends TestCase {
     assertEquals(expected, v2);
   }
 
-  public void testFail() {
+  public void testStackFail() {
     GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
-    try {
-      Serialization.copy(geometricLayer);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
     geometricLayer.popMatrix();
     try {
       geometricLayer.popMatrix();
@@ -75,8 +69,9 @@ public class GeometricLayerTest extends TestCase {
   }
 
   public void testSerializableFail() {
+    GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
     try {
-      Serialization.copy(new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3)));
+      Serialization.copy(geometricLayer);
       fail();
     } catch (Exception exception) {
       // ---

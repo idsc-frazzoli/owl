@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -27,17 +28,7 @@ public class RrtsNodeTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      RrtsNode.createRoot(null, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RrtsNode.createRoot(Tensors.vector(1, 2, 3), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RrtsNode.createRoot(null, RealScalar.ZERO));
+    AssertFail.of(() -> RrtsNode.createRoot(Tensors.vector(1, 2, 3), null));
   }
 }

@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
@@ -63,11 +64,7 @@ public class Duncan1StateSpaceModelTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new Duncan1StateSpaceModel(Quantity.of(-1.0, "s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      new Duncan1StateSpaceModel(Quantity.of(-1.0, "s^-1")));
   }
 }

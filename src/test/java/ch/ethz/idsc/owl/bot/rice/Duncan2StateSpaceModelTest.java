@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rice;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,11 +26,7 @@ public class Duncan2StateSpaceModelTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new Duncan2StateSpaceModel(Quantity.of(-1.0, "s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      new Duncan2StateSpaceModel(Quantity.of(-1.0, "s^-1")));
   }
 }

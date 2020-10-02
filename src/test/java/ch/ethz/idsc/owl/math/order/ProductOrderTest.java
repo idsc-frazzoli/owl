@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class ProductOrderTest extends TestCase {
@@ -20,18 +21,8 @@ public class ProductOrderTest extends TestCase {
 
   public void testNullFail() {
     for (OrderComparison orderComparison : OrderComparison.values()) {
-      try {
-        ProductOrder.intersect(orderComparison, null);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
-      try {
-        ProductOrder.intersect(null, orderComparison);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> ProductOrder.intersect(orderComparison, null));
+      AssertFail.of(() -> ProductOrder.intersect(null, orderComparison));
     }
   }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.order;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -37,50 +38,20 @@ public class VectorLexicographicTest extends TestCase {
   public void testLengthFail() {
     Tensor x = Tensors.vector(0, 1, 2, 3);
     Tensor y = Tensors.vector(0, 1, 2, 4, 2);
-    try {
-      VectorLexicographic.COMPARATOR.compare(x, y);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      VectorLexicographic.COMPARATOR.compare(y, x);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(x, y));
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(y, x));
   }
 
   public void testMatrixFail() {
-    try {
-      VectorLexicographic.COMPARATOR.compare(HilbertMatrix.of(3), HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(HilbertMatrix.of(3), HilbertMatrix.of(3)));
   }
 
   public void testScalarFail() {
-    try {
-      VectorLexicographic.COMPARATOR.compare(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(RealScalar.ONE, RealScalar.ZERO));
   }
 
   public void testScalarVectorFail() {
-    try {
-      VectorLexicographic.COMPARATOR.compare(RealScalar.ONE, Tensors.vector(0, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      VectorLexicographic.COMPARATOR.compare(Tensors.vector(0, 2, 3), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(RealScalar.ONE, Tensors.vector(0, 2, 3)));
+    AssertFail.of(() -> VectorLexicographic.COMPARATOR.compare(Tensors.vector(0, 2, 3), RealScalar.ONE));
   }
 }

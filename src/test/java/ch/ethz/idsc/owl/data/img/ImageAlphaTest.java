@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.data.img;
 
 import java.awt.image.BufferedImage;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ImageFormat;
@@ -20,12 +21,8 @@ public class ImageAlphaTest extends TestCase {
   public void testFailGray() {
     Tensor tensor = Tensors.fromString("{{255, 255, 255, 255}, {128, 0, 255, 128}}");
     BufferedImage bufferedImage = ImageFormat.of(tensor);
-    try {
-      ImageAlpha.scale(bufferedImage, 0.5f);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      ImageAlpha.scale(bufferedImage, 0.5f));
   }
 
   public void testGray() {

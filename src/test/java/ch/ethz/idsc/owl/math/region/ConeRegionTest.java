@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -90,11 +91,6 @@ public class ConeRegionTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      new ConeRegion(Tensors.vector(5, 0, Math.PI / 2), RealScalar.of(-Math.PI));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new ConeRegion(Tensors.vector(5, 0, Math.PI / 2), RealScalar.of(-Math.PI)));
   }
 }

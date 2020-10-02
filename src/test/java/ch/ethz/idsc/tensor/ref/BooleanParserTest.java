@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.ref;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class BooleanParserTest extends TestCase {
@@ -14,11 +15,6 @@ public class BooleanParserTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      BooleanParser.orNull(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BooleanParser.orNull(null));
   }
 }

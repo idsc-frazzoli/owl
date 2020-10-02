@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.ply;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -89,20 +90,10 @@ public class PolygonAreaTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      PolygonArea.FUNCTION.apply(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PolygonArea.FUNCTION.apply(RealScalar.ONE));
   }
 
   public void testFailMatrix() {
-    try {
-      PolygonArea.FUNCTION.apply(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PolygonArea.FUNCTION.apply(HilbertMatrix.of(3)));
   }
 }

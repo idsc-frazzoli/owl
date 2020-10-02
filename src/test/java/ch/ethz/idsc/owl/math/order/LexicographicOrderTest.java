@@ -10,6 +10,7 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -80,18 +81,8 @@ public class LexicographicOrderTest extends TestCase {
     List<Scalar> y = Tensors.vector(6, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(x, x));
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(y, y));
-    try {
-      lexicographicOrder.compare(x, y);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      lexicographicOrder.compare(y, x);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> lexicographicOrder.compare(x, y));
+    AssertFail.of(() -> lexicographicOrder.compare(y, x));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

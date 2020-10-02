@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.sym;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -86,20 +87,10 @@ public class JetScalarTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      JetScalar.of(RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> JetScalar.of(RealScalar.of(2)));
   }
 
   public void testMatrixFail() {
-    try {
-      JetScalar.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> JetScalar.of(HilbertMatrix.of(3)));
   }
 }

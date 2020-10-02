@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -90,17 +91,7 @@ public class SingleEboTrackerTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      SingleEboTracker.withList(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SingleEboTracker.withSet(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SingleEboTracker.withList(null));
+    AssertFail.of(() -> SingleEboTracker.withSet(null));
   }
 }

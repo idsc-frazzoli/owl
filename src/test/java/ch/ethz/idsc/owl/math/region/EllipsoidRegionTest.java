@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -57,35 +58,15 @@ public class EllipsoidRegionTest extends TestCase {
   }
 
   public void testLengthFail() {
-    try {
-      new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0, 3)));
   }
 
   public void testNegativeFail() {
-    try {
-      new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, -2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, -2)));
   }
 
   public void testZeroFail() {
-    try {
-      new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      new EllipsoidRegion(Tensors.vector(10, 2, 3), Tensors.vector(1, 0.0, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0)));
+    AssertFail.of(() -> new EllipsoidRegion(Tensors.vector(10, 2, 3), Tensors.vector(1, 0.0, 3)));
   }
 }

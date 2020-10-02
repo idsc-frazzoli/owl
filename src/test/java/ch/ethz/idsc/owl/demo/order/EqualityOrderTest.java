@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import junit.framework.TestCase;
 
@@ -16,23 +17,8 @@ public class EqualityOrderTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      EqualityOrder.INSTANCE.compare(null, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      EqualityOrder.INSTANCE.compare("abc", null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      EqualityOrder.INSTANCE.compare(null, "abc");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualityOrder.INSTANCE.compare(null, null));
+    AssertFail.of(() -> EqualityOrder.INSTANCE.compare("abc", null));
+    AssertFail.of(() -> EqualityOrder.INSTANCE.compare(null, "abc"));
   }
 }

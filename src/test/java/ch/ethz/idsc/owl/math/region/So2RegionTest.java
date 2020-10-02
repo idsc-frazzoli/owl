@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -59,11 +60,6 @@ public class So2RegionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      So2Region.periodic(RealScalar.of(2), RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> So2Region.periodic(RealScalar.of(2), RealScalar.of(-1)));
   }
 }

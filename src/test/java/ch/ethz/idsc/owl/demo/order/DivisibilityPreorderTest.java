@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.RealScalar;
 import junit.framework.TestCase;
@@ -14,17 +15,7 @@ public class DivisibilityPreorderTest extends TestCase {
   }
 
   public void testZeroFail() {
-    try {
-      DivisibilityPreorder.INSTANCE.compare(RealScalar.ZERO, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DivisibilityPreorder.INSTANCE.compare(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DivisibilityPreorder.INSTANCE.compare(RealScalar.ZERO, RealScalar.ONE));
+    AssertFail.of(() -> DivisibilityPreorder.INSTANCE.compare(RealScalar.ONE, RealScalar.ZERO));
   }
 }

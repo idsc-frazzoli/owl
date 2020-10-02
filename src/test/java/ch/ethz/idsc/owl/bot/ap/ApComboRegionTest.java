@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,11 +29,6 @@ public class ApComboRegionTest extends TestCase {
   }
 
   public void testRequireNonNull() {
-    try {
-      ApComboRegion.createApRegion(null, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ApComboRegion.createApRegion(null, null));
   }
 }

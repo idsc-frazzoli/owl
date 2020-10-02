@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -63,20 +64,12 @@ public class Se2WrapTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Se2Wrap.INSTANCE.represent(Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      Se2Wrap.INSTANCE.represent(Tensors.vector(1, 2)));
   }
 
   public void testFailMatrix() {
-    try {
-      Se2Wrap.INSTANCE.represent(IdentityMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      Se2Wrap.INSTANCE.represent(IdentityMatrix.of(3)));
   }
 }

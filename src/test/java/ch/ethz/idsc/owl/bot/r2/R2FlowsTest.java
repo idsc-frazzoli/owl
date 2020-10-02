@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,11 +23,7 @@ public class R2FlowsTest extends TestCase {
 
   public void testFail() {
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
-    try {
-      r2Flows.getFlows(2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      r2Flows.getFlows(2));
   }
 }

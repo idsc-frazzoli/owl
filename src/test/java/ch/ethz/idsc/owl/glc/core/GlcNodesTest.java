@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.rn.RnNoHeuristicCircleGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -49,12 +50,7 @@ public class GlcNodesTest extends TestCase {
   }
 
   public void testRootFail() {
-    try {
-      GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ONE), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ONE), null));
   }
 
   public void testRoot() {
@@ -65,11 +61,6 @@ public class GlcNodesTest extends TestCase {
   }
 
   public void testSimple() {
-    try {
-      GlcNodes.getPathFromRootTo(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GlcNodes.getPathFromRootTo(null));
   }
 }

@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -56,11 +57,7 @@ public class FloodFill2DTest extends TestCase {
   public void testInvalid() {
     Tensor tensor = Array.zeros(5, 6);
     int ttl = -1;
-    try {
-      FloodFill2D.of(tensor, ttl);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> 
+      FloodFill2D.of(tensor, ttl));
   }
 }

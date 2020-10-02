@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.order;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class ProductTotalOrderTest extends TestCase {
@@ -56,32 +57,12 @@ public class ProductTotalOrderTest extends TestCase {
   public void testSizeException() {
     List<Comparable> x = Arrays.asList("zwei", 'a');
     List<Comparable> y = Arrays.asList("drei");
-    try {
-      ProductTotalOrder.INSTANCE.compare(x, y);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ProductTotalOrder.INSTANCE.compare(y, x);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ProductTotalOrder.INSTANCE.compare(x, y));
+    AssertFail.of(() -> ProductTotalOrder.INSTANCE.compare(y, x));
   }
 
   public void testNullException() {
-    try {
-      ProductTotalOrder.INSTANCE.compare(Arrays.asList(2), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ProductTotalOrder.INSTANCE.compare(null, Arrays.asList(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ProductTotalOrder.INSTANCE.compare(Arrays.asList(2), null));
+    AssertFail.of(() -> ProductTotalOrder.INSTANCE.compare(null, Arrays.asList(2)));
   }
 }

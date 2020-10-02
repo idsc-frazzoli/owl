@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -54,17 +55,7 @@ public class BallRegionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      new BallRegion(RealScalar.ZERO, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      new BallRegion(Tensors.vector(1, 2), RealScalar.ONE.negate());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new BallRegion(RealScalar.ZERO, RealScalar.ONE));
+    AssertFail.of(() -> new BallRegion(Tensors.vector(1, 2), RealScalar.ONE.negate()));
   }
 }

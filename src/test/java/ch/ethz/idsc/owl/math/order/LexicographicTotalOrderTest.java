@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class LexicographicTotalOrderTest extends TestCase {
@@ -61,18 +62,8 @@ public class LexicographicTotalOrderTest extends TestCase {
     y.add("drei");
     assertTrue(LexicographicTotalOrder.INSTANCE.compare(x, x) == 0);
     assertTrue(LexicographicTotalOrder.INSTANCE.compare(y, y) == 0);
-    try {
-      LexicographicTotalOrder.INSTANCE.compare(x, y);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LexicographicTotalOrder.INSTANCE.compare(y, x);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LexicographicTotalOrder.INSTANCE.compare(x, y));
+    AssertFail.of(() -> LexicographicTotalOrder.INSTANCE.compare(y, x));
   }
 
   public void testEmpty() {

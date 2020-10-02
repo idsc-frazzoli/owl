@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.data.tree;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,23 +36,8 @@ public class NodesTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Nodes.rootFrom(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Nodes.listFromRoot(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Nodes.listToRoot(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Nodes.rootFrom(null));
+    AssertFail.of(() -> Nodes.listFromRoot(null));
+    AssertFail.of(() -> Nodes.listToRoot(null));
   }
 }
