@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.lev;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
-import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
@@ -22,8 +21,6 @@ import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ abstract class AbstractHoverDemo extends LogWeightingDemo {
-  static final Random RANDOM = new Random();
-  // ---
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   final SpinnerLabel<Integer> spinnerCount = new SpinnerLabel<>();
   private final JButton jButtonShuffle = new JButton("shuffle");

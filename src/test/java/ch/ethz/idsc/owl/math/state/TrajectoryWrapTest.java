@@ -15,11 +15,8 @@ public class TrajectoryWrapTest extends TestCase {
     TrajectoryWrap trajectoryWrap = TrajectoryWrap.of(Collections.singletonList(trajectorySample));
     assertTrue(trajectoryWrap.isRelevant(RealScalar.of(3)));
     assertFalse(trajectoryWrap.isDefined(RealScalar.of(4)));
-    AssertFail.of(()->
-      trajectoryWrap.getControl(RealScalar.of(3)));
-    AssertFail.of(()->
-      trajectoryWrap.getSample(RealScalar.of(3)));
-    AssertFail.of(()->
-      trajectoryWrap.getSample(RealScalar.of(4)));
+    AssertFail.of(() -> trajectoryWrap.getControl(RealScalar.of(3)));
+    AssertFail.of(() -> trajectoryWrap.getSample(RealScalar.of(3)));
+    AssertFail.of(() -> trajectoryWrap.getSample(RealScalar.of(4)));
   }
 }

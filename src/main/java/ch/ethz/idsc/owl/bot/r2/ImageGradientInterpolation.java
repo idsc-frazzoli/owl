@@ -22,6 +22,8 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** rotated gradient of potential function */
 public class ImageGradientInterpolation implements Serializable {
+  private static final Tensor ZEROS = Tensors.vectorDouble(0, 0).unmodifiable();
+
   /** @param image
    * @param range
    * @param amp
@@ -37,10 +39,8 @@ public class ImageGradientInterpolation implements Serializable {
   public static ImageGradientInterpolation nearest(Tensor image, Tensor range, Scalar amp) {
     return new ImageGradientInterpolation(image, range, amp, NearestInterpolation::of);
   }
-  // ---
 
-  private static final Tensor ZEROS = Tensors.vectorDouble(0, 0).unmodifiable();
-  // ---
+  /***************************************************/
   private final Tensor scale;
   private final Interpolation interpolation;
   private final Scalar maxNormGradient;

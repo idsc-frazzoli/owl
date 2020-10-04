@@ -51,16 +51,14 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   }
 
   private static TrajectoryPlanner simple(PlannerConstraint plannerConstraint) {
-    final Tensor stateRoot = Tensors.vector(-2, -2);
-    final Tensor stateGoal = Tensors.vector(2, 2);
-    final Scalar radius = RealScalar.of(0.25);
-    // ---
+    Tensor stateRoot = Tensors.vector(-2, -2);
+    Tensor stateGoal = Tensors.vector(2, 2);
+    Scalar radius = RealScalar.of(0.25);
     Tensor eta = Tensors.vector(8, 8);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Tensor> controls = r2Flows.getFlows(36);
     BallRegion ballRegion = new BallRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
-    // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));

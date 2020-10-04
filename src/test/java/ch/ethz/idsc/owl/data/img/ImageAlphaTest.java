@@ -21,8 +21,7 @@ public class ImageAlphaTest extends TestCase {
   public void testFailGray() {
     Tensor tensor = Tensors.fromString("{{255, 255, 255, 255}, {128, 0, 255, 128}}");
     BufferedImage bufferedImage = ImageFormat.of(tensor);
-    AssertFail.of(() -> 
-      ImageAlpha.scale(bufferedImage, 0.5f));
+    AssertFail.of(() -> ImageAlpha.scale(bufferedImage, 0.5f));
   }
 
   public void testGray() {

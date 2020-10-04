@@ -47,7 +47,6 @@ import ch.ethz.idsc.tensor.alg.Array;
     Collection<Tensor> controls = r2Flows.getFlows(20);
     GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
-    // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));

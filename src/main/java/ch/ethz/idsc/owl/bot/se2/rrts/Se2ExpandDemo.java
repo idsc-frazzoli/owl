@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -18,6 +17,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,8 +28,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum Se2ExpandDemo {
   ;
-  private static final Random RANDOM = new Random();
-
   private static void animate(TransitionSpace transitionSpace) throws IOException, Exception {
     Tensor min = Tensors.vector(0, 0, -Math.PI);
     Tensor max = Tensors.vector(7, 7, +Math.PI);
@@ -50,7 +48,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       int frame = 0;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 5; ++count)
-          rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 20);
+          rrts.insertAsNode(RandomSample.of(randomSampleInterface), 20);
         owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.write(owlyFrame.offscreen());
       }

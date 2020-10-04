@@ -44,8 +44,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
  * the implementation chooses certain values */
 /* package */ class R2Entity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
-  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 12), 4);
+  public static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
+      EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 12), 4);
   // ---
   private final TreeRender treeRender = new TreeRender();
   /** extra cost functions, for instance to prevent cutting corners */
@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         RnMinTimeGoalManager.create(goalRegion, controls), //
         extraCosts);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, //
         plannerConstraint, goalInterface);
   }
 
@@ -104,9 +104,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RegionRenders.draw(geometricLayer, graphics, goalRegion);
-    // ---
     super.render(geometricLayer, graphics);
-    // ---
     treeRender.render(geometricLayer, graphics);
   }
 

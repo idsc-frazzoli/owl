@@ -62,10 +62,9 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   }
 
   private static TrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) throws Exception {
-    final Tensor stateRoot = Tensors.vector(-2.2, -2.2);
-    final Tensor stateGoal = Tensors.vector(2, 3.5);
-    final Scalar radius = RealScalar.of(0.8);
-    // ---
+    Tensor stateRoot = Tensors.vector(-2.2, -2.2);
+    Tensor stateGoal = Tensors.vector(2, 3.5);
+    Scalar radius = RealScalar.of(0.8);
     Tensor eta = Tensors.vector(1.5, 1.5);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
@@ -74,7 +73,6 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     BallRegion ballRegion = new BallRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     RenderInterface renderInterface = RegionRenders.create(obstacleQuery);
-    // ---
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);

@@ -42,7 +42,6 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(1.2, 2.2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
-    // ---
     BijectionFamily rigid1 = new Se2Family( //
         scalar -> Tensors.of( //
             Cos.FUNCTION.apply(scalar.multiply(RealScalar.of(0.1))).multiply(RealScalar.of(2.0)), //
@@ -50,7 +49,6 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
             scalar.multiply(RealScalar.of(0.15))));
     Region<StateTime> region1 = new R2xTPolygonStateTimeRegion( //
         R2ExamplePolygons.CORNER_CENTERED, rigid1, () -> abstractEntity.getStateTimeNow().time());
-    // ---
     BijectionFamily rigid2 = new Se2Family( //
         R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(5, 9, 4), 0.1, 2.0));
     Tensor polygon = CogPoints.of(4, RealScalar.of(1.5), RealScalar.of(0.5));

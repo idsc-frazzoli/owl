@@ -73,7 +73,6 @@ import ch.ethz.idsc.tensor.lie.r2.AngleVector;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
-    // ---
     treeRender.render(geometricLayer, graphics);
     {
       Tensor xya = geometricLayer.getMouseSe2State();

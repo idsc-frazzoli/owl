@@ -16,7 +16,6 @@ public class NodeCostComparatorTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      NodeCostComparator.INSTANCE.compare(null, null));
+    AssertFail.of(() -> NodeCostComparator.INSTANCE.compare(null, null));
   }
 }

@@ -32,8 +32,7 @@ public class PurePursuitTest extends TestCase {
 
   public void testMatch2() {
     Tensor curve = Tensors.fromString("{{-0.4}, {0.6}, {1.4}, {2.2}}");
-    AssertFail.of(()->
-      PurePursuit.fromTrajectory(curve, RealScalar.ONE));
+    AssertFail.of(() -> PurePursuit.fromTrajectory(curve, RealScalar.ONE));
   }
 
   public void testDistanceFail() {

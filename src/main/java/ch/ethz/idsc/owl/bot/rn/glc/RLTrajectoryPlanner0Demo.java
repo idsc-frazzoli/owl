@@ -55,9 +55,8 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
 
   static Optional<GlcNode> getBest() {
     Tensor slacks = Tensors.vector(5, 2);
-    final Tensor stateRoot = Tensors.vector(0, 0);
-    final Tensor stateGoal = Tensors.vector(5, 0);
-    // ---
+    Tensor stateRoot = Tensors.vector(0, 0);
+    Tensor stateGoal = Tensors.vector(5, 0);
     int n = 3;
     Tensor eta = Tensors.vector(n, n);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);

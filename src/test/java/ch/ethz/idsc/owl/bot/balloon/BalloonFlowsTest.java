@@ -18,7 +18,6 @@ public class BalloonFlowsTest extends TestCase {
 
   public void testFail() {
     FlowsInterface flowsInterface = BalloonFlows.of(RealScalar.of(10));
-    AssertFail.of(() -> 
-      flowsInterface.getFlows(-1));
+    AssertFail.of(() -> flowsInterface.getFlows(-1));
   }
 }

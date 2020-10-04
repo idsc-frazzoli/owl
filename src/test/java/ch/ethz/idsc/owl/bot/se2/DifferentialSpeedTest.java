@@ -144,7 +144,6 @@ public class DifferentialSpeedTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(0.5)));
+    AssertFail.of(() -> DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(0.5)));
   }
 }

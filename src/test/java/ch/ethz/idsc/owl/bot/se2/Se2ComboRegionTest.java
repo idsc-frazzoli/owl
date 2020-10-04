@@ -11,8 +11,7 @@ import junit.framework.TestCase;
 public class Se2ComboRegionTest extends TestCase {
   public void testSimple() {
     Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 3));
-    AssertFail.of(() -> 
-      Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3)));
   }
 
   public void testIsMember() {

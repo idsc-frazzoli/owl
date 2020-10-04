@@ -64,7 +64,6 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
-    // ---
     treeRender.render(geometricLayer, graphics);
   }
 }

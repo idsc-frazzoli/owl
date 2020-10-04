@@ -34,7 +34,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ class PsuEntity extends AbstractCircularEntity implements GlcPlannerCallback {
-  // ---
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.ONE;
@@ -65,7 +64,6 @@ import ch.ethz.idsc.tensor.alg.Array;
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, psuWrap.represent(Extract2D.FUNCTION.apply(goal)), RealScalar.of(0.2));
-    // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
     return new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
@@ -74,7 +72,6 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
-    // ---
     treeRender.render(geometricLayer, graphics);
   }
 

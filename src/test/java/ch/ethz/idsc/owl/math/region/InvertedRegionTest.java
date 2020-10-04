@@ -11,7 +11,6 @@ public class InvertedRegionTest extends TestCase {
   }
 
   public void testNullFail() {
-    AssertFail.of(()->
-      new InvertedRegion<>(null));
+    AssertFail.of(() -> new InvertedRegion<>(null));
   }
 }

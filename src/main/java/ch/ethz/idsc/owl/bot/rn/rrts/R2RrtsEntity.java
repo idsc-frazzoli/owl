@@ -32,8 +32,10 @@ import ch.ethz.idsc.tensor.alg.Array;
   private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
   static final Tensor SHAPE = Tensors.fromString("{{0, 0.1}, {0.1, 0}, {0, -0.1}, {-0.1, 0}}").unmodifiable();
 
-  // ---
-  /** @param stateTime initial position of entity */
+  /** @param stateTime initial position of entity
+   * @param transitionRegionQuery
+   * @param lbounds
+   * @param ubounds */
   public R2RrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
     super( //
         new SimpleEpisodeIntegrator( //

@@ -13,7 +13,6 @@ public class ListsTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      Lists.getLast(new LinkedList<>()));
+    AssertFail.of(() -> Lists.getLast(new LinkedList<>()));
   }
 }

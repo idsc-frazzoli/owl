@@ -34,8 +34,8 @@ public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements
   public static GoalInterface sperical(Tensor center, Scalar radius) {
     return new RnMinDistGoalManager(new BallRegion(center, radius));
   }
-  // ---
 
+  /***************************************************/
   private final RegionWithDistance<Tensor> regionWithDistance;
 
   /** @param regionWithDistance */

@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.glc.rl2;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
@@ -12,6 +11,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
 public class RelaxedDomainQueueTest extends TestCase {
@@ -104,8 +106,8 @@ public class RelaxedDomainQueueTest extends TestCase {
 
   public void testSpeed() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    Random random = new Random();
-    Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+    Distribution distribution = UniformDistribution.of(1, 2);
+    Scalar costFromRoot = VectorScalar.of(RandomVariate.of(distribution, 3));
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
     GlcNode firstNode = GlcNode.of(null, null, costFromRoot, minCostToGoal);
     RelaxedPriorityQueue relaxedPriorityQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
@@ -114,7 +116,7 @@ public class RelaxedDomainQueueTest extends TestCase {
       int removed = 0;
       int limit = 1000;
       for (int count = 0; count < limit; ++count) {
-        costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+        costFromRoot = VectorScalar.of(RandomVariate.of(distribution, 3));
         GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
         Collection<GlcNode> collection = relaxedPriorityQueue.add(node);
         removed += collection.size();

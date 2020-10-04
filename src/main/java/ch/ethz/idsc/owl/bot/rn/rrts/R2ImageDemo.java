@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
-import java.util.Random;
-
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -19,6 +17,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,8 +26,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ enum R2ImageDemo {
   ;
-  private static final Random RANDOM = new Random();
-
   public static void main(String[] args) throws Exception {
     Tensor origin = Array.zeros(2);
     Tensor range = Tensors.vector(7, 7);
@@ -49,7 +46,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)
-        rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 15);
+        rrts.insertAsNode(RandomSample.of(randomSampleInterface), 15);
       owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
       Thread.sleep(10);
     }

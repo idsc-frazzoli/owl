@@ -36,7 +36,6 @@ public class Rice1dNoiseDemo implements DemoInterface {
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
-    // ---
     Tensor range = Tensors.vector(6, 1);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(range.negate(), range);

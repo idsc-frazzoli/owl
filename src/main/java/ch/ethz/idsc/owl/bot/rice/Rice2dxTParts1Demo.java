@@ -41,7 +41,6 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     Rice2dEntity abstractEntity = new Rice2dEntity(mu, Tensors.vector(2, 2, 0, 0), trajectoryControl, controls);
     abstractEntity.delayHint = RealScalar.of(1.6);
     owlyAnimationFrame.add(abstractEntity);
-    // ---
     ScalarTensorFunction stf1 = R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(4, 2), 0.03, 2.5);
     BijectionFamily noise1 = new SimpleR2TranslationFamily(stf1);
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
@@ -50,7 +49,6 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     BijectionFamily noise2 = new SimpleR2TranslationFamily(stf2);
     Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.5, 0.6), noise2, () -> abstractEntity.getStateTimeNow().time());
-    // ---
     BijectionFamily rigid2 = new So2Family(s -> s.multiply(RealScalar.of(0.25)));
     Tensor polygon = CogPoints.of(4, RealScalar.of(1.0), RealScalar.of(0.3));
     Region<StateTime> region3 = new R2xTPolygonStateTimeRegion( //
@@ -64,7 +62,6 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) region3);
-    // ---
     owlyAnimationFrame.configCoordinateOffset(350, 350);
     return owlyAnimationFrame;
   }

@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ enum DeltaHelper {
   ;
-  // ---
   public static VectorFieldRender vectorFieldRender(StateSpaceModel stateSpaceModel, Tensor range, Region<Tensor> region, Scalar factor) {
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface sampler = BoxRandomSample.of(Tensors.vector(0, 0), range);

@@ -41,8 +41,6 @@ import ch.ethz.idsc.tensor.io.Timing;
 /** position and velocity control in 2D with friction */
 /* package */ enum Rice2dDemo {
   ;
-  // static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
-  // MidpointIntegrator.INSTANCE, RationalScalar.HALF, 5);
   static final EllipsoidRegion ELLIPSOID_REGION = //
       new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
 
@@ -57,13 +55,11 @@ import ch.ethz.idsc.tensor.io.Timing;
             new HyperplaneRegion(Tensors.vector(0, -1, 0, 0), RealScalar.of(3.2)), //
             new HyperplaneRegion(Tensors.vector(0, +0, 0, 1), RealScalar.ZERO) //
         ))));
-    // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, FixedStateIntegrator.create( //
             MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5),
         controls, plannerConstraint, goalInterface);
-    // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0.1, 0, 0), RealScalar.ZERO));
     return trajectoryPlanner;
   }

@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   void shuffle(int n) {
     super.shuffle(n);
     // assignment of random labels to points
-    vector = RandomVariate.of(DiscreteUniformDistribution.of(0, 3), RANDOM, n);
+    vector = RandomVariate.of(DiscreteUniformDistribution.of(0, 3), n);
   }
 
   @Override // from RenderInterface

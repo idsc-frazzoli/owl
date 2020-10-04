@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 
 public class DefaultRrtsPlanner implements RrtsPlanner {
   protected static final int K_NEAREST = 12;
-  protected static final Random RANDOM = new Random();
   private static final RrtsNode DUMMY = new RrtsNodeImpl(null, null);
   // ---
   protected final Rrts rrts;
@@ -48,9 +47,9 @@ public class DefaultRrtsPlanner implements RrtsPlanner {
 
   @Override // from ExpandInterface
   public void expand(RrtsNode node) { // node is not used, instead new random sample
-    rrts.insertAsNode(spaceSample.randomSample(RANDOM), K_NEAREST);
+    rrts.insertAsNode(RandomSample.of(spaceSample), K_NEAREST);
     if (queue.isEmpty()) { // TODO RRTS logic not final
-      rrts.insertAsNode(goalSample.randomSample(RANDOM), K_NEAREST).ifPresent(queue::add);
+      rrts.insertAsNode(RandomSample.of(goalSample), K_NEAREST).ifPresent(queue::add);
     }
   }
 

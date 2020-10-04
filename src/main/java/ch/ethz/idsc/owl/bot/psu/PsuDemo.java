@@ -42,7 +42,6 @@ import ch.ethz.idsc.tensor.alg.Array;
         RungeKutta4Integrator.INSTANCE, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Tensor> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
-    // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
@@ -53,7 +52,6 @@ import ch.ethz.idsc.tensor.alg.Array;
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
     TrajectoryPlanner trajectoryPlanner = raw(goalInterface);
-    // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
@@ -67,11 +65,9 @@ import ch.ethz.idsc.tensor.alg.Array;
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
-    // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
-    // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);

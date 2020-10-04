@@ -37,11 +37,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5).unmodifiable();
-  // protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
-  // RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
-  // ---
   /** the constants define the control */
   private static final Scalar U_NORM = RealScalar.of(0.6);
   /** resolution of radial controls */
@@ -53,6 +50,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private RegionWithDistance<Tensor> goalRegion = null;
   final FixedStateIntegrator fixedStateIntegrator;
 
+  /** @param episodeIntegrator
+   * @param trajectoryControl
+   * @param imageGradientInterpolation */
   public DeltaEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
     super(episodeIntegrator, trajectoryControl);
     add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));

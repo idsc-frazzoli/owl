@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.glc.rl;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.AssertFail;
@@ -12,6 +11,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
 public class RLQueueTest extends TestCase {
@@ -51,12 +53,12 @@ public class RLQueueTest extends TestCase {
   public void testSpeed() {
     Tensor slack = Tensors.vector(1, 1, 1);
     RLQueue rlQueue = new RLQueue(slack);
-    Random random = new Random();
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
     {
+      Distribution distribution = UniformDistribution.of(1, 2);
       Timing timing = Timing.started();
       for (int i = 0; i < 1000; ++i) {
-        Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+        Scalar costFromRoot = VectorScalar.of(RandomVariate.of(distribution, 3));
         GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
         boolean added = rlQueue.add(node);
         assertTrue(added);

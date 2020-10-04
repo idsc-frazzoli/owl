@@ -34,11 +34,10 @@ public class BoundedEpisodeIntegratorTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    AssertFail.of(()->
-      new BoundedEpisodeIntegrator( //
-          SingleIntegratorStateSpaceModel.INSTANCE, //
-          EulerIntegrator.INSTANCE, //
-          new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), //
-          RealScalar.of(-1)));
+    AssertFail.of(() -> new BoundedEpisodeIntegrator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        EulerIntegrator.INSTANCE, //
+        new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), //
+        RealScalar.of(-1)));
   }
 }

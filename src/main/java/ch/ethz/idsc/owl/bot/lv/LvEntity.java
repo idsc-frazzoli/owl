@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   private static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   // ---
-  private final FixedStateIntegrator FIXED_STATE_INTEGRATOR;
+  private final FixedStateIntegrator fixedStateIntegrator;
   private final TreeRender treeRender = new TreeRender();
   private final Collection<Tensor> controls;
 
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel, Collection<Tensor> controls) {
     super(episodeIntegrator, trajectoryControl);
     add(FallbackControl.of(Array.zeros(1)));
-    FIXED_STATE_INTEGRATOR = //
+    fixedStateIntegrator = //
         FixedStateIntegrator.create(INTEGRATOR, stateSpaceModel, RationalScalar.of(1, 12), 4);
     this.controls = controls;
   }
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     GoalInterface goalInterface = LvGoalInterface.create(Extract2D.FUNCTION.apply(goal), Tensors.vector(0.2, 0.2));
     StateTimeRaster stateTimeRaster = EtaRaster.state(PARTITION_SCALE);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster, FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, fixedStateIntegrator, controls, plannerConstraint, goalInterface);
   }
 
   @Override

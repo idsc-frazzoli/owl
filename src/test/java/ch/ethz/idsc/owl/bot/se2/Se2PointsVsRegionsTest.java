@@ -19,8 +19,7 @@ public class Se2PointsVsRegionsTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      Se2PointsVsRegions.line(Tensors.vector(-2, 1, 0, 5), null));
+    AssertFail.of(() -> Se2PointsVsRegions.line(Tensors.vector(-2, 1, 0, 5), null));
   }
 
   public void testFootprint() {

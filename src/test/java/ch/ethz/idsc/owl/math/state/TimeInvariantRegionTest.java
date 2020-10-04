@@ -6,7 +6,6 @@ import junit.framework.TestCase;
 
 public class TimeInvariantRegionTest extends TestCase {
   public void testFailNull() {
-    AssertFail.of(()->
-      new TimeInvariantRegion(null));
+    AssertFail.of(() -> new TimeInvariantRegion(null));
   }
 }

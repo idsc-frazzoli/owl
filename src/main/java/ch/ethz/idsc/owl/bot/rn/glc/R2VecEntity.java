@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(slack);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, //
         plannerConstraint, goalInterface, new LexicographicRelabelDecision(comparator));
   }
 
@@ -61,7 +61,6 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     edgeRender.getRender().render(geometricLayer, graphics);
-    // ---
     super.render(geometricLayer, graphics);
   }
 }

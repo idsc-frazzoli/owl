@@ -37,13 +37,11 @@ public class R2xTImageAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(1.5, 2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
-    // ---
     R2RigidFamily rigidFamily = Se2Family.rotationAround( //
         Tensors.vectorDouble(1.5, 2), time -> time.multiply(RealScalar.of(0.1)));
     ImageRegion imageRegion = R2ImageRegions.inside_circ();
     Region<StateTime> region = new R2xTImageStateTimeRegion( //
         imageRegion, rigidFamily, () -> abstractEntity.getStateTimeNow().time());
-    // ---
     PlannerConstraint plannerConstraint = RegionConstraints.stateTime(region);
     MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);

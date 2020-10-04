@@ -5,13 +5,15 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiObstacleRegion implements Region<Tensor> {
+  /** @param size
+   * @return */
   public static Region<Tensor> fromSize(Tensor size) {
     return new KlotskiObstacleRegion( //
         size.Get(0).number().intValue(), //
         size.Get(1).number().intValue());
   }
 
-  // ---
+  /***************************************************/
   private final int sx;
   private final int sy;
 

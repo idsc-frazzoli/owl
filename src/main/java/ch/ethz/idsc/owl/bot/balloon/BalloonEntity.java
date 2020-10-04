@@ -36,8 +36,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class BalloonEntity extends AbstractCircularEntity {
   private static final Tensor PARTITION_SCALE = Tensors.vector(2, 2, 1, 1).unmodifiable();
-  // protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
-  // FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
   static final int FLOWRES = 4;
   static final Scalar U_MAX = RealScalar.of(30);
   final static Scalar SPEED_MAX = RealScalar.of(10);
@@ -45,11 +43,12 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   private static final Scalar DELAY_HINT = RealScalar.of(2);
   private static final Scalar GOAL_RADIUS = RealScalar.of(3);
   // ---
-  /***************************************************/
   private final StateSpaceModel stateSpaceModel;
   private BufferedImage bufferedImage;
 
-  /***************************************************/
+  /** @param episodeIntegrator
+   * @param trajectoryControl
+   * @param stateSpaceModel */
   public BalloonEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel) {
     super(episodeIntegrator, trajectoryControl);
     add(BalloonFallbackControl.INSTANCE);
@@ -91,7 +90,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       trajectoryRender.setColor(Color.GREEN);
       trajectoryRender.render(geometricLayer, graphics);
     }
-    // ---
     { // indicate current position
       Tensor state = getStateTimeNow().state();
       Point2D point = geometricLayer.toPoint2D(state);

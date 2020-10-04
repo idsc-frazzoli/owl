@@ -23,7 +23,6 @@ public class R2FlowsTest extends TestCase {
 
   public void testFail() {
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
-    AssertFail.of(() -> 
-      r2Flows.getFlows(2));
+    AssertFail.of(() -> r2Flows.getFlows(2));
   }
 }

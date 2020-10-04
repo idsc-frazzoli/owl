@@ -31,6 +31,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       Tensors.vector(0, 0, 1, 1, 1), //
       Tensors.vector(2, 2) //
   ).unmodifiable();
+  // ---
   private final EspFrame espFrame = new EspFrame();
 
   public EspDemo() {
@@ -40,7 +41,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   List<StateTime> compute() {
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
-    // ---
     TrajectoryPlanner trajectoryPlanner = StandardTrajectoryPlanner.create( //
         EspStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(EspModel.INSTANCE), //

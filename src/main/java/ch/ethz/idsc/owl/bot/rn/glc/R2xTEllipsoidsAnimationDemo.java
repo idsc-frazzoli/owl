@@ -50,7 +50,6 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
-    // ---
     BijectionFamily shiftx = new SimpleR2TranslationFamily( //
         scalar -> Tensors.of(Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.2))), RealScalar.ZERO));
     BijectionFamily shifty = new SimpleR2TranslationFamily( //
@@ -62,7 +61,6 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(0, 2), 0.1, 1.3));
     BijectionFamily rigidm = new Se2Family( //
         R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(5, 9, 4), 0.1, 2.0));
-    // ---
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.7, 0.9), circle, () -> abstractEntity.getStateTimeNow().time());
     Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //

@@ -32,7 +32,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
 /** inverted pendulum */
-/* package */ class IpDemo {
+/* package */ enum IpDemo {
+  ;
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(10, 10, 10, 10);
     StateSpaceModel stateSpaceModel = new IpStateSpaceModel( //
@@ -51,11 +52,9 @@ import ch.ethz.idsc.tensor.alg.Array;
         new FreeBoundedIntervalRegion(2, RealScalar.of(-2), RealScalar.of(+2)) // ,
     ));
     PlannerConstraint plannerConstraint = RegionConstraints.timeDependent(region);
-    // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, plannerConstraint, ipGoalManager);
-    // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(4), RealScalar.ZERO));
     // new ExpandGlcFrame(trajectoryPlanner);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);

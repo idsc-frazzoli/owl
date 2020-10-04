@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   ;
   public static void main(String[] args) throws Exception {
     DeltaExample deltaDemo = new DeltaExample(RealScalar.of(0.5));
-    // ---
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.addBackground(RegionRenders.create(DeltaExample.REGION));
     owlyFrame.addBackground(RegionRenders.create(DeltaExample.SPHERICAL_REGION));

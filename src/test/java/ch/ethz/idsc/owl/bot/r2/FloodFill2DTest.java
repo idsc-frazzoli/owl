@@ -57,7 +57,6 @@ public class FloodFill2DTest extends TestCase {
   public void testInvalid() {
     Tensor tensor = Array.zeros(5, 6);
     int ttl = -1;
-    AssertFail.of(() -> 
-      FloodFill2D.of(tensor, ttl));
+    AssertFail.of(() -> FloodFill2D.of(tensor, ttl));
   }
 }

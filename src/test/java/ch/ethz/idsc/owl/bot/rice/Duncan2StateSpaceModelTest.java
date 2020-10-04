@@ -26,7 +26,6 @@ public class Duncan2StateSpaceModelTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      new Duncan2StateSpaceModel(Quantity.of(-1.0, "s^-1")));
+    AssertFail.of(() -> new Duncan2StateSpaceModel(Quantity.of(-1.0, "s^-1")));
   }
 }

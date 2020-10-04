@@ -34,11 +34,9 @@ public class R2xTMapAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(4.5, 5), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
-    // ---
     Region<Tensor> imageRegion = ImageRegions.loadFromRepository( //
         "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.15));
-    // ---
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

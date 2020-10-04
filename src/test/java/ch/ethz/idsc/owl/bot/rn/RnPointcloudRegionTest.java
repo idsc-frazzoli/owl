@@ -41,12 +41,10 @@ public class RnPointcloudRegionTest extends TestCase {
 
   public void testRadiusFail() {
     RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(1.0));
-    AssertFail.of(() -> 
-      RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(-1.0)));
+    AssertFail.of(() -> RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(-1.0)));
   }
 
   public void testNonMatrix() {
-    AssertFail.of(() -> 
-      RnPointcloudRegion.of(Array.zeros(3, 3, 3), RealScalar.of(1.0)));
+    AssertFail.of(() -> RnPointcloudRegion.of(Array.zeros(3, 3, 3), RealScalar.of(1.0)));
   }
 }

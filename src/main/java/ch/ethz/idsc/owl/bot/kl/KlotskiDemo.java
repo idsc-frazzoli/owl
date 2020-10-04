@@ -37,7 +37,6 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
   KlotskiSolution compute() {
     PlannerConstraint plannerConstraint = //
         RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
-    // ---
     TableBuilder tableBuilder = new TableBuilder();
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
         klotskiProblem.stateTimeRaster(), //

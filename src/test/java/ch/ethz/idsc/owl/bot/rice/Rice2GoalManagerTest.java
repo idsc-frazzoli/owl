@@ -6,7 +6,6 @@ import junit.framework.TestCase;
 
 public class Rice2GoalManagerTest extends TestCase {
   public void testSimple() {
-    AssertFail.of(() -> 
-      new Rice2GoalManager(null));
+    AssertFail.of(() -> new Rice2GoalManager(null));
   }
 }

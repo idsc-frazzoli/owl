@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -17,13 +16,13 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.ref.FieldClip;
 import ch.ethz.idsc.tensor.ref.FieldIntegerQ;
@@ -56,11 +55,10 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---
-    Random random = new Random();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         Append.of(LBOUNDS, Pi.VALUE.negate()), //
         Append.of(UBOUNDS, Pi.VALUE));
-    Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), SIZE);
+    Tensor tensor = RandomSample.of(randomSampleInterface, SIZE);
     for (Tensor state : tensor) {
       rrtsNodeCollection1.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
       rrtsNodeCollection2.insert(RrtsNode.createRoot(state, RealScalar.ZERO));

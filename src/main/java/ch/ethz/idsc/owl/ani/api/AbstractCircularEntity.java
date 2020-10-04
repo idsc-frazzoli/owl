@@ -42,7 +42,6 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
       graphics.setColor(new Color(255, 128, 128 - 64, 128 + 64));
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
-    // ---
     if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();

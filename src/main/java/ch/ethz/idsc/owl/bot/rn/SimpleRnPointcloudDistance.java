@@ -25,7 +25,7 @@ public class SimpleRnPointcloudDistance implements TensorScalarFunction {
     return new SimpleRnPointcloudDistance(points, norm);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor points;
   private final Norm norm;
 

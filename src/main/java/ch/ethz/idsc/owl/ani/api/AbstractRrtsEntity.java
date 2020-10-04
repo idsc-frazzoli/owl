@@ -84,7 +84,6 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
       graphics.setColor(new Color(255, 128, 64, 192));
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
-    // ---
     treeRender.render(geometricLayer, graphics);
     transitionRender.render(geometricLayer, graphics);
   }

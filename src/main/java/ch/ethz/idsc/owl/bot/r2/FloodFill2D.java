@@ -17,6 +17,11 @@ import ch.ethz.idsc.tensor.sca.Decrement;
 
 /** computes manhatten distance by flood fill */
 public class FloodFill2D {
+  private static final Tensor DXP = Tensors.vector(+1, 0);
+  private static final Tensor DXN = Tensors.vector(-1, 0);
+  private static final Tensor DYP = Tensors.vector(0, +1);
+  private static final Tensor DYN = Tensors.vector(0, -1);
+
   /** @param image
    * @param ttl non-negative
    * @param seeds
@@ -34,12 +39,7 @@ public class FloodFill2D {
     return of(image, ttl, seeds(image));
   }
 
-  // ---
-  private static final Tensor DXP = Tensors.vector(+1, 0);
-  private static final Tensor DXN = Tensors.vector(-1, 0);
-  private static final Tensor DYP = Tensors.vector(0, +1);
-  private static final Tensor DYN = Tensors.vector(0, -1);
-  // ----
+  /***************************************************/
   private final List<Integer> dimensions;
   private final Tensor array;
   private final Tensor image;

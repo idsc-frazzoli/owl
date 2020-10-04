@@ -2,11 +2,10 @@
 package ch.ethz.idsc.owl.lane;
 
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
@@ -25,8 +24,7 @@ public class LaneRandomSampleTest extends TestCase {
         LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), 1)::cyclic, 3, Quantity.of(0.3, "m"));
     Distribution rotDist = UniformDistribution.of(Clips.absoluteOne());
     RandomSampleInterface randomSampleInterface = Serialization.copy(LaneRandomSample.of(laneInterface, rotDist));
-    Random random = new SecureRandom();
-    Tensor tensor = randomSampleInterface.randomSample(random);
+    Tensor tensor = RandomSample.of(randomSampleInterface);
     boolean inside1 = Polygons.isInside(laneInterface.rightBoundary(), tensor);
     boolean inside2 = Polygons.isInside(laneInterface.leftBoundary(), tensor);
     System.out.println(inside1);

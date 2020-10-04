@@ -64,12 +64,10 @@ public class Se2WrapTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      Se2Wrap.INSTANCE.represent(Tensors.vector(1, 2)));
+    AssertFail.of(() -> Se2Wrap.INSTANCE.represent(Tensors.vector(1, 2)));
   }
 
   public void testFailMatrix() {
-    AssertFail.of(() -> 
-      Se2Wrap.INSTANCE.represent(IdentityMatrix.of(3)));
+    AssertFail.of(() -> Se2Wrap.INSTANCE.represent(IdentityMatrix.of(3)));
   }
 }

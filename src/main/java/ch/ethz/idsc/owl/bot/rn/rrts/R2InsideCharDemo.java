@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
@@ -21,6 +20,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,13 +28,10 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum R2InsideCharDemo {
   ;
-  private static final Random RANDOM = new Random();
-
   private static void explore(BufferedImage bufferedImage, Tensor range, Tensor start) throws Exception {
     Region<Tensor> region = ImageRegion.of(bufferedImage, range, false);
     RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(Tensors.vector(0, 0), range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(region, RealScalar.of(0.1));
-    // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
@@ -46,7 +43,7 @@ import ch.ethz.idsc.tensor.Tensors;
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int count = 0; count < 50; ++count)
-        rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 15);
+        rrts.insertAsNode(RandomSample.of(randomSampleInterface), 15);
       owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
       Thread.sleep(10);
     }

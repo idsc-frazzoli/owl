@@ -52,7 +52,6 @@ public class ImageAreaTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> 
-      ImageArea.fromImage(null));
+    AssertFail.of(() -> ImageArea.fromImage(null));
   }
 }

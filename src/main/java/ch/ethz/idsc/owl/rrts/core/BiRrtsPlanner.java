@@ -7,19 +7,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 
 public class BiRrtsPlanner implements RrtsPlanner {
   private static final int K_NEAREST = 12;
   private static final RrtsNode DUMMY = new RrtsNodeImpl(null, null);
-  private static final Random RANDOM = new Random();
   // ---
   private final BidirectionalRrts rrts;
-  private final RandomSampleInterface spaceSample;
+  private final RandomSampleInterface randomSampleInterface;
   private final Queue<RrtsNode> queue;
 
   /** @param rrts with root already inserted
@@ -29,11 +28,11 @@ public class BiRrtsPlanner implements RrtsPlanner {
   }
 
   /** @param rrts with root already inserted
-   * @param spaceSample
+   * @param randomSampleInterface
    * @param nodeComparator */
-  public BiRrtsPlanner(BidirectionalRrts rrts, RandomSampleInterface spaceSample, Comparator<StateCostNode> nodeComparator) {
+  public BiRrtsPlanner(BidirectionalRrts rrts, RandomSampleInterface randomSampleInterface, Comparator<StateCostNode> nodeComparator) {
     this.rrts = rrts;
-    this.spaceSample = spaceSample;
+    this.randomSampleInterface = randomSampleInterface;
     queue = new PriorityQueue<>(nodeComparator);
   }
 
@@ -44,7 +43,7 @@ public class BiRrtsPlanner implements RrtsPlanner {
 
   @Override // from ExpandInterface
   public void expand(RrtsNode node) { // node is not used, instead new random sample
-    rrts.insertAsNode(spaceSample.randomSample(RANDOM), K_NEAREST);
+    rrts.insertAsNode(RandomSample.of(randomSampleInterface), K_NEAREST);
     rrts.getGoal().ifPresent(queue::add);
   }
 

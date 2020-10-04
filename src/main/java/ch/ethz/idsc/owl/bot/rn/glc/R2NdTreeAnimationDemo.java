@@ -32,7 +32,6 @@ public class R2NdTreeAnimationDemo implements DemoInterface {
     BufferedImage bufferedImage = ResourceData.bufferedImage(path);
     Region<Tensor> imageRegion = ImageRegions.from(bufferedImage, Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.3));
-    // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         SingleIntegratorStateSpaceModel.INSTANCE, //
@@ -44,7 +43,6 @@ public class R2NdTreeAnimationDemo implements DemoInterface {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-    // owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;
   }

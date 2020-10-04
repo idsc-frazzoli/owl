@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
@@ -30,6 +29,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -41,8 +41,6 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ enum Se2RrtsPlannerServerDemo {
   ;
-  private static final Random RANDOM = new Random();
-
   public static void main(String[] args) throws Exception {
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = //
@@ -88,7 +86,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     StateTime stateTime = new StateTime(Append.of(lbounds, RealScalar.ZERO), RealScalar.ZERO);
-    Tensor goal = randomSampleInterface.randomSample(RANDOM);
+    Tensor goal = RandomSample.of(randomSampleInterface);
     Tensor trajectory = Tensors.empty();
     int frame = 0;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {
@@ -112,7 +110,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         owlyFrame.geometricComponent.jComponent.repaint();
         // ---
         stateTime = Lists.getLast(optional.get()).stateTime();
-        goal = randomSampleInterface.randomSample(RANDOM);
+        goal = RandomSample.of(randomSampleInterface);
       }
       System.out.println(frame + "/" + 5);
       Thread.sleep(10);

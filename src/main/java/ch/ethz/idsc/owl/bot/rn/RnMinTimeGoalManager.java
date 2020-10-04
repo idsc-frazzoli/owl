@@ -31,7 +31,7 @@ public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements
     return new RnMinTimeGoalManager(regionWithDistance, RnControls.maxSpeed(controls));
   }
 
-  // ---
+  /***************************************************/
   private final RegionWithDistance<Tensor> regionWithDistance;
   private final Scalar maxSpeed;
 

@@ -26,7 +26,6 @@ public class R2ImageAnimationDemo implements DemoInterface {
   @Override // from DemoInterface
   public OwlyAnimationFrame start() {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         SingleIntegratorStateSpaceModel.INSTANCE, //

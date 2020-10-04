@@ -8,7 +8,6 @@ import java.awt.geom.Path2D;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Random;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
@@ -21,13 +20,13 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Append;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.Pi;
@@ -46,11 +45,10 @@ public class TransitionNdContainer {
   public TransitionNdContainer(Tensor lbounds, Tensor ubounds, int n, int value) {
     VectorQ.requireLength(lbounds, 2);
     VectorQ.requireLength(ubounds, 2);
-    Random random = new Random(1);
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         Append.of(lbounds, Pi.VALUE.negate()), //
         Append.of(ubounds, Pi.VALUE));
-    tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
+    tensor = RandomSample.of(randomSampleInterface, n);
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
       TransitionNdTypes se2TransitionNdType = TransitionNdTypes.fromString(geodesicDisplay);
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(TransitionNdTypes.RN) //
