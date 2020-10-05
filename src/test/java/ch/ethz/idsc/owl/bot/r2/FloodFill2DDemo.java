@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ enum FloodFill2DDemo {
   ;
   public static final ScalarUnaryOperator GRAYSCALE = new ScalarUnaryOperator() {
+    private static final long serialVersionUID = -4776041844126464718L;
+    // ---
     final Scalar scale = RealScalar.of(63.0);
     final Scalar middl = RealScalar.of(128.0);
     final Clip clip = Clips.interval(0, 255);

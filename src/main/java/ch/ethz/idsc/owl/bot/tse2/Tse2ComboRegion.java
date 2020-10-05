@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Clip;
  * 
  * class defines circle region for (x, y) component, periodic intervals in angular component, linear region in v */
 public class Tse2ComboRegion extends Se2ComboRegion {
+  private static final long serialVersionUID = -3772350284490680711L;
+
   /** @param goal {px, py, angle, v}
    * @param radiusVector {dist_radius, dist_radius, dist_angle, dist_v}
    * @throws Exception if first two entries of radiusVector are different */
@@ -29,7 +31,7 @@ public class Tse2ComboRegion extends Se2ComboRegion {
         new LinearRegion(goal.Get(3), radiusVector.Get(3)));
   }
 
-  // ---
+  /***************************************************/
   private final LinearRegion linearRegion;
 
   /** @param regionWithDistance for xy

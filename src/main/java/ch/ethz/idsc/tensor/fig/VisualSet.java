@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 public class VisualSet implements Serializable {
+  private static final long serialVersionUID = 4099546058796673432L;
   static {
     ChartFactory.setChartTheme(DefaultChartTheme.STANDARD);
     // BarRenderer.setDefaultBarPainter(new StandardBarPainter());

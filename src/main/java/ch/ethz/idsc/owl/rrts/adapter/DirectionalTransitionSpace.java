@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class DirectionalTransitionSpace implements TransitionSpace, Serializable {
+  private static final long serialVersionUID = 2377667870169009962L;
+
   /** @param transitionSpace
    * @return */
   public static TransitionSpace of(TransitionSpace transitionSpace) {

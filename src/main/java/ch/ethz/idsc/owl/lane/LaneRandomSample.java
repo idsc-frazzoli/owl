@@ -14,6 +14,8 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 public class LaneRandomSample implements RandomSampleInterface, Serializable {
+  private static final long serialVersionUID = 6181785246933522308L;
+
   /** @param laneInterface
    * @param distribution
    * @return */

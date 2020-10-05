@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.lie.r2.AngleVector;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 abstract class AbstractShadowConstraint implements PlannerConstraint, Serializable {
+  private static final long serialVersionUID = 4410511840384097382L;
   static final Tensor DIR = AngleVector.of(RealScalar.ZERO).unmodifiable();
   private static final int RESOLUTION = 10;
   /** values for seglength have been 3 and 4 */

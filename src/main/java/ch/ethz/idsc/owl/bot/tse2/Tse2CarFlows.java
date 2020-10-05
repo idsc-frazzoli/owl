@@ -14,6 +14,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class Tse2CarFlows implements FlowsInterface, Serializable {
+  private static final long serialVersionUID = 795960608086476238L;
+
   /** @param rate_max with unit [m^-1], i.e. the amount of rotation [] performed per distance [m^-1]
    * @param accelerations vector with unit [m*s^-2]
    * @return */

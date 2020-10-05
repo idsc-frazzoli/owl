@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /* package */ class H2ArrayPlot implements GeodesicArrayPlot, Serializable {
+  private static final long serialVersionUID = -7206313517468060655L;
+  // ---
   private final Scalar radius;
 
   public H2ArrayPlot(Scalar radius) {

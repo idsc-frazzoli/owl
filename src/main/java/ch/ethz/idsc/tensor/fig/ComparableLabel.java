@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /* package */ class ComparableLabel implements Comparable<ComparableLabel>, Serializable {
+  private static final long serialVersionUID = 6313667721475781988L;
+  // ---
   private final int index;
   /** may not be null */
   private String string;

@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** generic controller to execute time dependent trajectories */
 public class TemporalTrajectoryControl implements TrajectoryControl, Serializable {
+  private static final long serialVersionUID = -8977082555426986321L;
+
   /** @return */
   public static TrajectoryControl createInstance() {
     return new TemporalTrajectoryControl();

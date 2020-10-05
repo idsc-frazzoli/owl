@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.alg.Append;
 
 /** StateTime is immutable, contents of instance do not change after construction */
 public final class StateTime implements Serializable {
+  private static final long serialVersionUID = 1794230395292395224L;
+  // ---
   private final Tensor x;
   private final Scalar time;
 
@@ -49,7 +51,8 @@ public final class StateTime implements Serializable {
   public boolean equals(Object object) {
     if (object instanceof StateTime) {
       StateTime stateTime = (StateTime) object;
-      return state().equals(stateTime.state()) && time().equals(stateTime.time());
+      return state().equals(stateTime.state()) //
+          && time().equals(stateTime.time());
     }
     return false;
   }

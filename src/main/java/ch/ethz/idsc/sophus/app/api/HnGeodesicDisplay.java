@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
+  private static final long serialVersionUID = 4751112995360241333L;
   private static final Tensor STAR_POINTS = StarPoints.of(6, 0.12, 0.04).unmodifiable();
   // ---
   private final int dimensions;

@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * membership is determined in state space regardless of time.
  * membership is extended indefinitely along the time-axis */
 public final class TimeInvariantRegion implements Region<StateTime>, Serializable {
+  private static final long serialVersionUID = 4383060490965358508L;
+  // ---
   private final Region<Tensor> region;
 
   public TimeInvariantRegion(Region<Tensor> region) {

@@ -60,10 +60,26 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    // GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();
     // ---
-    Tensor weights = operator(leversRender.getSequence()).apply(leversRender.getOrigin());
+    Tensor control = leversRender.getSequence();
+    Tensor weights = operator(control).apply(leversRender.getOrigin());
+    // leversRender.renderInfluenceX(ColorDataGradients.JET);
+    // Tensor influence = new HsInfluence( //
+    // geodesicDisplay.vectorLogManifold().logAt(leversRender.getOrigin()), //
+    // control).matrix();
+    // List<Edge> list = PrimAlgorithm.of(influence);
+    // graphics.setColor(Color.BLACK);
+    // Tensor domain = Subdivide.of(0.0, 1.0, 10);
+    // for (Edge edge : list) {
+    // Tensor p = control.get(edge.i);
+    // Tensor q = control.get(edge.j);
+    // ScalarTensorFunction curve = geodesicInterface.curve(p, q);
+    // Path2D line = geometricLayer.toPath2D(domain.map(curve));
+    // graphics.draw(line);
+    // }
     leversRender.renderLevers(spinnerLabels.getValue().equals(Labels.ARG_MIN) //
         ? Sqrt.of(weights).negate()
         : weights);
@@ -79,8 +95,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       ++index;
     }
     // ---
-    Classification labelInterface = spinnerLabels.getValue().apply(vector);
-    int bestLabel = labelInterface.result(weights).getLabel();
+    Classification classification = spinnerLabels.getValue().apply(vector);
+    int bestLabel = classification.result(weights).getLabel();
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicMouse));
     Path2D path2d = geometricLayer.toPath2D(shape, true);
     graphics.setColor(COLOR_DATA_INDEXED_T.getColor(bestLabel));

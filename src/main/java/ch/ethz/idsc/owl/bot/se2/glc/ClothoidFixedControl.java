@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** clothoid pursuit control with fixed look ahead */
 /* package */ class ClothoidFixedControl extends LookAheadControl {
+  private static final long serialVersionUID = -6169753130948500697L;
+  // ---
   private final CurveIntersection curveIntersection;
 
   public ClothoidFixedControl(Scalar lookAhead, Scalar maxTurningRate) {

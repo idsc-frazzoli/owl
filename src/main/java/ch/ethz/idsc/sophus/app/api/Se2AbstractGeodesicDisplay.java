@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
@@ -16,7 +14,7 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Serializable {
+public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override // from GeodesicDisplay

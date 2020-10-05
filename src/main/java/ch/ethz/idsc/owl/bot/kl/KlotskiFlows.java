@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class KlotskiFlows implements StateTimeFlows, Serializable {
+  private static final long serialVersionUID = -195238443552248423L;
+  // ---
   private final int lx;
   private final int ly;
 

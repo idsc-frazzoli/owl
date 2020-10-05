@@ -13,6 +13,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** holds the node which have not yet been expanded */
 /* package */ class RelaxedGlobalQueue extends RelaxedPollingQueue {
+  private static final long serialVersionUID = 4156235396228574912L;
+  // ---
   private final Tensor slacks;
 
   /** @param slacks */

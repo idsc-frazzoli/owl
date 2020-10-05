@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class NaiveEntryFinder extends TrajectoryEntryFinder implements Serializable {
+  private static final long serialVersionUID = -1368129406422150082L;
   public static final TrajectoryEntryFinder INSTANCE = new NaiveEntryFinder();
 
   private NaiveEntryFinder() {

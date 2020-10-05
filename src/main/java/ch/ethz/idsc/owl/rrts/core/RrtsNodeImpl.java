@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * Sampling-based algorithms for optimal motion planning
  * Algorithm 6, p.855 */
 /* package */ final class RrtsNodeImpl extends SetNode<RrtsNode> implements RrtsNode {
+  private static final long serialVersionUID = -5774540873039812999L;
+  // ---
   private final Tensor state;
   private Scalar costFromRoot;
 

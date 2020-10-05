@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.red.Mean;
 
 public class ArgMinVariable implements TensorScalarFunction {
+  private static final long serialVersionUID = -3999667741713242359L;
+
   /** @param trajectoryEntryFinder strategy
    * @param mapping cost function
    * @param maxLevel of search steps

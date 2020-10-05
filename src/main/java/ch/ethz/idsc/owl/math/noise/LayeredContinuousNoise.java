@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 public class LayeredContinuousNoise implements NativeContinuousNoise, Serializable {
+  private static final long serialVersionUID = -4767195612641930120L;
+
   /** WARNING: values are not copied but used by reference
    *
    * @param nativeContinuousNoise

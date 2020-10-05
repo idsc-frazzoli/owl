@@ -6,6 +6,8 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class CurvePoint implements Serializable {
+  private static final long serialVersionUID = -6549785841499898125L;
+  // ---
   private final int index;
   private final Tensor tensor;
 

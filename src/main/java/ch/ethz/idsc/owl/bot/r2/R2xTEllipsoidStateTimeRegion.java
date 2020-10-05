@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /** ellipsoid region that is moving with respect to time */
 public class R2xTEllipsoidStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
+  private static final long serialVersionUID = 2935982078034986735L;
   /** number of samples to visualize ellipsoid */
   private static final int RESOLUTION = 22;
   // ---

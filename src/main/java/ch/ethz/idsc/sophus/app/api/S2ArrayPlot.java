@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Dimension;
-import java.io.Serializable;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -15,7 +14,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/* package */ class S2ArrayPlot implements GeodesicArrayPlot, Serializable {
+/* package */ enum S2ArrayPlot implements GeodesicArrayPlot {
+  INSTANCE;
+
   private static final double RADIUS = 1;
 
   @Override // from GeodesicArrayPlot

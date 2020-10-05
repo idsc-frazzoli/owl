@@ -8,6 +8,6 @@ import junit.framework.TestCase;
 
 public class S2ArrayPlotTest extends TestCase {
   public void testSerialization() throws ClassNotFoundException, IOException {
-    Serialization.copy(new S2ArrayPlot());
+    Serialization.copy(S2ArrayPlot.INSTANCE);
   }
 }

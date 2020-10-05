@@ -13,6 +13,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 /** region is open
  * coordinates on the boundary are inside */
 public class BoundedBoxRegion implements Region<Tensor>, Serializable {
+  private static final long serialVersionUID = -3182394073027781320L;
+
   /** @param center
    * @param radius for each coordinate
    * @return */

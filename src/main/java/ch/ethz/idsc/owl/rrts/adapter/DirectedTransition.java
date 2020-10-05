@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class DirectedTransition extends AbstractTransition {
+  private static final long serialVersionUID = 6203192165846162940L;
+  // ---
   protected final Transition transition;
   public final boolean isForward;
 

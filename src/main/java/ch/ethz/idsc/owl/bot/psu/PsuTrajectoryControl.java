@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ final class PsuTrajectoryControl extends StateTrajectoryControl {
+  private static final long serialVersionUID = -1328420364739956747L;
+
   @Override // from StateTrajectoryControl
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
     return PsuMetric.INSTANCE.distance(x, y);

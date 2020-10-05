@@ -47,6 +47,8 @@ import ch.ethz.idsc.tensor.sca.Real;
 public class VectorScalar extends AbstractScalar implements //
     ChopInterface, ComplexEmbedding, ConjugateInterface, ExactScalarQInterface, //
     NInterface, Comparable<Scalar>, Serializable {
+  private static final long serialVersionUID = 2326095440575458877L;
+
   /** @param vector
    * @return
    * @throws Exception if input is not a vector, or contains entries of type {@link VectorScalar} */

@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
  * Lipschitz L == Hypot.of(RealScalar.ONE, lambda) */
 public class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
+  private static final long serialVersionUID = 7791582399859195055L;
+  // ---
   private final Scalar lambda;
 
   /** @param lambda non-negative friction coefficient typically with unit [s^-1] */

@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** trajectory control for a time-invariant state-space */
 public abstract class StateTrajectoryControl implements TrajectoryControl, Serializable {
+  private static final long serialVersionUID = -109154239406162175L;
+  // ---
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 

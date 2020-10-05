@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** planar infinite cone region in R^2 */
 public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
+  private static final long serialVersionUID = -8021208544351358539L;
+  // ---
   private final Tensor apex;
   private final TensorUnaryOperator inverse;
   private final Scalar semi;

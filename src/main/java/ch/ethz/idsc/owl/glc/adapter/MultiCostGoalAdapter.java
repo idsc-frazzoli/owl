@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * @see GoalAdapter */
 public final class MultiCostGoalAdapter implements GoalInterface, Serializable {
+  private static final long serialVersionUID = 3118710221131764183L;
+
   /** @param goalInterface
    * @param collection
    * @return */

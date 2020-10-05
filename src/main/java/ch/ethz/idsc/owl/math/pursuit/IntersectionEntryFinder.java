@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder implements Serializable {
+  private static final long serialVersionUID = -7812372217475819973L;
   public static final TrajectoryEntryFinder SPHERE_RN = new IntersectionEntryFinder(SphereCurveIntersection::new);
   public static final TrajectoryEntryFinder SPHERE_SE2 = new IntersectionEntryFinder(SphereSe2CurveIntersection::new);
   // ---

@@ -21,6 +21,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * functionality for testing purpose only */
 public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+  private static final long serialVersionUID = 8479453321318301910L;
+
   /** constructor creates a spherical region in R^n with given center and radius.
    * distance measure is Euclidean distance.
    * 

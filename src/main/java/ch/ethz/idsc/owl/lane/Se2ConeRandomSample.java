@@ -17,6 +17,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
 /** @see Se2ComboRegion */
 public class Se2ConeRandomSample implements RandomSampleInterface, Serializable {
+  private static final long serialVersionUID = 5514319268129242242L;
+
   /** @param apex vector of the form {x, y, angle}
    * @param semi non-negative
    * @param heading non-negative

@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 public class H2GeodesicDisplay extends HnGeodesicDisplay {
+  private static final long serialVersionUID = -4027571410920102690L;
   public static final GeodesicDisplay INSTANCE = new H2GeodesicDisplay();
   private static final Scalar RADIUS = RealScalar.of(2.5);
 

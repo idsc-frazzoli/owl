@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class LimitedClothoidNdType implements NdType, Serializable {
+  private static final long serialVersionUID = 8025708373327739168L;
   private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
 
   /** @param max curvature non-negative
@@ -43,6 +44,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from NdType
   public NdCenterInterface ndCenterTo(Tensor center) {
     return new LimitedClothoidNdCenter(center) {
+      private static final long serialVersionUID = 1214176531066284393L;
+
       @Override
       protected Clothoid clothoid(Tensor other) {
         return CLOTHOID_BUILDER.curve(other, center);
@@ -53,6 +56,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from NdType
   public NdCenterInterface ndCenterFrom(Tensor center) {
     return new LimitedClothoidNdCenter(center) {
+      private static final long serialVersionUID = 493827119724938795L;
+
       @Override
       protected Clothoid clothoid(Tensor other) {
         return CLOTHOID_BUILDER.curve(center, other);
@@ -66,6 +71,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   /***************************************************/
   /* package */ abstract class LimitedClothoidNdCenter implements NdCenterInterface, Serializable {
+    private static final long serialVersionUID = 1722796778859509658L;
     private final Tensor center;
 
     public LimitedClothoidNdCenter(Tensor center) {

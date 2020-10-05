@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
+  private static final long serialVersionUID = -3131512360298574434L;
+  // ---
   private final ApComboRegion apComboRegion;
   private final Scalar maxVerticalSpeed;
 

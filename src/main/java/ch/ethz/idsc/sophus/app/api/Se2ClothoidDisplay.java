@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
+  private static final long serialVersionUID = 3988810297465843983L;
   public static final GeodesicDisplay ANALYTIC = //
       new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), "ClA");
   public static final GeodesicDisplay LEGENDRE = //

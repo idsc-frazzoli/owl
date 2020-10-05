@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import junit.framework.TestCase;
 
 class Some implements TensorUnaryOperator {
+  private static final long serialVersionUID = -2454879289081765904L;
+
   public Some(List<Integer> list) {
     list.add(0);
   }

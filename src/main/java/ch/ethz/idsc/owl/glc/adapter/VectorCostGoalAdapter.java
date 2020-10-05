@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class VectorCostGoalAdapter implements GoalInterface, Serializable {
+  private static final long serialVersionUID = 3764694061789553911L;
+  // ---
   private final List<CostFunction> costFunctions;
   private final TrajectoryRegionQuery trajectoryRegionQuery;
 

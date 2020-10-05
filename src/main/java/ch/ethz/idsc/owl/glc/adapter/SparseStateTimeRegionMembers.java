@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.alg.Append;
 
 /** distinguishes the first 2 coordinates of StateTime::state */
 class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializable {
+  private static final long serialVersionUID = 8430378260925859744L;
   /** magic constants of scale are not universal but are suitable for most examples */
   private final RasterMap<StateTime> rasterMap = new LinearRasterMap<>(Tensors.vector(10, 10));
 

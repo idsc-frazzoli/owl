@@ -19,6 +19,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Serializable {
+  private static final long serialVersionUID = 4007322114509100479L;
+  // ---
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   private final RelaxedPriorityQueue globalQueue;

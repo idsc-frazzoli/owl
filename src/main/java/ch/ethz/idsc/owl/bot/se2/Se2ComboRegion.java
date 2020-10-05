@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * class defines circle region for (x, y) component and periodic intervals in angular component */
 public class Se2ComboRegion implements Region<Tensor>, Serializable {
+  private static final long serialVersionUID = 6691969791379006887L;
+
   /** @param goal {px, py, angle}
    * @param radiusVector {dist_radius, dist_radius, dist_angle}
    * @throws Exception if first two entries of radiusVector are different */

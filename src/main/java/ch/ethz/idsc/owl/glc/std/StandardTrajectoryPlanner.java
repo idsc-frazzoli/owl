@@ -33,6 +33,14 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
 public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
+  private static final long serialVersionUID = -3001722298097971649L;
+
+  /** @param stateTimeRaster
+   * @param stateIntegrator
+   * @param stateTimeFlows
+   * @param plannerConstraint
+   * @param goalInterface
+   * @return */
   public static CTrajectoryPlanner create( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, StateTimeFlows stateTimeFlows, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
@@ -41,6 +49,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
         SimpleRelabelDecision.DEFAULT, NodeMeritComparator.INSTANCE);
   }
 
+  /***************************************************/
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;

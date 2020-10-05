@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class PsuGoalManager implements Region<Tensor>, CostFunction, Serializable {
+  private static final long serialVersionUID = 3997196464954517496L;
+
   /** @param coordinateWrap
    * @param center
    * @param radius

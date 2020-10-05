@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * @see Polygons */
 public class PolygonRegion implements Region<Tensor>, Serializable {
+  private static final long serialVersionUID = 2574537172153897964L;
+  // ---
   private final Tensor polygon;
 
   /** @param polygon as matrix with dimensions n x 2 */

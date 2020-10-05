@@ -7,6 +7,8 @@ import java.io.Serializable;
 public enum Regions {
   ;
   private static class EmptyRegion<T> implements Region<T>, Serializable {
+    private static final long serialVersionUID = -3157478796118197883L;
+
     @Override // from Region
     public boolean isMember(T type) {
       return false;
@@ -23,6 +25,8 @@ public enum Regions {
 
   /***************************************************/
   private static class CompleteRegion<T> implements Region<T>, Serializable {
+    private static final long serialVersionUID = 3359262243844351524L;
+
     @Override
     public boolean isMember(T type) {
       return true;

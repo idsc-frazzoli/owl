@@ -16,6 +16,8 @@ import java.util.LinkedList;
  * 
  * @param <T> type of elements to compare */
 public class RepresentativeNegTransitiveMinTracker<T> extends NegTransitiveMinTracker<T> {
+  private static final long serialVersionUID = 2209327811205678079L;
+
   public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new RepresentativeNegTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
@@ -24,7 +26,7 @@ public class RepresentativeNegTransitiveMinTracker<T> extends NegTransitiveMinTr
     return new RepresentativeNegTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
-  // ---
+  /***************************************************/
   private RepresentativeNegTransitiveMinTracker(OrderComparator<T> orderComparator, Collection<T> collection) {
     super(orderComparator, collection);
   }

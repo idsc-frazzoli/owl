@@ -23,9 +23,10 @@ public final class AnyScalar extends AbstractScalar implements //
     AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
     ExactScalarQInterface, ExpInterface, LogInterface, MachineNumberQInterface, RoundingInterface, //
     TrigonometryInterface, Serializable {
+  private static final long serialVersionUID = -8843338369546875980L;
   public static final Scalar INSTANCE = new AnyScalar();
 
-  // ---
+  /***************************************************/
   private AnyScalar() {
     // ---
   }

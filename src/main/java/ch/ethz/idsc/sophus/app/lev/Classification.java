@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+@FunctionalInterface
 public interface Classification {
   /** @param weights
    * @return */

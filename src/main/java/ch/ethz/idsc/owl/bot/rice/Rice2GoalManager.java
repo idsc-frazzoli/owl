@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 /** Careful: implementation assumes max speed == 1
  * Cost function attains values as minimal distance (not minimal time)! */
 /* package */ class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+  private static final long serialVersionUID = -1547213457696313801L;
+  // ---
   private final Tensor center;
   private final Scalar radius;
 

@@ -22,6 +22,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * two or more areas, that are connected only with 1-dimensional edges. In
  * such cases, the returned polygon may contain duplicate vertices. */
 public class PolygonClip implements TensorUnaryOperator {
+  private static final long serialVersionUID = 1743663591917363605L;
+
   /** @param clip convex, vertices ordered ccw, with dimensions n x 2
    * @return */
   public static TensorUnaryOperator of(Tensor clip) {
@@ -29,7 +31,7 @@ public class PolygonClip implements TensorUnaryOperator {
     return new PolygonClip(clip);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor[] vertex;
 
   private PolygonClip(Tensor clip) {

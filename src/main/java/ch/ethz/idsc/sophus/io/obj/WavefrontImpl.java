@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class WavefrontImpl implements Wavefront, Serializable {
+  private static final long serialVersionUID = 7124205072136838659L;
+  // ---
   private final Tensor vertices = Tensors.empty();
   private final Tensor normals = Tensors.empty();
   private final List<WavefrontObject> objects = new ArrayList<>();

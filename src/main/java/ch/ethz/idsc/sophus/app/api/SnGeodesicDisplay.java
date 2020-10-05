@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
+  private static final long serialVersionUID = -7565465166604802848L;
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
   // ---
   private final int dimensions;

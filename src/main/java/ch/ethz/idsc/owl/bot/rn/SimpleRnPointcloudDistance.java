@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.red.Norm;
  * 
  * @see RnPointcloudRegion which uses a nd-map */
 public class SimpleRnPointcloudDistance implements TensorScalarFunction {
+  private static final long serialVersionUID = -8241926217737812068L;
+
   /** @param points
    * @param norm
    * @return */

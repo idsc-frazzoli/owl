@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO_YN ideally there should be a demo or tests that still uses this implementation
 /* package */ class SimpleShadowConstraint extends AbstractShadowConstraint {
+  private static final long serialVersionUID = 1337722229020808928L;
+  // ---
   private final ShadowMapArea shadowMap;
   private final Area initArea;
 

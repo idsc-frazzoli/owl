@@ -15,11 +15,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 class SatelliteGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+  private static final long serialVersionUID = 5873813698615043864L;
+
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new SatelliteGoalManager(new EllipsoidRegion(center, radius));
   }
-  // ---
 
+  /***************************************************/
   public SatelliteGoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
   }
