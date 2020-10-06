@@ -102,7 +102,7 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
       public void mouseMoved(MouseEvent e) {
         if (isPositioningOngoing())
           recompute();
-      };
+      }
     };
     // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
