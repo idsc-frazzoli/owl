@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
   }
 
   public static void main(String[] args) {
-    List<String> anagrams = new ArrayList<String>();
+    List<String> anagrams = new ArrayList<>();
     anagrams.add("code");
     anagrams.add("cdoe");
     anagrams.add("ecde");

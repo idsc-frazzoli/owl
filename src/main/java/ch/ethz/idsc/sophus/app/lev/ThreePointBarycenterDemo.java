@@ -13,9 +13,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public ThreePointBarycenterDemo() {
-    super(true, GeodesicDisplays.R2_H2_S2, Arrays.asList(ThreePointCoordinates.values()));
+    super(true, GeodesicDisplays.R2_H2_S2, Arrays.asList(PolygonCoordinates.values()));
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---

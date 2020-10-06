@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsInfluence;
 import ch.ethz.idsc.sophus.hs.Mahalanobis;
@@ -229,8 +230,9 @@ public class LeversRender {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
-      Tensor w1 = new Mahalanobis(tangentSpace, sequence).leverages_sqrt();
-      Tensor w2 = new HsInfluence(tangentSpace, sequence).leverages_sqrt();
+      Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
+      Tensor w1 = new Mahalanobis(matrix).leverages_sqrt();
+      Tensor w2 = new HsInfluence(matrix).leverages_sqrt();
       Chop._05.requireClose(w1, w2);
       renderWeights(w1);
     }
@@ -428,8 +430,7 @@ public class LeversRender {
   public void renderEllipseMahalanobis() {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
-      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      Mahalanobis mahalanobis = new Mahalanobis(new HsDesign(vectorLogManifold).matrix(sequence, origin));
       renderEllipse(origin, mahalanobis.sigma_inverse());
     }
   }
@@ -449,8 +450,7 @@ public class LeversRender {
   public void renderMahalanobisFormXEV(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
-      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      Mahalanobis mahalanobis = new Mahalanobis(new HsDesign(vectorLogManifold).matrix(sequence, origin));
       renderMahalanobisMatrix(origin, mahalanobis, colorDataGradient);
     }
   }
@@ -458,8 +458,7 @@ public class LeversRender {
   public void renderEllipseMahalanobisP() {
     VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
     for (Tensor point : sequence) {
-      TangentSpace tangentSpace = vectorLogManifold.logAt(point);
-      Mahalanobis mahalanobis = new Mahalanobis(tangentSpace, sequence);
+      Mahalanobis mahalanobis = new Mahalanobis(new HsDesign(vectorLogManifold).matrix(sequence, point));
       renderEllipse(point, mahalanobis.sigma_inverse());
     }
   }
@@ -468,7 +467,8 @@ public class LeversRender {
   public void renderInfluenceX(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      Tensor influence = new HsInfluence(vectorLogManifold.logAt(origin), sequence).matrix();
+      Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
+      Tensor influence = new HsInfluence(matrix).matrix();
       // ---
       graphics.setFont(FONT_MATRIX);
       MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
@@ -481,8 +481,9 @@ public class LeversRender {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       // HsProjection hsProjection = ;
+      // Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
       Tensor projections = Tensor.of(sequence.stream() //
-          .map(point -> new HsInfluence(vectorLogManifold.logAt(point), sequence).matrix()));
+          .map(point -> new HsInfluence(new HsDesign(vectorLogManifold).matrix(sequence, point)).matrix()));
       // ---
       graphics.setFont(FONT_MATRIX);
       int index = 0;

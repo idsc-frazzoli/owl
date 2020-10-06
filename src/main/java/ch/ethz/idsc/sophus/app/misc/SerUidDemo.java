@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class SerUidDemo implements Serializable {
   int asd = 3;
 
   public void asd() {
+    // ---
   }
 
   public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {

@@ -24,9 +24,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.MixedLogWeightings;
+import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.r2.Polygons;
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   public static List<LogWeighting> list() {
     List<LogWeighting> list = new ArrayList<>();
-    list.addAll(Arrays.asList(ThreePointCoordinates.values()));
+    list.addAll(Arrays.asList(PolygonCoordinates.values()));
     list.addAll(LogWeightings.list());
     list.addAll(Arrays.asList(MixedLogWeightings.values()));
     return list;

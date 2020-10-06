@@ -13,8 +13,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public LbsBarycenterDemo() {
-    super(true, GeodesicDisplays.S2_ONLY, Arrays.asList(ThreePointCoordinates.values()));
+    super(true, GeodesicDisplays.S2_ONLY, Arrays.asList(PolygonCoordinates.values()));
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---

@@ -14,6 +14,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.HsInfluence;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -58,7 +59,8 @@ import ch.ethz.idsc.tensor.Tensors;
       {
         Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
         Tensor origin = controlPointsAll.get(0);
-        Tensor weights = new HsInfluence(vectorLogManifold.logAt(origin), sequence).leverages_sqrt();
+        Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
+        Tensor weights = new HsInfluence(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
@@ -77,7 +79,8 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor result = lieGroupOp.slash(allR);
         Tensor sequence = result.extract(1, result.length());
         Tensor origin = result.get(0);
-        Tensor weights = new HsInfluence(vectorLogManifold.logAt(origin), sequence).leverages_sqrt();
+        Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
+        Tensor weights = new HsInfluence(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();

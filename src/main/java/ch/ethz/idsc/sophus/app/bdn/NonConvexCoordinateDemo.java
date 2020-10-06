@@ -3,20 +3,18 @@ package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
-/* package */ class NonConvexCoordinateDemo extends ThreePointCoordinateDemo //
-    implements SpinnerListener<GeodesicDisplay> {
+/* package */ class NonConvexCoordinateDemo extends PolygonCoordinatesDemo {
   public NonConvexCoordinateDemo() {
-    super(Arrays.asList(ThreePointCoordinates.MEAN_VALUE));
+    super(Arrays.asList(PolygonCoordinates.MEAN_VALUE));
   }
 
   @Override

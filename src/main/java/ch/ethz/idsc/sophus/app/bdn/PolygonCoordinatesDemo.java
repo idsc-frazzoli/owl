@@ -18,9 +18,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
+import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.ThreePointCoordinates;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,15 +31,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
-/* package */ class ThreePointCoordinateDemo extends A2ScatteredSetCoordinateDemo //
+/* package */ class PolygonCoordinatesDemo extends A2ScatteredSetCoordinateDemo //
     implements SpinnerListener<GeodesicDisplay> {
   private final List<LogWeighting> array;
 
-  public ThreePointCoordinateDemo() {
-    this(ThreePointCoordinates.list());
+  public PolygonCoordinatesDemo() {
+    this(PolygonCoordinates.list());
   }
 
-  public ThreePointCoordinateDemo(List<LogWeighting> array) {
+  public PolygonCoordinatesDemo(List<LogWeighting> array) {
     super(array);
     this.array = array;
     // ---
@@ -105,7 +105,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public void actionPerformed(GeodesicDisplay geodesicDisplay) {
     if (geodesicDisplay instanceof R2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-1.017, -0.953, 0.000}, {-0.991, 0.113, 0.000}, {-0.644, 0.967, 0.000}, {0.509, 0.840, 0.000}, {0.689, 0.513, 0.000}, {0.956, -0.627, 0.000}}"));
+          "{{-0.076, -0.851, 0.000}, {-0.300, -0.992, 0.000}, {-0.689, -0.097, 0.000}, {-0.689, -0.892, 0.000}, {-1.017, -0.953, 0.000}, {-0.991, 0.113, 0.000}, {-0.465, 0.157, 0.000}, {-0.164, -0.362, 0.000}, {0.431, -0.539, 0.000}, {-0.912, 0.669, 0.000}, {-0.644, 0.967, 0.000}, {0.509, 0.840, 0.000}, {1.051, 0.495, 0.000}, {0.950, -0.209, 0.000}, {0.747, 0.469, 0.000}, {-0.461, 0.637, 0.000}, {0.956, -0.627, 0.000}}"));
     } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
@@ -118,6 +118,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void main(String[] args) {
-    new ThreePointCoordinateDemo().setVisible(1300, 900);
+    new PolygonCoordinatesDemo().setVisible(1300, 900);
   }
 }
