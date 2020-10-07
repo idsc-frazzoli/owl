@@ -10,8 +10,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.math.ClipCover;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Rescale;
-import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 public class ArrayPlotRender implements RenderInterface {
@@ -19,7 +19,7 @@ public class ArrayPlotRender implements RenderInterface {
    * @param colorDataGradient
    * @param magnify
    * @return */
-  public static ArrayPlotRender rescale(Tensor tensor, ColorDataGradient colorDataGradient, int magnify) {
+  public static ArrayPlotRender rescale(Tensor tensor, ScalarTensorFunction colorDataGradient, int magnify) {
     Rescale rescale = new Rescale(tensor);
     return new ArrayPlotRender( //
         rescale.result(), //
@@ -33,7 +33,7 @@ public class ArrayPlotRender implements RenderInterface {
   private final int height;
   private final BufferedImage legend;
 
-  public ArrayPlotRender(Tensor tensor, Clip clip, ColorDataGradient colorDataGradient, int magnify) {
+  public ArrayPlotRender(Tensor tensor, Clip clip, ScalarTensorFunction colorDataGradient, int magnify) {
     bufferedImage = ImageFormat.of(tensor.map(colorDataGradient));
     width = bufferedImage.getWidth() * magnify;
     height = bufferedImage.getHeight() * magnify;

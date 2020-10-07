@@ -11,8 +11,8 @@ import java.util.Objects;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.ImageFormat;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
@@ -22,13 +22,13 @@ public enum LegendImage {
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final Color FONT_COLOR = Color.BLACK;
 
-  public static BufferedImage of(ColorDataGradient colorDataGradient, int height, Clip clip) {
+  public static BufferedImage of(ScalarTensorFunction colorDataGradient, int height, Clip clip) {
     String smax = Objects.nonNull(clip) ? clip.max().map(Round._3).toString() : "";
     String smin = Objects.nonNull(clip) ? clip.min().map(Round._3).toString() : "";
     return _of(colorDataGradient, height, smax, smin);
   }
 
-  public static BufferedImage of(ColorDataGradient colorDataGradient, int height, String smax, String smin) {
+  public static BufferedImage of(ScalarTensorFunction colorDataGradient, int height, String smax, String smin) {
     return _of(colorDataGradient, height, smax, smin);
   }
 
@@ -42,7 +42,7 @@ public enum LegendImage {
         fontMetrics.stringWidth(smax));
   }
 
-  private static BufferedImage _of(ColorDataGradient colorDataGradient, int height, String smax, String smin) {
+  private static BufferedImage _of(ScalarTensorFunction colorDataGradient, int height, String smax, String smin) {
     int width = 10;
     int space = 2;
     BufferedImage bufferedImage = new BufferedImage(width + space + fontw(smax, smin), height, BufferedImage.TYPE_INT_ARGB);

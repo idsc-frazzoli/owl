@@ -7,24 +7,32 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.java.awt.SpinnerListener;
+import ch.ethz.idsc.java.io.HtmlUtf8;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.IterativeGenesis;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -33,6 +41,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class PolygonCoordinatesDemo extends A2ScatteredSetCoordinateDemo //
     implements SpinnerListener<GeodesicDisplay> {
+  public static final ColorDataIndexed COLOR_DATA_INDEXED = HueColorData.of(6, 3);
   private final List<LogWeighting> array;
 
   public PolygonCoordinatesDemo() {
@@ -48,6 +57,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     addSpinnerListener(this);
     addSpinnerListener(l -> recompute());
     recompute();
+    timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
   @Override
@@ -57,6 +67,36 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     LeversRender leversRender = LeversRender.of( //
         geodesicDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
     leversRender.renderSurfaceP();
+    BufferedImage bufferedImage = levelsImage(refinement());
+    graphics.drawImage(bufferedImage, 0, 200, bufferedImage.getWidth() * magnification(), bufferedImage.getHeight() * magnification(), null);
+  }
+
+  public static BufferedImage fuseImages(GeodesicDisplay geodesicDisplay, ArrayPlotRender arrayPlotRender, int refinement, int sequence_length) {
+    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
+    BufferedImage foreground = arrayPlotRender.export();
+    BufferedImage background = new BufferedImage(foreground.getWidth(), foreground.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D graphics = background.createGraphics();
+    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+      Tensor matrix = geodesicArrayPlot.pixel2model(new Dimension(refinement, refinement));
+      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(matrix));
+      for (int count = 0; count < sequence_length; ++count) {
+        GeodesicDisplayRender.render_s2(geometricLayer, graphics);
+        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(2, 0)));
+      }
+    }
+    graphics.drawImage(foreground, 0, 0, null);
+    return background;
+  }
+
+  public BufferedImage levelsImage(int res) {
+    Tensor sequence = getGeodesicControlPoints();
+    TensorUnaryOperator tuo = //
+        point -> IterativeGenesis.counts(geodesicDisplay().vectorLogManifold(), point, sequence);
+    Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, 3);
+    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+    Tensor wgs = geodesicArrayPlot.raster(res, tuo, fallback);
+    ArrayPlotRender arrayPlotRender = arrayPlotFromTensor(wgs, 1);
+    return fuseImages(geodesicDisplay(), arrayPlotRender, res, 3);
   }
 
   @Override
@@ -66,39 +106,48 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         getClass().getSimpleName(), //
         geodesicDisplay.toString());
     root.mkdirs();
-    for (LogWeighting logWeighting : array) {
-      Tensor sequence = getGeodesicControlPoints();
-      TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
-          null, geodesicDisplay.vectorLogManifold(), null, sequence);
-      System.out.print("computing " + logWeighting);
-      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
-      int refinement = resolution();
-      ArrayPlotRender arrayPlotRender = arrayPlotRender(sequence, refinement, tensorUnaryOperator, 1);
-      BufferedImage foreground = arrayPlotRender.export();
-      BufferedImage background = new BufferedImage(foreground.getWidth(), foreground.getHeight(), BufferedImage.TYPE_INT_ARGB);
-      Graphics2D graphics = background.createGraphics();
-      if (geodesicDisplay instanceof S2GeodesicDisplay) {
-        Tensor matrix = geodesicArrayPlot.pixel2model(new Dimension(refinement, refinement));
-        GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(matrix));
-        for (int count = 0; count < sequence.length(); ++count) {
-          GeodesicDisplayRender.render_s2(geometricLayer, graphics);
-          geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(2, 0)));
+    try (HtmlUtf8 htmlUtf8 = HtmlUtf8.page(new File(root, "index.html"))) {
+      {
+        System.out.println("computing levels image");
+        BufferedImage bufferedImage = levelsImage(resolution());
+        try {
+          File file = new File(root, "levels.png");
+          ImageIO.write(bufferedImage, "png", file);
+          htmlUtf8.appendln("min K until non-negative<br/>");
+          String collect = Stream.of(IterativeGenesis.values()).map(Object::toString).collect(Collectors.joining(" | "));
+          htmlUtf8.appendln(collect + ":<br/>");
+          htmlUtf8.appendln("<img src='" + file.getName() + "'><br/>");
+          htmlUtf8.appendln("<hr/>");
+        } catch (Exception exception) {
+          exception.printStackTrace();
         }
       }
-      graphics.drawImage(foreground, 0, 0, null);
-      try {
-        File file = new File(root, logWeighting.toString() + ".png");
-        ImageIO.write(background, "png", file);
-      } catch (Exception exception) {
-        exception.printStackTrace();
+      for (LogWeighting logWeighting : array) {
+        Tensor sequence = getGeodesicControlPoints();
+        TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
+            null, geodesicDisplay.vectorLogManifold(), null, sequence);
+        System.out.print("computing " + logWeighting);
+        // GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
+        int refinement = resolution();
+        try {
+          ArrayPlotRender arrayPlotRender = arrayPlotRender(sequence, refinement, tensorUnaryOperator, 1);
+          BufferedImage bufferedImage = fuseImages(geodesicDisplay, arrayPlotRender, refinement, sequence.length());
+          File file = new File(root, logWeighting.toString() + ".png");
+          ImageIO.write(bufferedImage, "png", file);
+          htmlUtf8.appendln(logWeighting.toString() + "<br/>");
+          htmlUtf8.appendln("<img src='" + file.getName() + "'><br/>");
+          htmlUtf8.appendln("<hr/>");
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
+        System.out.println(" done");
       }
-      System.out.println(" done");
     }
     System.out.println("all done");
   }
 
   int resolution() {
-    return 70; // for sequence of length 6
+    return 120; // for sequence of length 6
   }
 
   @Override
@@ -109,11 +158,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     } else //
     if (geodesicDisplay instanceof H2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-1.900, 1.783, 0.000}, {-0.867, 2.450, 0.000}, {2.300, 2.117, 0.000}, {2.567, 0.150, 0.000}, {1.600, -2.583, 0.000}, {-2.550, -1.817, 0.000}}"));
+          "{{-2.900, 2.467, 0.000}, {-0.367, 2.550, 0.000}, {-0.450, 0.400, 0.000}, {-1.533, 0.250, 0.000}, {-0.600, -0.567, 0.000}, {0.250, 2.867, 0.000}, {0.400, -0.683, 0.000}, {0.867, -1.067, 0.000}, {1.450, 2.800, 0.000}, {2.300, 2.117, 0.000}, {2.700, 0.317, 0.000}, {2.183, -0.517, 0.000}, {1.183, 0.167, 0.000}, {1.683, -1.767, 0.000}, {1.600, -2.583, 0.000}, {-0.800, -2.650, 0.000}, {-2.650, -1.900, 0.000}, {-2.917, 0.550, 0.000}}"));
     } else //
     if (geodesicDisplay instanceof S2GeodesicDisplay) {
       setControlPointsSe2(Tensors.fromString( //
-          "{{-0.933, -0.325, 0.000}, {-0.708, 0.500, 0.000}, {0.217, 0.683, 0.000}, {0.408, 0.125, 0.000}, {0.404, -0.333, 0.000}, {-0.200, -0.846, 0.000}}"));
+          "{{-0.933, -0.325, 0.000}, {-0.708, 0.500, 0.000}, {-0.262, 0.592, 0.000}, {-0.621, 0.746, 0.000}, {-0.375, 0.879, 0.000}, {0.079, 0.979, 0.000}, {0.700, 0.567, 0.000}, {0.096, 0.775, 0.000}, {-0.233, 0.833, 0.000}, {-0.004, 0.646, 0.000}, {0.733, 0.455, 0.000}, {0.942, 0.242, 0.000}, {0.033, 0.371, 0.000}, {-0.522, 0.372, 0.000}, {-0.808, 0.042, 0.000}, {-0.192, -0.158, 0.000}, {-0.634, -0.188, 0.000}, {0.014, -0.459, 0.000}, {-0.169, 0.260, 0.000}, {0.916, 0.142, 0.000}, {0.792, -0.465, 0.000}, {0.408, -0.200, 0.000}, {0.480, 0.054, 0.000}, {0.121, -0.008, 0.000}, {0.462, -0.800, 0.000}, {0.067, -0.712, 0.000}, {-0.321, -0.621, 0.000}, {0.233, -0.933, 0.000}, {-0.071, -0.975, 0.000}, {-0.200, -0.846, 0.000}, {-0.550, -0.737, 0.000}}"));
     }
   }
 

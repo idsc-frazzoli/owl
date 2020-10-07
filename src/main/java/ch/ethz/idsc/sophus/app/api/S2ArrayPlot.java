@@ -21,8 +21,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from GeodesicArrayPlot
   public Tensor raster(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback) {
-    Tensor dx = Subdivide.of(-RADIUS, +RADIUS, resolution);
-    Tensor dy = Subdivide.of(+RADIUS, -RADIUS, resolution);
+    Tensor dx = Subdivide.of(-RADIUS, +RADIUS, resolution - 1);
+    Tensor dy = Subdivide.of(+RADIUS, -RADIUS, resolution - 1);
     return Tensor.of(dy.stream().parallel() //
         .map(py -> Tensor.of(dx.stream() //
             .map(px -> Tensors.of(px, py)) // in R2

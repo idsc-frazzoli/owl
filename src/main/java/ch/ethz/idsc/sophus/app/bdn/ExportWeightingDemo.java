@@ -77,12 +77,17 @@ import ch.ethz.idsc.tensor.sca.Clip;
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
     Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
     Tensor wgs = geodesicArrayPlot.raster(refinement, tensorUnaryOperator, fallback);
+    return arrayPlotFromTensor(wgs, magnification);
+  }
+
+  protected final ArrayPlotRender arrayPlotFromTensor(Tensor wgs, int magnification) {
     List<Integer> dims = Dimensions.of(wgs);
     Tensor wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
     Rescale rescale = new Rescale(wgp);
     Clip clip = ClipCover.of(rescale.scalarSummaryStatistics());
     return new ArrayPlotRender( //
         rescale.result(), //
+        // TODO ugly
         logWeighting().equals(LogWeightings.DISTANCES) ? ClipCover.of(clip, RealScalar.ZERO) : clip, //
         colorDataGradient(), magnification);
   }

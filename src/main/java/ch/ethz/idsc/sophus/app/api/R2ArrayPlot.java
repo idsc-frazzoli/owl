@@ -24,8 +24,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override // from GeodesicArrayPlot
   public Tensor raster(int resolution, Function<Tensor, ? extends Tensor> function, Tensor fallback) {
-    Tensor dx = Subdivide.of(radius.negate(), radius, resolution);
-    Tensor dy = Subdivide.of(radius, radius.negate(), resolution);
+    Tensor dx = Subdivide.of(radius.negate(), radius, resolution - 1);
+    Tensor dy = Subdivide.of(radius, radius.negate(), resolution - 1);
     return Tensor.of(dy.stream().parallel() //
         .map(py -> Tensor.of(dx.stream() //
             .map(px -> Tensors.of(px, py)) //
