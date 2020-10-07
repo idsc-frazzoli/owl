@@ -40,6 +40,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     graphics.fill(geometricLayer.toPath2D(result));
     new PathRender(COLOR_DATA_INDEXED.getColor(1), 2.5f).setCurve(result, true).render(geometricLayer, graphics);
     RenderQuality.setDefault(graphics);
+    // new PathRender(COLOR_DATA_INDEXED.getColor(1), 2.5f).setCurve(HILBERT, false).render(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {
