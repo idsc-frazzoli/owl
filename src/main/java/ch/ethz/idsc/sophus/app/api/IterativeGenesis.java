@@ -5,31 +5,38 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.gbc.MetricCoordinate;
-import ch.ethz.idsc.sophus.gbc.TargetCoordinate;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateLevel;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
-import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum IterativeGenesis {
   MEAN_VALUE(ThreePointCoordinate.of(Barycenter.MEAN_VALUE)), //
   INVERSE_DISTANCE(MetricCoordinate.affine()), //
-  TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
+  // INVERSE_LEVERAGE(TargetCoordinate.of(InversePowerVariogram.of(2))), //
   ;
 
-  private final TensorScalarFunction tsf;
+  private final Genesis genesis;
 
   private IterativeGenesis(Genesis genesis) {
-    tsf = IterativeCoordinateLevel.of(genesis, Tolerance.CHOP, 32);
+    this.genesis = genesis;
   }
 
-  public static Tensor counts(VectorLogManifold vectorLogManifold, Tensor point, Tensor sequence) {
-    Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, point);
-    return Tensor.of(Stream.of(values()).map(ig -> ig.tsf.apply(matrix)));
+  public TensorScalarFunction with(int max) {
+    return IterativeCoordinateLevel.of(genesis, Chop._08, max);
+  }
+
+  public static TensorUnaryOperator counts(VectorLogManifold vectorLogManifold, Tensor sequence, int max) {
+    HsDesign hsDesign = new HsDesign(vectorLogManifold);
+    TensorScalarFunction[] array = Stream.of(values()).map(ig -> ig.with(max)).toArray(TensorScalarFunction[]::new);
+    return point -> {
+      Tensor matrix = hsDesign.matrix(sequence, point);
+      return Tensor.of(Stream.of(array).map(ig -> ig.apply(matrix)));
+    };
   }
 }

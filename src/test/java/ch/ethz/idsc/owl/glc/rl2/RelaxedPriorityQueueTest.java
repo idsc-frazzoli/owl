@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import junit.framework.TestCase;
 

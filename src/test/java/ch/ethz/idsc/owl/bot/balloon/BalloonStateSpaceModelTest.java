@@ -6,7 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;

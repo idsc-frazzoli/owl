@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;

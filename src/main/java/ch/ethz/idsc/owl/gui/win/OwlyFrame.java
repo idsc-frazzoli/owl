@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 
 public class OwlyFrame extends BaseFrame {
   private boolean replay = false;

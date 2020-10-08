@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class S2ArrayPlotTest extends TestCase {

@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 

@@ -21,7 +21,7 @@ import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
 public class OwlyAnimationFrame extends TimerFrame {
   private static final Dimension RECORDING = new Dimension(400, 400);

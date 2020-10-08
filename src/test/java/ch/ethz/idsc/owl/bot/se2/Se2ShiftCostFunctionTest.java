@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 

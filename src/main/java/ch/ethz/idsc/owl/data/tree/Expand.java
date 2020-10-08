@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 
 public class Expand<T extends StateCostNode> {
   protected final ExpandInterface<T> expandInterface;

@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 
 /* package */ class ClothoidEvolution extends AbstractPlaceDemo {
   private static final Tensor BETAS = Tensors.fromString("{0.05, 0.1, 0.2, 0.3, 0.4, 0.5}");

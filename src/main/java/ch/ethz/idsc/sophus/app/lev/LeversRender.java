@@ -122,6 +122,8 @@ public class LeversRender {
     return sequence.length();
   }
 
+  private static final int MAX_INDEX_P = 20;
+
   public void renderIndexP(String plabel) {
     int index = 0;
     Tensor shape = geodesicDisplay.shape();
@@ -146,6 +148,8 @@ public class LeversRender {
       // ---
       geometricLayer.popMatrix();
       ++index;
+      if (MAX_INDEX_P <= index)
+        break;
     }
   }
 

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.region;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class PolygonRegionTest extends TestCase {

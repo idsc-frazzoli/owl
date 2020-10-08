@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.fig;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
 /* package */ enum PlotPackageDemo {
   ;

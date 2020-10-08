@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class TrajectoryObstacleConstraintTest extends TestCase {

@@ -17,7 +17,7 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** base class for {@link OwlyFrame} and {@link OwlyAnimationFrame} */

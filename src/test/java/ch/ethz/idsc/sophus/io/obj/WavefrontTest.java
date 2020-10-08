@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ReadLine;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;

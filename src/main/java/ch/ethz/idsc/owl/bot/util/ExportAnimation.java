@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 import ch.ethz.idsc.tensor.io.GifAnimationWriter;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 enum ExportAnimation {
   ;

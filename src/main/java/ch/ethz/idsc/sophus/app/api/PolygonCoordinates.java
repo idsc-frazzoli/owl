@@ -23,31 +23,27 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum PolygonCoordinates implements LogWeighting {
   MEAN_VALUE(ThreePointCoordinate.of(Barycenter.MEAN_VALUE)), //
-  ITERATIVE_MEAN_VALUE_1(IterativeCoordinate.meanValue(1)), //
-  ITERATIVE_MEAN_VALUE_2(IterativeCoordinate.meanValue(2)), //
-  ITERATIVE_MEAN_VALUE_3(IterativeCoordinate.meanValue(3)), //
-  ITERATIVE_MEAN_VALUE_5(IterativeCoordinate.meanValue(5)), //
+  // CIRCULAR(CircularCoordinate.INSTANCE), //
+  ITERATIVE_MV_1(IterativeCoordinate.meanValue(1)), //
+  ITERATIVE_MV_2(IterativeCoordinate.meanValue(2)), //
+  ITERATIVE_MV_3(IterativeCoordinate.meanValue(3)), //
+  ITERATIVE_MV_5(IterativeCoordinate.meanValue(5)), //
   WACHSPRESS(ThreePointCoordinate.of(Barycenter.WACHSPRESS)), //
   DISCRETE_HARMONIC(ThreePointCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   INVERSE_DISTANCE(MetricCoordinate.of(InversePowerVariogram.of(2))), //
-  ITERATIVE_INVERSE_DISTANCE_0(IterativeCoordinate.of(MetricCoordinate.affine(), 0)), //
-  ITERATIVE_INVERSE_DISTANCE_1(IterativeCoordinate.of(MetricCoordinate.affine(), 1)), //
-  ITERATIVE_INVERSE_DISTANCE_2(IterativeCoordinate.of(MetricCoordinate.affine(), 2)), //
-  ITERATIVE_INVERSE_DISTANCE_3(IterativeCoordinate.of(MetricCoordinate.affine(), 3)), //
-  ITERATIVE_INVERSE_DISTANCE_5(IterativeCoordinate.of(MetricCoordinate.affine(), 5)), //
+  ITERATIVE_ID_0(IterativeCoordinate.of(MetricCoordinate.affine(), 0)), //
+  ITERATIVE_ID_1(IterativeCoordinate.of(MetricCoordinate.affine(), 1)), //
+  ITERATIVE_ID_2(IterativeCoordinate.of(MetricCoordinate.affine(), 2)), //
+  ITERATIVE_ID_3(IterativeCoordinate.of(MetricCoordinate.affine(), 3)), //
+  ITERATIVE_ID_5(IterativeCoordinate.of(MetricCoordinate.affine(), 5)), //
   TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
-  ITERATIVE_TARGET_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
-  ITERATIVE_TARGET_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //
-  ITERATIVE_TARGET_2(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 2)), //
-  ITERATIVE_TARGET_3(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 3)), //
-  ITERATIVE_TARGET_5(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 5)), //
+  ITERATIVE_IL_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
+  ITERATIVE_IL_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //
+  ITERATIVE_IL_2(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 2)), //
+  ITERATIVE_IL_3(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 3)), //
+  ITERATIVE_IL_5(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 5)), //
   ;
 
-  public static final Genesis[] GENESIS = { //
-      ThreePointCoordinate.of(Barycenter.MEAN_VALUE), //
-      MetricCoordinate.affine(), //
-      TargetCoordinate.of(InversePowerVariogram.of(2)), //
-  };
   private final Genesis genesis;
 
   private PolygonCoordinates(Genesis genesis) {

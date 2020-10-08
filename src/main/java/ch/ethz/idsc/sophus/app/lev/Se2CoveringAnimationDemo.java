@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 
 // TODO refactor with S2AnimationDemo
 /* package */ class Se2CoveringAnimationDemo extends LogWeightingDemo {

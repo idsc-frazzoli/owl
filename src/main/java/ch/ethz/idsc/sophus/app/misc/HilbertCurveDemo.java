@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.function.Function;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -19,14 +19,21 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.hs.r2.HilbertCurve;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.qty.LruCache;
+import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ class HilbertCurveDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.strict();
+
+  public static Tensor curve(int n) {
+    System.out.println("compute here");
+    return HilbertCurve.closed(n).multiply(Power.of(2.0, -n));
+  }
+
   private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();
-  private final LruCache<Integer, Tensor> lruCache = new LruCache<>(10);
+  private final Function<Integer, Tensor> cache = Cache.of(HilbertCurveDemo::curve, 10);
 
   public HilbertCurveDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
@@ -43,9 +50,8 @@ import ch.ethz.idsc.tensor.qty.LruCache;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     int n = spinnerTotal.getValue();
-    Tensor tensor = lruCache.get(n);
-    if (Objects.isNull(tensor))
-      lruCache.put(n, tensor = HilbertCurve.closed(n));
+    Tensor tensor = cache.apply(n);
+    // ---
     Path2D path2d = geometricLayer.toPath2D(tensor);
     graphics.setColor(new Color(128, 128, 128, 64));
     graphics.fill(path2d);

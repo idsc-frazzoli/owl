@@ -28,10 +28,10 @@ import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.io.Timing;
 
 /** uses TrueOnlineSarsa */
 /* package */ enum AirportDemo {

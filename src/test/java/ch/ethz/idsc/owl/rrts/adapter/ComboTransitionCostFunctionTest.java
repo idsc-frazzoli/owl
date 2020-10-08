@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidContinuityCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class ComboTransitionCostFunctionTest extends TestCase {

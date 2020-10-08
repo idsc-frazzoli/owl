@@ -26,10 +26,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ class NonuniformityEvaluation {
   private static final NonuniformFixedRadiusGeodesicCenter NONUNIFORM_FIXED_RADIUS_GEODESIC_CENTER = //

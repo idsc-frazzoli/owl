@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
 /* package */ class KlotskiPlot {
   private static final Color STONE_GOAL = new Color(128 - 32, 128 - 32, 255);

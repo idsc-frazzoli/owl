@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
-import ch.ethz.idsc.tensor.io.Timing;
 
 enum ImageEdgesDemo {
   ;

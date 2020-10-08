@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.sym;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Arg;

@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 
 enum StaticHelper {

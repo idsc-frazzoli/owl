@@ -9,13 +9,13 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.Hue;
 import ch.ethz.idsc.tensor.img.ImageResize;
 import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 public enum HueColorData {

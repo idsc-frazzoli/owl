@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class KlotskiDemoTest extends TestCase {

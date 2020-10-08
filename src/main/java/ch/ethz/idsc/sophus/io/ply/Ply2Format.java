@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ReadLine;
 import ch.ethz.idsc.tensor.sca.Increment;
 

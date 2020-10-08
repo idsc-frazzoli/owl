@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class TrajectoryEntryTest extends TestCase {

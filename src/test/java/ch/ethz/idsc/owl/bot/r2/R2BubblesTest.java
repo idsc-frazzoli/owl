@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.owl.math.region.ImplicitFunctionRegion;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class R2BubblesTest extends TestCase {

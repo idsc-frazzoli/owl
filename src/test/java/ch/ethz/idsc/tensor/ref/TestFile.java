@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.ref;
 
 import java.io.File;
 
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import junit.framework.Assert;
 
 public enum TestFile {

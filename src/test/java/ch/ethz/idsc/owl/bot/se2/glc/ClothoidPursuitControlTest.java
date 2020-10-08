@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;

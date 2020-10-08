@@ -10,10 +10,10 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum StaticHelper {
   ;

@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.TreePlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 
 public abstract class MotionPlanWorker<T extends TreePlanner<?>, P extends PlannerCallback<T>> {
   @SuppressWarnings("unchecked")

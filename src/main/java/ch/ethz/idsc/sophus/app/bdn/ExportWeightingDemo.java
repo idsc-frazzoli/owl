@@ -18,18 +18,11 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
-import ch.ethz.idsc.sophus.math.ClipCover;
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
-import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Rescale;
-import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ abstract class ExportWeightingDemo extends ScatteredSetWeightingDemo implements ActionListener {
   private static final int REFINEMENT = 120; // presentation 60
@@ -77,19 +70,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
     Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
     Tensor wgs = geodesicArrayPlot.raster(refinement, tensorUnaryOperator, fallback);
-    return arrayPlotFromTensor(wgs, magnification);
-  }
-
-  protected final ArrayPlotRender arrayPlotFromTensor(Tensor wgs, int magnification) {
-    List<Integer> dims = Dimensions.of(wgs);
-    Tensor wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-    Rescale rescale = new Rescale(wgp);
-    Clip clip = ClipCover.of(rescale.scalarSummaryStatistics());
-    return new ArrayPlotRender( //
-        rescale.result(), //
-        // TODO ugly
-        logWeighting().equals(LogWeightings.DISTANCES) ? ClipCover.of(clip, RealScalar.ZERO) : clip, //
-        colorDataGradient(), magnification);
+    return StaticHelper.arrayPlotFromTensor(wgs, magnification, logWeighting().equals(LogWeightings.DISTANCES), colorDataGradient());
   }
 
   private static List<Biinvariant> distinct() {

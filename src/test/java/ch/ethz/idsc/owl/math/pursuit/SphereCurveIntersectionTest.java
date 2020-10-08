@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;

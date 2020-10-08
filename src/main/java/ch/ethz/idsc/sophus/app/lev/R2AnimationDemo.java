@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.lie.r2.RotationMatrix;
 
 /* package */ class R2AnimationDemo extends LogWeightingDemo {

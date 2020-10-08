@@ -6,7 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;

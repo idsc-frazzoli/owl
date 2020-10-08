@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -17,9 +16,7 @@ import ch.ethz.idsc.java.io.HtmlUtf8;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.ArrayPlotRender;
-import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.IterativeGenesis;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
@@ -27,14 +24,10 @@ import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
@@ -67,36 +60,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     LeversRender leversRender = LeversRender.of( //
         geodesicDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
     leversRender.renderSurfaceP();
-    BufferedImage bufferedImage = levelsImage(refinement());
-    graphics.drawImage(bufferedImage, 0, 200, bufferedImage.getWidth() * magnification(), bufferedImage.getHeight() * magnification(), null);
-  }
-
-  public static BufferedImage fuseImages(GeodesicDisplay geodesicDisplay, ArrayPlotRender arrayPlotRender, int refinement, int sequence_length) {
-    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
-    BufferedImage foreground = arrayPlotRender.export();
-    BufferedImage background = new BufferedImage(foreground.getWidth(), foreground.getHeight(), BufferedImage.TYPE_INT_ARGB);
-    Graphics2D graphics = background.createGraphics();
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
-      Tensor matrix = geodesicArrayPlot.pixel2model(new Dimension(refinement, refinement));
-      GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(matrix));
-      for (int count = 0; count < sequence_length; ++count) {
-        GeodesicDisplayRender.render_s2(geometricLayer, graphics);
-        geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(2, 0)));
-      }
-    }
-    graphics.drawImage(foreground, 0, 0, null);
-    return background;
-  }
-
-  public BufferedImage levelsImage(int res) {
-    Tensor sequence = getGeodesicControlPoints();
-    TensorUnaryOperator tuo = //
-        point -> IterativeGenesis.counts(geodesicDisplay().vectorLogManifold(), point, sequence);
-    Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, 3);
-    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
-    Tensor wgs = geodesicArrayPlot.raster(res, tuo, fallback);
-    ArrayPlotRender arrayPlotRender = arrayPlotFromTensor(wgs, 1);
-    return fuseImages(geodesicDisplay(), arrayPlotRender, res, 3);
+    // BufferedImage bufferedImage = levelsImage(refinement());
+    // graphics.drawImage(bufferedImage, 0, 200, bufferedImage.getWidth() * magnification(), bufferedImage.getHeight() * magnification(), null);
   }
 
   @Override
@@ -107,9 +72,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         geodesicDisplay.toString());
     root.mkdirs();
     try (HtmlUtf8 htmlUtf8 = HtmlUtf8.page(new File(root, "index.html"))) {
+      final Tensor sequence = getGeodesicControlPoints();
       {
         System.out.println("computing levels image");
-        BufferedImage bufferedImage = levelsImage(resolution());
+        BufferedImage bufferedImage = StaticHelper.levelsImage(geodesicDisplay(), sequence, resolution(), colorDataGradient(), 32);
         try {
           File file = new File(root, "levels.png");
           ImageIO.write(bufferedImage, "png", file);
@@ -123,7 +89,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         }
       }
       for (LogWeighting logWeighting : array) {
-        Tensor sequence = getGeodesicControlPoints();
         TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
             null, geodesicDisplay.vectorLogManifold(), null, sequence);
         System.out.print("computing " + logWeighting);
@@ -131,7 +96,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         int refinement = resolution();
         try {
           ArrayPlotRender arrayPlotRender = arrayPlotRender(sequence, refinement, tensorUnaryOperator, 1);
-          BufferedImage bufferedImage = fuseImages(geodesicDisplay, arrayPlotRender, refinement, sequence.length());
+          BufferedImage bufferedImage = StaticHelper.fuseImages(geodesicDisplay, arrayPlotRender, refinement, sequence.length());
           File file = new File(root, logWeighting.toString() + ".png");
           ImageIO.write(bufferedImage, "png", file);
           htmlUtf8.appendln(logWeighting.toString() + "<br/>");

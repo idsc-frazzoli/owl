@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.math.noise;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 /* package */ enum ColoredNoiseSpectrogram {
