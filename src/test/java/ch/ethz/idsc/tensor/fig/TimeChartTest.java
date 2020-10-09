@@ -4,8 +4,8 @@ package ch.ethz.idsc.tensor.fig;
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.ext.DeleteDirectory;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
-import ch.ethz.idsc.tensor.io.DeleteDirectory;
 import junit.framework.TestCase;
 
 public class TimeChartTest extends TestCase {
