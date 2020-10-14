@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.hs.r2.HilbertCurve;
+import ch.ethz.idsc.sophus.hs.r2.HilbertPolygon;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 
   public static Tensor curve(int n) {
     System.out.println("compute here");
-    return HilbertCurve.closed(n).multiply(Power.of(2.0, -n));
+    return HilbertPolygon.of(n).multiply(Power.of(2.0, -n));
   }
 
   private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();

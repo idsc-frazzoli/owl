@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.hs.r2.HilbertCurve;
+import ch.ethz.idsc.sophus.hs.r2.HilbertPolygon;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ class HilbertCoordinateDemo extends ExportWeightingDemo {
   public static Tensor standardized(int n) {
-    Tensor polygon = HilbertCurve.closed(n).multiply(Power.of(2.0, -n + 1));
+    Tensor polygon = HilbertPolygon.of(n).multiply(Power.of(2.0, -n + 1));
     return polygon.map(scalar -> scalar.subtract(RealScalar.of(1.0 + 1e-5)));
   }
 

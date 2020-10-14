@@ -369,6 +369,7 @@ public class LeversRender {
 
   private static final Tensor DOMAIN = Drop.tail(Subdivide.of(0.0, 1.0, 10), 1);
 
+  /** render points in sequence as polygon with geodesic edges */
   public void renderSurfaceP() {
     Tensor all = Tensors.empty();
     for (int index = 0; index < sequence.length(); ++index) {
@@ -506,6 +507,34 @@ public class LeversRender {
     MatrixRender matrixRender = MatrixRender.of(graphics, colorDataIndexed, new Color(255, 255, 255, 32));
     matrixRender.setScalarMapper(Round._3);
     renderMatrix(sequence.get(index), matrixRender, matrix);
+  }
+
+  public void renderMatrix2(Tensor p, Tensor matrix) {
+    ColorDataIndexed colorDataIndexed = new ColorDataIndexed() {
+      @Override
+      public Tensor apply(Scalar t) {
+        return Tensors.vector(64, 64, 64, 128);
+      }
+
+      @Override
+      public int length() {
+        return 1;
+      }
+
+      @Override
+      public Color getColor(int index) {
+        return new Color(64, 64, 64, 128);
+      }
+
+      @Override
+      public ColorDataIndexed deriveWithAlpha(int alpha) {
+        return this;
+      }
+    };
+    graphics.setFont(FONT_MATRIX);
+    MatrixRender matrixRender = MatrixRender.of(graphics, colorDataIndexed, new Color(255, 255, 255, 32));
+    matrixRender.setScalarMapper(Round._3);
+    renderMatrix(p, matrixRender, matrix);
   }
 
   /** render control points */
