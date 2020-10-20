@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.red.Total;
 /* package */ class UbongoBoard {
   private static final Scalar FREE = RealScalar.ONE.negate();
   // ---
-  private final Tensor mask;
+  public final Tensor mask;
   private final int count;
 
   public UbongoBoard(String... strings) {
@@ -146,8 +146,8 @@ import ch.ethz.idsc.tensor.red.Total;
   public static void export(File folder, Tensor mask, List<List<UbongoEntry>> solutions) throws IOException {
     folder.mkdir();
     int index = 0;
-    for (List<UbongoEntry> sol : solutions) {
-      Tensor tensor = UbongoRender.of(mask, sol);
+    for (List<UbongoEntry> solution : solutions) {
+      Tensor tensor = UbongoRender.of(Dimensions.of(mask), solution);
       Export.of(new File(folder, String.format("ub%03d.png", index)), ImageResize.nearest(tensor, 10));
       ++index;
     }

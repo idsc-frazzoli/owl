@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.ubo;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -9,12 +10,17 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
 
 /* package */ enum UbongoRender {
   ;
-  public static Tensor of(Tensor mask, List<UbongoEntry> solution) {
-    List<Integer> list = Dimensions.of(mask);
+  private static final ColorDataIndexed INSTANCE = StrictColorDataIndexed.of(Tensor.of(Stream.of(Ubongo.values()).map(Ubongo::colorVector)));
+
+  /** @param list
+   * @param solution
+   * @return */
+  public static Tensor of(List<Integer> list, List<UbongoEntry> solution) {
     Tensor image = ConstantArray.of(DoubleScalar.INDETERMINATE, list).copy();
     for (UbongoEntry ubongoEntry : solution) {
       List<Integer> size = Dimensions.of(ubongoEntry.stamp);
@@ -23,6 +29,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
           if (Scalars.nonZero(ubongoEntry.stamp.Get(si, sj)))
             image.set(RealScalar.of(ubongoEntry.ubongo.ordinal()), ubongoEntry.i + si, ubongoEntry.j + sj);
     }
-    return image.map(ColorDataLists._251.strict());
+    return image.map(INSTANCE);
   }
 }
