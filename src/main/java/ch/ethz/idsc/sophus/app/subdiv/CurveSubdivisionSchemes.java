@@ -26,7 +26,7 @@ import ch.ethz.idsc.sophus.ref.d1.MSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.MSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.SixPointCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.BinaryAverage;
+import ch.ethz.idsc.tensor.itp.BinaryAverage;
 
 /* package */ enum CurveSubdivisionSchemes {
   BSPLINE1 {

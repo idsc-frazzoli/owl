@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
-import ch.ethz.idsc.tensor.io.ReadLine;
+import ch.ethz.idsc.tensor.ext.ReadLine;
 import ch.ethz.idsc.tensor.red.Max;
 import junit.framework.TestCase;
 

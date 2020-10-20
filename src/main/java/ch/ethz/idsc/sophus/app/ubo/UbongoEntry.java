@@ -1,9 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.ubo;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class UbongoEntry {
+/* package */ class UbongoEntry implements Serializable {
   public int i;
   public int j;
   public Ubongo ubongo;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
-import ch.ethz.idsc.tensor.opt.BinaryAverage;
+import ch.ethz.idsc.tensor.itp.BinaryAverage;
 
 public abstract class AssistedCurveIntersection extends SimpleCurveIntersection //
     implements AssistedCurveIntersectionInterface {

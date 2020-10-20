@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subsets;
-import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ImageResize;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.red.Total;
@@ -61,10 +60,12 @@ import ch.ethz.idsc.tensor.red.Total;
             .mapToObj(i -> Ubongo.values()[i]) //
             .collect(Collectors.toList());
         Solve solve = new Solve(list);
-        if (solve.solutions.size() == 1) {
-          List<UbongoEntry> list2 = solve.solutions.get(0);
-          solutions.add(list2);
-          System.out.println(list2);
+        if (solve.solutions.size() == 1) //
+        {
+          for (List<UbongoEntry> list2 : solve.solutions) {
+            solutions.add(list2);
+            System.out.println(list2);
+          }
         }
       }
     }
@@ -151,18 +152,5 @@ import ch.ethz.idsc.tensor.red.Total;
       Export.of(new File(folder, String.format("ub%03d.png", index)), ImageResize.nearest(tensor, 10));
       ++index;
     }
-  }
-
-  public static void main(String[] args) throws IOException {
-    UbongoBoard ubongoBoard = new UbongoBoard("o oo ", "ooooo", " oooo", " oo o", "ooooo");
-    export(HomeDirectory.Pictures("hole2_5"), ubongoBoard.mask, ubongoBoard.filter0(5));
-    // System.out.println(Pretty.of(ubongoBoard.mask));
-    // Solve solve = ubongoBoard.new Solve(3);
-    // System.out.println(solve.solutions.size());
-    // UbongoBoard ubongoBoard = new UbongoBoard("ooooo", "ooooo", "oooo ", "oooo ", " o o ");
-    // ubongoBoard.filter0(5);
-    // System.out.println(Pretty.of(ubongoBoard.mask));
-    // Solve solve = ubongoBoard.new Solve(5);
-    // System.out.println(solve.solutions.size());
   }
 }

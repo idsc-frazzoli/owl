@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.ubo;
 
 import java.awt.Dimension;
@@ -32,16 +33,17 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     List<UbongoEntry> solution = list.get(spinnerIndex.getIndex());
     {
-      Tensor tensor = UbongoRender.of(Dimensions.of(ubongoBoard.mask), solution);
-      graphics.drawImage(ImageFormat.of(tensor), 100, 100, 100, 100, null);
+      List<Integer> size = Dimensions.of(ubongoBoard.mask);
+      Tensor tensor = UbongoRender.of(size, solution);
+      graphics.drawImage(ImageFormat.of(tensor), 100, 100, size.get(1) * 20, size.get(0) * 20, null);
     }
     int pix = 0;
     for (UbongoEntry ubongoEntry : solution) {
-      UbongoEntry ubongoEntry2 = new UbongoEntry();
-      ubongoEntry2.stamp = ImageRotate.cw(ubongoEntry.ubongo.mask());
-      ubongoEntry2.ubongo = ubongoEntry.ubongo;
-      List<Integer> size = Dimensions.of(ubongoEntry2.stamp);
-      Tensor tensor = UbongoRender.of(size, Arrays.asList(ubongoEntry2));
+      UbongoEntry ubongoPiece = new UbongoEntry();
+      ubongoPiece.stamp = ImageRotate.cw(ubongoEntry.ubongo.mask());
+      ubongoPiece.ubongo = ubongoEntry.ubongo;
+      List<Integer> size = Dimensions.of(ubongoPiece.stamp);
+      Tensor tensor = UbongoRender.of(size, Arrays.asList(ubongoPiece));
       // List<Integer> size2 = Dimensions.of(tensor);
       int piw = size.get(1) * 10;
       graphics.drawImage(ImageFormat.of(tensor), 100 + pix, 300, piw, size.get(0) * 10, null);
@@ -50,7 +52,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void main(String[] args) {
-    UbongoBoards ubongoBoards = UbongoBoards.SHOE1d;
+    UbongoBoards ubongoBoards = UbongoBoards.HOLE4b;
     List<List<UbongoEntry>> list = ubongoBoards.solve();
     if (!list.isEmpty()) {
       UbongoBrowser ubongoBrowser = new UbongoBrowser(ubongoBoards.board(), list);
