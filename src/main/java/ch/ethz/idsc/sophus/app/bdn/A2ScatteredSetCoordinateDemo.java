@@ -45,11 +45,13 @@ import ch.ethz.idsc.tensor.Tensor;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
-    final Tensor sequence = getGeodesicControlPoints();
-    LeversRender leversRender = //
-        LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
-    leversRender.renderIndexX();
-    leversRender.renderIndexP();
+    {
+      final Tensor sequence = getGeodesicControlPoints();
+      LeversRender leversRender = //
+          LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
+      leversRender.renderIndexX();
+      leversRender.renderIndexP();
+    }
     // ---
     if (Objects.isNull(renderInterface))
       recompute();
