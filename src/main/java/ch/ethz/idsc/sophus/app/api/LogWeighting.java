@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 public interface LogWeighting {
   /** @param biinvariant

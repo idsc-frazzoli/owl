@@ -12,12 +12,12 @@ import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
 import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */

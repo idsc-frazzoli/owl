@@ -13,9 +13,9 @@ import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 public enum LogWeightings implements LogWeighting {
   DISTANCES() {

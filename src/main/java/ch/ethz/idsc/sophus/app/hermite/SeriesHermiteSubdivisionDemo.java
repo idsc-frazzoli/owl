@@ -35,8 +35,8 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class SeriesHermiteSubdivisionDemo extends ControlPointsDemo implements ActionListener {
   private static final int WIDTH = 640;

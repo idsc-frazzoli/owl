@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.sym;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 public enum SymGeodesic implements GeodesicInterface {
   INSTANCE;

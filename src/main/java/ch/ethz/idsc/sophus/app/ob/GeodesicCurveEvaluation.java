@@ -21,12 +21,12 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class GeodesicCurveEvaluation {
   public static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //

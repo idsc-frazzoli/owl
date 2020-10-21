@@ -2,7 +2,7 @@
 // https://stackoverflow.com/questions/3305059/how-do-you-calculate-log-base-2-in-java-for-integers
 package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.tensor.Integers;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** Quote from Java Integer:
  * "Note that this method is closely related to the logarithm base 2.

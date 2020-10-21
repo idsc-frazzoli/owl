@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.opt.GaussianMatrix;
+import ch.ethz.idsc.tensor.mat.GaussianMatrix;
 
 /* package */ enum IconDemo {
   ;

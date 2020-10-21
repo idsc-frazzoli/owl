@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rn;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /** shortest distance from given point to a collection of points

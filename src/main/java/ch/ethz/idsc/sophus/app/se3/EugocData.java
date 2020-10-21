@@ -10,10 +10,10 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ enum EugocData {
   ;

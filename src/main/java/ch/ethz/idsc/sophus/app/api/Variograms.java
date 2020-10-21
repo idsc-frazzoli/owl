@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.math.var.SphericalVariogram;
 import ch.ethz.idsc.sophus.math.var.ThinPlateSplineVariogram;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 public enum Variograms {
   INVERSE_POWER() {

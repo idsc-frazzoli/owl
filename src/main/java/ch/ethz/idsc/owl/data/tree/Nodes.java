@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.Integers;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** utility functions */
 public enum Nodes {

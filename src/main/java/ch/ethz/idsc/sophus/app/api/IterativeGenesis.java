@@ -11,8 +11,8 @@ import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateLevel;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum IterativeGenesis {

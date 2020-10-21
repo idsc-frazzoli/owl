@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
+import ch.ethz.idsc.tensor.opt.rn.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;

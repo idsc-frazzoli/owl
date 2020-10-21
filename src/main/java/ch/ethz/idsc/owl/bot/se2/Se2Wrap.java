@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x, y, theta) === (x, y, theta + 2 pi n) for all n

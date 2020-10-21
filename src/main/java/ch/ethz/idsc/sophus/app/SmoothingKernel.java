@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMean;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanNuttallWindow;

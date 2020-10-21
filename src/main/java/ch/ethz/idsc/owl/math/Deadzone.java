@@ -5,9 +5,9 @@ package ch.ethz.idsc.owl.math;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class Deadzone implements ScalarUnaryOperator {
   private static final long serialVersionUID = 503752331132872901L;

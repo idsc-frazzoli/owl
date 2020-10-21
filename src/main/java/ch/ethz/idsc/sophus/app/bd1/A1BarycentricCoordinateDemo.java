@@ -16,10 +16,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class A1BarycentricCoordinateDemo extends LogWeightingDemo {
   public A1BarycentricCoordinateDemo(List<LogWeighting> array) {

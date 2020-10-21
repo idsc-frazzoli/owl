@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.ply.Spearhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 // TODO probably obsolete: instead use Se2 and Se2Covering with different clothoid builders
 public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serializable {

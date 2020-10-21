@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.DeBoor;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 // TODO JPH demo does not seem correct
 /* package */ class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedImageSupplier {

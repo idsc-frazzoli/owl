@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.lie.so2.So2FilterBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2PhongBiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** demo of {@link Se2BiinvariantMeans}

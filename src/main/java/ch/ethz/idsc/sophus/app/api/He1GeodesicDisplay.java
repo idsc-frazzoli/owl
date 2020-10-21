@@ -21,8 +21,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public enum He1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;

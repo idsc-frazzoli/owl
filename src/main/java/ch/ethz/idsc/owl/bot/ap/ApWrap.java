@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.ap;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x, z, v, gamma) === (x, z, v, gamma + 2 pi n) for all n */

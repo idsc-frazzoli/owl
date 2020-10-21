@@ -8,14 +8,14 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class MatrixRender {
   public static MatrixRender absoluteOne(Graphics2D graphics, ColorDataIndexed colorDataIndexed, ColorDataGradient colorDataGradient) {

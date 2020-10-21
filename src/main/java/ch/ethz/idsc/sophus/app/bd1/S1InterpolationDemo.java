@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
-import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class S1InterpolationDemo extends LogWeightingDemo {

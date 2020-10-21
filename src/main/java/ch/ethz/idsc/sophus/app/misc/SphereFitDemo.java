@@ -24,14 +24,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
-import ch.ethz.idsc.tensor.opt.SpatialMedian;
-import ch.ethz.idsc.tensor.opt.SphereFit;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.opt.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
+import ch.ethz.idsc.tensor.opt.rn.SpatialMedian;
+import ch.ethz.idsc.tensor.opt.rn.SphereFit;
+import ch.ethz.idsc.tensor.opt.rn.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 

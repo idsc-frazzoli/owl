@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.r2;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.num.Rationalize;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** for single integrator state space
  * use with {@link EulerIntegrator} */

@@ -3,11 +3,11 @@ package ch.ethz.idsc.owl.gui;
 
 import ch.ethz.idsc.java.awt.Hsluv;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /** @see ColorDataIndexed */

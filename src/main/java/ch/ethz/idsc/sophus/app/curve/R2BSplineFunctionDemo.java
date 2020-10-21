@@ -17,8 +17,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.BSplineFunction;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** use of tensor lib {@link BSplineFunction} */
 /* package */ class R2BSplineFunctionDemo extends CurvatureDemo {

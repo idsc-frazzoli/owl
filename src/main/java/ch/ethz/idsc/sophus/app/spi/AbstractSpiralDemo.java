@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /* package */ abstract class AbstractSpiralDemo extends ControlPointsDemo {
   private static final PointsRender POINTS_RENDER = //

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import junit.framework.TestCase;
 
 public class GeodesicCausalFiltersTest extends TestCase {

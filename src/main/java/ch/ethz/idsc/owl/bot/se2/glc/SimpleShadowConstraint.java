@@ -6,7 +6,7 @@ import java.awt.geom.Area;
 import ch.ethz.idsc.owl.mapping.ShadowMapArea;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 // TODO_YN ideally there should be a demo or tests that still uses this implementation
 /* package */ class SimpleShadowConstraint extends AbstractShadowConstraint {

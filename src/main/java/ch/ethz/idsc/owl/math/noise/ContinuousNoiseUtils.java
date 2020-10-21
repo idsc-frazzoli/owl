@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.noise;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 public enum ContinuousNoiseUtils {
   ;

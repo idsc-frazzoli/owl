@@ -30,8 +30,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.DeBoor;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
   private final JSlider jSliderExponent = new JSlider(0, 100, 100);

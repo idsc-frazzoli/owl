@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 // TODO JPH several issues: 
 // 1) frame rate should be handled outside this class!

@@ -12,9 +12,9 @@ import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */

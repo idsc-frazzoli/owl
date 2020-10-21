@@ -8,8 +8,8 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** in the current implementation all filters have the same performance for an arbitrary radius */
 public enum GeodesicFilters {

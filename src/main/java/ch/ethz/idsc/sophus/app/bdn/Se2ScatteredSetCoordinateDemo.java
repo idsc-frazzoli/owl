@@ -28,9 +28,9 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
-import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.num.Pi;
 
 /* package */ class Se2ScatteredSetCoordinateDemo extends ExportWeightingDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);

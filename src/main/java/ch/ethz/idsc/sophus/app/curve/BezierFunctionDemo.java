@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.crv.spline.BezierFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
 /* package */ class BezierFunctionDemo extends CurvatureDemo {

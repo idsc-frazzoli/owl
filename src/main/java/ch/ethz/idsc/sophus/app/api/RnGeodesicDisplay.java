@@ -23,8 +23,8 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final long serialVersionUID = -3588927420417722918L;

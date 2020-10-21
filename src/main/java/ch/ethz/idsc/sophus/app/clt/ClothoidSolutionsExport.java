@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.ext.DeleteDirectory;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.TableBuilder;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Clips;
 

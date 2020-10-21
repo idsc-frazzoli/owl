@@ -18,9 +18,9 @@ import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class AnAveragingDemo extends LogWeightingDemo {
   private static final int WIDTH = 480;

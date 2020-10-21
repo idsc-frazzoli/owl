@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolationFilter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /* package */ class GeodesicExtrapolationDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
   private Tensor refined = Tensors.empty();

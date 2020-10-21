@@ -9,7 +9,7 @@ import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class TrajectoryEntryFinderTest extends TestCase {

@@ -17,9 +17,9 @@ import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 public enum PolygonCoordinates implements LogWeighting {
   MEAN_VALUE(ThreePointCoordinate.of(Barycenter.MEAN_VALUE)), //

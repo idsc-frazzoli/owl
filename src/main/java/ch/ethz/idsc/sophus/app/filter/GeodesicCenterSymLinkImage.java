@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /* package */ enum GeodesicCenterSymLinkImage {
   ;

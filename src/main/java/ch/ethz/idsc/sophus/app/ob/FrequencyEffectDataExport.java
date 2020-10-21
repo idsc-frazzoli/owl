@@ -13,9 +13,9 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ enum FrequencyEffectDataExport {
   ;

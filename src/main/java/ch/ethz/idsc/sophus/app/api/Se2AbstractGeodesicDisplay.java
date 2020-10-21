@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();

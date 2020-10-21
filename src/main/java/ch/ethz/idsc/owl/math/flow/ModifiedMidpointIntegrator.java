@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.math.flow;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** Numerical Recipes 3rd Edition Section 17.3.1 */
 public class ModifiedMidpointIntegrator implements Integrator, Serializable {

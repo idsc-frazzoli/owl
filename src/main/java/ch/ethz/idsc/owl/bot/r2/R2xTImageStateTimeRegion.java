@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** for images only rigid transformations are allowed */
 public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {

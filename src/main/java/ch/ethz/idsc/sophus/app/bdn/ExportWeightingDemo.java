@@ -21,8 +21,8 @@ import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class ExportWeightingDemo extends ScatteredSetWeightingDemo implements ActionListener {
   private static final int REFINEMENT = 120; // presentation 60

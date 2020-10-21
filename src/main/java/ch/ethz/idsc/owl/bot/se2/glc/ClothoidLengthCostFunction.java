@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** only applied in {@link ClothoidPursuitControl} resp. {@link Se2Letter5Demo} */

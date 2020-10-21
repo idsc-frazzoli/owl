@@ -20,8 +20,8 @@ import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ class R1AveragingDemo extends A1AveragingDemo {
