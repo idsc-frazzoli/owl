@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void main(String[] args) {
-    UbongoBoards ubongoBoards = UbongoBoards.HOLE4b;
+    UbongoBoards ubongoBoards = UbongoBoards.MICKEY_2;
     List<List<UbongoEntry>> list = ubongoBoards.solve();
     if (!list.isEmpty()) {
       UbongoBrowser ubongoBrowser = new UbongoBrowser(ubongoBoards.board(), list);

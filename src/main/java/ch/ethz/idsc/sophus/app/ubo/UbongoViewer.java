@@ -5,10 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
@@ -18,37 +16,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.ext.Cache;
-import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ImageRotate;
-import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.Import;
 
 /* package */ class UbongoViewer extends AbstractDemo {
   private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
-  private final Function<UbongoBoards, List<List<UbongoEntry>>> cache = Cache.of(this::compute, 100);
-
-  public List<List<UbongoEntry>> compute(UbongoBoards ubongoBoards) {
-    File folder = HomeDirectory.Documents("ubongo");
-    folder.mkdir();
-    File file = new File(folder, ubongoBoards.name());
-    if (file.isFile())
-      try {
-        System.out.println("load");
-        return Import.object(file);
-      } catch (Exception exception) {
-        exception.printStackTrace();
-      }
-    System.out.println("compute");
-    List<List<UbongoEntry>> list = ubongoBoards.solve();
-    try {
-      Export.object(file, list);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
-    return list;
-  }
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
@@ -56,8 +28,11 @@ import ch.ethz.idsc.tensor.io.Import;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    UbongoPublish ubongoPublish = spinnerIndex.getValue();
-    List<List<UbongoEntry>> solutions = cache.apply(ubongoPublish.ubongoBoards);
+    draw(graphics, spinnerIndex.getValue());
+  }
+
+  public static void draw(Graphics2D graphics, UbongoPublish ubongoPublish) {
+    List<List<UbongoEntry>> solutions = UbongoLoader.INSTANCE.load(ubongoPublish.ubongoBoards);
     {
       UbongoBoard ubongoBoard = ubongoPublish.ubongoBoards.board();
       List<Integer> size = Dimensions.of(ubongoBoard.mask);
