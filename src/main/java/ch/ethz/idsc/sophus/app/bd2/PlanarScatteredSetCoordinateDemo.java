@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app.bd2;
 
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;

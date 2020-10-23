@@ -25,10 +25,9 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-public abstract class LogWeightingDemo extends AbstractPlaceDemo {
+public abstract class LogWeightingDemo extends LogWeightingBase {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
-  protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
   private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
@@ -61,7 +60,7 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
   };
 
   public LogWeightingDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
-    super(addRemoveControlPoints, list);
+    super(addRemoveControlPoints, list, array);
     {
       spinnerLogWeighting.setList(array);
       if (array.contains(LogWeightings.COORDINATE))
@@ -109,15 +108,6 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
   }
 
-  protected final LogWeighting logWeighting() {
-    return spinnerLogWeighting.getValue();
-  }
-
-  protected final void setLogWeighting(LogWeighting logWeighting) {
-    spinnerLogWeighting.setValue(logWeighting);
-    spinnerListener.actionPerformed(logWeighting);
-  }
-
   protected final void setBiinvariant(Biinvariant biinvariant) {
     spinnerBiinvariant.setValue(biinvariant);
   }
@@ -126,6 +116,7 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
     return spinnerBiinvariant.getValue();
   }
 
+  @Override
   protected final TensorUnaryOperator operator(VectorLogManifold vectorLogManifold, Tensor sequence) {
     return logWeighting().operator( //
         biinvariant(), //
@@ -134,14 +125,11 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
         sequence);
   }
 
-  protected final TensorUnaryOperator operator(Tensor sequence) {
-    return operator(geodesicDisplay().vectorLogManifold(), sequence);
-  }
-
   protected final ScalarUnaryOperator variogram() {
     return spinnerVariogram.getValue().of(spinnerBeta.getValue());
   }
 
+  @Override
   protected final TensorScalarFunction function(Tensor sequence, Tensor values) {
     return logWeighting().function( //
         biinvariant(), //
@@ -150,6 +138,7 @@ public abstract class LogWeightingDemo extends AbstractPlaceDemo {
         sequence, values);
   }
 
+  @Override
   protected void recompute() {
     // ---
   }

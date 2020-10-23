@@ -14,12 +14,12 @@ import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 
-/* package */ abstract class ScatteredSetWeightingDemo extends LogWeightingDemo {
-  final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+public abstract class ScatteredSetWeightingDemo extends LogWeightingDemo {
+  protected final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerMagnif = new SpinnerLabel<>();
   private final SpinnerLabel<ColorDataGradient> spinnerColorData = SpinnerLabel.of(ColorDataGradients.values());
-  final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
-  final JToggleButton jToggleArrows = new JToggleButton("arrows");
+  protected final JToggleButton jToggleHeatmap = new JToggleButton("heatmap");
+  protected final JToggleButton jToggleArrows = new JToggleButton("arrows");
 
   public ScatteredSetWeightingDemo( //
       boolean addRemoveControlPoints, //
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     setMidpointIndicated(false);
     spinnerLogWeighting.addSpinnerListener(v -> recompute());
     {
-      spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80));
+      spinnerRefine.setList(Arrays.asList(3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 120, 160));
       spinnerRefine.setValue(20);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
       spinnerRefine.addSpinnerListener(v -> recompute());
@@ -52,15 +52,15 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     timerFrame.jToolBar.addSeparator();
   }
 
-  final int refinement() {
+  protected final int refinement() {
     return spinnerRefine.getValue();
   }
 
-  final int magnification() {
+  protected final int magnification() {
     return spinnerMagnif.getValue();
   }
 
-  final ColorDataGradient colorDataGradient() {
+  protected final ColorDataGradient colorDataGradient() {
     return spinnerColorData.getValue();
   }
 }

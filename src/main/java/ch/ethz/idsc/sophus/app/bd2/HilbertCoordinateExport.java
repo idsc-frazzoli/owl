@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app.bd2;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
   public static void main(String[] args) throws IOException {
     for (int n = 2; n < 5; ++n) {
       System.out.println(n);
-      Tensor sequence = HilbertCoordinateDemo.standardized(n);
-      BufferedImage bufferedImage = StaticHelper.levelsImage( //
+      Tensor sequence = HilbertBenchmarkDemo.unit(n);
+      BufferedImage bufferedImage = HilbertLevelImage.of( //
           R2GeodesicDisplay.INSTANCE, sequence, 60, ColorDataGradients.CLASSIC, 800);
       ImageIO.write(bufferedImage, "png", HomeDirectory.Pictures(String.format("hc%d.png", n)));
     }

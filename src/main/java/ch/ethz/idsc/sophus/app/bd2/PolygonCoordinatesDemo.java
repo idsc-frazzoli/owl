@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app.bd2;
 
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -18,11 +18,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.IterativeGenesis;
 import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.PolygonCoordinates;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.bdn.HueColorData;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
       final Tensor sequence = getGeodesicControlPoints();
       {
         System.out.println("computing levels image");
-        BufferedImage bufferedImage = StaticHelper.levelsImage(geodesicDisplay(), sequence, resolution(), colorDataGradient(), 32);
+        BufferedImage bufferedImage = HilbertLevelImage.of(geodesicDisplay(), sequence, resolution(), colorDataGradient(), 32);
         try {
           File file = new File(root, "levels.png");
           ImageIO.write(bufferedImage, "png", file);

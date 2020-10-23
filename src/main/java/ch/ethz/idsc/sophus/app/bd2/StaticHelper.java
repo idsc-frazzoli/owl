@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app.bd2;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -11,20 +11,16 @@ import ch.ethz.idsc.sophus.app.ArrayPlotRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayRender;
-import ch.ethz.idsc.sophus.app.api.IterativeGenesis;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.ClipCover;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ArrayReshape;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -46,16 +42,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
     }
     graphics.drawImage(foreground, 0, 0, null);
     return background;
-  }
-
-  public static BufferedImage levelsImage(GeodesicDisplay geodesicDisplay, Tensor sequence, int res, ColorDataGradient colorDataGradient, int max) {
-    TensorUnaryOperator tuo = IterativeGenesis.counts(geodesicDisplay.vectorLogManifold(), sequence, max);
-    int sequence_length = IterativeGenesis.values().length;
-    Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence_length);
-    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
-    Tensor wgs = geodesicArrayPlot.raster(res, tuo, fallback);
-    ArrayPlotRender arrayPlotRender = arrayPlotFromTensor(wgs, 1, false, colorDataGradient);
-    return fuseImages(geodesicDisplay, arrayPlotRender, res, sequence_length);
   }
 
   public static ArrayPlotRender arrayPlotFromTensor(Tensor wgs, int magnification, boolean coverZero, ColorDataGradient colorDataGradient) {

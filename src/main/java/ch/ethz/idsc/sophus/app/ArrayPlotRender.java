@@ -24,7 +24,8 @@ public class ArrayPlotRender implements RenderInterface {
     return new ArrayPlotRender( //
         rescale.result(), //
         ClipCover.of(rescale.scalarSummaryStatistics()), //
-        colorDataGradient, magnify);
+        colorDataGradient, //
+        magnify);
   }
 
   /***************************************************/

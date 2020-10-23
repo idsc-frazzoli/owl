@@ -7,13 +7,15 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.gbc.HsCoordinates;
-import ch.ethz.idsc.sophus.gbc.InsidePolygonCoordinate;
 import ch.ethz.idsc.sophus.gbc.MetricCoordinate;
 import ch.ethz.idsc.sophus.gbc.TargetCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
+import ch.ethz.idsc.sophus.lie.r2.InsidePolygonCoordinate;
+import ch.ethz.idsc.sophus.lie.r2.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinate;
+import ch.ethz.idsc.sophus.lie.r2.IterativeMeanValueCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,18 +26,18 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 public enum PolygonCoordinates implements LogWeighting {
   MEAN_VALUE(ThreePointCoordinate.of(Barycenter.MEAN_VALUE)), //
   // CIRCULAR(CircularCoordinate.INSTANCE), //
-  ITERATIVE_MV_1(IterativeCoordinate.meanValue(1)), //
-  ITERATIVE_MV_2(IterativeCoordinate.meanValue(2)), //
-  ITERATIVE_MV_3(IterativeCoordinate.meanValue(3)), //
-  ITERATIVE_MV_5(IterativeCoordinate.meanValue(5)), //
+  ITERATIVE_MV_1(IterativeMeanValueCoordinate.of(1)), //
+  ITERATIVE_MV_2(IterativeMeanValueCoordinate.of(2)), //
+  ITERATIVE_MV_3(IterativeMeanValueCoordinate.of(3)), //
+  ITERATIVE_MV_5(IterativeMeanValueCoordinate.of(5)), //
   WACHSPRESS(ThreePointCoordinate.of(Barycenter.WACHSPRESS)), //
   DISCRETE_HARMONIC(ThreePointCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   INVERSE_DISTANCE(MetricCoordinate.of(InversePowerVariogram.of(2))), //
-  ITERATIVE_ID_0(IterativeCoordinate.of(MetricCoordinate.affine(), 0)), //
-  ITERATIVE_ID_1(IterativeCoordinate.of(MetricCoordinate.affine(), 1)), //
-  ITERATIVE_ID_2(IterativeCoordinate.of(MetricCoordinate.affine(), 2)), //
-  ITERATIVE_ID_3(IterativeCoordinate.of(MetricCoordinate.affine(), 3)), //
-  ITERATIVE_ID_5(IterativeCoordinate.of(MetricCoordinate.affine(), 5)), //
+  ITERATIVE_AF_0(IterativeAffineCoordinate.of(0)), //
+  ITERATIVE_AF_1(IterativeAffineCoordinate.of(1)), //
+  ITERATIVE_AF_2(IterativeAffineCoordinate.of(2)), //
+  ITERATIVE_AF_3(IterativeAffineCoordinate.of(3)), //
+  ITERATIVE_AF_5(IterativeAffineCoordinate.of(5)), //
   TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
   ITERATIVE_IL_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
   ITERATIVE_IL_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //
@@ -57,7 +59,7 @@ public enum PolygonCoordinates implements LogWeighting {
       ScalarUnaryOperator variogram, // <- ignored
       Tensor sequence) {
     return WeightingOperators.wrap( //
-        HsCoordinates.wrap(vectorLogManifold, InsidePolygonCoordinate.of(genesis)), //
+        HsCoordinates.wrap(vectorLogManifold, equals(INVERSE_DISTANCE) || equals(TARGET) ? genesis : InsidePolygonCoordinate.of(genesis)), //
         sequence);
   }
 
