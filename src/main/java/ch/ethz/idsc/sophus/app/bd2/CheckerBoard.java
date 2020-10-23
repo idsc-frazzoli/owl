@@ -22,13 +22,9 @@ import ch.ethz.idsc.tensor.sca.Floor;
 
   @Override
   public Scalar apply(Tensor point) {
-    try {
-      Scalar scalar = Total.ofVector(tensorUnaryOperator.apply(point).map(Floor.FUNCTION));
-      if (DeterminateScalarQ.of(scalar))
-        return RealScalar.of(Math.floorMod(scalar.number().intValue(), 2));
-    } catch (Exception exception) {
-      System.err.println("---");
-    }
+    Scalar scalar = Total.ofVector(tensorUnaryOperator.apply(point).map(Floor.FUNCTION));
+    if (DeterminateScalarQ.of(scalar))
+      return RealScalar.of(Math.floorMod(scalar.number().intValue(), 2));
     return DoubleScalar.INDETERMINATE;
   }
 }

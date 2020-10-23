@@ -47,6 +47,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   public static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._000.strict();
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
   // ---
+  final SpinnerLabel<ParameterizationPattern> spinnerPattern = SpinnerLabel.of(ParameterizationPattern.values());
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerFactor = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("freeze");
@@ -55,6 +56,10 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   public CheckerBoardDemo() {
     super(true, GeodesicDisplays.R2_H2_S2, PolygonCoordinates.list());
     spinnerLogWeighting.addSpinnerListener(v -> recompute());
+    {
+      spinnerPattern.addSpinnerListener(v -> recompute());
+      spinnerPattern.addToComponentReduced(timerFrame.jToolBar, new Dimension(160, 28), "pattern");
+    }
     {
       spinnerFactor.setList(Arrays.asList(2, 3, 5, 8, 10, 15, 20));
       spinnerFactor.setValue(5);
@@ -182,8 +187,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   protected TensorScalarFunction function(Tensor sequence, Tensor values) {
     TensorUnaryOperator operator = operator(sequence);
     TensorUnaryOperator dot_prod = p -> operator.apply(p).dot(values);
-    // return new CheckerBoard(dot_prod);
-    return new GridLines(dot_prod);
+    return spinnerPattern.getValue().apply(dot_prod);
   }
 
   public static void main(String[] args) {

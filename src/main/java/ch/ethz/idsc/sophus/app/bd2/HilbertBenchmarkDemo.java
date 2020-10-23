@@ -1,15 +1,17 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd2;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -21,14 +23,19 @@ import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.sca.Power;
 
+/** References:
+ * "Iterative coordinates"
+ * by Chongyang Deng, Qingjun Chang, Kai Hormann, 2020 */
 /* package */ class HilbertBenchmarkDemo extends ControlPointsDemo {
   final SpinnerLabel<Integer> spinnerLevels = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  JToggleButton jToggleButton = new JToggleButton("ctrl points");
 
   public HilbertBenchmarkDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
     setPositioningEnabled(false);
     // ---
+    timerFrame.jToolBar.add(jToggleButton);
     {
       spinnerLevels.setList(Arrays.asList(1, 2, 3, 4));
       spinnerLevels.setValue(2);
@@ -56,12 +63,15 @@ import ch.ethz.idsc.tensor.sca.Power;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    AxesRender.INSTANCE.render(geometricLayer, graphics);
+    graphics.setColor(Color.LIGHT_GRAY);
+    graphics.draw(geometricLayer.toPath2D(CheckerBoardDemo.BOX, true));
+    // ---
     RenderQuality.setQuality(graphics);
-    renderControlPoints(geometricLayer, graphics);
     final Tensor sequence = getGeodesicControlPoints();
     LeversRender leversRender = //
         LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
+    if (jToggleButton.isSelected())
+      renderControlPoints(geometricLayer, graphics);
     // leversRender.renderIndexX();
     // leversRender.renderIndexP();
     leversRender.renderSurfaceP();
