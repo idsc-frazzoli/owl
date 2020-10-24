@@ -142,7 +142,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       if (Objects.isNull(bufferedImage))
         recompute();
       if (Objects.nonNull(bufferedImage)) {
-        // BufferedImage bufferedImage = cache.apply(getGeodesicControlPoints());
         RenderQuality.setDefault(graphics); // default so that raster becomes visible
         GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
         Tensor pixel2model = geodesicArrayPlot.pixel2model(new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
@@ -186,7 +185,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   @Override
   protected TensorScalarFunction function(Tensor sequence, Tensor values) {
     TensorUnaryOperator operator = operator(sequence);
-    TensorUnaryOperator dot_prod = p -> operator.apply(p).dot(values);
+    TensorUnaryOperator dot_prod = point -> operator.apply(point).dot(values);
     return spinnerPattern.getValue().apply(dot_prod);
   }
 

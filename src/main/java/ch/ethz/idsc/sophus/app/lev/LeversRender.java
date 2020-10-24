@@ -469,6 +469,7 @@ public class LeversRender {
   }
 
   /***************************************************/
+  /** @param colorDataGradient */
   public void renderInfluenceX(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
@@ -502,11 +503,11 @@ public class LeversRender {
   }
 
   /***************************************************/
-  public void renderMatrix(int index, Tensor matrix, ColorDataIndexed colorDataIndexed) {
+  public void renderMatrix(Tensor pos, Tensor matrix, ColorDataIndexed colorDataIndexed) {
     graphics.setFont(FONT_MATRIX);
     MatrixRender matrixRender = MatrixRender.of(graphics, colorDataIndexed, new Color(255, 255, 255, 32));
     matrixRender.setScalarMapper(Round._3);
-    renderMatrix(sequence.get(index), matrixRender, matrix);
+    renderMatrix(pos, matrixRender, matrix);
   }
 
   public void renderMatrix2(Tensor p, Tensor matrix) {

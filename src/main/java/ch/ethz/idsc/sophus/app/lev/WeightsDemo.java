@@ -85,7 +85,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
         ColorDataIndexed colorDataIndexed = ColorDataLists._097.strict();
         for (int index = 0; index < sequence.length(); ++index) {
           Tensor map = matrix.get(Tensor.ALL, index).map(Tensors::of);
-          leversRender.renderMatrix(index, map, colorDataIndexed);
+          leversRender.renderMatrix(sequence.get(index), map, colorDataIndexed);
         }
         int index = 0;
         graphics.setFont(LeversRender.FONT_MATRIX);
