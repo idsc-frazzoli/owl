@@ -9,7 +9,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.lev.LeversHud;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.gbc.AffineGenesis;
+import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       leversRender.renderSequence();
       leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
       if (2 < sequence.length()) {
-        Genesis genesis = AffineGenesis.INSTANCE;
+        Genesis genesis = AffineCoordinate.INSTANCE;
         Tensor weights = genesis.origin(normalized);
         leversRender.renderWeights(weights);
         Tensor lhs = Tensor.of(normalized.stream().map(r -> Append.of(r, RealScalar.ONE)));

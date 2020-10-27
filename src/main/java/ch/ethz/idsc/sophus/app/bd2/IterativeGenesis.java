@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.bd2;
 
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.sophus.gbc.AffineGenesis;
+import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ enum IterativeGenesis {
   MEAN_VALUE(ThreePointWeighting.of(Barycenter.MEAN_VALUE)), //
-  INVERSE_DISTANCE(AffineGenesis.INSTANCE), //
+  INVERSE_DISTANCE(AffineCoordinate.INSTANCE), //
   ;
 
   private final Genesis genesis;

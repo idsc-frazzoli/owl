@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.ubo;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,22 @@ import ch.ethz.idsc.tensor.img.ImageRotate;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 
 /* package */ class UbongoViewer extends AbstractDemo {
+  public static final int GRY = 128;
+  static final int MARGIN_X = 340;
+  static final int MARGIN_Y = 13;
+  // 61.1465
+  static final int SCALE = 62;
+  private static final int ZCALE = 10;
+  private static final int MAX = 6;
   private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
+
+  public static int maxWidth() {
+    return MARGIN_X + MAX * SCALE + 5;
+  }
+
+  public static int maxHeight() {
+    return Math.max(300, MAX * SCALE + MARGIN_Y * 2);
+  }
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
@@ -32,15 +48,20 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void draw(Graphics2D graphics, UbongoPublish ubongoPublish) {
+    graphics.setColor(new Color(192 - 32, 192 - 32, 192 - 32));
+    graphics.drawLine(0, 0, maxWidth(), 0);
+    graphics.drawLine(0, maxHeight() - 1, maxWidth(), maxHeight() - 1);
     List<List<UbongoEntry>> solutions = UbongoLoader.INSTANCE.load(ubongoPublish.ubongoBoards);
     {
       UbongoBoard ubongoBoard = ubongoPublish.ubongoBoards.board();
       List<Integer> size = Dimensions.of(ubongoBoard.mask);
-      Tensor tensor = ubongoBoard.mask.map(s -> Scalars.nonZero(s) ? RealScalar.of(192 + 16) : RealScalar.of(255));
-      int scale = 40;
-      graphics.drawImage(ImageFormat.of(tensor), 300, 50, size.get(1) * scale, size.get(0) * scale, null);
+      Tensor tensor = ubongoBoard.mask.map(s -> Scalars.nonZero(s) ? RealScalar.of(GRY) : RealScalar.of(255));
+      int pix = MARGIN_X;
+      int piy = MARGIN_Y;
+      graphics.drawImage(ImageFormat.of(tensor), pix, piy, size.get(1) * SCALE, size.get(0) * SCALE, null);
+      drawGrid(graphics);
     }
-    int piy = 10;
+    int piy = MARGIN_Y;
     int count = 0;
     graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
     for (int index : ubongoPublish.list) {
@@ -48,23 +69,34 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
       graphics.setColor(Color.DARK_GRAY);
       int pix = 50;
       RenderQuality.setQuality(graphics);
-      graphics.drawString("" + count, pix - 40, piy + 20);
+      graphics.drawString("" + count, 2, piy + 20);
       RenderQuality.setDefault(graphics);
       List<UbongoEntry> solution = solutions.get(index);
-      int scale = 8;
+      int scale = ZCALE;
       for (UbongoEntry ubongoEntry : solution) {
         UbongoEntry ubongoPiece = new UbongoEntry();
         ubongoPiece.stamp = ImageRotate.cw(ubongoEntry.ubongo.mask());
         ubongoPiece.ubongo = ubongoEntry.ubongo;
         List<Integer> size = Dimensions.of(ubongoPiece.stamp);
-        Tensor tensor = UbongoRender.of(size, Arrays.asList(ubongoPiece));
+        Tensor tensor = UbongoRender.gray(size, Arrays.asList(ubongoPiece));
         // List<Integer> size2 = Dimensions.of(tensor);
         int piw = size.get(1) * scale;
         graphics.drawImage(ImageFormat.of(tensor), pix, piy, piw, size.get(0) * scale, null);
         pix += piw + 20;
       }
-      piy += 50;
+      piy += 4 * ZCALE + 20;
     }
+  }
+
+  public static void drawGrid(Graphics graphics) {
+    int pix = MARGIN_X;
+    int piy = MARGIN_Y;
+    graphics.setColor(Color.WHITE);
+    for (int c = 0; c <= MAX; ++c) {
+      graphics.drawLine(pix + c * SCALE, piy, pix + c * SCALE, piy + MAX * SCALE);
+      graphics.drawLine(pix, piy + c * SCALE, pix + MAX * SCALE, piy + c * SCALE);
+    }
+    
   }
 
   public static void main(String[] args) {

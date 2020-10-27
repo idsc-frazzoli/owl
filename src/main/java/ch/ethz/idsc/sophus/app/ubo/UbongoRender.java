@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.ubo;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
   /** @param list
    * @param solution
    * @return */
-  public static Tensor of(List<Integer> list, List<UbongoEntry> solution) {
+  public static Tensor matrix(List<Integer> list, List<UbongoEntry> solution) {
     Tensor image = ConstantArray.of(DoubleScalar.INDETERMINATE, list).copy();
     for (UbongoEntry ubongoEntry : solution) {
       List<Integer> size = Dimensions.of(ubongoEntry.stamp);
@@ -29,6 +30,14 @@ import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
           if (Scalars.nonZero(ubongoEntry.stamp.Get(si, sj)))
             image.set(RealScalar.of(ubongoEntry.ubongo.ordinal()), ubongoEntry.i + si, ubongoEntry.j + sj);
     }
-    return image.map(INSTANCE);
+    return image;
+  }
+
+  public static Tensor of(List<Integer> list, List<UbongoEntry> solution) {
+    return matrix(list, solution).map(INSTANCE);
+  }
+
+  public static Tensor gray(List<Integer> list, List<UbongoEntry> solution) {
+    return matrix(list, solution).map(ConstantColorDataIndexed.of(new Color(160, 160, 160)));
   }
 }

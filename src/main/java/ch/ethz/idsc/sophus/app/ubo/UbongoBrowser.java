@@ -33,9 +33,12 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     List<UbongoEntry> solution = list.get(spinnerIndex.getIndex());
     {
+      int scale = 30;
       List<Integer> size = Dimensions.of(ubongoBoard.mask);
       Tensor tensor = UbongoRender.of(size, solution);
-      graphics.drawImage(ImageFormat.of(tensor), 100, 100, size.get(1) * 20, size.get(0) * 20, null);
+      int pix = 50;
+      int piy = 120;
+      graphics.drawImage(ImageFormat.of(tensor), pix, piy, size.get(1) * scale, size.get(0) * scale, null);
     }
     int pix = 0;
     for (UbongoEntry ubongoEntry : solution) {
@@ -45,15 +48,17 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
       List<Integer> size = Dimensions.of(ubongoPiece.stamp);
       Tensor tensor = UbongoRender.of(size, Arrays.asList(ubongoPiece));
       // List<Integer> size2 = Dimensions.of(tensor);
-      int piw = size.get(1) * 10;
-      graphics.drawImage(ImageFormat.of(tensor), 100 + pix, 300, piw, size.get(0) * 10, null);
+      int scale = 15;
+      int piw = size.get(1) * scale;
+      graphics.drawImage(ImageFormat.of(tensor), 30 + pix, 30, piw, size.get(0) * scale, null);
       pix += piw + 20;
     }
   }
 
   public static void main(String[] args) {
     UbongoBoards ubongoBoards = UbongoBoards.MICKEY_2;
-    List<List<UbongoEntry>> list = ubongoBoards.solve();
+    List<List<UbongoEntry>> list = // ubongoBoards.solve();
+        UbongoLoader.INSTANCE.load(ubongoBoards);
     if (!list.isEmpty()) {
       UbongoBrowser ubongoBrowser = new UbongoBrowser(ubongoBoards.board(), list);
       ubongoBrowser.setVisible(800, 600);

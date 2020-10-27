@@ -1,25 +1,40 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd2;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import ch.ethz.idsc.java.awt.SpinnerListener;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.ExponentialCoordinates;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.LogWeightings;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class PlanarScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo implements SpinnerListener<GeodesicDisplay> {
+  public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
+
   public PlanarScatteredSetCoordinateDemo() {
-    super(LogWeightings.list());
+    super(ExponentialCoordinates.list());
+    // super(LogWeightings.list());
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     addSpinnerListener(l -> recompute());
     recompute();
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    graphics.setColor(Color.LIGHT_GRAY);
+    graphics.draw(geometricLayer.toPath2D(BOX, true));
+    super.render(geometricLayer, graphics);
   }
 
   @Override
