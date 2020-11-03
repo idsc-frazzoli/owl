@@ -29,6 +29,27 @@ import java.util.List;
   PIGGIES2(5, " oooo ", "oooooo", "ooooo", " ooo", " o o"), //
   MICKEY_1(5, "oo  oo", "oo  oo", " oooo", " oooo", " o oo", "  oo  "), //
   MICKEY_2(6, "oo  oo", "oo  oo", " oooo", " oooo", " o oo", "  oo  "), //
+  // ---
+  // 2nd batch
+  RAYRAC_1(5, "  oooo ", " oo oo", "ooo ", " oooo", " ooo"), //
+  // 2nd batch
+  CRANED_1(5, "  oooo ", " oo oo", "ooo ", " oooo", " oooo"), //
+  // TODO
+  TSHAPE_1(5, "  oooo ", " oo oo", "ooo ", " oo oo", " ooooo"), //
+  // maybe not very exciting
+  HOOK_A3(5, "  oooo ", " oo o ", "ooo ", " oo oo", " ooooo"), //
+  // interesting
+  BARCODE1(5, "  oooo ", " oo o ", "ooo o", " oo oo", " ooooo"), //
+  // interesting
+  BOTTLE_1(5, "  oooo ", " oo o ", "ooooo", " oo oo", " ooooo"), //
+  // interesting
+  SHOTGUN1(5, "  oooo ", " oo o ", "o ooo", "ooo oo", " ooooo"), //
+  // TODO 6 solutions
+  GRID_A6(5, "  oooo ", " oo oo", "o ooo", "ooo oo", " oooo "), //
+  // very nice with 6
+  CHEESE_1(6, "o oooo ", "ooo oo", "ooooo", "ooo oo", " oooo "), //
+  // TODO mickey produces 12 solutions
+  MICKEY_3(6, "oo  oo", "ooo oo", " oooo", " oooo", " o oo", "  oo  "), //
   PYRAMID5(6, "   o   ", "  oooo ", " oooo", "ooooo", " oooo", " ooo"), //
   HOLE2(5, "oooo ", "ooooo", " oooo", " o  o", "ooooo"), //
   HOLE3(5, "oooo ", "ooooo", " o oo", " o  o", "ooooo"), //

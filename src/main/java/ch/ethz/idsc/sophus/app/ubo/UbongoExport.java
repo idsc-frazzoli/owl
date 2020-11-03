@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 /* package */ enum UbongoExport {
   ;
   public static void single() throws IOException {
-    File folder = HomeDirectory.Pictures("ubongo_publish");
+    File folder = HomeDirectory.Pictures("ubongo_publish2");
     folder.mkdir();
     for (UbongoPublish ubongoPublish : UbongoPublish.values()) {
       BufferedImage bufferedImage = new BufferedImage( //
@@ -34,9 +34,10 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
   private static final int SPACE = 50;
 
   public static void bulk() throws IOException {
-    File folder = HomeDirectory.Pictures("ubongo_publish");
+    File folder = HomeDirectory.Pictures("ubongo_publish2");
     folder.mkdir();
     List<UbongoPublish> list = Arrays.asList(UbongoPublish.values());
+    list = list.subList(UbongoPublish.RAYRAC_1.ordinal(), list.size());
     int height = UbongoViewer.maxHeight();
     int page = 0;
     for (int index = 0; index < list.size(); index += NUMEL) {

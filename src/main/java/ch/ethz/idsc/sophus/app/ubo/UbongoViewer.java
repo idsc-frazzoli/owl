@@ -96,7 +96,6 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
       graphics.drawLine(pix + c * SCALE, piy, pix + c * SCALE, piy + MAX * SCALE);
       graphics.drawLine(pix, piy + c * SCALE, pix + MAX * SCALE, piy + c * SCALE);
     }
-    
   }
 
   public static void main(String[] args) {

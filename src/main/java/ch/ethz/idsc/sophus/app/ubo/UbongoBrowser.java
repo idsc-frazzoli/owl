@@ -56,10 +56,12 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void main(String[] args) {
-    UbongoBoards ubongoBoards = UbongoBoards.MICKEY_2;
+    UbongoBoards ubongoBoards = UbongoBoards.SHOTGUN1;
     List<List<UbongoEntry>> list = // ubongoBoards.solve();
         UbongoLoader.INSTANCE.load(ubongoBoards);
-    if (!list.isEmpty()) {
+    if (list.isEmpty()) {
+      System.err.println("no solutions");
+    } else {
       UbongoBrowser ubongoBrowser = new UbongoBrowser(ubongoBoards.board(), list);
       ubongoBrowser.setVisible(800, 600);
     }

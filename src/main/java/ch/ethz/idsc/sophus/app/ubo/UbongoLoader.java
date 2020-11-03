@@ -32,7 +32,8 @@ import ch.ethz.idsc.tensor.io.Import;
     System.out.println("compute");
     List<List<UbongoEntry>> list = ubongoBoards.solve();
     try {
-      Export.object(file, list);
+      if (!list.isEmpty())
+        Export.object(file, list);
     } catch (Exception exception) {
       exception.printStackTrace();
     }

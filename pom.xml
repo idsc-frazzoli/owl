@@ -24,6 +24,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
+			<artifactId>jbot</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>java</artifactId>
 			<version>0.0.3</version>
 		</dependency>
