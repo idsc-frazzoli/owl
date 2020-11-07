@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /* package */ enum UbongoPublish {
-  /** 2020 October */
+  /** BATCH 1 2020 October */
   STANDARD(UbongoBoards.STANDARD, Arrays.asList(0, 1, 2, 3, 10, 12)), //
   CARPET_1(UbongoBoards.CARPET_1, Arrays.asList(2, 6, 9, 12, 16, 19)), //
   CARPET_A(UbongoBoards.CARPET_1, Arrays.asList(5, 7, 10, 15, 17, 20)), //
@@ -24,20 +24,35 @@ import java.util.List;
   PIGGIESA(UbongoBoards.PIGGIES2, Arrays.asList(3, 12, 17, 20, 26, 30)), //
   MICKEY_1(UbongoBoards.MICKEY_1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
   MICKEY_2(UbongoBoards.MICKEY_2, Arrays.asList(0, 1, 3, 4, 5, 6)), //
-  /** 2020 November 1 */
+  /** BATCH 2 2020 November 1 */
   RAYRAC_1(UbongoBoards.RAYRAC_1, Arrays.asList(1, 10, 13, 22, 23, 27)), //
   CRANED_1(UbongoBoards.CRANED_1, Arrays.asList(4, 10, 25, 31, 32, 35)), //
   BARCODE1(UbongoBoards.BARCODE1, Arrays.asList(3, 6, 12, 17, 22, 27)), //
   BARCODE2(UbongoBoards.BARCODE1, Arrays.asList(5, 9, 16, 20, 26, 28)), //
   BOTTLE_1(UbongoBoards.BOTTLE_1, Arrays.asList(0, 5, 9, 13, 18, 24)), //
   BOTTLE_2(UbongoBoards.BOTTLE_1, Arrays.asList(1, 7, 12, 16, 21, 25)), //
-  SHOTGUN1(UbongoBoards.PLANET_1, Arrays.asList(0, 2, 3, 4, 5, 7)), //
+  PLANET_1(UbongoBoards.PLANET_1, Arrays.asList(0, 2, 3, 4, 5, 7)), //
   CHEESE_1(UbongoBoards.CHEESE_1, Arrays.asList(0, 3, 7, 13, 16, 23)), //
   CHEESE_2(UbongoBoards.CHEESE_1, Arrays.asList(1, 4, 11, 14, 17, 24)), //
   CHEESE_3(UbongoBoards.CHEESE_1, Arrays.asList(2, 5, 12, 15, 22, 27)), //
+  /** BATCH 3 2020 November 7 */
+  SPIRAL_1(UbongoBoards.SPIRAL_1, Arrays.asList(0, 10, 16, 19, 24, 30)), //
+  SPIRAL_A(UbongoBoards.SPIRAL_1, Arrays.asList(4, 12, 17, 21, 25, 31)), //
+  SPIRAL_B(UbongoBoards.SPIRAL_1, Arrays.asList(9, 14, 18, 22, 27, 33)), //
+  SPIRAL_3(UbongoBoards.SPIRAL_3, Arrays.asList(1, 5, 9, 13, 16, 19)), //
+  SPIRAL_C(UbongoBoards.SPIRAL_3, Arrays.asList(2, 6, 11, 14, 17, 20)), //
+  SPIRAL_D(UbongoBoards.SPIRAL_3, Arrays.asList(4, 8, 12, 15, 18, 21)), //
+  SPIRAL_4(UbongoBoards.SPIRAL_4, Arrays.asList(0, 3, 5, 12, 14, 16)), //
+  SPIRAL_E(UbongoBoards.SPIRAL_4, Arrays.asList(2, 4, 10, 13, 15, 17)), //
+  SHOTGUN1(UbongoBoards.SHOTGUN1, Arrays.asList(0, 2, 3, 4, 5, 6)), //
+  SHOTGUN2(UbongoBoards.SHOTGUN2, Arrays.asList(1, 3, 5, 7, 11, 13)), //
+  SHOTGUNA(UbongoBoards.SHOTGUN2, Arrays.asList(2, 4, 6, 8, 12, 14)), //
+  SPIRAL_2(UbongoBoards.SPIRAL_2, Arrays.asList(0, 2, 3, 7, 11, 14)), //
+  SHOTGUN3(UbongoBoards.SHOTGUN3, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  SHOTGUN4(UbongoBoards.SHOTGUN4, Arrays.asList(0)), //
+  ;
 
-  /** 2020 November 7 */
-  ;public final UbongoBoards ubongoBoards;
+  public final UbongoBoards ubongoBoards;
   public final List<Integer> list;
 
   private UbongoPublish(UbongoBoards ubongoBoards, List<Integer> list) {

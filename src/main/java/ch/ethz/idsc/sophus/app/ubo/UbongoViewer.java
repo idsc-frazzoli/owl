@@ -27,15 +27,16 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   // 61.1465
   static final int SCALE = 62;
   private static final int ZCALE = 10;
-  private static final int MAX = 6;
+  private static final int MAX_X = 7;
+  private static final int MAX_Y = 6;
   private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
 
   public static int maxWidth() {
-    return MARGIN_X + MAX * SCALE + 5;
+    return MARGIN_X + MAX_X * SCALE + 5;
   }
 
   public static int maxHeight() {
-    return Math.max(300, MAX * SCALE + MARGIN_Y * 2);
+    return Math.max(300, MAX_Y * SCALE + MARGIN_Y * 2);
   }
 
   public UbongoViewer() {
@@ -92,10 +93,10 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
     int pix = MARGIN_X;
     int piy = MARGIN_Y;
     graphics.setColor(Color.WHITE);
-    for (int c = 0; c <= MAX; ++c) {
-      graphics.drawLine(pix + c * SCALE, piy, pix + c * SCALE, piy + MAX * SCALE);
-      graphics.drawLine(pix, piy + c * SCALE, pix + MAX * SCALE, piy + c * SCALE);
-    }
+    for (int c = 0; c <= MAX_X; ++c)
+      graphics.drawLine(pix + c * SCALE, piy, pix + c * SCALE, piy + MAX_Y * SCALE);
+    for (int c = 0; c <= MAX_Y; ++c)
+      graphics.drawLine(pix, piy + c * SCALE, pix + MAX_X * SCALE, piy + c * SCALE);
   }
 
   public static void main(String[] args) {

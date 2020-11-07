@@ -45,7 +45,7 @@ import java.util.List;
   // very nice with 6
   CHEESE_1(6, "o oooo ", "ooo oo", "ooooo", "ooo oo", " oooo "), //
   /***************************************************/
-  /************ BATCH 2 ******************************/
+  /************ BATCH 3 ******************************/
   // interesting
   SPIRAL_1(5, "oooooo ", "  oooo", "  ooo ", "  oooo", "   oooo"),
   // interesting
@@ -54,8 +54,6 @@ import java.util.List;
   SPIRAL_3(5, "ooooo  ", "  oooo", "  ooo ", "  oooo", "   oooo"),
   // interesting
   SPIRAL_4(5, "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"),
-  // 12 solutions
-  SPIRAL_6(6, " o     ", "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"), //
   // 7 solutions
   SHOTGUN1(4, "oooooo", "ooooo", "ooooo", "oo"),
   // interesting
@@ -64,6 +62,8 @@ import java.util.List;
   SHOTGUN3(6, "oooooooo", " ooooooo", " oooooo", " oo"),
   // one solution
   SHOTGUN4(6, "ooooooo", "ooooooo", "oooooo", "oo"),
+  /***************************************************/
+  /************ BATCH 4 ******************************/
   // many solutions
   CORNER_1(4, "oooooo", "ooooo", "ooo", "o"),
   // 7 sol
@@ -72,11 +72,13 @@ import java.util.List;
   CORNER_3(5, "oooooo", "ooooo", "oooo", "ooo", "o"),
   // many solutions
   CORNER_4(5, "oooooo", "ooooo", "oooo", "ooo", "oo"),
-  // ...
+  // sufficient solutions
   CORNER_5(6, "ooooooo", "oooooo", "oooo", "ooo", "oo", "o"),
-  // ...
+  // many solutions
   CORNER_6(6, "ooooooo", "ooooo", "oooo", "ooooo", "oo"),
   // ---
+  // 12 solutions
+  SPIRAL_6(6, " o     ", "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"), // TODO
   // only 3 solutions
   SPIRAL_5(6, "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"), //
   // maybe not very exciting
