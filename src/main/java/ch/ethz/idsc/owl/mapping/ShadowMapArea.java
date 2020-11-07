@@ -17,8 +17,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
 /** implementation uses only java default function and does not depend on 3rd party libraries */
@@ -45,11 +45,11 @@ public class ShadowMapArea implements RenderInterface {
     //
     // convert imageRegion into Area
     Tensor scale = imageRegion.scale();
-    Tensor invsc = DiagonalMatrix.of( //
+    Tensor invsc = Tensors.of( //
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
     Tensor translate = IdentityMatrix.of(3);
     translate.set(RealScalar.of(-image.length()), 1, 2);
-    Tensor tmatrix = invsc.dot(translate);
+    Tensor tmatrix = invsc.pmul(translate);
     Area obstacleArea = area.createTransformedArea(AffineTransforms.toAffineTransform(tmatrix));
     Rectangle2D rInit = new Rectangle2D.Double();
     rInit.setFrame(obstacleArea.getBounds());

@@ -12,9 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /** only the first two coordinates are tested for membership
  * a location is available if the grayscale value of the pixel equals 0
@@ -30,11 +28,10 @@ public class ImageRegion implements Region<Tensor>, Serializable {
    * @return */
   public static Region<Tensor> of(BufferedImage bufferedImage, Tensor range, boolean outside) {
     return new BufferedImageRegion(bufferedImage, //
-        Dot.of( //
-            DiagonalMatrix.of( //
-                range.Get(0).number().doubleValue() / bufferedImage.getWidth(), //
-                range.Get(1).number().doubleValue() / bufferedImage.getHeight(), 1), //
-            Se2Matrix.flipY(bufferedImage.getHeight())),
+        Tensors.vector( //
+            range.Get(0).number().doubleValue() / bufferedImage.getWidth(), //
+            range.Get(1).number().doubleValue() / bufferedImage.getHeight(), 1) //
+            .pmul(Se2Matrix.flipY(bufferedImage.getHeight())),
         outside);
   }
 

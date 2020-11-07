@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /* package */ class H2ArrayPlot implements GeodesicArrayPlot, Serializable {
   private static final long serialVersionUID = -7206313517468060655L;
@@ -44,7 +43,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //
         Se2Matrix.translation(range.multiply(RationalScalar.HALF.negate())), //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), // pixel 2 model
-        Se2Matrix.flipY(dimension.height));
+        scale.map(Scalar::reciprocal).append(RealScalar.ONE) // pixel 2 model
+            .pmul(Se2Matrix.flipY(dimension.height)));
   }
 }

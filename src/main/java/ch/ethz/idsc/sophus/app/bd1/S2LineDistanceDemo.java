@@ -33,7 +33,6 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -86,8 +85,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //
         Se2Matrix.translation(range.multiply(RationalScalar.HALF.negate())), //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), // pixel 2 model
-        Se2Matrix.flipY(bufferedImage.getHeight()));
+        scale.map(Scalar::reciprocal).append(RealScalar.ONE) // pixel 2 model
+            .pmul(Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 
   private BufferedImage bufferedImage(int resolution, VectorLogManifold vectorLogManifold) {

@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /** @see ArrayPlot */
 public interface GeodesicArrayPlot {
@@ -34,7 +33,6 @@ public interface GeodesicArrayPlot {
     Tensor scale = range.pmul(Tensors.vector(dimension.width, dimension.height).map(Scalar::reciprocal));
     return Dot.of( //
         Se2Matrix.translation(xy), //
-        DiagonalMatrix.with(scale.append(RealScalar.ONE)), // TODO use pmul
-        Se2Matrix.flipY(dimension.height));
+        scale.append(RealScalar.ONE).pmul(Se2Matrix.flipY(dimension.height)));
   }
 }

@@ -13,10 +13,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** Hint:
@@ -45,9 +43,9 @@ public class ImageRender implements RenderInterface {
    * @param scale vector of length 2 */
   public static ImageRender scale(BufferedImage bufferedImage, Tensor scale) {
     VectorQ.requireLength(scale, 2);
-    return new ImageRender(bufferedImage, Dot.of( //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), //
-        Se2Matrix.flipY(bufferedImage.getHeight())));
+    return new ImageRender(bufferedImage, //
+        scale.map(Scalar::reciprocal).append(RealScalar.ONE) //
+            .pmul(Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 
   /***************************************************/
