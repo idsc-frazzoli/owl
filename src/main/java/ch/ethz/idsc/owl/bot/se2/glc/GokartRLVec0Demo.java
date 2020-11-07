@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -45,7 +45,7 @@ public class GokartRLVec0Demo extends GokartDemo {
     GokartRelaxedEntity gokartEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
     gokartEntity.setAdditionalCostFunction(regionCosts);
     // ---
-    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     // ---
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);

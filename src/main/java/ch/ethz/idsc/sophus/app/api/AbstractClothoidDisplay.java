@@ -92,7 +92,7 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
 
   @Override
   public final LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override // from Object

@@ -43,7 +43,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
-    return null; // FIXME
+    return null;
   }
 
   @Override // from GeodesicDisplay
@@ -63,7 +63,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // FIXME
+    return RnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -83,7 +83,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public final LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override

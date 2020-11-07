@@ -52,7 +52,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
-    return null; // FIXME
+    return null;
   }
 
   @Override // from GeodesicDisplay
@@ -77,12 +77,11 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // FIXME
+    return RnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public VectorLogManifold vectorLogManifold() {
-    // FIXME
     return null;
   }
 
@@ -103,7 +102,7 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public final LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override // from Object

@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     Clothoid clothoid = CLOTHOID_BUILDER.curve(xya.map(Scalar::zero), xya);
     if (isCompliant.test(clothoid.curvature().absMax()))
       return clothoid.length();
-    // TODO GJOEL filter out via collision check, units
+    // TODO bad design
     if (xya.Get(0) instanceof Quantity)
       return Quantity.of(DoubleScalar.POSITIVE_INFINITY, ((Quantity) xya.Get(0)).unit());
     return DoubleScalar.POSITIVE_INFINITY;

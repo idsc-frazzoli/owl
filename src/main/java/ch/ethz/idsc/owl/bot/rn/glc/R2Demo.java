@@ -8,7 +8,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
       EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
 
   static TrajectoryPlanner simpleEmpty() {
-    return simple(EmptyObstacleConstraint.INSTANCE);
+    return simple(EmptyPlannerConstraint.INSTANCE);
   }
 
   static TrajectoryPlanner simpleR2Bubbles() {

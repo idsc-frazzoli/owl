@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -89,7 +89,7 @@ public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
         new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost), goalRegion);
     // -------------------------------
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
+        stateTimeRaster, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface, slacks);
   }
 
   @Override // from DemoInterface

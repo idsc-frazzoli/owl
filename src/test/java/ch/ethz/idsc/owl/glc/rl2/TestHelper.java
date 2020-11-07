@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
@@ -65,6 +65,6 @@ import ch.ethz.idsc.tensor.qty.Quantity;
         new VectorCostGoalAdapter(Arrays.asList(costFunction, regionCost), regionWithDistance);
     // ---
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
+        stateTimeRaster, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface, slacks);
   }
 }

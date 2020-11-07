@@ -64,7 +64,7 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public final LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override // from Object

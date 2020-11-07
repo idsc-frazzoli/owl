@@ -32,7 +32,7 @@ public class S1GeodesicDisplay extends SnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public TensorUnaryOperator tangentProjection(Tensor p) {
-    return null; // FIXME
+    return null;
   }
 
   @Override // from GeodesicDisplay

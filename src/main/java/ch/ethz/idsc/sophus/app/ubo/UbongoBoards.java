@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.app.ubo;
 import java.util.List;
 
 /* package */ enum UbongoBoards {
+  /***************************************************/
+  /************ BATCH 1 ******************************/
   STANDARD(3, "oooo", "oooo", "ooo", " o"), //
   /** 2,5,6,7,9,10,12,15,16,17,19,20 */
   CARPET_1(5, "o oo ", "ooooo", " oooo", " oooo", "ooooo"), //
@@ -29,25 +31,58 @@ import java.util.List;
   PIGGIES2(5, " oooo ", "oooooo", "ooooo", " ooo", " o o"), //
   MICKEY_1(5, "oo  oo", "oo  oo", " oooo", " oooo", " o oo", "  oo  "), //
   MICKEY_2(6, "oo  oo", "oo  oo", " oooo", " oooo", " o oo", "  oo  "), //
-  // ---
-  // 2nd batch
+  /***************************************************/
+  /************ BATCH 2 ******************************/
   RAYRAC_1(5, "  oooo ", " oo oo", "ooo ", " oooo", " ooo"), //
-  // 2nd batch
+  /**  */
   CRANED_1(5, "  oooo ", " oo oo", "ooo ", " oooo", " oooo"), //
-  // TODO
-  TSHAPE_1(5, "  oooo ", " oo oo", "ooo ", " oo oo", " ooooo"), //
-  // maybe not very exciting
-  HOOK_A3(5, "  oooo ", " oo o ", "ooo ", " oo oo", " ooooo"), //
-  // interesting
+  /**  */
   BARCODE1(5, "  oooo ", " oo o ", "ooo o", " oo oo", " ooooo"), //
   // interesting
   BOTTLE_1(5, "  oooo ", " oo o ", "ooooo", " oo oo", " ooooo"), //
   // interesting
-  SHOTGUN1(5, "  oooo ", " oo o ", "o ooo", "ooo oo", " ooooo"), //
-  // TODO 6 solutions
-  GRID_A6(5, "  oooo ", " oo oo", "o ooo", "ooo oo", " oooo "), //
+  PLANET_1(5, "  oooo ", " oo o ", "o ooo", "ooo oo", " ooooo"), //
   // very nice with 6
   CHEESE_1(6, "o oooo ", "ooo oo", "ooooo", "ooo oo", " oooo "), //
+  /***************************************************/
+  /************ BATCH 2 ******************************/
+  // interesting
+  SPIRAL_1(5, "oooooo ", "  oooo", "  ooo ", "  oooo", "   oooo"),
+  // interesting
+  SPIRAL_2(6, "oooooo  ", " ooooo", "  ooo ", "  oooo", "   ooooo"),
+  // interesting
+  SPIRAL_3(5, "ooooo  ", "  oooo", "  ooo ", "  oooo", "   oooo"),
+  // interesting
+  SPIRAL_4(5, "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"),
+  // 12 solutions
+  SPIRAL_6(6, " o     ", "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"), //
+  // 7 solutions
+  SHOTGUN1(4, "oooooo", "ooooo", "ooooo", "oo"),
+  // interesting
+  SHOTGUN2(5, "ooooooo", "oooooo", "oooooo", "oo"),
+  // 6 solutions
+  SHOTGUN3(6, "oooooooo", " ooooooo", " oooooo", " oo"),
+  // one solution
+  SHOTGUN4(6, "ooooooo", "ooooooo", "oooooo", "oo"),
+  // many solutions
+  CORNER_1(4, "oooooo", "ooooo", "ooo", "o"),
+  // 7 sol
+  CORNER_2(5, "oooooo", "ooooo", "oooo", "oo", "o"),
+  // many solutions
+  CORNER_3(5, "oooooo", "ooooo", "oooo", "ooo", "o"),
+  // many solutions
+  CORNER_4(5, "oooooo", "ooooo", "oooo", "ooo", "oo"),
+  // ...
+  CORNER_5(6, "ooooooo", "oooooo", "oooo", "ooo", "oo", "o"),
+  // ...
+  CORNER_6(6, "ooooooo", "ooooo", "oooo", "ooooo", "oo"),
+  // ---
+  // only 3 solutions
+  SPIRAL_5(6, "ooooo  ", "oooooo", "  ooo ", "  oooo", "   oooo"), //
+  // maybe not very exciting
+  HOOK_A3(5, "  oooo ", " oo o ", "ooo ", " oo oo", " ooooo"), //
+  // 6 solutions
+  GRID_A6(5, "  oooo ", " oo oo", "o ooo", "ooo oo", " oooo "), //
   // TODO mickey produces 12 solutions
   MICKEY_3(6, "oo  oo", "ooo oo", " oooo", " oooo", " o oo", "  oo  "), //
   PYRAMID5(6, "   o   ", "  oooo ", " oooo", "ooooo", " oooo", " ooo"), //

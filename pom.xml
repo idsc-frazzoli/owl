@@ -21,12 +21,7 @@
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>sophus</artifactId>
 			<version>0.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.ethz.idsc</groupId>
-			<artifactId>jbot</artifactId>
-			<version>0.0.1</version>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>java</artifactId>

@@ -31,6 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
+// TODO what does this demo do!?
 /* package */ class S1AveragingDemo extends AnAveragingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
@@ -64,7 +65,6 @@ import ch.ethz.idsc.tensor.sca.N;
         geometricLayer.popMatrix();
       }
       // ---
-      // TODO different stroke
       graphics.setColor(Color.GREEN);
       for (int index = 0; index < sequence.length(); ++index)
         graphics.draw(geometricLayer.toLine2D(control.get(index), sequence.get(index)));

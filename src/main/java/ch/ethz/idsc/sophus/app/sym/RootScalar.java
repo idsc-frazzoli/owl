@@ -56,7 +56,7 @@ public class RootScalar extends AbstractScalar implements //
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     if (scalar instanceof RealScalar)
-      // TODO check for exact precision
+      // LONGTERM check for exact precision
       return new RootScalar(re.multiply(scalar), im.multiply(scalar), ba);
     if (scalar instanceof RootScalar) {
       RootScalar rootScalar = (RootScalar) scalar;
@@ -115,7 +115,6 @@ public class RootScalar extends AbstractScalar implements //
 
   @Override // from ExactNumberInterface
   public boolean isExactScalar() {
-    // TODO
     return ExactScalarQ.of(re) //
         && ExactScalarQ.of(im) //
         && ExactScalarQ.of(ba);

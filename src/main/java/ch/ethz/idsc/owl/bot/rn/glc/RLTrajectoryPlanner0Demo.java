@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -87,7 +87,7 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     RLTrajectoryPlanner trajectoryPlanner = new StandardRLTrajectoryPlanner( //
-        stateTimeRaster, STATE_INTEGRATOR, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
+        stateTimeRaster, STATE_INTEGRATOR, controls, EmptyPlannerConstraint.INSTANCE, goalInterface, slacks);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);

@@ -7,7 +7,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -52,7 +52,7 @@ public class GokartVec0Demo extends GokartDemo {
     gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(0, 0.8); // set priority to 0, allow for 0.8 seconds of slack
     // ---
-    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     // ---
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);

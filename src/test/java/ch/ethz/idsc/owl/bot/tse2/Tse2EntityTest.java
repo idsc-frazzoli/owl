@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -42,7 +42,7 @@ public class Tse2EntityTest extends TestCase {
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     // new Tse2VelocityConstraint(v_range);
     Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
@@ -79,7 +79,7 @@ public class Tse2EntityTest extends TestCase {
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, v_range.max());
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     // new Tse2VelocityConstraint(v_range);
     Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);

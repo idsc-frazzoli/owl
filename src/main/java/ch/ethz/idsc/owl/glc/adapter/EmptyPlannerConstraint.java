@@ -10,8 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** adapter for planning without constraint, for instance no obstacles
  * the planning then only depends on the cost function and heuristic */
-// TODO rename
-public enum EmptyObstacleConstraint implements PlannerConstraint {
+public enum EmptyPlannerConstraint implements PlannerConstraint {
   INSTANCE;
 
   @Override // from PlannerConstraint

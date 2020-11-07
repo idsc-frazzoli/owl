@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
-  private static final Tensor[] CONTROLS = { // TODO GJOEL fill in
+  private static final Tensor[] CONTROLS = { //
       Tensors.fromString("{{6.017, 4.983, 0.785},{8.100, 5.100, -1.571},{1.667, 1.950, -3.142}}"), //
       Tensors.fromString("{{1.817, 7.283, -3.665},{5.483, 8.817, -7.854},{7.950, 10.733, -3.142}}"), //
       Tensors.fromString("{{6.000, 5.617, -1.571},{6.967, 2.500, 0.000},{9.350, 2.500, 0.000},{10.383, 5.500, 1.571}}"), //

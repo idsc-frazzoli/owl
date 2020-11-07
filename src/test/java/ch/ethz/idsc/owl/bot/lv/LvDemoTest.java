@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.lv;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -38,7 +38,7 @@ public class LvDemoTest extends TestCase {
       // ---
       StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(Log::of));
       TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-          stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+          stateTimeRaster, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
       // ---
       // trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
       trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));

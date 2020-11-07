@@ -5,6 +5,6 @@ import junit.framework.TestCase;
 
 public class EmptyObstacleConstraintTest extends TestCase {
   public void testSimple() {
-    assertTrue(EmptyObstacleConstraint.INSTANCE.isSatisfied(null, null, null));
+    assertTrue(EmptyPlannerConstraint.INSTANCE.isSatisfied(null, null, null));
   }
 }

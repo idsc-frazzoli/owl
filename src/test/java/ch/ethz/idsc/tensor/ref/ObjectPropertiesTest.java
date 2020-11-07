@@ -64,18 +64,12 @@ public class ObjectPropertiesTest extends TestCase {
   }
 
   public void testParseTensorFail() {
-    // FIXME
     Tensor tensor = Tensors.fromString("{1, 2}+a");
-    System.out.println(tensor);
+    assertTrue(tensor instanceof StringScalar);
   }
 
   public void testParseScalarFail() {
-    try {
-      ObjectProperties.parse(Integer.class, "123");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ObjectProperties.parse(Integer.class, "123"));
   }
 
   public void testListSize1() throws Exception {

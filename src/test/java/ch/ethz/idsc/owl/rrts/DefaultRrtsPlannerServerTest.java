@@ -167,5 +167,4 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     List<TrajectorySample> trajectory = server.getTrajectory().get();
     Chop._05.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
-  // TODO GJOEL design test for rerunning expansion
 }

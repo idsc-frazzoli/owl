@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.adapter.DiscreteIntegrator;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.io.Export;
   }
 
   List<StateTime> compute() {
-    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     TrajectoryPlanner trajectoryPlanner = StandardTrajectoryPlanner.create( //
         EspStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(EspModel.INSTANCE), //

@@ -12,8 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private static final int RES = 128;
   // ---
   private final KlotskiPlot klotskiPlot;
-  // TODO bad design
-  Tensor _board = null;
+  Tensor _board = null; // bad design
 
   public KlotskiFrame(KlotskiProblem klotskiProblem) {
     klotskiPlot = new KlotskiPlot(klotskiProblem, RES);

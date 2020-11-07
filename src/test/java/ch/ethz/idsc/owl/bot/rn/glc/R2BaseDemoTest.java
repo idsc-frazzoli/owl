@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
@@ -66,7 +66,7 @@ public class R2BaseDemoTest extends TestCase {
         EtaRaster.state(eta), //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SINGLE_INTEGRATOR, RealScalar.ONE, 1), //
         controls, //
-        EmptyObstacleConstraint.INSTANCE, //
+        EmptyPlannerConstraint.INSTANCE, //
         goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     return trajectoryPlanner;

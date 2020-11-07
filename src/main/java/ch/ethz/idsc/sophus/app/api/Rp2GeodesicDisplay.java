@@ -55,7 +55,7 @@ public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
-    return null; // FIXME
+    return null;
   }
 
   public Tensor projectTangent(Tensor xya) {

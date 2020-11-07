@@ -97,7 +97,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
           System.out.println(logWeighting);
           TensorScalarFunction tensorUnaryOperator = function(sequence, reference.multiply(DoubleScalar.of(spinnerFactor.getValue())));
           GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
-          // TODO redundant
+          // LONGTERM redundant
           Tensor matrix = geodesicArrayPlot.raster(512, tensorUnaryOperator, DoubleScalar.INDETERMINATE);
           BufferedImage bufferedImage = ArrayPlotRender.rescale(matrix, COLOR_DATA_INDEXED, 1).export();
           ImageIO.write(bufferedImage, "png", new File(folder, logWeighting.toString() + ".png"));

@@ -70,7 +70,7 @@ public class ArgMinVariable implements TensorScalarFunction {
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
     TrajectoryEntry trajectoryEntry = function.apply(var);
-    // TODO LONGTERM structure not optimal: isPresent, insert, isPresent
+    // LONGTERM structure not optimal: isPresent, insert, isPresent
     if (trajectoryEntry.point().isPresent())
       insert(trajectoryEntry);
     return trajectoryEntry;

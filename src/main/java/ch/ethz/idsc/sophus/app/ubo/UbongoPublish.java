@@ -24,20 +24,20 @@ import java.util.List;
   PIGGIESA(UbongoBoards.PIGGIES2, Arrays.asList(3, 12, 17, 20, 26, 30)), //
   MICKEY_1(UbongoBoards.MICKEY_1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
   MICKEY_2(UbongoBoards.MICKEY_2, Arrays.asList(0, 1, 3, 4, 5, 6)), //
-  /** 2020 November */
+  /** 2020 November 1 */
   RAYRAC_1(UbongoBoards.RAYRAC_1, Arrays.asList(1, 10, 13, 22, 23, 27)), //
   CRANED_1(UbongoBoards.CRANED_1, Arrays.asList(4, 10, 25, 31, 32, 35)), //
   BARCODE1(UbongoBoards.BARCODE1, Arrays.asList(3, 6, 12, 17, 22, 27)), //
   BARCODE2(UbongoBoards.BARCODE1, Arrays.asList(5, 9, 16, 20, 26, 28)), //
   BOTTLE_1(UbongoBoards.BOTTLE_1, Arrays.asList(0, 5, 9, 13, 18, 24)), //
   BOTTLE_2(UbongoBoards.BOTTLE_1, Arrays.asList(1, 7, 12, 16, 21, 25)), //
-  SHOTGUN1(UbongoBoards.SHOTGUN1, Arrays.asList(0, 2, 3, 4, 5, 7)), //
+  SHOTGUN1(UbongoBoards.PLANET_1, Arrays.asList(0, 2, 3, 4, 5, 7)), //
   CHEESE_1(UbongoBoards.CHEESE_1, Arrays.asList(0, 3, 7, 13, 16, 23)), //
   CHEESE_2(UbongoBoards.CHEESE_1, Arrays.asList(1, 4, 11, 14, 17, 24)), //
   CHEESE_3(UbongoBoards.CHEESE_1, Arrays.asList(2, 5, 12, 15, 22, 27)), //
-  ;
 
-  public final UbongoBoards ubongoBoards;
+  /** 2020 November 7 */
+  ;public final UbongoBoards ubongoBoards;
   public final List<Integer> list;
 
   private UbongoPublish(UbongoBoards ubongoBoards, List<Integer> list) {

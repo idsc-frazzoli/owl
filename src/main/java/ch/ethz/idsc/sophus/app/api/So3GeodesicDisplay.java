@@ -67,7 +67,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
-    return null; // FIXME
+    return null;
   }
 
   @Override // from GeodesicDisplay

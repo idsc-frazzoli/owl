@@ -51,7 +51,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
-    return null; // FIXME
+    return null;
   }
 
   @Override // from GeodesicDisplay
@@ -78,7 +78,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE; // FIXME
+    return RnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -103,7 +103,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override // from GeodesicDisplay

@@ -84,7 +84,7 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
 
   @Override
   public final LineDistance lineDistance() {
-    return null; // TODO line distance
+    return null;
   }
 
   @Override

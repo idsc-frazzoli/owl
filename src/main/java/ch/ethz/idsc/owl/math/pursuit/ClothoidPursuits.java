@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.red.Nest;
 
 public enum ClothoidPursuits {
   ;
-  // FIXME !?!?!
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       LaneRiesenfeldCurveSubdivision.of(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), 1);
 
