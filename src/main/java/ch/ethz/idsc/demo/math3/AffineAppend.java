@@ -6,7 +6,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.red.Total;
 
-public enum AffineAppend {
+// not for public scope!
+/* package */ enum AffineAppend {
   ;
   /** @param vector
    * @return given vector with one entry appended so that sum of entries equals one */

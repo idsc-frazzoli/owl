@@ -50,6 +50,15 @@ import java.util.List;
   SPIRAL_2(UbongoBoards.SPIRAL_2, Arrays.asList(0, 2, 3, 7, 11, 14)), //
   SHOTGUN3(UbongoBoards.SHOTGUN3, Arrays.asList(0, 1, 2, 3, 4, 5)), //
   SHOTGUN4(UbongoBoards.SHOTGUN4, Arrays.asList(0)), //
+  CORNER_2(UbongoBoards.CORNER_2, Arrays.asList(0, 1, 2, 3, 5, 6)), //
+  CORNER_3(UbongoBoards.CORNER_3, Arrays.asList(0, 2, 6, 8, 10, 12)), //
+  CORNER_A(UbongoBoards.CORNER_3, Arrays.asList(1, 3, 7, 9, 11, 16)), //
+  CORNER_4(UbongoBoards.CORNER_4, Arrays.asList(0, 5, 9, 12, 16, 21)), //
+  CORNER_B(UbongoBoards.CORNER_4, Arrays.asList(3, 6, 10, 14, 17, 24)), //
+  CORNER_C(UbongoBoards.CORNER_4, Arrays.asList(4, 7, 11, 15, 20, 26)), //
+  CORNER_5(UbongoBoards.CORNER_5, Arrays.asList(1, 2, 3, 4, 6, 7)), //
+  CORNER_6(UbongoBoards.CORNER_6, Arrays.asList(0, 3, 5, 7, 9, 11)), //
+  CORNER_D(UbongoBoards.CORNER_6, Arrays.asList(1, 4, 6, 8, 10, 12)), //
   ;
 
   public final UbongoBoards ubongoBoards;

@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.sophus.math.AppendOne;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,13 +24,9 @@ import ch.ethz.idsc.tensor.Tensors;
   public EntityImageRender(Supplier<StateTime> supplier, BufferedImage bufferedImage, Tensor range) {
     this.supplier = supplier;
     this.bufferedImage = bufferedImage;
-    Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
-        .pmul(range.map(Scalar::reciprocal));
-    Tensor invsc = Tensors.of( //
-        scale.Get(0).reciprocal(), //
-        scale.Get(1).negate().reciprocal(), //
-        RealScalar.ONE);
-    // not generic
+    Tensor invsc = AppendOne.FUNCTION.apply(range.pmul( //
+        Tensors.vector(bufferedImage.getWidth(), -bufferedImage.getHeight()).map(Scalar::reciprocal)));
+    // not generic since factor / 3 is used
     Tensor translate = Se2Matrix.translation( //
         Tensors.vector(-bufferedImage.getWidth() / 3, -bufferedImage.getHeight() / 2));
     matrix = invsc.pmul(translate);

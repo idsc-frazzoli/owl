@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     renderControlPoints(geometricLayer, graphics);
     // ---
     Tensor sequence = getGeodesicControlPoints();
-    Tensor normalized = Tensor.of(sequence.stream().map(NORMALIZE));
+    Tensor levers = Tensor.of(sequence.stream().map(NORMALIZE));
     {
       LeversRender leversRender = LeversRender.of( //
           geodesicDisplay(), sequence, Array.zeros(2), geometricLayer, graphics);
@@ -52,12 +52,12 @@ import ch.ethz.idsc.tensor.sca.Chop;
       graphics.setColor(Color.LIGHT_GRAY);
       graphics.draw(geometricLayer.toPath2D(CirclePoints.of(31), true));
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), normalized, Array.zeros(2), geometricLayer, graphics);
+          geodesicDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
       leversRender.renderSequence();
       if (2 < sequence.length()) {
         // ---
         Genesis genesis = ThreePointCoordinate.of(Barycenter.MEAN_VALUE);
-        Tensor weights = genesis.origin(normalized);
+        Tensor weights = genesis.origin(levers);
         leversRender.renderWeights(weights);
       }
     }
@@ -66,17 +66,18 @@ import ch.ethz.idsc.tensor.sca.Chop;
       graphics.setColor(Color.LIGHT_GRAY);
       graphics.draw(geometricLayer.toPath2D(CirclePoints.of(31), true));
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), normalized, Array.zeros(2), geometricLayer, graphics);
+          geodesicDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
       leversRender.renderSequence();
       leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
       if (2 < sequence.length()) {
         Genesis genesis = AffineCoordinate.INSTANCE;
-        Tensor weights = genesis.origin(normalized);
+        Tensor weights = genesis.origin(levers);
         leversRender.renderWeights(weights);
-        Tensor lhs = Tensor.of(normalized.stream().map(r -> Append.of(r, RealScalar.ONE)));
+        
+        Tensor lhs = Tensor.of(levers.stream().map(lever -> Append.of(lever, RealScalar.ONE)));
         Tensor rhs = weights;
         Tensor sol = LeastSquares.of(lhs, rhs);
-        Tensor err = lhs.dot(sol).subtract(rhs);
+        Tensor err = AffineCoordinate.defect(levers, weights);
         if (!Chop._08.allZero(err))
           System.out.println(err.map(Chop._12));
         // System.out.println(sol.map(Chop._12));

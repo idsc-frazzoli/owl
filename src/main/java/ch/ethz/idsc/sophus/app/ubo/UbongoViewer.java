@@ -22,17 +22,17 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
 /* package */ class UbongoViewer extends AbstractDemo {
   public static final int GRY = 128;
-  static final int MARGIN_X = 340;
+  static final int MARGIN_X = 300;
   static final int MARGIN_Y = 13;
   // 61.1465
   static final int SCALE = 62;
   private static final int ZCALE = 10;
-  private static final int MAX_X = 7;
+  private static final int MAX_X = 8;
   private static final int MAX_Y = 6;
   private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
 
   public static int maxWidth() {
-    return MARGIN_X + MAX_X * SCALE + 5;
+    return MARGIN_X + MAX_X * SCALE + 1;
   }
 
   public static int maxHeight() {
@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
+    spinnerIndex.setValue(UbongoPublish.SPIRAL_2);
   }
 
   @Override
@@ -68,7 +69,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
     for (int index : ubongoPublish.list) {
       ++count;
       graphics.setColor(Color.DARK_GRAY);
-      int pix = 50;
+      int pix = 30;
       RenderQuality.setQuality(graphics);
       graphics.drawString("" + count, 2, piy + 20);
       RenderQuality.setDefault(graphics);
@@ -80,7 +81,6 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
         ubongoPiece.ubongo = ubongoEntry.ubongo;
         List<Integer> size = Dimensions.of(ubongoPiece.stamp);
         Tensor tensor = UbongoRender.gray(size, Arrays.asList(ubongoPiece));
-        // List<Integer> size2 = Dimensions.of(tensor);
         int piw = size.get(1) * scale;
         graphics.drawImage(ImageFormat.of(tensor), pix, piy, piw, size.get(0) * scale, null);
         pix += piw + 20;

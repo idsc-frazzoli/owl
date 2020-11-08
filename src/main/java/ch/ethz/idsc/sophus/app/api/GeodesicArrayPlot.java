@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.sophus.math.AppendOne;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -33,6 +33,6 @@ public interface GeodesicArrayPlot {
     Tensor scale = range.pmul(Tensors.vector(dimension.width, dimension.height).map(Scalar::reciprocal));
     return Dot.of( //
         Se2Matrix.translation(xy), //
-        scale.append(RealScalar.ONE).pmul(Se2Matrix.flipY(dimension.height)));
+        AppendOne.FUNCTION.apply(scale).pmul(Se2Matrix.flipY(dimension.height)));
   }
 }

@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.lie.r3.MinTriangleAreaSquared;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.sophus.math.AppendOne;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -45,8 +45,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     Tensor sequence = getGeodesicControlPoints();
     pathRender.setCurve(sequence, true);
     if (0 < sequence.length()) {
-      Tensor polygon = sequence.copy();
-      polygon.stream().forEach(row -> row.append(RealScalar.ONE));
+      Tensor polygon = Tensor.of(sequence.stream().map(AppendOne.FUNCTION));
       Tensor weights = MinTriangleAreaSquared.weights(polygon);
       Tensor weiszfeld = weights.dot(polygon).extract(0, 2);
       LeversRender leversRender = //

@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.AppendOne;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -44,7 +45,7 @@ public class ImageRender implements RenderInterface {
   public static ImageRender scale(BufferedImage bufferedImage, Tensor scale) {
     VectorQ.requireLength(scale, 2);
     return new ImageRender(bufferedImage, //
-        scale.map(Scalar::reciprocal).append(RealScalar.ONE) //
+        AppendOne.FUNCTION.apply(scale.map(Scalar::reciprocal)) //
             .pmul(Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 

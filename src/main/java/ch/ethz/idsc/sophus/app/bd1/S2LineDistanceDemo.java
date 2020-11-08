@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.AppendOne;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -85,7 +86,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         .pmul(range.map(Scalar::reciprocal)); // model 2 pixel
     return Dot.of( //
         Se2Matrix.translation(range.multiply(RationalScalar.HALF.negate())), //
-        scale.map(Scalar::reciprocal).append(RealScalar.ONE) // pixel 2 model
+        AppendOne.FUNCTION.apply(scale.map(Scalar::reciprocal)) // pixel 2 model
             .pmul(Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 

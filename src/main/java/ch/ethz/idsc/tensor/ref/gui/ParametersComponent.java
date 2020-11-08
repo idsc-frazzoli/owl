@@ -30,7 +30,7 @@ public class ParametersComponent extends ToolbarsComponent {
     // {
     // jButtonSave.addActionListener(actionEvent -> {
     // // fieldPanels.updateInstance();
-    // // AppResources.save(object); // TODO
+    // // AppResources.save(object);
     // });
     // jButtonSave.setToolTipText("update values to memory, and save to disk");
     // jToolBar.add(jButtonSave);
