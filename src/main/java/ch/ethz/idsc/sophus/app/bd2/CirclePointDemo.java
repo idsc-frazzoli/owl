@@ -73,7 +73,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
         Genesis genesis = AffineCoordinate.INSTANCE;
         Tensor weights = genesis.origin(levers);
         leversRender.renderWeights(weights);
-        
         Tensor lhs = Tensor.of(levers.stream().map(lever -> Append.of(lever, RealScalar.ONE)));
         Tensor rhs = weights;
         Tensor sol = LeastSquares.of(lhs, rhs);

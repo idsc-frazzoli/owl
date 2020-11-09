@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ExponentialCoordinates;
+import ch.ethz.idsc.sophus.app.api.ConvexHullCoordinates;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
 
   public PlanarScatteredSetCoordinateDemo() {
-    super(ExponentialCoordinates.list());
+    super(ConvexHullCoordinates.list());
     // super(LogWeightings.list());
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;

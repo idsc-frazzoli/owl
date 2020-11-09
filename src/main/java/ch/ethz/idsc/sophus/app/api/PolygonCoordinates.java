@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.Amplifiers;
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.gbc.HsCoordinates;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
@@ -19,7 +20,6 @@ import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.IterativeMeanValueCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -40,11 +40,11 @@ public enum PolygonCoordinates implements LogWeighting {
   ITERATIVE_AF_2(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 2)), //
   ITERATIVE_AF_3(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 3)), //
   ITERATIVE_AF_5(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 5)), //
-  ITERATIVE_EX_05(new IterativeAffineCoordinate(05, RealScalar.of(5))), //
-  ITERATIVE_EX_10(new IterativeAffineCoordinate(10, RealScalar.of(5))), //
-  ITERATIVE_EX_20(new IterativeAffineCoordinate(20, RealScalar.of(5))), //
-  ITERATIVE_EX_30(new IterativeAffineCoordinate(30, RealScalar.of(5))), //
-  ITERATIVE_EX_50(new IterativeAffineCoordinate(50, RealScalar.of(5))), //
+  ITERATIVE_EX_05(new IterativeAffineCoordinate(Amplifiers.exp(5), 05)), //
+  ITERATIVE_EX_10(new IterativeAffineCoordinate(Amplifiers.exp(5), 10)), //
+  ITERATIVE_EX_20(new IterativeAffineCoordinate(Amplifiers.exp(5), 20)), //
+  ITERATIVE_EX_30(new IterativeAffineCoordinate(Amplifiers.exp(5), 30)), //
+  ITERATIVE_EX_50(new IterativeAffineCoordinate(Amplifiers.exp(5), 50)), //
   TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
   ITERATIVE_IL_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
   ITERATIVE_IL_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //

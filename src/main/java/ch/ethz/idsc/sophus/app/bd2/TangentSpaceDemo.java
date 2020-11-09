@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.Amplifiers;
 import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
@@ -77,7 +78,8 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
       leversRender.renderWeights(genesis.origin(levers));
     }
     // ---
-    IterativeAffineCoordinate itAfCoordinate = new IterativeAffineCoordinate(spinnerRefine.getValue(), spinnerBeta.getValue());
+    IterativeAffineCoordinate itAfCoordinate = //
+        new IterativeAffineCoordinate(Amplifiers.exp(spinnerBeta.getValue()), spinnerRefine.getValue());
     Deque<Tensor> deque = itAfCoordinate.factors(levers);
     for (Tensor factor : deque)
       POINTS_RENDER.show(geodesicDisplay()::matrixLift, geodesicDisplay().shape(), factor.pmul(levers)) //
