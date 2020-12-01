@@ -109,7 +109,7 @@ import java.util.List;
 
   private UbongoBoards(int use, String... strings) {
     this.use = use;
-    ubongoBoard = new UbongoBoard(strings);
+    ubongoBoard = UbongoBoard.of(strings);
   }
 
   public UbongoBoard board() {

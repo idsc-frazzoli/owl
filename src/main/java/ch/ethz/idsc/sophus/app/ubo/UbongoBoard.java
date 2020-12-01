@@ -23,12 +23,9 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.red.Total;
 
 /* package */ class UbongoBoard {
-  private static final Scalar FREE = RealScalar.ONE.negate();
-  // ---
-  public final Tensor mask;
-  private final int count;
+  public static final Scalar FREE = RealScalar.ONE.negate();
 
-  public UbongoBoard(String... strings) {
+  public static UbongoBoard of(String... strings) {
     final int n = strings[0].length();
     Tensor prep = Tensors.empty();
     for (String string : strings) {
@@ -39,8 +36,17 @@ import ch.ethz.idsc.tensor.red.Total;
       }
       prep.append(row);
     }
+    return new UbongoBoard(prep);
+  }
+
+  // ---
+  public final Tensor mask;
+  private final int count;
+
+  public UbongoBoard(Tensor prep) {
     mask = prep.unmodifiable();
     count = (int) mask.flatten(-1).filter(FREE::equals).count();
+    // System.out.println("count=" + count);
   }
 
   public List<List<UbongoEntry>> filter0(int use) {
