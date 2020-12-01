@@ -57,7 +57,7 @@ public class R2VectorCostDemo implements DemoInterface {
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(AxesRender.INSTANCE);
     owlyAnimationFrame.addBackground(ImageRender.scale(RegionRenders.image(image), imageCostFunction.scale()));
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     return owlyAnimationFrame;
   }
 

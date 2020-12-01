@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   Se2DeformationDemo() {
     super(GeodesicDisplays.SE2C_SE2, LogWeightings.coordinates());
     // ---
-    timerFrame.configCoordinateOffset(300, 500);
+    timerFrame.geometricComponent.setOffset(300, 500);
     shuffleSnap();
   }
 

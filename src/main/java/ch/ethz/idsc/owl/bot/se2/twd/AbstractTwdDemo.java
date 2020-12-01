@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
   @Override
   public final OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     TwdEntity twdEntity = configure(owlyAnimationFrame);
     {
       RenderInterface renderInterface = new MouseShapeRender( //

@@ -34,7 +34,7 @@ public class Rice2dImageDemo implements DemoInterface {
     owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     return owlyAnimationFrame;
   }
 

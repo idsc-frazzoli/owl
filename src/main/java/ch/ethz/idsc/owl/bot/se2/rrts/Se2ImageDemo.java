@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(60, 477);
+    owlyFrame.geometricComponent.setOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //

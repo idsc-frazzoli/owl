@@ -33,7 +33,7 @@ public class Se2xTPolygonDemo implements DemoInterface {
     // owlyAnimationFrame.addRegionRender(imageRegion);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     // ---
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;
   }

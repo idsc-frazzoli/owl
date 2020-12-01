@@ -59,7 +59,7 @@ public class TwdxTImageAnimationDemo extends AbstractTwdDemo {
           LIDAR_RAYTRACER, () -> twdxTEntity.getStateTimeNow(), trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
     }
-    owlyAnimationFrame.configCoordinateOffset(200, 400);
+    owlyAnimationFrame.geometricComponent.setOffset(200, 400);
     return twdxTEntity;
   }
 

@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
     for (int i = 0; i < CURVE_SUBDIVISION_SCHEMES.size(); ++i)
       pathRenders.add(new PathRender(COLORS.getColor(i)));
     // ---
-    timerFrame.configCoordinateOffset(100, 600);
+    timerFrame.geometricComponent.setOffset(100, 600);
   }
 
   @Override // from RenderInterface

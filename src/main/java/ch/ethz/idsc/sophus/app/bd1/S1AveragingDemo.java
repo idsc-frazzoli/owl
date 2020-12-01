@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.N;
   public S1AveragingDemo() {
     super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
-    timerFrame.configCoordinateOffset(500, 500);
+    timerFrame.geometricComponent.setOffset(500, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(S1FrameRender.INSTANCE);
   }
 

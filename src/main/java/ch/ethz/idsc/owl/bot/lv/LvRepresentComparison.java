@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Log;
     glcExpand.findAny(4000);
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(ellipsoidRegion));
-    owlyFrame.configCoordinateOffset(100, 300);
+    owlyFrame.geometricComponent.setOffset(100, 300);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
   }
 

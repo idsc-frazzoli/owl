@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.num.Pi;
     setControlPointsSe2(se2);
     // Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     // timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
-    timerFrame.configCoordinateOffset(500, 500);
+    timerFrame.geometricComponent.setOffset(500, 500);
   }
 
   @Override

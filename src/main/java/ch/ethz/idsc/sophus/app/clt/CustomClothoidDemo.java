@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     // ---
     stateChanged(null);
     setControlPointsSe2(Array.zeros(2, 3));
-    timerFrame.configCoordinateOffset(300, 700);
+    timerFrame.geometricComponent.setOffset(300, 700);
     validateContainer();
   }
 

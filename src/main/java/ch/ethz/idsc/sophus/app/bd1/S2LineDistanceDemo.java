@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     // ---
-    timerFrame.configCoordinateOffset(400, 400);
+    timerFrame.geometricComponent.setOffset(400, 400);
     setMidpointIndicated(false);
   }
 

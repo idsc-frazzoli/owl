@@ -25,7 +25,7 @@ public class TwdNoiseDemo extends AbstractTwdDemo {
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
-    owlyAnimationFrame.configCoordinateOffset(400, 400);
+    owlyAnimationFrame.geometricComponent.setOffset(400, 400);
     return twdEntity;
   }
 

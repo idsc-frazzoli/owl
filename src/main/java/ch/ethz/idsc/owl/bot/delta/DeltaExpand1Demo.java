@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.io.GifAnimationWriter;
     owlyFrame.addBackground(RegionRenders.create(DeltaExample.SPHERICAL_REGION));
     // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
     owlyFrame.addBackground(deltaDemo.vf(0.05));
-    owlyFrame.configCoordinateOffset(33, 416);
+    owlyFrame.geometricComponent.setOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
     try (AnimationWriter animationWriter = //
         new GifAnimationWriter(HomeDirectory.Pictures("delta_s.gif"), 250, TimeUnit.MILLISECONDS)) {

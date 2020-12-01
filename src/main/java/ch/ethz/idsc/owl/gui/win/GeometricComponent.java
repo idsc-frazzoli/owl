@@ -231,9 +231,9 @@ public final class GeometricComponent {
   }
 
   /** @param vector of length at least 2 */
-  void setOffset(Tensor vector) {
-    model2pixel.set(vector.Get(0), 0, 2);
-    model2pixel.set(vector.Get(1), 1, 2);
+  public void setOffset(int pix, int piy) {
+    model2pixel.set(RealScalar.of(pix), 0, 2);
+    model2pixel.set(RealScalar.of(piy), 1, 2);
   }
 
   void render(Graphics2D graphics, Dimension dimension) {

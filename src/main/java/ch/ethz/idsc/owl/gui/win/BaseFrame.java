@@ -68,10 +68,10 @@ public class BaseFrame {
     geometricComponent.render(bufferedImage.createGraphics(), dimension);
     return bufferedImage;
   }
-
-  public final void configCoordinateOffset(int px, int py) {
-    geometricComponent.setOffset(Tensors.vector(px, py));
-  }
+  // @Deprecated
+  // public final void configCoordinateOffset(int px, int py) {
+  // geometricComponent.setOffset(Tensors.vector(px, py));
+  // }
 
   public final void close() {
     jFrame.setVisible(false);

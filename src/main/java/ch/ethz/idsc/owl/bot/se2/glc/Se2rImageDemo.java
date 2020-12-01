@@ -60,7 +60,7 @@ enum Se2rImageDemo {
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(100, 550);
+    owlyFrame.geometricComponent.setOffset(100, 550);
     owlyFrame.jFrame.setBounds(100, 100, 700, 700);
     owlyFrame.addBackground(RegionRenders.create(region));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);

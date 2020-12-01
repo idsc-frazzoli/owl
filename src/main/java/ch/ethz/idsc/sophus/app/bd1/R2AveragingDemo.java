@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ class R2AveragingDemo extends A2AveragingDemo {
   public R2AveragingDemo() {
     super(GeodesicDisplays.R2_H2);
-    timerFrame.configCoordinateOffset(400, 400);
+    timerFrame.geometricComponent.setOffset(400, 400);
     // ---
     setControlPointsSe2(Tensors.fromString("{{0, 0, 1}, {1, 0, 1}, {-1, 1, 0}, {-0.5, -1, 0}, {0.4, 1, 0}}"));
   }

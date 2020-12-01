@@ -120,7 +120,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from DemoInterface
   public BaseFrame start() {
     BaseFrame baseFrame = laneConsumptionDemo.start();
-    baseFrame.configCoordinateOffset(50, 700);
+    baseFrame.geometricComponent.setOffset(50, 700);
     baseFrame.jFrame.setBounds(100, 100, 1200, 900);
     baseFrame.jFrame.setTitle(getClass().getSimpleName());
     return baseFrame;

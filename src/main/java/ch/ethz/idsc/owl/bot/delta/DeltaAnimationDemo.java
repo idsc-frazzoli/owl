@@ -47,7 +47,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.5)));
-    owlyAnimationFrame.configCoordinateOffset(50, 600);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 600);
     return owlyAnimationFrame;
   }
 

@@ -8,7 +8,7 @@ public class BaseFrameTest extends TestCase {
     BaseFrame bf = new BaseFrame();
     bf.jFrame.setVisible(true);
     bf.offscreen();
-    bf.configCoordinateOffset(2, 3);
+    bf.geometricComponent.setOffset(2, 3);
     bf.close();
   }
 }

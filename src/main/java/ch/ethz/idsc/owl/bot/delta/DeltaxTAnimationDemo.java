@@ -77,7 +77,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) region3);
     owlyAnimationFrame.addBackground((RenderInterface) region4);
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.5)));
-    owlyAnimationFrame.configCoordinateOffset(50, 600);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 600);
     return owlyAnimationFrame;
   }
 

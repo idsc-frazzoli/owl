@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.RealScalar;
     DeltaExample deltaDemo = new DeltaExample(RealScalar.of(-.25));
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(33, 416);
+    owlyFrame.geometricComponent.setOffset(33, 416);
     owlyFrame.addBackground(RegionRenders.create(DeltaExample.REGION));
     owlyFrame.addBackground(RegionRenders.create(DeltaExample.SPHERICAL_REGION));
     // owlyFrame.addBackground(RenderElements.create(plannerConstraint));

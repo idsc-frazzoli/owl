@@ -56,7 +56,7 @@ public class Rice2dxTGearDemo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) cog0);
     owlyAnimationFrame.addBackground((RenderInterface) cog1);
     owlyAnimationFrame.addBackground((RenderInterface) cog2);
-    owlyAnimationFrame.configCoordinateOffset(350, 350);
+    owlyAnimationFrame.geometricComponent.setOffset(350, 350);
     return owlyAnimationFrame;
   }
 

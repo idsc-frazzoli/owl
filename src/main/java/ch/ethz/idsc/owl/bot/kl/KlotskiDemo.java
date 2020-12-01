@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
   public KlotskiDemo(KlotskiProblem klotskiProblem) {
     this.klotskiProblem = klotskiProblem;
     klotskiFrame = new KlotskiFrame(klotskiProblem);
-    klotskiFrame.timerFrame.configCoordinateOffset(100, 500);
+    klotskiFrame.timerFrame.geometricComponent.setOffset(100, 500);
     klotskiFrame.setVisible(700, 700);
   }
 

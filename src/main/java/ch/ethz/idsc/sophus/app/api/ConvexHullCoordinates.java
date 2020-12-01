@@ -20,21 +20,21 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum ConvexHullCoordinates implements LogWeighting {
-  AFFINE_00_LO(new IterativeAffineCoordinate(Amplifiers.exp(1), 0)), //
+  AFFINE_00_LO(new IterativeAffineCoordinate(Amplifiers.EXP.supply(1), 0)), //
   // ---
-  EXPONENTIAL_01_LO(new IterativeAffineCoordinate(Amplifiers.exp(1), 1)), //
-  SMOOTH_RAMP_01_LO(new IterativeAffineCoordinate(Amplifiers.ramp(1), 1)), //
-  ARCTAN_01_LO(new IterativeAffineCoordinate(Amplifiers.arctan(1), 1)), //
+  EXPONENTIAL_01_LO(new IterativeAffineCoordinate(Amplifiers.EXP.supply(1), 1)), //
+  SMOOTH_RAMP_01_LO(new IterativeAffineCoordinate(Amplifiers.RAMP.supply(1), 1)), //
+  ARCTAN_01_LO(new IterativeAffineCoordinate(Amplifiers.ARCTAN.supply(1), 1)), //
   // ---
-  AFFINE_01_HI(new IterativeAffineCoordinate(Amplifiers.exp(5), 1)), //
-  AFFINE_05_LO(new IterativeAffineCoordinate(Amplifiers.exp(1), 5)), //
-  AFFINE_05_HI(new IterativeAffineCoordinate(Amplifiers.exp(5), 5)), //
-  EXPONENTIAL_LO(new IterativeAffineGenesis(Amplifiers.exp(1), Chop._08)), //
-  EXPONENTIAL_HI(new IterativeAffineGenesis(Amplifiers.exp(5), Chop._08)), //
-  SMOOTH_RAMP_LO(new IterativeAffineGenesis(Amplifiers.ramp(1), Chop._08)), //
-  SMOOTH_RAMP_HI(new IterativeAffineGenesis(Amplifiers.ramp(5), Chop._08)), //
-  ARCTAN_LO(new IterativeAffineGenesis(Amplifiers.arctan(5), Chop._08)), //
-  ARCTAN_HI(new IterativeAffineGenesis(Amplifiers.arctan(10), Chop._08)), //
+  AFFINE_01_HI(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 1)), //
+  AFFINE_05_LO(new IterativeAffineCoordinate(Amplifiers.EXP.supply(1), 5)), //
+  AFFINE_05_HI(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 5)), //
+  EXPONENTIAL_LO(new IterativeAffineGenesis(Amplifiers.EXP.supply(1), Chop._08)), //
+  EXPONENTIAL_HI(new IterativeAffineGenesis(Amplifiers.EXP.supply(5), Chop._08)), //
+  SMOOTH_RAMP_LO(new IterativeAffineGenesis(Amplifiers.RAMP.supply(1), Chop._08)), //
+  SMOOTH_RAMP_HI(new IterativeAffineGenesis(Amplifiers.RAMP.supply(5), Chop._08)), //
+  ARCTAN_LO(new IterativeAffineGenesis(Amplifiers.ARCTAN.supply(5), Chop._08)), //
+  ARCTAN_HI(new IterativeAffineGenesis(Amplifiers.ARCTAN.supply(10), Chop._08)), //
   ;
 
   private final Genesis genesis;

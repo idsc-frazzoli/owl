@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
     System.out.println("rewireCount=" + rrts.rewireCount());
     RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.INSTANCE);
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(122, 226);
+    owlyFrame.geometricComponent.setOffset(122, 226);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
     owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
   }

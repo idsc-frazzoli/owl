@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       jToggleRigidMotionFit.addActionListener(l -> recompute());
       timerFrame.jToolBar.add(jToggleRigidMotionFit);
     }
-    timerFrame.configCoordinateOffset(300, 500);
+    timerFrame.geometricComponent.setOffset(300, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(renderInterface);
     setControlPointsSe2(Tensors.fromString( //
         "{{0.650, 4.183, 0.000}, {3.517, 4.650, 0.000}, {2.233, 2.733, 0.000}, {4.217, 2.917, 0.000}, {1.767, 1.150, 0.000}, {0.600, 0.317, 0.000}, {4.450, 0.550, 0.000}}"));

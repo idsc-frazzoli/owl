@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.io.Export;
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     Tensor model2Pixel = klotskiDemo.klotskiFrame.timerFrame.geometricComponent.getModel2Pixel();
     klotskiDemo.klotskiFrame.timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(0.4, 0.4, 1).pmul(model2Pixel));
-    klotskiDemo.klotskiFrame.timerFrame.configCoordinateOffset(100, 600);
+    klotskiDemo.klotskiFrame.timerFrame.geometricComponent.setOffset(100, 600);
     KlotskiSolution klotskiSolution = klotskiDemo.compute();
     Export.object(KlotskiDemo.solutionFile(klotskiProblem), klotskiSolution);
     klotskiDemo.close();

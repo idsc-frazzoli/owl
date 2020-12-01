@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(60, 477);
+    owlyFrame.geometricComponent.setOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 650, 550);
     owlyFrame.addBackground(RegionRenders.create(region));
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(Tensors.vector(0, 0), range);

@@ -36,7 +36,7 @@ public class Se2PolicyImageDemo implements DemoInterface {
       owlyAnimationFrame.add(twdPolicyEntity);
     }
     // ---
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;
   }

@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
           ClothoidRrtsEntity.SHAPE, () -> clothoidRrtsEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setTitle(getClass().getSimpleName());
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;

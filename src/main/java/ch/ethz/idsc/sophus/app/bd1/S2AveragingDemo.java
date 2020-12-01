@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.red.Max;
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
     timerFrame.geometricComponent.setModel2Pixel(Tensors.vector(5, 5, 1).pmul(model2pixel));
     // ---
-    timerFrame.configCoordinateOffset(400, 400);
+    timerFrame.geometricComponent.setOffset(400, 400);
     setGeodesicDisplay(Rp2GeodesicDisplay.INSTANCE);
     setControlPointsSe2(Tensors.fromString( //
         "{{59/150, 1/2, 0.7853981633974483}, {-47/75, 13/300, 1.0471975511965976}, {37/300, 11/15, 0}, {-13/75, 119/300, 0}}"));

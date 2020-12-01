@@ -30,7 +30,7 @@ public class Se2PolicyNoiseDemo implements DemoInterface {
     owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.EXPECTED, trq));
     owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.ORIGINAL, trq));
     // ---
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;
   }

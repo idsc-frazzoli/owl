@@ -43,7 +43,7 @@ public class R2NdTreeAnimationDemo implements DemoInterface {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     return owlyAnimationFrame;
   }
 

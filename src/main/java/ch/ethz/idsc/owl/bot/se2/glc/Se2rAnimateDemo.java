@@ -61,7 +61,7 @@ enum Se2rAnimateDemo {
     TrajectoryPlanner trajectoryPlanner = trajectoryPlanner();
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(169, 71);
+    owlyFrame.geometricComponent.setOffset(169, 71);
     owlyFrame.jFrame.setBounds(100, 100, 300, 200);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {

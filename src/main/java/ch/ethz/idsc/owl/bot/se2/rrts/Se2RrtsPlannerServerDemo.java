@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.num.Pi;
     };
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(60, 477);
+    owlyFrame.geometricComponent.setOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     StateTime stateTime = new StateTime(Append.of(lbounds, RealScalar.ZERO), RealScalar.ZERO);

@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.io.Export;
   private final EspFrame espFrame = new EspFrame();
 
   public EspDemo() {
-    espFrame.timerFrame.configCoordinateOffset(100, 400);
+    espFrame.timerFrame.geometricComponent.setOffset(100, 400);
     espFrame.setVisible(500, 500);
   }
 

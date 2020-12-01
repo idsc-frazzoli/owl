@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.io.GifAnimationWriter;
     try (AnimationWriter animationWriter = //
         new GifAnimationWriter(HomeDirectory.Pictures(name), 250, TimeUnit.MILLISECONDS)) {
       OwlyFrame owlyFrame = OwlyGui.start();
-      owlyFrame.configCoordinateOffset(42, 456);
+      owlyFrame.geometricComponent.setOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);
       // owlyFrame.geometricComponent.addRenderInterface(renderInterface);
       int frame = 0;

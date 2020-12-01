@@ -61,7 +61,7 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
       owlyAnimationFrame.addBackground(renderInterface);
     }
     // ---
-    owlyAnimationFrame.configCoordinateOffset(350, 350);
+    owlyAnimationFrame.geometricComponent.setOffset(350, 350);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;
   }

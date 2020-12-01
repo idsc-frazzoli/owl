@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
     }
     // ---
     IterativeAffineCoordinate itAfCoordinate = //
-        new IterativeAffineCoordinate(Amplifiers.exp(spinnerBeta.getValue()), spinnerRefine.getValue());
+        new IterativeAffineCoordinate(Amplifiers.EXP.supply(spinnerBeta.getValue()), spinnerRefine.getValue());
     Deque<Tensor> deque = itAfCoordinate.factors(levers);
     for (Tensor factor : deque)
       POINTS_RENDER.show(geodesicDisplay()::matrixLift, geodesicDisplay().shape(), factor.pmul(levers)) //

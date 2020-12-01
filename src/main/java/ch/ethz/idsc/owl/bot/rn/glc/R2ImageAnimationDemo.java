@@ -39,7 +39,7 @@ public class R2ImageAnimationDemo implements DemoInterface {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     return owlyAnimationFrame;
   }
 

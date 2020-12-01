@@ -62,7 +62,7 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) region3);
-    owlyAnimationFrame.configCoordinateOffset(350, 350);
+    owlyAnimationFrame.geometricComponent.setOffset(350, 350);
     return owlyAnimationFrame;
   }
 

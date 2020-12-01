@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public final OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     configure(owlyAnimationFrame);
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     return owlyAnimationFrame;
   }

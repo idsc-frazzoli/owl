@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
       owlyAnimationFrame.add(carEntity);
     }
     owlyAnimationFrame.addBackground(new GridRender(Subdivide.of(0, 10, 5)));
-    owlyAnimationFrame.configCoordinateOffset(400, 400);
+    owlyAnimationFrame.geometricComponent.setOffset(400, 400);
   }
 
   public static void main(String[] args) {

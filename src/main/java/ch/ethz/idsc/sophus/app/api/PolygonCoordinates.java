@@ -40,11 +40,11 @@ public enum PolygonCoordinates implements LogWeighting {
   ITERATIVE_AF_2(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 2)), //
   ITERATIVE_AF_3(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 3)), //
   ITERATIVE_AF_5(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 5)), //
-  ITERATIVE_EX_05(new IterativeAffineCoordinate(Amplifiers.exp(5), 05)), //
-  ITERATIVE_EX_10(new IterativeAffineCoordinate(Amplifiers.exp(5), 10)), //
-  ITERATIVE_EX_20(new IterativeAffineCoordinate(Amplifiers.exp(5), 20)), //
-  ITERATIVE_EX_30(new IterativeAffineCoordinate(Amplifiers.exp(5), 30)), //
-  ITERATIVE_EX_50(new IterativeAffineCoordinate(Amplifiers.exp(5), 50)), //
+  ITERATIVE_EX_05(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 05)), //
+  ITERATIVE_EX_10(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 10)), //
+  ITERATIVE_EX_20(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 20)), //
+  ITERATIVE_EX_30(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 30)), //
+  ITERATIVE_EX_50(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 50)), //
   TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
   ITERATIVE_IL_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
   ITERATIVE_IL_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //

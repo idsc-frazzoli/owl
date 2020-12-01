@@ -148,7 +148,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     // CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
     // timerFrame.jToolBar.add(jSlider);
     // }
-    timerFrame.configCoordinateOffset(100, 600);
+    timerFrame.geometricComponent.setOffset(100, 600);
   }
 
   @Override

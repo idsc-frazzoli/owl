@@ -76,6 +76,6 @@ import ch.ethz.idsc.tensor.ext.Timing;
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(ballRegion));
     owlyFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
-    owlyFrame.configCoordinateOffset(100, 300);
+    owlyFrame.geometricComponent.setOffset(100, 300);
   }
 }

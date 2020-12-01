@@ -22,7 +22,7 @@ enum Se2rExpandDemo {
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(169, 71);
+    owlyFrame.geometricComponent.setOffset(169, 71);
     owlyFrame.jFrame.setBounds(100, 100, 300, 200);
     try (AnimationWriter animationWriter = //
         new GifAnimationWriter(HomeDirectory.Pictures("se2r.gif"), 250, TimeUnit.MILLISECONDS)) {

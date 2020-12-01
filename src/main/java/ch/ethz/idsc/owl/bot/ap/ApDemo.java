@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.apStandardTrajectoryPlanner();
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.configCoordinateOffset(300, 300);
+    owlyFrame.geometricComponent.setOffset(300, 300);
     owlyFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{1, 0, 10}, {0, -1, 500}, {0, 0, 1}}"));
     // owlyFrame.addBackground(RegionRenders.create(region));
     // owlyFrame.addBackground(RegionRenders.create(sphericalRegion));

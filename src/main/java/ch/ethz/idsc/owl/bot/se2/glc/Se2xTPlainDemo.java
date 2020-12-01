@@ -32,7 +32,7 @@ public class Se2xTPlainDemo
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));
     // ---
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.geometricComponent.setOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
     owlyAnimationFrame.jFrame.setVisible(true);
   }

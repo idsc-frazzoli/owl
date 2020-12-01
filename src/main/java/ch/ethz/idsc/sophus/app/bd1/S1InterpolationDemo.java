@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     setMidpointIndicated(false);
     // ---
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 0, 0}}"));
-    timerFrame.configCoordinateOffset(500, 500);
+    timerFrame.geometricComponent.setOffset(500, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(S1FrameRender.INSTANCE);
   }
 
