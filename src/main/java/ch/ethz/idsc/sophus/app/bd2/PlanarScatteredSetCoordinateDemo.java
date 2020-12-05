@@ -17,11 +17,12 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gbc.Amplifiers;
-import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.IterativeTargetCoordinate;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
@@ -90,7 +91,11 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   protected LogWeighting logWeighting() {
-    return new CustomLogWeighting(new IterativeAffineCoordinate(spinnerAmps.getValue().supply(spinnerBeta.getValue()), spinnerRefine.getValue()));
+    TensorUnaryOperator tensorUnaryOperator = spinnerAmps.getValue().supply(spinnerBeta.getValue());
+    // tensorUnaryOperator = new ShepardTarget(levers);
+    return new CustomLogWeighting(new IterativeTargetCoordinate(null, spinnerRefine.getValue())
+    // new IterativeAffineCoordinate(tensorUnaryOperator, spinnerRefine.getValue())
+    );
   }
 
   public static void main(String[] args) {
