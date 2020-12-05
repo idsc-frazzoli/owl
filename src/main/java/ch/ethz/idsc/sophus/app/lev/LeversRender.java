@@ -540,7 +540,11 @@ public class LeversRender {
 
   /** render control points */
   public void renderSequence() {
-    POINTS_RENDER_0.show(geodesicDisplay::matrixLift, shape, sequence).render(geometricLayer, graphics);
+    renderSequence(POINTS_RENDER_0);
+  }
+
+  public void renderSequence(PointsRender pointsRender) {
+    pointsRender.show(geodesicDisplay::matrixLift, shape, sequence).render(geometricLayer, graphics);
   }
 
   /** render point of coordinate evaluation */

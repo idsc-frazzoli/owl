@@ -2,15 +2,24 @@
 package ch.ethz.idsc.sophus.app.bd2;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ConvexHullCoordinates;
+import ch.ethz.idsc.sophus.app.api.CustomLogWeighting;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.H2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gbc.Amplifiers;
+import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -18,10 +27,30 @@ import ch.ethz.idsc.tensor.Tensors;
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class PlanarScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo implements SpinnerListener<GeodesicDisplay> {
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
+  private static final Tensor BETAS = Tensors.fromString("{1/8, 1/2, 1, 2, 5, 10, 15, 20}");
+  private final SpinnerLabel<Amplifiers> spinnerAmps = SpinnerLabel.of(Amplifiers.values());
+  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
 
   public PlanarScatteredSetCoordinateDemo() {
-    super(ConvexHullCoordinates.list());
-    // super(LogWeightings.list());
+    super(Arrays.asList());
+    spinnerLogWeighting.setVisible(false);
+    {
+      spinnerAmps.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "refinement");
+      spinnerAmps.addSpinnerListener(v -> recompute());
+    }
+    {
+      spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 10, 20, 50, 100, 200));
+      spinnerRefine.setValue(10);
+      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
+      spinnerRefine.addSpinnerListener(v -> recompute());
+    }
+    {
+      spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
+      spinnerBeta.setValue(RealScalar.of(2));
+      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(70, 28), "beta");
+      spinnerBeta.addSpinnerListener(v -> recompute());
+    }
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     actionPerformed(geodesicDisplay);
@@ -57,6 +86,11 @@ import ch.ethz.idsc.tensor.Tensors;
       setControlPointsSe2(Tensors.fromString( //
           "{{-1.900, 1.783, 0.000}, {-0.083, 2.517, 0.000}, {0.500, 1.400, 0.000}, {2.300, 2.117, 0.000}, {2.833, 0.217, 0.000}, {1.000, -1.550, 0.000}, {-0.283, -0.667, 0.000}, {-1.450, -1.650, 0.000}}"));
     }
+  }
+
+  @Override
+  protected LogWeighting logWeighting() {
+    return new CustomLogWeighting(new IterativeAffineCoordinate(spinnerAmps.getValue().supply(spinnerBeta.getValue()), spinnerRefine.getValue()));
   }
 
   public static void main(String[] args) {

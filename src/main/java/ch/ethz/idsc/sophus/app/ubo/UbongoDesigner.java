@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
   public static final Scalar FREE = UbongoBoard.FREE;
   private static final Tensor SQUARE = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
   // ---
-  private final SpinnerLabel<Integer> spinnerUse = SpinnerLabel.of(2, 3, 4, 5, 6);
+  private final SpinnerLabel<Integer> spinnerUse = SpinnerLabel.of(2, 3, 4, 5, 6, 7, 8);
   private final JButton jButton = new JButton("solve");
   private final GridRender gridRender;
   private final Tensor template = Array.fill(() -> RealScalar.ZERO, 8, 10);

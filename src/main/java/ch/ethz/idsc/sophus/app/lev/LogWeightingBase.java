@@ -52,7 +52,10 @@ public abstract class LogWeightingBase extends AbstractPlaceDemo {
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
   }
 
-  protected final LogWeighting logWeighting() {
+  /** Hint: override is possible for customization
+   * 
+   * @return */
+  protected LogWeighting logWeighting() {
     return spinnerLogWeighting.getValue();
   }
 
