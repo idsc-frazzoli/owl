@@ -2,67 +2,46 @@
 package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
-import ch.ethz.idsc.sophus.gbc.Amplifiers;
-import ch.ethz.idsc.sophus.gbc.Genesis;
+import ch.ethz.idsc.sophus.app.bd2.IterativeAffineProperties;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate.Evaluation;
-import ch.ethz.idsc.sophus.gbc.ShepardTarget;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
+import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
 /* package */ class TangentSpaceDemo extends AbstractPlaceDemo {
-  private static final Tensor BETAS = Tensors.fromString("{1/8, 1/2, 1, 2, 5, 10, 15, 20}");
   private static final int WIDTH = 300;
   // ---
-  private final SpinnerLabel<Amplifiers> spinnerAmps = SpinnerLabel.of(Amplifiers.values());
-  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
+  private final IterativeAffineProperties iterativeAffineProperties = new IterativeAffineProperties();
 
   public TangentSpaceDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
-    timerFrame.jToolBar.addSeparator();
-    {
-      spinnerAmps.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "refinement");
-    }
-    {
-      spinnerRefine.setList(Arrays.asList(1, 5, 10, 20, 50, 100, 200));
-      spinnerRefine.setValue(10);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
-    }
-    {
-      spinnerBeta.setList(BETAS.stream().map(Scalar.class::cast).collect(Collectors.toList()));
-      spinnerBeta.setValue(RealScalar.of(2));
-      spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(70, 28), "beta");
-    }
+    Container container = timerFrame.jFrame.getContentPane();
+    ConfigPanel configPanel = ConfigPanel.of(iterativeAffineProperties);
+    container.add("West", configPanel.getFields());
     Tensor sequence = Tensor.of(CirclePoints.of(15).multiply(RealScalar.of(2)).stream().skip(5).map(PadRight.zeros(3)));
     sequence.set(Scalar::zero, 0, Tensor.ALL);
     setControlPointsSe2(sequence);
@@ -73,7 +52,6 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Genesis genesis = AffineCoordinate.INSTANCE;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
@@ -88,11 +66,8 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
         pathRender.render(geometricLayer, graphics);
       }
       if (ConvexHull.isInside(levers2)) {
-        Amplifiers amplifiers = spinnerAmps.getValue();
-        TensorUnaryOperator tensorUnaryOperator = amplifiers.supply(spinnerBeta.getValue());
-        tensorUnaryOperator = new ShepardTarget(levers2);
         IterativeAffineCoordinate iterativeAffineCoordinate = //
-            new IterativeAffineCoordinate(tensorUnaryOperator, spinnerRefine.getValue());
+            (IterativeAffineCoordinate) iterativeAffineProperties.genesis();
         Deque<Evaluation> deque = iterativeAffineCoordinate.factors(levers2);
         {
           Tensor leversVirtual = deque.peekLast().factors().pmul(levers2);
@@ -108,8 +83,7 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
             LeversRender leversRender = LeversRender.of( //
                 geodesicDisplay(), leversVirtual, origin.map(Scalar::zero), geometricLayer, graphics);
             leversRender.renderSequence(POINTS_RENDER);
-            Tensor weights = genesis.origin(leversVirtual);
-            weights = iterativeAffineCoordinate.origin(deque, levers2);
+            Tensor weights = iterativeAffineCoordinate.origin(deque, levers2);
             leversRender.renderWeights(weights);
           }
           geometricLayer.popMatrix();
@@ -146,7 +120,6 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
             geodesicDisplay(), sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
         leversRender.renderOrigin();
-        leversRender.renderWeights(genesis.origin(levers2));
       }
     }
   }

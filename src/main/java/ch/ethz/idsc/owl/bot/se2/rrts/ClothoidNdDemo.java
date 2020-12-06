@@ -27,8 +27,6 @@ import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.ref.FieldClip;
 import ch.ethz.idsc.tensor.ref.FieldIntegerQ;
 import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
-import ch.ethz.idsc.tensor.ref.gui.FieldPanels;
-import ch.ethz.idsc.tensor.ref.gui.ParametersComponent;
 
 public class ClothoidNdDemo extends ControlPointsDemo {
   private static final int SIZE = 400;
@@ -49,10 +47,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     super(false, GeodesicDisplays.CL_ONLY);
     // ---
     Container container = timerFrame.jFrame.getContentPane();
-    ConfigPanel configPanel = ConfigPanel.of(this);
-//    FieldPanels fieldPanels = FieldPanels.of(this, null);
-//    ParametersComponent parametersComponent = new ParametersComponent(fieldPanels);
-    container.add("West", configPanel.getFields());
+    container.add("West", ConfigPanel.of(this).getFields());
     // ---
     setPositioningEnabled(false);
     setMidpointIndicated(false);

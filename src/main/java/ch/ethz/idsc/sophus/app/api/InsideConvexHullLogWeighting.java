@@ -12,11 +12,11 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-public class CustomLogWeighting implements LogWeighting {
+public class InsideConvexHullLogWeighting implements LogWeighting {
   private final Genesis genesis;
 
-  public CustomLogWeighting(Genesis genesis) {
-    this.genesis = genesis;
+  public InsideConvexHullLogWeighting(Genesis genesis) {
+    this.genesis = Objects.requireNonNull(genesis);
   }
 
   @Override // from LogWeighting

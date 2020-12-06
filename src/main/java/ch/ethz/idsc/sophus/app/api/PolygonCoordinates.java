@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.gbc.TargetCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
+import ch.ethz.idsc.sophus.lie.r2.InsideConvexHullCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.InsidePolygonCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.IterativeMeanValueCoordinate;
@@ -66,7 +67,9 @@ public enum PolygonCoordinates implements LogWeighting {
       ScalarUnaryOperator variogram, // <- ignored
       Tensor sequence) {
     return WeightingOperators.wrap( //
-        HsCoordinates.wrap(vectorLogManifold, equals(INVERSE_DISTANCE) || equals(TARGET) ? genesis : InsidePolygonCoordinate.of(genesis)), //
+        HsCoordinates.wrap(vectorLogManifold, equals(INVERSE_DISTANCE) || equals(TARGET) //
+            ? InsideConvexHullCoordinate.of(genesis)
+            : InsidePolygonCoordinate.of(genesis)), //
         sequence);
   }
 
