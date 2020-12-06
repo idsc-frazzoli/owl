@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 
@@ -27,7 +29,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ImageCrop;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -37,15 +38,27 @@ import ch.ethz.idsc.tensor.sca.Floor;
   private static final Tensor SQUARE = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
   // ---
   private final SpinnerLabel<Integer> spinnerUse = SpinnerLabel.of(2, 3, 4, 5, 6, 7, 8);
-  private final JButton jButton = new JButton("solve");
   private final GridRender gridRender;
   private final Tensor template = Array.fill(() -> RealScalar.ZERO, 8, 10);
 
   public UbongoDesigner() {
     spinnerUse.setValue(4);
     spinnerUse.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), null);
-    jButton.addActionListener(this);
-    timerFrame.jToolBar.add(jButton);
+    {
+      JButton jButton = new JButton("reset");
+      jButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          template.set(Scalar::zero, Tensor.ALL, Tensor.ALL);
+        }
+      });
+      timerFrame.jToolBar.add(jButton);
+    }
+    {
+      JButton jButton = new JButton("solve");
+      jButton.addActionListener(this);
+      timerFrame.jToolBar.add(jButton);
+    }
     // ---
     Tensor matrix = Tensors.fromString("{{30, 0, 100}, {0, -30, 500}, {0, 0, 1}}");
     matrix = matrix.dot(Se2Matrix.of(Tensors.vector(0, 0, -Math.PI / 2)));
@@ -97,13 +110,24 @@ import ch.ethz.idsc.tensor.sca.Floor;
     ubongoDesigner.setVisible(800, 600);
   }
 
+  static final Collector<CharSequence, ?, String> EMBRACE = //
+      Collectors.joining("", "\"", "\"");
+  static final Collector<CharSequence, ?, String> EMBRACE2 = //
+      Collectors.joining(", ", "", "");
+
+  private static String rowToString(Tensor row) {
+    return row.stream().map(s -> s.equals(FREE) ? "o" : " ").collect(EMBRACE);
+  }
+
   @Override
   public void actionPerformed(ActionEvent e) {
-    TensorUnaryOperator res = ImageCrop.color(RealScalar.ZERO);
-    Tensor result = res.apply(template);
+    Tensor result = ImageCrop.color(RealScalar.ZERO).apply(template);
+    int use = spinnerUse.getValue();
+    String collect = result.stream().map(UbongoDesigner::rowToString).collect(EMBRACE2);
+    System.out.printf("UNTITLED(%d, %s),\n", use, collect);
     System.out.println(Pretty.of(result));
     UbongoBoard ubongoBoard = new UbongoBoard(result);
-    List<List<UbongoEntry>> list = ubongoBoard.filter0(spinnerUse.getValue());
+    List<List<UbongoEntry>> list = ubongoBoard.filter0(use);
     if (list.isEmpty()) {
       System.err.println("no solutions");
     } else {

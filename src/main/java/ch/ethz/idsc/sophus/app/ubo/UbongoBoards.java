@@ -73,7 +73,7 @@ import java.util.List;
   // many solutions
   CORNER_6(6, "ooooooo", "ooooo", "oooo", "ooooo", "oo"),
   /***************************************************/
-  /************ BATCH 4 ******************************/
+  /************ UNPUBLISHED **************************/
   // ---
   // many solutions
   CORNER_1(4, "oooooo", "ooooo", "ooo", "o"),
@@ -85,8 +85,6 @@ import java.util.List;
   HOOK_A3(5, "  oooo ", " oo o ", "ooo ", " oo oo", " ooooo"), //
   // 6 solutions
   GRID_A6(5, "  oooo ", " oo oo", "o ooo", "ooo oo", " oooo "), //
-  // TODO mickey produces 12 solutions
-  MICKEY_3(6, "oo  oo", "ooo oo", " oooo", " oooo", " o oo", "  oo  "), //
   PYRAMID5(6, "   o   ", "  oooo ", " oooo", "ooooo", " oooo", " ooo"), //
   HOLE2(5, "oooo ", "ooooo", " oooo", " o  o", "ooooo"), //
   HOLE3(5, "oooo ", "ooooo", " o oo", " o  o", "ooooo"), //
@@ -102,6 +100,16 @@ import java.util.List;
   PYRAMID1(5, "  ooo ", " oooo", "ooooo", " ooo", " oo"), //
   /** 2 solutions */
   PYRAMID2(5, "   o  ", "  ooo ", " oooo", "ooooo", " ooo", " oo"), //
+  // ---
+  MASKDIFF(6, "  o    ", " ooooo ", "o ooo o", "ooooooo", " ooooo "),
+  /***************************************************/
+  /************ BATCH 4 ******************************/
+  NKAPPE_1(5, "  o    ", "  oo   ", "o ooo o", "ooooooo", " ooooo "),
+  TERRIER1(5, "  o    ", " ooo   ", "ooooooo", "  ooooo", "  o  oo", "  o   o"),
+  MASKEYES(5, "  o   ", " ooooo", "o oo o", "oooooo", " oooo "),
+  MICKEY_3(6, "oo  oo", "ooo oo", " oooo", " oooo", " o oo", "  oo  "), //
+  FREIGHT1(6, "    o    ", "   ooo o ", "oo  o  oo", " oooooooo", "  oooooo "), //
+  CHRISTMT(6, "  o   ", "  oo  ", " oooo ", "oooo  ", " oooo ", "oooooo", "  o   ", "  oo  "),
   ;
 
   private final int use;

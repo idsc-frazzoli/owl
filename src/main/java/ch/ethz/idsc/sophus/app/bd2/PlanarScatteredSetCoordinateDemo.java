@@ -23,13 +23,13 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 /* package */ class PlanarScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo implements SpinnerListener<GeodesicDisplay> {
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
   // ---
-  private final IterativeAffineProperties iterativeAffineProperties = new IterativeAffineProperties();
+  private final DequeGenesisProperties dequeGenesisProperties = new DequeGenesisProperties();
 
   public PlanarScatteredSetCoordinateDemo() {
     super(Arrays.asList());
     spinnerLogWeighting.setVisible(false);
     Container container = timerFrame.jFrame.getContentPane();
-    ConfigPanel configPanel = ConfigPanel.of(iterativeAffineProperties);
+    ConfigPanel configPanel = ConfigPanel.of(dequeGenesisProperties);
     configPanel.fieldPanels().addUniversalListener(l -> recompute());
     container.add("West", configPanel.getFields());
     // ---
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
   @Override
   protected LogWeighting logWeighting() {
-    return new InsideConvexHullLogWeighting(iterativeAffineProperties.genesis());
+    return new InsideConvexHullLogWeighting(dequeGenesisProperties.dequeGenesis());
   }
 
   public static void main(String[] args) {

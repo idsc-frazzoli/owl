@@ -16,8 +16,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.bd2.IterativeAffineProperties;
-import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
+import ch.ethz.idsc.sophus.app.bd2.DequeGenesisProperties;
+import ch.ethz.idsc.sophus.gbc.DequeGenesis;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate.Evaluation;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 /* package */ class TangentSpaceDemo extends AbstractPlaceDemo {
   private static final int WIDTH = 300;
   // ---
-  private final IterativeAffineProperties iterativeAffineProperties = new IterativeAffineProperties();
+  private final DequeGenesisProperties iterativeAffineProperties = new DequeGenesisProperties();
 
   public TangentSpaceDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
@@ -66,9 +66,8 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
         pathRender.render(geometricLayer, graphics);
       }
       if (ConvexHull.isInside(levers2)) {
-        IterativeAffineCoordinate iterativeAffineCoordinate = //
-            (IterativeAffineCoordinate) iterativeAffineProperties.genesis();
-        Deque<Evaluation> deque = iterativeAffineCoordinate.factors(levers2);
+        DequeGenesis dequeGenesis = iterativeAffineProperties.dequeGenesis();
+        Deque<Evaluation> deque = dequeGenesis.factors(levers2);
         {
           Tensor leversVirtual = deque.peekLast().factors().pmul(levers2);
           geometricLayer.pushMatrix(Se2Matrix.translation(origin));
@@ -83,8 +82,8 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
             LeversRender leversRender = LeversRender.of( //
                 geodesicDisplay(), leversVirtual, origin.map(Scalar::zero), geometricLayer, graphics);
             leversRender.renderSequence(POINTS_RENDER);
-            Tensor weights = iterativeAffineCoordinate.origin(deque, levers2);
-            leversRender.renderWeights(weights);
+            // Tensor weights = iterativeAffineCoordinate.origin(deque, levers2);
+            // leversRender.renderWeights(weights);
           }
           geometricLayer.popMatrix();
           {
