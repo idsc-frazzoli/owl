@@ -22,13 +22,13 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
 /* package */ class UbongoViewer extends AbstractDemo {
   public static final int GRY = 128;
-  static final int MARGIN_X = 300;
+  static final int MARGIN_X = 400;
   static final int MARGIN_Y = 13;
   // 61.1465
   static final int SCALE = 62;
-  private static final int ZCALE = 10;
-  private static final int MAX_X = 8;
-  private static final int MAX_Y = 6;
+  private static final int ZCALE = 12;
+  private static final int MAX_X = 9;
+  private static final int MAX_Y = 8;
   private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
 
   public static int maxWidth() {
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
-    spinnerIndex.setValue(UbongoPublish.SPIRAL_2);
+    spinnerIndex.setValue(UbongoPublish.MODERN_1);
   }
 
   @Override
@@ -51,8 +51,8 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
   public static void draw(Graphics2D graphics, UbongoPublish ubongoPublish) {
     graphics.setColor(new Color(192 - 32, 192 - 32, 192 - 32));
-    graphics.drawLine(0, 0, maxWidth(), 0);
-    graphics.drawLine(0, maxHeight() - 1, maxWidth(), maxHeight() - 1);
+    // graphics.drawLine(0, 0, maxWidth(), 0);
+    // graphics.drawLine(0, maxHeight() - 1, maxWidth(), maxHeight() - 1);
     List<List<UbongoEntry>> solutions = UbongoLoader.INSTANCE.load(ubongoPublish.ubongoBoards);
     {
       UbongoBoard ubongoBoard = ubongoPublish.ubongoBoards.board();
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
     for (int index : ubongoPublish.list) {
       ++count;
       graphics.setColor(Color.DARK_GRAY);
-      int pix = 30;
+      int pix = 50;
       RenderQuality.setQuality(graphics);
       graphics.drawString("" + count, 2, piy + 20);
       RenderQuality.setDefault(graphics);
@@ -83,9 +83,9 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
         Tensor tensor = UbongoRender.gray(size, Arrays.asList(ubongoPiece));
         int piw = size.get(1) * scale;
         graphics.drawImage(ImageFormat.of(tensor), pix, piy, piw, size.get(0) * scale, null);
-        pix += piw + 20;
+        pix += piw + 2 * ZCALE;
       }
-      piy += 4 * ZCALE + 20;
+      piy += 4 * ZCALE + 2 * ZCALE;
     }
   }
 
@@ -101,6 +101,6 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 
   public static void main(String[] args) {
     UbongoViewer ubongoBrowser = new UbongoViewer();
-    ubongoBrowser.setVisible(800, 600);
+    ubongoBrowser.setVisible(1200, 600);
   }
 }

@@ -59,6 +59,26 @@ import java.util.List;
   CORNER_5(UbongoBoards.CORNER_5, Arrays.asList(1, 2, 3, 4, 6, 7)), //
   CORNER_6(UbongoBoards.CORNER_6, Arrays.asList(0, 3, 5, 7, 9, 11)), //
   CORNER_D(UbongoBoards.CORNER_6, Arrays.asList(1, 4, 6, 8, 10, 12)), //
+  /** BATCH 4 2020 Dezember 6 */
+  MODERN_1(UbongoBoards.MODERN_1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  AUTOMOB1(UbongoBoards.AUTOMOB1, Arrays.asList(0, 1, 3, 4, 8, 9)), //
+  AUTOMOB2(UbongoBoards.AUTOMOB2, Arrays.asList(0, 3, 4, 5, 7, 8)), //
+  AUTOMOB3(UbongoBoards.AUTOMOB3, Arrays.asList(0, 1, 4, 6, 7, 14)), //
+  FACTORY1(UbongoBoards.FACTORY1, Arrays.asList(4, 5, 6, 8, 9, 11)), //
+  FACTORY2(UbongoBoards.FACTORY2, Arrays.asList(2, 3, 7, 8, 9, 10)), //
+  NKAPPE_1(UbongoBoards.NKAPPE_1, Arrays.asList(6, 7, 10, 11, 12, 14)), //
+  TERRIER1(UbongoBoards.TERRIER1, Arrays.asList(6, 7, 11, 14, 15, 19)), //
+  MASKEYES(UbongoBoards.MASKEYES, Arrays.asList(2, 5, 9, 14, 15, 17)), //
+  MODERN_2(UbongoBoards.MODERN_2, Arrays.asList(0, 1, 2, 3, 6, 7)), //
+  HOLGRAIL(UbongoBoards.HOLGRAIL, Arrays.asList(7, 8, 9, 12, 14, 19)), //
+  SICHEL_1(UbongoBoards.SICHEL_1, Arrays.asList(1, 2, 6, 7, 8, 10)), //
+  SICHAL_2(UbongoBoards.SICHAL_2, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  GIRLHAT1(UbongoBoards.GIRLHAT1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  GIRLHAT2(UbongoBoards.GIRLHAT2, Arrays.asList(0, 2, 3, 4, 6, 7)), //
+  MICKEY_3(UbongoBoards.MICKEY_3, Arrays.asList(0, 1, 4, 6, 8, 10)), //
+  FREIGHT1(UbongoBoards.FREIGHT1, Arrays.asList(1, 4, 5, 6, 10, 12)), //
+  CHRISTMT(UbongoBoards.CHRISTMT, Arrays.asList(0, 1, 2, 3, 5, 7)), //
+  KERZENH1(UbongoBoards.KERZENH1, Arrays.asList(0, 1, 2, 4, 7, 9)), //
   ;
 
   public final UbongoBoards ubongoBoards;

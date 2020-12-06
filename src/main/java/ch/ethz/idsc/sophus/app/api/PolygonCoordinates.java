@@ -58,9 +58,8 @@ public enum PolygonCoordinates implements LogWeighting {
   ITERATIVE_IL_3(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 3)), //
   ITERATIVE_IL_5(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 5)), //
   ;
-  
-  private static final Set<PolygonCoordinates> CONVEX = EnumSet.of(INVERSE_DISTANCE, ITER_TARGET, TARGET);
 
+  private static final Set<PolygonCoordinates> CONVEX = EnumSet.of(INVERSE_DISTANCE, ITER_TARGET, TARGET);
   private final Genesis genesis;
 
   private PolygonCoordinates(Genesis genesis) {

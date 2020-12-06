@@ -124,7 +124,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     Tensor result = ImageCrop.color(RealScalar.ZERO).apply(template);
     int use = spinnerUse.getValue();
     String collect = result.stream().map(UbongoDesigner::rowToString).collect(EMBRACE2);
-    System.out.printf("UNTITLED(%d, %s),\n", use, collect);
+    System.out.printf("UNTITLED(%d, %s), //\n", use, collect);
     System.out.println(Pretty.of(result));
     UbongoBoard ubongoBoard = new UbongoBoard(result);
     List<List<UbongoEntry>> list = ubongoBoard.filter0(use);

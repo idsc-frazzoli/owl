@@ -104,12 +104,51 @@ import java.util.List;
   MASKDIFF(6, "  o    ", " ooooo ", "o ooo o", "ooooooo", " ooooo "),
   /***************************************************/
   /************ BATCH 4 ******************************/
-  NKAPPE_1(5, "  o    ", "  oo   ", "o ooo o", "ooooooo", " ooooo "),
-  TERRIER1(5, "  o    ", " ooo   ", "ooooooo", "  ooooo", "  o  oo", "  o   o"),
-  MASKEYES(5, "  o   ", " ooooo", "o oo o", "oooooo", " oooo "),
+  MODERN_1(4, "  oo ", "oooo ", " ooo ", " ooo ", "oo oo"), //
+  AUTOMOB1(4, "  oo  ", " ooooo", "oooooo", " o  o "), //
+  AUTOMOB2(5, "  oo   ", "ooooooo", "ooooooo", " oo oo "), //
+  AUTOMOB3(5, " oo    ", "ooooooo", "ooooooo", " oo oo "), //
+  FACTORY1(4, " o     ", " oo    ", " oo    ", " ooooo ", "ooo ooo"), //
+  FACTORY2(5, " o     ", " o   o ", "oo   o ", "oooooo ", "ooo ooo"), //
+  NKAPPE_1(5, "  o    ", "  oo   ", "o ooo o", "ooooooo", " ooooo "), //
+  TERRIER1(5, "  o    ", " ooo   ", "ooooooo", "  ooooo", "  o  oo", "  o   o"), //
+  MASKEYES(5, "  o   ", " ooooo", "o oo o", "oooooo", " oooo "), //
+  MODERN_2(5, "oo oo", "oooo ", " oooo", " ooo ", "ooooo"), //
+  HOLGRAIL(5, " oo  ", "ooooo", " ooo ", "  o  ", " oooo", "ooooo"), //
+  // BROTHER1(5, " ooo ", " ooo ", " ooo ", " o ", " oooo", "ooooo"), //
+  SICHEL_1(5, "  ooo", " oooo", "ooo  ", "oo   ", " oo  ", "  oo ", "  oo "), //
+  SICHAL_2(5, "  ooo", " ooo ", "ooo  ", "oo   ", " oo  ", " ooo ", " ooo "), //
+  GIRLHAT1(5, "  o  ", " ooo ", "ooooo", "  ooo", "ooooo", " ooo "), //
+  GIRLHAT2(5, " oo  ", " ooo ", "oo oo", "  ooo", "ooooo", " ooo "), //
   MICKEY_3(6, "oo  oo", "ooo oo", " oooo", " oooo", " o oo", "  oo  "), //
   FREIGHT1(6, "    o    ", "   ooo o ", "oo  o  oo", " oooooooo", "  oooooo "), //
-  CHRISTMT(6, "  o   ", "  oo  ", " oooo ", "oooo  ", " oooo ", "oooooo", "  o   ", "  oo  "),
+  CHRISTMT(6, "  o   ", "  oo  ", " oooo ", "oooo  ", " oooo ", "oooooo", "  o   ", "  oo  "), //
+  KERZENH1(6, "o o o o", "ooooooo", " ooooo ", " oooo  ", "  oo   "), //
+  // ---
+  /***************************************************/
+  /************ BATCH 5 ******************************/
+  KEYLOCK1(4, "ooooooo", "o o  oo", "ooo  oo"), //
+  SHOEBLK1(4, " ooo  ", "ooooo ", "o  ooo", "o  ooo"), //
+  PRINTED1(4, " o   ", " oo  ", " oo o", "ooooo", "ooooo"), //
+  LETTERA1(5, "ooooo", "oo  o", "oo  o", "ooooo", "o  oo", "o  oo"), //
+  LETTERA2(5, " ooo ", "oo oo", "o   o", "ooooo", "o  oo", "o  oo"), //
+  LETTER_C(5, " oooo ", "ooo oo", "o     ", "o     ", "oo  oo", " oooo "), //
+  LETTER_G(5, "oooo ", "oo   ", "o    ", "o ooo", "o  oo", "ooooo"), //
+  LETTER_I(5, "ooooo", "  oo ", "  oo ", "  oo ", " ooo ", "ooooo"), //
+  LETTER_J(5, " oooo", "   oo", "   oo", "o   o", "oo oo", "ooooo"), //
+  LETTER_M(5, "o   oo", "oooooo", "o oo o", "o    o", "o   oo", "o   oo"), //
+  LETTER_P(5, "ooooo", "oo  o", "oo  o", "ooooo", "oo   ", "oo   "), //
+  RINGRI_1(5, " ooooo", " o  oo", " o   o", " o  oo", "ooooo "), //
+  RINGRI_2(5, " ooooo", " o  oo", " o   o", " o  oo", "oooooo"), //
+  RINGRI_3(5, "ooooo ", "oo oo ", "o   o ", "o  oo ", "oooooo"), //
+  RINGRI_4(5, "ooooo ", "oo oo ", "o   o ", "oo oo ", "oooooo"), //
+  RINGRI_5(5, " ooo  ", "oo oo ", "o   o ", "oo oo ", "oooooo"), //
+  CHAPEL_1(5, "oooo ", "oo oo", "o   o", "oo oo", "oo oo"), //
+  CHAPEL_2(5, "  o  ", "oooo ", "oo oo", "o   o", "oo oo", "oo oo"), //
+  ARROWHD1(5, "oo ooo  ", "oo   oo ", "oooooooo", "     oo ", "    oo  "), //
+  FACTORY3(5, " oooo   ", " oooooo ", "oo o  oo", "oooo  oo"), //
+  FACTORY4(5, "ooooo  ", "ooooo  ", "o  oooo", "o  oooo"), //
+  CHAPEL_3(6, "  o   ", "ooooo ", "oo oo ", "o   oo", "oo ooo", "oo ooo"), //
   ;
 
   private final int use;

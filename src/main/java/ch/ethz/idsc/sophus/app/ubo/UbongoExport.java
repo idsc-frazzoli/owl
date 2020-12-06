@@ -15,10 +15,12 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
 /* package */ enum UbongoExport {
   ;
-  private static final File FILE = HomeDirectory.Pictures("ubongo_publish3");
+  private static final File FILE = HomeDirectory.Pictures("ubongo_publish4");
 
   public static void single() throws IOException {
-    for (UbongoPublish ubongoPublish : UbongoPublish.values()) {
+    List<UbongoPublish> list = Arrays.asList(UbongoPublish.values());
+    list = list.subList(UbongoPublish.MODERN_1.ordinal(), list.size());
+    for (UbongoPublish ubongoPublish : list) {
       BufferedImage bufferedImage = new BufferedImage( //
           UbongoViewer.maxWidth(), //
           UbongoViewer.maxHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -26,7 +28,8 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
       graphics.setColor(Color.WHITE);
       graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
       UbongoViewer.draw(graphics, ubongoPublish);
-      ImageIO.write(bufferedImage, "png", new File(FILE, ubongoPublish + ".png"));
+      String name = String.format("%03d_%s.png", ubongoPublish.ordinal(), ubongoPublish.name());
+      ImageIO.write(bufferedImage, "png", new File(FILE, name));
     }
   }
 
@@ -61,7 +64,7 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
   public static void main(String[] args) throws IOException {
     FILE.mkdir();
-    // single();
-    bulk();
+    single();
+    // bulk();
   }
 }
