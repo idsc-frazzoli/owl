@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.bd2;
 
 import ch.ethz.idsc.sophus.gbc.Amplifiers;
-import ch.ethz.idsc.sophus.gbc.DequeGenesis;
+import ch.ethz.idsc.sophus.gbc.GenesisDeque;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.IterativeTargetCoordinate;
 import ch.ethz.idsc.sophus.krg.InverseDistanceWeighting;
@@ -19,11 +19,11 @@ public class DequeGenesisProperties {
   @FieldIntegerQ
   public Scalar refine = RealScalar.of(20);
 
-  public DequeGenesis dequeGenesis() {
+  public GenesisDeque dequeGenesis() {
     int resolution = refine.number().intValue();
     TensorUnaryOperator tensorUnaryOperator = amplifiers.supply(beta);
     return lagrange //
-        ? new IterativeTargetCoordinate(InverseDistanceWeighting.of(InversePowerVariogram.of(2)), resolution)
+        ? new IterativeTargetCoordinate(InverseDistanceWeighting.of(InversePowerVariogram.of(2)), beta, resolution)
         : new IterativeAffineCoordinate(tensorUnaryOperator, resolution);
   }
 }

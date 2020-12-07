@@ -25,7 +25,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class CirclePointDemo extends ControlPointsDemo {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
@@ -76,9 +75,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
         Tensor lhs = Tensor.of(levers.stream().map(lever -> Append.of(lever, RealScalar.ONE)));
         Tensor rhs = weights;
         Tensor sol = LeastSquares.of(lhs, rhs);
-        Tensor err = AffineCoordinate.defect(levers, weights);
-        if (!Chop._08.allZero(err))
-          System.out.println(err.map(Chop._12));
         // System.out.println(sol.map(Chop._12));
         Tensor dir = sol.extract(0, 2);
         graphics.setColor(Color.RED);

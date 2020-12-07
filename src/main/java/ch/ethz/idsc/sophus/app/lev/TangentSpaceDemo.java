@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.bd2.DequeGenesisProperties;
-import ch.ethz.idsc.sophus.gbc.DequeGenesis;
+import ch.ethz.idsc.sophus.gbc.GenesisDeque;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate.Evaluation;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
@@ -66,8 +66,8 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
         pathRender.render(geometricLayer, graphics);
       }
       if (ConvexHull.isInside(levers2)) {
-        DequeGenesis dequeGenesis = iterativeAffineProperties.dequeGenesis();
-        Deque<Evaluation> deque = dequeGenesis.factors(levers2);
+        GenesisDeque dequeGenesis = iterativeAffineProperties.dequeGenesis();
+        Deque<Evaluation> deque = dequeGenesis.deque(levers2);
         {
           Tensor leversVirtual = deque.peekLast().factors().pmul(levers2);
           geometricLayer.pushMatrix(Se2Matrix.translation(origin));
@@ -97,7 +97,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
                   .map(tensor -> tensor.Get(fi))));
             }
             JFreeChart jFreeChart = ListPlot.of(visualSet);
-            jFreeChart.draw(graphics, new Rectangle2D.Double(1 * WIDTH, 0, WIDTH, 200));
+            jFreeChart.draw(graphics, new Rectangle2D.Double(0 * WIDTH, 0, WIDTH, 200));
           }
           {
             VisualSet visualSet = new VisualSet();
@@ -110,7 +110,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
                   .map(tensor -> tensor.Get(fi))));
             }
             JFreeChart jFreeChart = ListPlot.of(visualSet);
-            jFreeChart.draw(graphics, new Rectangle2D.Double(0 * WIDTH, 0, WIDTH, 200));
+            jFreeChart.draw(graphics, new Rectangle2D.Double(1 * WIDTH, 0, WIDTH, 200));
           }
         }
       }

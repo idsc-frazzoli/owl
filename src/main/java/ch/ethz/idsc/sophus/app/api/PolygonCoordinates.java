@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.IterativeMeanValueCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -40,7 +41,7 @@ public enum PolygonCoordinates implements LogWeighting {
   WACHSPRESS(ThreePointCoordinate.of(Barycenter.WACHSPRESS)), //
   DISCRETE_HARMONIC(ThreePointCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   INVERSE_DISTANCE(MetricCoordinate.of(InversePowerVariogram.of(2))), //
-  ITER_TARGET(new IterativeTargetCoordinate(InverseDistanceWeighting.of(InversePowerVariogram.of(2)), 50)), //
+  ITER_TARGET(new IterativeTargetCoordinate(InverseDistanceWeighting.of(InversePowerVariogram.of(2)), RealScalar.ONE, 50)), //
   ITERATIVE_AF_0(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 0)), //
   ITERATIVE_AF_1(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 1)), //
   ITERATIVE_AF_2(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 2)), //
