@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.gbc.HsCoordinates;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.IterativeTargetCoordinate;
+import ch.ethz.idsc.sophus.gbc.LagrangeCoordinate;
 import ch.ethz.idsc.sophus.gbc.MetricCoordinate;
 import ch.ethz.idsc.sophus.gbc.TargetCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
@@ -41,6 +42,7 @@ public enum PolygonCoordinates implements LogWeighting {
   WACHSPRESS(ThreePointCoordinate.of(Barycenter.WACHSPRESS)), //
   DISCRETE_HARMONIC(ThreePointCoordinate.of(Barycenter.DISCRETE_HARMONIC)), //
   INVERSE_DISTANCE(MetricCoordinate.of(InversePowerVariogram.of(2))), //
+  LAGRANG_DISTANCE(LagrangeCoordinate.of(InverseDistanceWeighting.of(InversePowerVariogram.of(2)))), //
   ITER_TARGET(new IterativeTargetCoordinate(InverseDistanceWeighting.of(InversePowerVariogram.of(2)), RealScalar.ONE, 50)), //
   ITERATIVE_AF_0(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 0)), //
   ITERATIVE_AF_1(IterativeCoordinate.of(AffineCoordinate.INSTANCE, 1)), //
@@ -60,7 +62,9 @@ public enum PolygonCoordinates implements LogWeighting {
   ITERATIVE_IL_5(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 5)), //
   ;
 
-  private static final Set<PolygonCoordinates> CONVEX = EnumSet.of(INVERSE_DISTANCE, ITER_TARGET, TARGET);
+  private static final Set<PolygonCoordinates> CONVEX = //
+      EnumSet.of(INVERSE_DISTANCE, LAGRANG_DISTANCE, ITER_TARGET, TARGET);
+  // ---
   private final Genesis genesis;
 
   private PolygonCoordinates(Genesis genesis) {

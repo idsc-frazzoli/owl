@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 /* package */ class PlanarScatteredSetCoordinateDemo extends A2ScatteredSetCoordinateDemo implements SpinnerListener<GeodesicDisplay> {
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
   // ---
-  private final DequeGenesisProperties dequeGenesisProperties = new DequeGenesisProperties();
+  private final GenesisDequeProperties dequeGenesisProperties = new GenesisDequeProperties();
 
   public PlanarScatteredSetCoordinateDemo() {
     super(Arrays.asList());
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
   @Override
   protected LogWeighting logWeighting() {
-    return new InsideConvexHullLogWeighting(dequeGenesisProperties.dequeGenesis());
+    return new InsideConvexHullLogWeighting(dequeGenesisProperties.genesis());
   }
 
   public static void main(String[] args) {

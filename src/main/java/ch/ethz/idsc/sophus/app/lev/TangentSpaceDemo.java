@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.PathRender;
 import ch.ethz.idsc.sophus.app.PointsRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.bd2.DequeGenesisProperties;
+import ch.ethz.idsc.sophus.app.bd2.GenesisDequeProperties;
 import ch.ethz.idsc.sophus.gbc.GenesisDeque;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate.Evaluation;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 /* package */ class TangentSpaceDemo extends AbstractPlaceDemo {
   private static final int WIDTH = 300;
   // ---
-  private final DequeGenesisProperties iterativeAffineProperties = new DequeGenesisProperties();
+  private final GenesisDequeProperties iterativeAffineProperties = new GenesisDequeProperties();
 
   public TangentSpaceDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
         pathRender.render(geometricLayer, graphics);
       }
       if (ConvexHull.isInside(levers2)) {
-        GenesisDeque dequeGenesis = iterativeAffineProperties.dequeGenesis();
+        GenesisDeque dequeGenesis = (GenesisDeque) iterativeAffineProperties.genesis();
         Deque<Evaluation> deque = dequeGenesis.deque(levers2);
         {
           Tensor leversVirtual = deque.peekLast().factors().pmul(levers2);

@@ -45,7 +45,8 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
       }
       if ( //
       logWeighting.equals(LogWeightings.WEIGHTING) || //
-      logWeighting.equals(LogWeightings.COORDINATE)) {
+      logWeighting.equals(LogWeightings.COORDINATE) || //
+      logWeighting.equals(LogWeightings.LAGRAINATE)) {
         spinnerVariogram.setValue(Variograms.INVERSE_POWER);
         spinnerBeta.setValueSafe(RealScalar.of(2));
       }
