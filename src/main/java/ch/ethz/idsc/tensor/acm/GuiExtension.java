@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.ref.gui;
+package ch.ethz.idsc.tensor.acm;
 
 import java.io.File;
 
@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.ref.FieldClip;
 import ch.ethz.idsc.tensor.ref.FieldColor;
 import ch.ethz.idsc.tensor.ref.FieldIntegerQ;
+import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
 public class GuiExtension {
   public String string = "abc";

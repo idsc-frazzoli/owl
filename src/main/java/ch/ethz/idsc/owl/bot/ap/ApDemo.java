@@ -15,13 +15,12 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.acm.TensorsExt;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 /** simple animation of a landing airplane */
 /* package */ enum ApDemo {
   ;
-  final static Tensor INITIAL = TensorsExt.of(0, 80, 60, Degree.of(-1));
+  final static Tensor INITIAL = Tensors.of(RealScalar.of(0), RealScalar.of(80), RealScalar.of(60), Degree.of(-1));
 
   public static void main(String[] args) throws Exception {
     // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
