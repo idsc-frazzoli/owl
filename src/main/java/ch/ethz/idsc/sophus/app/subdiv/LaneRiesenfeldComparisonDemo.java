@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
     timerFrame.jToolBar.addSeparator();
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    spinnerRefine.setValue(5);
+    spinnerRefine.setValue(4);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
     for (int i = 0; i < CURVE_SUBDIVISION_SCHEMES.size(); ++i)
