@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.ubo;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -9,14 +8,17 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.CyclicColorDataIndexed;
 import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
 
 /* package */ enum UbongoRender {
   ;
   private static final ColorDataIndexed INSTANCE = StrictColorDataIndexed.of(Tensor.of(Stream.of(Ubongo.values()).map(Ubongo::colorVector)));
+  private static final ColorDataIndexed MONOCHROME = CyclicColorDataIndexed.of(Tensors.of(Tensors.vector(160, 160, 160, 255)));
 
   /** @param list
    * @param solution
@@ -33,11 +35,17 @@ import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
     return image;
   }
 
+  /** @param list
+   * @param solution
+   * @return */
   public static Tensor of(List<Integer> list, List<UbongoEntry> solution) {
     return matrix(list, solution).map(INSTANCE);
   }
 
+  /** @param list
+   * @param solution
+   * @return */
   public static Tensor gray(List<Integer> list, List<UbongoEntry> solution) {
-    return matrix(list, solution).map(ConstantColorDataIndexed.of(new Color(160, 160, 160)));
+    return matrix(list, solution).map(MONOCHROME);
   }
 }

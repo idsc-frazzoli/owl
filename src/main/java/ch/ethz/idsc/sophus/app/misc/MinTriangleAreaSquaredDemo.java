@@ -14,6 +14,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.lie.r3.MinTriangleAreaSquared;
 import ch.ethz.idsc.sophus.math.AppendOne;
+import ch.ethz.idsc.sophus.ply.PolygonCentroid;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -47,12 +48,20 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     if (0 < sequence.length()) {
       Tensor polygon = Tensor.of(sequence.stream().map(AppendOne.FUNCTION));
       Tensor weights = MinTriangleAreaSquared.INSTANCE.origin(polygon);
-      Tensor weiszfeld = weights.dot(polygon).extract(0, 2);
-      LeversRender leversRender = //
-          LeversRender.of(geodesicDisplay, sequence, weiszfeld, geometricLayer, graphics);
-      leversRender.renderWeights(weights);
-      leversRender.renderOrigin();
-      leversRender.renderLevers(weights);
+      {
+        Tensor origin = weights.dot(polygon).extract(0, 2);
+        LeversRender leversRender = //
+            LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
+        leversRender.renderWeights(weights);
+        leversRender.renderOrigin();
+        leversRender.renderLevers(weights);
+      }
+      {
+        Tensor origin = PolygonCentroid.FUNCTION.apply(sequence);
+        LeversRender leversRender = //
+            LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
+        leversRender.renderOrigin();
+      }
     }
     renderControlPoints(geometricLayer, graphics);
   }
