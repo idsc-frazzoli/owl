@@ -21,7 +21,7 @@
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>sophus</artifactId>
 			<version>0.0.4</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>java</artifactId>
@@ -48,11 +48,8 @@
 			<artifactId>jfreesvg</artifactId>
 			<version>3.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.6.1</version>
-		</dependency>
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-math3</artifactId> 
+			<version>3.6.1</version> </dependency> -->
 
 		<dependency>
 			<groupId>junit</groupId>

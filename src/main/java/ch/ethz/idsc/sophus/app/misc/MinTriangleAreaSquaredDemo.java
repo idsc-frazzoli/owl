@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     pathRender.setCurve(sequence, true);
     if (0 < sequence.length()) {
       Tensor polygon = Tensor.of(sequence.stream().map(AppendOne.FUNCTION));
-      Tensor weights = MinTriangleAreaSquared.weights(polygon);
+      Tensor weights = MinTriangleAreaSquared.INSTANCE.origin(polygon);
       Tensor weiszfeld = weights.dot(polygon).extract(0, 2);
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, weiszfeld, geometricLayer, graphics);
