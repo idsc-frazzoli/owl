@@ -62,15 +62,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
 
   public LogWeightingDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
-    {
-      spinnerLogWeighting.setList(array);
-      if (array.contains(LogWeightings.COORDINATE))
-        spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
-      else
-        spinnerLogWeighting.setIndex(0);
-      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "weights");
-      spinnerLogWeighting.addSpinnerListener(spinnerListener);
-    }
+    spinnerLogWeighting.addSpinnerListener(spinnerListener);
     {
       spinnerBiinvariant.setArray(Biinvariants.values());
       spinnerBiinvariant.setValue(Biinvariants.TARGET);

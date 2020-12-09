@@ -26,7 +26,8 @@ public abstract class LogWeightingBase extends AbstractPlaceDemo {
         spinnerLogWeighting.setValue(LogWeightings.COORDINATE);
       else
         spinnerLogWeighting.setIndex(0);
-      spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "weights");
+      if (1 < array.size())
+        spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "weights");
     }
     timerFrame.jToolBar.addSeparator();
     // ---
