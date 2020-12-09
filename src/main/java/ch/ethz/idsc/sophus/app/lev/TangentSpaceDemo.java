@@ -39,6 +39,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
   public TangentSpaceDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
+    // ---
     Container container = timerFrame.jFrame.getContentPane();
     ConfigPanel configPanel = ConfigPanel.of(iterativeAffineProperties);
     container.add("West", configPanel.getFields());
