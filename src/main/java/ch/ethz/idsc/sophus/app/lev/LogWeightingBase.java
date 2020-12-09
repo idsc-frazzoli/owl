@@ -30,7 +30,9 @@ public abstract class LogWeightingBase extends AbstractPlaceDemo {
         spinnerLogWeighting.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "weights");
     }
     timerFrame.jToolBar.addSeparator();
-    // ---
+  }
+
+  public final void addMouseRecomputation() {
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {

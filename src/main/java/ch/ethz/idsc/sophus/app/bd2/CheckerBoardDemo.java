@@ -81,6 +81,8 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     addSpinnerListener(l -> recompute());
     recompute();
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
+    // ---
+    addMouseRecomputation();
   }
 
   public void actionPerformed(ActionEvent actionEvent) {

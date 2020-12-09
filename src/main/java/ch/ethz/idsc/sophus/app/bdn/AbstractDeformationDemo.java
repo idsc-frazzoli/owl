@@ -83,6 +83,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override
   protected final void recompute() {
+    System.out.println("recomp");
     movingDomain2D = updateMovingDomain2D(movingOrigin);
   }
 

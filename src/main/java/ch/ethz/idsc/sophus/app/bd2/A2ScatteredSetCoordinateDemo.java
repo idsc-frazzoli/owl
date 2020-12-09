@@ -28,6 +28,7 @@ import ch.ethz.idsc.tensor.Tensor;
     timerFrame.jToolBar.add(jToggleAxes);
     jToggleHeatmap.setVisible(false);
     jToggleArrows.setVisible(false);
+    addMouseRecomputation();
   }
 
   @Override
