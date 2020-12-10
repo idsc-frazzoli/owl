@@ -47,11 +47,10 @@ public abstract class MovingDomain2D {
   public abstract Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean);
 
   /** @return array of weights for visualization */
-  // TODO function should be outside of class
   public final Tensor arrayReshape_weights() {
     if (Objects.isNull(_wgs)) {
-      int rows = domain.length();
-      int cols = Unprotect.dimension1(domain);
+      int rows = weights.length;
+      int cols = weights[0].length;
       Tensor wgs = Tensors.matrix((i, j) -> weights[i][j], rows, cols);
       List<Integer> dims = Dimensions.of(wgs);
       _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));

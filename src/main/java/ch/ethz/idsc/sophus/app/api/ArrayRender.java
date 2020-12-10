@@ -25,7 +25,7 @@ public class ArrayRender implements RenderInterface {
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     for (int i0 = 1; i0 < array.length; ++i0)
-      for (int i1 = 1; i1 < array.length; ++i1) {
+      for (int i1 = 1; i1 < array[i0].length; ++i1) {
         Tensor po = array[i0][i1];
         Tensor p0 = array[i0 - 1][i1];
         Tensor p1 = array[i0][i1 - 1];

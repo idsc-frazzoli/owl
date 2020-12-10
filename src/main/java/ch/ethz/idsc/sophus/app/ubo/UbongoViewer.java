@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
   public static int maxHeight() {
     // TODO 300 is a magic const
-    return Math.max(300, MAX_Y * SCALE + MARGIN_Y * 2);
+    return MAX_Y * SCALE + MARGIN_Y * 2;
   }
 
   // ---
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
-    spinnerIndex.setValue(UbongoPublish.MODERN_1);
+    spinnerIndex.setValue(UbongoPublish.CHRISTMT);
   }
 
   @Override
@@ -67,19 +67,21 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
     draw(graphics, spinnerIndex.getValue());
   }
 
-  private static final double EXTENT = 2.0;
+  
 
   public static void draw(Graphics2D graphics, UbongoPublish ubongoPublish) {
     {
-      GeometricLayer geometricLayer = GeometricLayer.of(Dot.of(Se2Matrix.flipY(500), DiagonalMatrix.of(300, 300, 1)));
+      
+      int maxHeight = maxHeight();
+      GeometricLayer geometricLayer = GeometricLayer.of(Dot.of(Se2Matrix.flipY(maxHeight), DiagonalMatrix.of(maxHeight, maxHeight, 1)));
       int res = 20;
-      Tensor dx = Subdivide.of(0.0, EXTENT, res - 1);
-      Tensor dy = Subdivide.of(0.0, EXTENT, res - 1);
+      Tensor dx = Subdivide.of(0.0, 2.0, res - 1);
+      Tensor dy = Subdivide.of(0.0, 1.0, res - 1);
       Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
       Tensor origin = Tensors.fromString("{{0,0}, {1,0}, {0,1}, {1,1},{2,0}}");
       TensorUnaryOperator tensorUnaryOperator = Biinvariants.METRIC.coordinate(RnManifold.INSTANCE, InversePowerVariogram.of(2), origin);
       MovingDomain2D movingDomain2D = AveragedMovingDomain2D.of(origin, tensorUnaryOperator, domain);
-      Tensor target = Tensors.fromString("{{0,0}, {1,0.2}, {0,0.8},{2,4},{3,2}}");
+      Tensor target = Tensors.fromString("{{0,0}, {1,0.2}, {0,0.8},{2,4},{2.1,.2}}");
       Tensor[][] forward = movingDomain2D.forward(target, RnBiinvariantMean.INSTANCE);
       AxesRender.INSTANCE.render(geometricLayer, graphics);
       new ArrayRender(forward, ColorDataGradients.CLASSIC) //
