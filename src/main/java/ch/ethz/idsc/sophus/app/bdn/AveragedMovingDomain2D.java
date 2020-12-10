@@ -11,8 +11,15 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
-/* package */ class AveragedMovingDomain2D extends MovingDomain2D {
-  public AveragedMovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
+public class AveragedMovingDomain2D extends MovingDomain2D {
+  /** @param origin
+   * @param tensorUnaryOperator
+   * @param domain */
+  public static MovingDomain2D of(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
+    return new AveragedMovingDomain2D(origin, tensorUnaryOperator, domain);
+  }
+
+  private AveragedMovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
     super(origin, tensorUnaryOperator, domain);
   }
 

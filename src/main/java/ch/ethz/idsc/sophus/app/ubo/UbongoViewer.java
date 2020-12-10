@@ -11,33 +11,51 @@ import java.util.List;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.ArrayRender;
+import ch.ethz.idsc.sophus.app.bdn.AveragedMovingDomain2D;
+import ch.ethz.idsc.sophus.app.bdn.MovingDomain2D;
+import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.rn.RnManifold;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ImageRotate;
 import ch.ethz.idsc.tensor.io.ImageFormat;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /* package */ class UbongoViewer extends AbstractDemo {
-  public static final int GRY = 128;
-  static final int MARGIN_X = 400;
-  static final int MARGIN_Y = 13;
+  private static final int GRY = 128;
+  private static final int MARGIN_X = 400;
+  private static final int MARGIN_Y = 13;
   // 61.1465
-  static final int SCALE = 62;
+  private static final int SCALE = 62;
   private static final int ZCALE = 12;
   private static final int MAX_X = 9;
   private static final int MAX_Y = 8;
-  private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
 
   public static int maxWidth() {
     return MARGIN_X + MAX_X * SCALE + 1;
   }
 
   public static int maxHeight() {
+    // TODO 300 is a magic const
     return Math.max(300, MAX_Y * SCALE + MARGIN_Y * 2);
   }
+
+  // ---
+  private final SpinnerLabel<UbongoPublish> spinnerIndex = SpinnerLabel.of(UbongoPublish.values());
 
   public UbongoViewer() {
     spinnerIndex.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "index");
@@ -49,10 +67,25 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
     draw(graphics, spinnerIndex.getValue());
   }
 
+  private static final double EXTENT = 2.0;
+
   public static void draw(Graphics2D graphics, UbongoPublish ubongoPublish) {
-    graphics.setColor(new Color(192 - 32, 192 - 32, 192 - 32));
-    // graphics.drawLine(0, 0, maxWidth(), 0);
-    // graphics.drawLine(0, maxHeight() - 1, maxWidth(), maxHeight() - 1);
+    {
+      GeometricLayer geometricLayer = GeometricLayer.of(Dot.of(Se2Matrix.flipY(500), DiagonalMatrix.of(300, 300, 1)));
+      int res = 20;
+      Tensor dx = Subdivide.of(0.0, EXTENT, res - 1);
+      Tensor dy = Subdivide.of(0.0, EXTENT, res - 1);
+      Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
+      Tensor origin = Tensors.fromString("{{0,0}, {1,0}, {0,1}, {1,1},{2,0}}");
+      TensorUnaryOperator tensorUnaryOperator = Biinvariants.METRIC.coordinate(RnManifold.INSTANCE, InversePowerVariogram.of(2), origin);
+      MovingDomain2D movingDomain2D = AveragedMovingDomain2D.of(origin, tensorUnaryOperator, domain);
+      Tensor target = Tensors.fromString("{{0,0}, {1,0.2}, {0,0.8},{2,4},{3,2}}");
+      Tensor[][] forward = movingDomain2D.forward(target, RnBiinvariantMean.INSTANCE);
+      AxesRender.INSTANCE.render(geometricLayer, graphics);
+      new ArrayRender(forward, ColorDataGradients.CLASSIC) //
+          .render(geometricLayer, graphics);
+    }
+    //
     List<List<UbongoEntry>> solutions = UbongoLoader.INSTANCE.load(ubongoPublish.ubongoBoards);
     {
       UbongoBoard ubongoBoard = ubongoPublish.ubongoBoards.board();
@@ -100,7 +133,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void main(String[] args) {
-    UbongoViewer ubongoBrowser = new UbongoViewer();
-    ubongoBrowser.setVisible(1200, 600);
+    UbongoViewer ubongoViewer = new UbongoViewer();
+    ubongoViewer.setVisible(1200, 600);
   }
 }

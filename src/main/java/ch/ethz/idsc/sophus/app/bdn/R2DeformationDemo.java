@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /** moving least squares */
 /* package */ class R2DeformationDemo extends AbstractDeformationDemo {
-  private static final int EXTENT = 5;
+  private static final double EXTENT = 5.0;
   private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.1));
   // ---
   private final JToggleButton jToggleRigidMotionFit = new JToggleButton("MLS");
@@ -66,13 +66,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override
   MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
-    Tensor dx = Subdivide.of(0, EXTENT, res - 1);
-    Tensor dy = Subdivide.of(0, EXTENT, res - 1);
+    // TODO meshgrid functionality is already(?)/should be generalized
+    Tensor dx = Subdivide.of(0.0, EXTENT, res - 1);
+    Tensor dy = Subdivide.of(0.0, EXTENT, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy)), dx.length(), dy.length());
     TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
     return jToggleRigidMotionFit.isSelected() //
         ? new RnFittedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain)
-        : new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
+        : AveragedMovingDomain2D.of(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override

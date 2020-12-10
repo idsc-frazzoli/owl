@@ -35,14 +35,14 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
   }
 
   @Override // from AbstractDeformationDemo
-  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     double rad = 1.0;
     Tensor dx = Subdivide.of(-rad, rad, res - 1);
     Tensor dy = Subdivide.of(-rad, rad, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> HnWeierstrassCoordinate.toPoint(Tensors.of(dx.get(cx), dy.get(cy))), dx.length(), dy.length());
     TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
-    return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
+    return AveragedMovingDomain2D.of(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override // from AbstractDeformationDemo

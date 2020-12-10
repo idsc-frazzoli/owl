@@ -35,12 +35,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   @Override
-  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(0, 6, res - 1);
     Tensor dy = Subdivide.of(0, 6, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> Tensors.of(dx.get(cx), dy.get(cy), RealScalar.ZERO), dx.length(), dy.length());
-    return new AveragedMovingDomain2D(movingOrigin, operator(movingOrigin), domain);
+    return AveragedMovingDomain2D.of(movingOrigin, operator(movingOrigin), domain);
   }
 
   @Override

@@ -16,7 +16,8 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 /** Reference:
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
-/* package */ abstract class MovingDomain2D {
+// TODO move class to different package
+public abstract class MovingDomain2D {
   private final Tensor origin;
   final Tensor domain;
   final Tensor[][] weights;
@@ -43,7 +44,10 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     return origin;
   }
 
+  public abstract Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean);
+
   /** @return array of weights for visualization */
+  // TODO function should be outside of class
   public final Tensor arrayReshape_weights() {
     if (Objects.isNull(_wgs)) {
       int rows = domain.length();
@@ -54,6 +58,4 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     }
     return _wgs;
   }
-
-  public abstract Tensor[][] forward(Tensor target, BiinvariantMean biinvariantMean);
 }

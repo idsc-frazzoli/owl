@@ -55,13 +55,13 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   @Override
-  AveragedMovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
+  MovingDomain2D updateMovingDomain2D(Tensor movingOrigin) {
     int res = refinement();
     Tensor dx = Subdivide.of(-1, 1, res - 1);
     Tensor dy = Subdivide.of(-1, 1, res - 1);
     Tensor domain = Tensors.matrix((cx, cy) -> NORMALIZE.apply(Tensors.of(dx.get(cx), dy.get(cy), ZHEIGHT)), dx.length(), dy.length());
     TensorUnaryOperator tensorUnaryOperator = operator(movingOrigin);
-    return new AveragedMovingDomain2D(movingOrigin, tensorUnaryOperator, domain);
+    return AveragedMovingDomain2D.of(movingOrigin, tensorUnaryOperator, domain);
   }
 
   @Override
