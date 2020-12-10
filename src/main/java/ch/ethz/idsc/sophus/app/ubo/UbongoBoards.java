@@ -125,13 +125,14 @@ import java.util.List;
   CHRISTMT(6, "  o   ", "  oo  ", " oooo ", "oooo  ", " oooo ", "oooooo", "  o   ", "  oo  "), //
   KERZENH1(6, "o o o o", "ooooooo", " ooooo ", " oooo  ", "  oo   "), //
   // ---
+  // dont use:
+  LETTERA2(5, " ooo ", "oo oo", "o   o", "ooooo", "o  oo", "o  oo"), //
   /***************************************************/
   /************ BATCH 5 ******************************/
   KEYLOCK1(4, "ooooooo", "o o  oo", "ooo  oo"), //
   SHOEBLK1(4, " ooo  ", "ooooo ", "o  ooo", "o  ooo"), //
   PRINTED1(4, " o   ", " oo  ", " oo o", "ooooo", "ooooo"), //
   LETTERA1(5, "ooooo", "oo  o", "oo  o", "ooooo", "o  oo", "o  oo"), //
-  LETTERA2(5, " ooo ", "oo oo", "o   o", "ooooo", "o  oo", "o  oo"), //
   LETTER_C(5, " oooo ", "ooo oo", "o     ", "o     ", "oo  oo", " oooo "), //
   LETTER_G(5, "oooo ", "oo   ", "o    ", "o ooo", "o  oo", "ooooo"), //
   LETTER_I(5, "ooooo", "  oo ", "  oo ", "  oo ", " ooo ", "ooooo"), //
@@ -149,6 +150,10 @@ import java.util.List;
   FACTORY3(5, " oooo   ", " oooooo ", "oo o  oo", "oooo  oo"), //
   FACTORY4(5, "ooooo  ", "ooooo  ", "o  oooo", "o  oooo"), //
   CHAPEL_3(6, "  o   ", "ooooo ", "oo oo ", "o   oo", "oo ooo", "oo ooo"), //
+  AIRPLAN1(5, "   o  o", " oooooo", "ooooooo", "  oo  o", "   o   "), //
+  CACTUS_1(5, "  o  ", "o o o", "o ooo", "ooooo", " ooo ", "  oo ", "  oo "), //
+  BATMAN_1(6, " o   o ", " oo oo ", " ooooo ", " o o oo", "oooooo ", " ooooo "), //
+  LETTER_S(6, " oooo", "oo  o", "ooo  ", " oooo", "   oo", "ooooo"), //
   ;
 
   private final int use;

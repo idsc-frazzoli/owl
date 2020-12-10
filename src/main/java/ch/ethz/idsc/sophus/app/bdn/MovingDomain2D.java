@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.bdn;
 
 import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,8 +20,12 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   private final Tensor origin;
   final Tensor domain;
   final Tensor[][] weights;
-  private final Tensor _wgs;
+  /* for visualization only */
+  private Tensor _wgs = null;
 
+  /** @param origin reference control points that will be associated to given targets
+   * @param tensorUnaryOperator
+   * @param domain */
   public MovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
     this.origin = origin;
     this.domain = domain;
@@ -32,18 +37,21 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
         Tensor point = domain.get(cx, cy);
         weights[cx][cy] = tensorUnaryOperator.apply(point);
       }
-    {
-      Tensor wgs = Tensors.matrix((i, j) -> weights[i][j], rows, cols);
-      List<Integer> dims = Dimensions.of(wgs);
-      _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
-    }
   }
 
   public final Tensor origin() {
     return origin;
   }
 
-  public final Tensor weights() {
+  /** @return array of weights for visualization */
+  public final Tensor arrayReshape_weights() {
+    if (Objects.isNull(_wgs)) {
+      int rows = domain.length();
+      int cols = Unprotect.dimension1(domain);
+      Tensor wgs = Tensors.matrix((i, j) -> weights[i][j], rows, cols);
+      List<Integer> dims = Dimensions.of(wgs);
+      _wgs = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
+    }
     return _wgs;
   }
 

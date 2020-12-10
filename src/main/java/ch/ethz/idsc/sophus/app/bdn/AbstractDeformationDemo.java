@@ -24,10 +24,11 @@ import ch.ethz.idsc.sophus.app.api.LogWeighting;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ abstract class AbstractDeformationDemo extends ScatteredSetWeightingDemo {
@@ -35,6 +36,8 @@ import ch.ethz.idsc.tensor.sca.N;
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255));
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  /** for parameterization of geodesic */
+  private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
   private final JButton jButton = new JButton("snap");
@@ -103,19 +106,20 @@ import ch.ethz.idsc.tensor.sca.N;
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();
     // ---
-    new ArrayRender( //
-        movingDomain2D.forward(target, biinvariantMean()), //
-        colorDataGradient().deriveWithOpacity(RationalScalar.HALF)) //
-            .render(geometricLayer, graphics);
-    { // connect origin and target pairs with lines/geodesics
+    {
+      ColorDataGradient colorDataGradient = colorDataGradient().deriveWithOpacity(RealScalar.of(0.5));
+      new ArrayRender(movingDomain2D.forward(target, biinvariantMean()), colorDataGradient) //
+          .render(geometricLayer, graphics);
+    }
+    boolean isTarget = jToggleTarget.isSelected();
+    if (isTarget) { // connect origin and target pairs with lines/geodesics
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       graphics.setColor(new Color(128, 128, 128, 255));
       graphics.setStroke(STROKE);
       for (int index = 0; index < origin.length(); ++index) {
         ScalarTensorFunction scalarTensorFunction = //
             geodesicInterface.curve(origin.get(index), target.get(index));
-        Tensor domain = Subdivide.of(0, 1, 15);
-        Tensor ms = Tensor.of(domain.map(scalarTensorFunction).stream() //
+        Tensor ms = Tensor.of(DOMAIN.map(scalarTensorFunction).stream() //
             .map(geodesicDisplay::toPoint));
         graphics.draw(geometricLayer.toPath2D(ms));
       }
@@ -124,13 +128,13 @@ import ch.ethz.idsc.tensor.sca.N;
     POINTS_RENDER_POINTS //
         .show(geodesicDisplay::matrixLift, shapeOrigin(), origin) //
         .render(geometricLayer, graphics);
-    boolean isTarget = jToggleTarget.isSelected();
-    LeversRender leversRender = LeversRender.of(geodesicDisplay, //
-        isTarget ? getGeodesicControlPoints() : origin, null, geometricLayer, graphics);
+    LeversRender leversRender = LeversRender.of(geodesicDisplay, isTarget //
+        ? getGeodesicControlPoints()
+        : origin, null, geometricLayer, graphics);
     if (isTarget)
       leversRender.renderSequence();
     leversRender.renderIndexP(isTarget ? "q" : "p");
     if (jToggleHeatmap.isSelected())
-      ArrayPlotRender.rescale(movingDomain2D.weights(), colorDataGradient(), 3).render(geometricLayer, graphics);
+      ArrayPlotRender.rescale(movingDomain2D.arrayReshape_weights(), colorDataGradient(), 3).render(geometricLayer, graphics);
   }
 }

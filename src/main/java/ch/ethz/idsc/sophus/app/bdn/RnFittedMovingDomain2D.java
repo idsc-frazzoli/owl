@@ -13,6 +13,9 @@ import ch.ethz.idsc.tensor.opt.rn.RigidMotionFit;
  * "Weighted Averages on Surfaces"
  * by Daniele Panozzo, Ilya Baran, Olga Diamanti, Olga Sorkine-Hornung */
 /* package */ class RnFittedMovingDomain2D extends MovingDomain2D {
+  /** @param origin
+   * @param tensorUnaryOperator
+   * @param domain */
   public RnFittedMovingDomain2D(Tensor origin, TensorUnaryOperator tensorUnaryOperator, Tensor domain) {
     super(origin, tensorUnaryOperator, domain);
   }

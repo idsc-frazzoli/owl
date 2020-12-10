@@ -79,6 +79,32 @@ import java.util.List;
   FREIGHT1(UbongoBoards.FREIGHT1, Arrays.asList(1, 4, 5, 6, 10, 12)), //
   CHRISTMT(UbongoBoards.CHRISTMT, Arrays.asList(0, 1, 2, 3, 5, 7)), //
   KERZENH1(UbongoBoards.KERZENH1, Arrays.asList(0, 1, 2, 4, 7, 9)), //
+  /** BATCH 5 2020 Dezember 9 */
+  KEYLOCK1(UbongoBoards.KEYLOCK1, Arrays.asList(0, 2, 3, 5, 6, 8)), //
+  SHOEBLK1(UbongoBoards.SHOEBLK1, Arrays.asList(1, 2, 5, 7, 10, 11)), //
+  PRINTED1(UbongoBoards.PRINTED1, Arrays.asList(1, 2, 4, 5, 6, 8)), //
+  LETTERA1(UbongoBoards.PRINTED1, Arrays.asList(1, 2, 3, 4, 5, 6)), //
+  LETTER_C(UbongoBoards.LETTER_C, Arrays.asList(0, 1, 2, 3, 4, 6)), //
+  LETTER_G(UbongoBoards.LETTER_G, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  LETTER_I(UbongoBoards.LETTER_I, Arrays.asList(1, 2, 3, 5, 7, 9)), //
+  LETTERJ0(UbongoBoards.LETTER_J, Arrays.asList(1, 2, 4, 11, 12, 14)), //
+  LETTERJ1(UbongoBoards.LETTER_J, Arrays.asList(6, 7, 9, 16, 17, 18)), //
+  LETTER_M(UbongoBoards.LETTER_J, Arrays.asList(1, 2, 3, 4, 5, 6)), //
+  LETTER_P(UbongoBoards.LETTER_P, Arrays.asList(8, 10, 15, 16, 18, 20)), //
+  RINGRI_1(UbongoBoards.RINGRI_1, Arrays.asList(0, 1, 2, 7, 8, 9)), //
+  RINGRI3A(UbongoBoards.RINGRI_3, Arrays.asList(0, 2, 3, 8, 9, 11)), //
+  RINGRI3B(UbongoBoards.RINGRI_3, Arrays.asList(4, 5, 6, 12, 14, 15)), //
+  RINGRI_4(UbongoBoards.RINGRI_4, Arrays.asList(1, 2, 3, 5, 7, 13)), //
+  RINGRI_5(UbongoBoards.RINGRI_5, Arrays.asList(1, 2, 3, 4, 7, 8)), //
+  CHAPEL_2(UbongoBoards.CHAPEL_2, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  ARROWHD1(UbongoBoards.ARROWHD1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  FACTORY3(UbongoBoards.FACTORY3, Arrays.asList(4, 8, 10, 12, 15, 31)), //
+  FACTORY4(UbongoBoards.FACTORY4, Arrays.asList(5, 6, 8, 12, 16, 20)), //
+  CHAPEL_3(UbongoBoards.CHAPEL_3, Arrays.asList(0, 2, 4, 5, 6, 7)), //
+  AIRPLAN1(UbongoBoards.AIRPLAN1, Arrays.asList(1, 3, 6, 7, 14, 16)), //
+  CACTUS_1(UbongoBoards.CACTUS_1, Arrays.asList(0, 6, 7, 9, 14, 19)), //
+  BATMAN_1(UbongoBoards.BATMAN_1, Arrays.asList(4, 9, 11, 12, 14, 16)), //
+  LETTER_S(UbongoBoards.LETTER_S, Arrays.asList(1, 2, 3, 4, 6, 7)), //
   ;
 
   public final UbongoBoards ubongoBoards;
