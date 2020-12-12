@@ -149,9 +149,9 @@ import java.util.List;
   ARROWHD1(5, "oo ooo  ", "oo   oo ", "oooooooo", "     oo ", "    oo  "), //
   FACTORY3(5, " oooo   ", " oooooo ", "oo o  oo", "oooo  oo"), //
   FACTORY4(5, "ooooo  ", "ooooo  ", "o  oooo", "o  oooo"), //
-  CHAPEL_3(6, "  o   ", "ooooo ", "oo oo ", "o   oo", "oo ooo", "oo ooo"), //
   AIRPLAN1(5, "   o  o", " oooooo", "ooooooo", "  oo  o", "   o   "), //
   CACTUS_1(5, "  o  ", "o o o", "o ooo", "ooooo", " ooo ", "  oo ", "  oo "), //
+  CHAPEL_3(6, "  o   ", "ooooo ", "oo oo ", "o   oo", "oo ooo", "oo ooo"), //
   BATMAN_1(6, " o   o ", " oo oo ", " ooooo ", " o o oo", "oooooo ", " ooooo "), //
   LETTER_S(6, " oooo", "oo  o", "ooo  ", " oooo", "   oo", "ooooo"), //
   ;

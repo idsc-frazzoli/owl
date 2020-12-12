@@ -12,11 +12,11 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 
-public class ArrayRender implements RenderInterface {
+public class MeshRender implements RenderInterface {
   private final Tensor[][] array;
   private final ColorDataGradient colorDataGradient;
 
-  public ArrayRender(Tensor[][] array, ColorDataGradient colorDataGradient) {
+  public MeshRender(Tensor[][] array, ColorDataGradient colorDataGradient) {
     this.array = Objects.requireNonNull(array);
     this.colorDataGradient = colorDataGradient;
   }
@@ -32,7 +32,7 @@ public class ArrayRender implements RenderInterface {
         {
           Scalar shading = QuadShading.ANGLE.map(po, p0, p1, pd);
           graphics.setColor(ColorFormat.toColor(colorDataGradient.apply(shading)));
-          graphics.fill(geometricLayer.toPath2D(Unprotect.byRef(po, p0, pd, p1)));
+          // graphics.fill(geometricLayer.toPath2D(Unprotect.byRef(po, p0, pd, p1)));
         }
         graphics.draw(geometricLayer.toPath2D(Unprotect.byRef(p0, po)));
         graphics.draw(geometricLayer.toPath2D(Unprotect.byRef(p1, po)));

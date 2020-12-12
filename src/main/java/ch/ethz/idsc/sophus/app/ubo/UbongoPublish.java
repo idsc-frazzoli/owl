@@ -100,9 +100,9 @@ import java.util.List;
   ARROWHD1(UbongoBoards.ARROWHD1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
   FACTORY3(UbongoBoards.FACTORY3, Arrays.asList(4, 8, 10, 12, 15, 31)), //
   FACTORY4(UbongoBoards.FACTORY4, Arrays.asList(5, 6, 8, 12, 16, 20)), //
-  CHAPEL_3(UbongoBoards.CHAPEL_3, Arrays.asList(0, 2, 4, 5, 6, 7)), //
   AIRPLAN1(UbongoBoards.AIRPLAN1, Arrays.asList(1, 3, 6, 7, 14, 16)), //
   CACTUS_1(UbongoBoards.CACTUS_1, Arrays.asList(0, 6, 7, 9, 14, 19)), //
+  CHAPEL_3(UbongoBoards.CHAPEL_3, Arrays.asList(0, 2, 4, 5, 6, 7)), //
   BATMAN_1(UbongoBoards.BATMAN_1, Arrays.asList(4, 9, 11, 12, 14, 16)), //
   LETTER_S(UbongoBoards.LETTER_S, Arrays.asList(1, 2, 3, 4, 6, 7)), //
   ;

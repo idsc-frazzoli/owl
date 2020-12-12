@@ -35,7 +35,7 @@ public class PolygonClip implements TensorUnaryOperator {
   private final Tensor[] vertex;
 
   private PolygonClip(Tensor clip) {
-    vertex = clip.stream().map(Tensor::copy).toArray(Tensor[]::new);
+    vertex = clip.stream().toArray(Tensor[]::new);
   }
 
   @Override

@@ -49,6 +49,16 @@ import ch.ethz.idsc.tensor.red.Total;
     // System.out.println("count=" + count);
   }
 
+  public Tensor indices() {
+    Tensor tensor = Tensors.empty();
+    for (int row = 0; row < mask.length(); ++row)
+      for (int col = 0; col < mask.get(row).length(); ++col) {
+        if (mask.Get(row, col).equals(FREE))
+          tensor.append(Tensors.vector(row, col));
+      }
+    return tensor;
+  }
+
   public List<List<UbongoEntry>> filter0(int use) {
     List<List<UbongoEntry>> solutions = new LinkedList<>();
     for (Tensor index : Subsets.of(Range.of(0, 12), use)) {
