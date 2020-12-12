@@ -18,7 +18,7 @@ public class ArrowheadTest extends TestCase {
     Scalar scalar = PolygonArea.FUNCTION.apply(polygon);
     assertEquals(scalar, RationalScalar.HALF);
     Sign.requirePositive(scalar);
-    Tensor centroid = PolygonCentroid.FUNCTION.apply(polygon);
+    Tensor centroid = PolygonCentroid.of(polygon);
     ExactTensorQ.require(centroid);
     assertEquals(centroid, Array.zeros(2));
   }

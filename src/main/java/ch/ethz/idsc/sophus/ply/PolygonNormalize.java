@@ -12,7 +12,7 @@ public enum PolygonNormalize {
    * @return */
   public static Tensor of(Tensor polygon, Scalar area) {
     Scalar factor = Sqrt.FUNCTION.apply(area.divide(PolygonArea.FUNCTION.apply(polygon)));
-    Tensor shift = PolygonCentroid.FUNCTION.apply(polygon).negate();
+    Tensor shift = PolygonCentroid.of(polygon).negate();
     return Tensor.of(polygon.stream().map(shift::add)).multiply(factor);
   }
 }

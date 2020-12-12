@@ -17,7 +17,7 @@ public class UbongoPrintable implements Printable {
     Graphics2D graphics = (Graphics2D) g;
     RenderQuality.setQuality(graphics);
     graphics.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-    graphics.scale(0.735, 0.735);
+    // graphics.scale(0.735, 0.735);
     if (pageIndex < UbongoPublish.values().length) {
       UbongoViewer.draw(graphics, UbongoPublish.values()[pageIndex]);
       return Printable.PAGE_EXISTS;

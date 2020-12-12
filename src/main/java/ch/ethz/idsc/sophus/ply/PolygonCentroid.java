@@ -6,14 +6,13 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 
-public enum PolygonCentroid implements TensorUnaryOperator {
-  FUNCTION;
-
-  @Override
-  public Tensor apply(Tensor polygon) {
+public enum PolygonCentroid {
+  ;
+  /** @param polygon
+   * @return */
+  public static Tensor of(Tensor polygon) {
     Tensor prev = Last.of(polygon);
     Tensor contrib = Tensors.empty();
     for (int index = 0; index < polygon.length(); ++index) {

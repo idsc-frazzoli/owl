@@ -2,19 +2,25 @@
 package ch.ethz.idsc.sophus.ply;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
 public class PolygonClipTest extends TestCase {
@@ -34,6 +40,13 @@ public class PolygonClipTest extends TestCase {
     result.append(RealScalar.ZERO);
     assertTrue(Tensors.isEmpty(a));
     assertTrue(Tensors.isEmpty(b));
+  }
+
+  public void testEmptyNonEmpty() {
+    Tensor a = Tensors.empty();
+    Tensor b = RandomVariate.of(UniformDistribution.unit(), 10, 2);
+    Tensor result = PolygonClip.of(a).apply(b);
+    assertTrue(Tensors.isEmpty(result));
   }
 
   public void testSimple() {
@@ -88,25 +101,29 @@ public class PolygonClipTest extends TestCase {
     assertEquals(area, RationalScalar.of(1, 3));
   }
 
+  public void testSome() {
+    Tensor circ = CirclePoints.of(7).multiply(RealScalar.of(4));
+    Tensor poly = Tensors.fromString(
+        "{{-5, 0}, {-5.667, -1.050}, {-3.683, -4.750}, {0.067, -5.533}, {1.183, -3.850}, {3.383, -2.183}, {1.683, -1.517}, {-2.283, -3.183}, {-2.933, -2.617}, {-2.317, -1.650}, {-3.4, -2.35}}");
+    TensorUnaryOperator tensorUnaryOperator = PolygonClip.of(circ);
+    Tensor result = tensorUnaryOperator.apply(poly);
+    assertEquals(Dimensions.of(result), Arrays.asList(9, 2));
+  }
+
+  public void testRandom() {
+    Tensor circ = CirclePoints.of(7);
+    TensorUnaryOperator tensorUnaryOperator = PolygonClip.of(circ);
+    for (int n = 3; n < 20; ++n) {
+      Tensor poly = RandomVariate.of(NormalDistribution.standard(), n, 2);
+      Tensor result = tensorUnaryOperator.apply(poly);
+      if (0 < result.length()) {
+        MatrixQ.require(result);
+        assertEquals((int) Dimensions.of(result).get(1), 2);
+      }
+    }
+  }
+
   public void testFail() {
     AssertFail.of(() -> PolygonClip.of(HilbertMatrix.of(2, 3)));
-  }
-
-  public void testLine() {
-    Tensor tensor = PolygonClip.intersection( //
-        Tensors.vector(1, 0), //
-        Tensors.vector(2, 0), //
-        Tensors.vector(3, 3), //
-        Tensors.vector(3, 2));
-    assertEquals(tensor, Tensors.vector(3, 0));
-    ExactTensorQ.require(tensor);
-  }
-
-  public void testSingular() {
-    AssertFail.of(() -> PolygonClip.intersection( //
-        Tensors.vector(1, 0), //
-        Tensors.vector(2, 0), //
-        Tensors.vector(4, 0), //
-        Tensors.vector(9, 0)));
   }
 }

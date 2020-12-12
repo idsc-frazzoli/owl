@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
         leversRender.renderLevers(weights);
       }
       {
-        Tensor origin = PolygonCentroid.FUNCTION.apply(sequence);
+        Tensor origin = PolygonCentroid.of(sequence);
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderOrigin();

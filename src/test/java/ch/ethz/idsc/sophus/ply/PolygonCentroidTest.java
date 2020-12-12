@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class PolygonCentroidTest extends TestCase {
   public void testSimple() {
     for (int n = 3; n < 10; ++n) {
-      Tensor centroid = PolygonCentroid.FUNCTION.apply(CirclePoints.of(n));
+      Tensor centroid = PolygonCentroid.of(CirclePoints.of(n));
       Tolerance.CHOP.requireAllZero(centroid);
     }
   }
@@ -19,7 +19,7 @@ public class PolygonCentroidTest extends TestCase {
   public void testTranslated() {
     for (int n = 3; n < 10; ++n) {
       Tensor shift = RandomVariate.of(UniformDistribution.unit(), 2);
-      Tensor centroid = PolygonCentroid.FUNCTION.apply(Tensor.of(CirclePoints.of(n).stream().map(shift::add)));
+      Tensor centroid = PolygonCentroid.of(Tensor.of(CirclePoints.of(n).stream().map(shift::add)));
       Tolerance.CHOP.requireClose(centroid, shift);
     }
   }
