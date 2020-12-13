@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
   }
 
   public static void main(String[] args) {
-    UbongoBoards ubongoBoards = UbongoBoards.LETTER_S;
+    UbongoBoards ubongoBoards = UbongoBoards.TOWERBR1;
     List<List<UbongoEntry>> list = // ubongoBoards.solve();
         UbongoLoader.INSTANCE.load(ubongoBoards);
     if (list.isEmpty()) {

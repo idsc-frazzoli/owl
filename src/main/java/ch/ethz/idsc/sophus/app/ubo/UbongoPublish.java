@@ -105,6 +105,38 @@ import java.util.List;
   CHAPEL_3(UbongoBoards.CHAPEL_3, Arrays.asList(0, 2, 4, 5, 6, 7)), //
   BATMAN_1(UbongoBoards.BATMAN_1, Arrays.asList(4, 9, 11, 12, 14, 16)), //
   LETTER_S(UbongoBoards.LETTER_S, Arrays.asList(1, 2, 3, 4, 6, 7)), //
+  // ---
+  ALIENFC1(UbongoBoards.ALIENFC1, Arrays.asList(1, 4, 9, 13, 16, 19)), //
+  PRALINE1(UbongoBoards.PRALINE1, Arrays.asList(5, 10, 11, 18, 19, 24)), //
+  PRALINE2(UbongoBoards.PRALINE2, Arrays.asList(3, 5, 6, 7, 10, 13)), //
+  PRALINE3(UbongoBoards.PRALINE3, Arrays.asList(2, 3, 6, 8, 10, 11)), //
+  SOMETRE1(UbongoBoards.SOMETRE1, Arrays.asList(0, 2, 4, 9, 10, 12)), //
+  UMBRELL1(UbongoBoards.UMBRELL1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  SKULLED1(UbongoBoards.SKULLED1, Arrays.asList(0, 1, 2, 9, 11, 12)), //
+  SKULLED2(UbongoBoards.SKULLED2, Arrays.asList(2, 7, 14, 17, 19, 20)), //
+  ROOFED_1(UbongoBoards.ROOFED_1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  ROOFED_2(UbongoBoards.ROOFED_2, Arrays.asList(0, 1, 3, 4, 7, 8)), //
+  FLOWER_3(UbongoBoards.FLOWER_3, Arrays.asList(0, 2, 7, 10, 15, 16)), //
+  FLOWER_4(UbongoBoards.FLOWER_4, Arrays.asList(2, 7, 8, 9, 11, 13)), //
+  SKULLED3(UbongoBoards.SKULLED3, Arrays.asList(2, 11, 13, 19, 23, 24)), //
+  SKULLED4(UbongoBoards.SKULLED4, Arrays.asList(0, 2, 3, 5, 11, 15)), //
+  HYDRANT1(UbongoBoards.HYDRANT1, Arrays.asList(0, 3, 5, 11, 17, 20)), //
+  HYDRANTA(UbongoBoards.HYDRANT1, Arrays.asList(6, 9, 10, 26, 27, 29)), //
+  HYDRANT2(UbongoBoards.HYDRANT2, Arrays.asList(0, 1, 2, 7, 8, 13)), //
+  HYDRANTB(UbongoBoards.HYDRANT2, Arrays.asList(3, 4, 5, 14, 15, 17)), //
+  HYDRANT3(UbongoBoards.HYDRANT3, Arrays.asList(0, 3, 6, 7, 9, 11)), //
+  HYDRANTC(UbongoBoards.HYDRANT3, Arrays.asList(12, 14, 15, 18, 20, 22)), //
+  HYDRANT4(UbongoBoards.HYDRANT4, Arrays.asList(0, 1, 5, 10, 11, 12)), //
+  HYDRANTD(UbongoBoards.HYDRANT4, Arrays.asList(7, 8, 9, 16, 19, 20)), //
+  // ---
+  MODERN_3(UbongoBoards.MODERN_3, Arrays.asList(8, 10, 11, 13, 14, 16)), //
+  MODERN_4(UbongoBoards.MODERN_4, Arrays.asList(5, 7, 8, 10, 16, 18)), //
+  MODERN_5(UbongoBoards.MODERN_5, Arrays.asList(4, 7, 9, 15, 16, 18)), //
+  MODERN_A(UbongoBoards.MODERN_5, Arrays.asList(12, 13, 14, 19, 25, 27)), //
+  MOUSEGT1(UbongoBoards.MOUSEGT1, Arrays.asList(1, 2, 4, 7, 8, 11)), //
+  TOWERBR1(UbongoBoards.TOWERBR1, Arrays.asList(0, 1, 2, 3, 4, 5)), //
+  HELMET_1(UbongoBoards.HELMET_1, Arrays.asList(0, 1, 2, 12, 13, 14)), //
+  HELMET_A(UbongoBoards.HELMET_1, Arrays.asList(7, 9, 11, 15, 17, 20)), //
   ;
 
   public final UbongoBoards ubongoBoards;

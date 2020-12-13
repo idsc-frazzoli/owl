@@ -154,6 +154,35 @@ import java.util.List;
   CHAPEL_3(6, "  o   ", "ooooo ", "oo oo ", "o   oo", "oo ooo", "oo ooo"), //
   BATMAN_1(6, " o   o ", " oo oo ", " ooooo ", " o o oo", "oooooo ", " ooooo "), //
   LETTER_S(6, " oooo", "oo  o", "ooo  ", " oooo", "   oo", "ooooo"), //
+  // ---
+  ALIENFC1(5, "  o   ", " oooo ", "oo oo ", " ooooo", " oooo ", "   oo "), //
+  PRALINE1(5, " oooo", " o oo", "ooooo", "o o o", "ooooo"), //
+  PRALINE2(5, "ooooo", " o oo", "ooooo", "o o o", "ooooo"), //
+  PRALINE3(5, "ooooo", "oooo ", "ooooo", "o o  ", "ooo  "), //
+  SOMETRE1(5, "  o  ", " oooo", "  oo ", "ooooo", " ooo ", "  oo ", " ooo "), //
+  UMBRELL1(5, "  oo  ", " oooo ", "oooooo", "o  o o", "   o  ", "   o  ", "  oo  "), //
+  SKULLED1(5, "o  o ", "ooooo", "o o o", "ooooo", " ooo ", " ooo "), //
+  SKULLED2(5, " oo  ", "oooo ", "oo o ", "ooooo", " ooo ", " oo  "), //
+  ROOFED_1(5, "  o  ", "ooooo", " ooo ", "oooo ", "ooo  ", "ooo  "), //
+  ROOFED_2(5, "  o  ", "ooooo", " ooo ", " ooo ", " oooo", "ooooo"), //
+  HYDRANT5(5, "   o ", "  ooo", " oooo", "oooo ", " ooo ", "  ooo", "  oo "), //
+  FLOWER_1(5, " oo  ", "oooo ", " ooo ", "  oo ", "  oo ", " oooo", "  oo "), //
+  FLOWER_2(5, " o  ", "ooo ", "oooo", "ooo ", " ooo", "oooo", " oo "), //
+  FLOWER_3(5, " oo ", "ooo ", "oooo", "ooo ", " ooo", "oooo", " oo "), //
+  FLOWER_4(5, "  ooo ", " oooo ", "ooooo ", " ooooo", " oooo ", "  o   "), //
+  SKULLED3(6, " ooo  ", "ooooo ", "oo ooo", "oo  oo", "ooooo ", "  oo  "), //
+  SKULLED4(6, " ooo  ", "ooooo ", "oo ooo", "oo  oo", "ooooo ", " ooo  "), //
+  HYDRANT1(6, "  oo ", " oooo", "  ooo", "ooooo", " ooo ", "  oo ", " oooo"), //
+  HYDRANT2(6, " oooo ", " ooooo", " ooooo", "ooooo ", "  oo  ", "  ooo ", "  oo  "), //
+  HYDRANT3(6, "  ooo ", " ooooo", " ooooo", "ooooo ", "  oo  ", "  ooo ", "  oo  "), //
+  HYDRANT4(6, "   oo ", "  oooo", " ooooo", "ooooo ", "  oo  ", "  ooo ", "  oo  "), //
+  // ---
+  MODERN_3(5, "  ooo", "ooooo", "ooooo", " oooo", "oo   "), //
+  MODERN_4(5, "  ooo", "ooooo", "ooooo", " oooo", " o  o"), //
+  MODERN_5(6, "  ooo  ", "ooooo o", "ooooooo", " ooooo ", " o  o  "), //
+  MOUSEGT1(6, "oo    ", "oo oo ", " oooo ", " ooo  ", "ooooo ", "oo ooo"), //
+  TOWERBR1(6, "  o   o  ", "  oo  o  ", " ooo ooo ", "ooooooooo", " oo   oo "), //
+  HELMET_1(6, " ooo ", "ooooo", "oo oo", "oo oo", " oooo", "oo  o"), //
   ;
 
   private final int use;
