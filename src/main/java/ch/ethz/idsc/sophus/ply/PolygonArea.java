@@ -11,17 +11,16 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 
 /** polygon not necessarily convex
  * 
  * computes signed area circumscribed by given polygon
  * area is positive when polygon is in counter-clockwise direction */
-public enum PolygonArea implements TensorScalarFunction {
-  FUNCTION;
-
-  @Override
-  public Scalar apply(Tensor polygon) {
+public enum PolygonArea {
+  ;
+  /** @param polygon
+   * @return */
+  public static Scalar of(Tensor polygon) {
     if (Tensors.isEmpty(polygon))
       return RealScalar.ZERO;
     Tensor prev = Last.of(polygon);

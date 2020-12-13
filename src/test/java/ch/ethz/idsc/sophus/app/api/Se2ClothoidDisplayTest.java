@@ -27,8 +27,8 @@ public class Se2ClothoidDisplayTest extends TestCase {
   }
 
   public void testShapeArea() {
-    Scalar a1 = PolygonArea.FUNCTION.apply(Arrowhead.of(0.4));
-    Scalar a2 = PolygonArea.FUNCTION.apply(Se2ClothoidDisplay.ANALYTIC.shape());
+    Scalar a1 = PolygonArea.of(Arrowhead.of(0.4));
+    Scalar a2 = PolygonArea.of(Se2ClothoidDisplay.ANALYTIC.shape());
     Tolerance.CHOP.requireClose(a1, a2);
   }
 }

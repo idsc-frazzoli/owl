@@ -76,7 +76,7 @@ public class PolygonClipTest extends TestCase {
     Tensor clipper = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     Tensor subject = Tensors.fromString("{{0, 0}, {1, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(clipper).apply(subject);
-    Scalar area = PolygonArea.FUNCTION.apply(result);
+    Scalar area = PolygonArea.of(result);
     assertEquals(area, RationalScalar.of(1, 4));
     assertTrue(ExactScalarQ.of(area));
   }
@@ -86,7 +86,7 @@ public class PolygonClipTest extends TestCase {
     Tensor subj = Tensors.fromString("{{0, 0}, {2, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(clip).apply(subj);
     assertTrue(equalsCycle(result, Tensors.fromString("{{0, 0}, {1, 0}, {1, 1/3}, {1/2, 1/2}}")));
-    Scalar area = PolygonArea.FUNCTION.apply(result);
+    Scalar area = PolygonArea.of(result);
     assertTrue(ExactScalarQ.of(area));
     assertEquals(area, RationalScalar.of(1, 3));
   }
@@ -96,7 +96,7 @@ public class PolygonClipTest extends TestCase {
     Tensor subj = Tensors.fromString("{{0, 0}, {2, 0}, {1/2, 1/2}}");
     Tensor result = Serialization.copy(PolygonClip.of(subj)).apply(clip);
     assertTrue(equalsCycle(result, Tensors.fromString("{{1/2, 1/2}, {0, 0}, {1, 0}, {1, 1/3}}")));
-    Scalar area = PolygonArea.FUNCTION.apply(result);
+    Scalar area = PolygonArea.of(result);
     assertTrue(ExactScalarQ.of(area));
     assertEquals(area, RationalScalar.of(1, 3));
   }

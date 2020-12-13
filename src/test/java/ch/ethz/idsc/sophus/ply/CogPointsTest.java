@@ -14,7 +14,7 @@ public class CogPointsTest extends TestCase {
   public void testSimple() {
     Tensor polygon = CogPoints.of(10, RealScalar.of(10.2), RealScalar.of(3.2));
     assertEquals(Dimensions.of(polygon), Arrays.asList(40, 2));
-    Sign.requirePositive(PolygonArea.FUNCTION.apply(polygon));
+    Sign.requirePositive(PolygonArea.of(polygon));
     Tensor convex = ConvexHull.of(polygon);
     assertEquals(Dimensions.of(convex), Arrays.asList(20, 2));
   }

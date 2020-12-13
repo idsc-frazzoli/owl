@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class ArrowheadTest extends TestCase {
   public void testOriented() {
     Tensor polygon = Arrowhead.of(1);
-    Scalar scalar = PolygonArea.FUNCTION.apply(polygon);
+    Scalar scalar = PolygonArea.of(polygon);
     assertEquals(scalar, RationalScalar.HALF);
     Sign.requirePositive(scalar);
     Tensor centroid = PolygonCentroid.of(polygon);

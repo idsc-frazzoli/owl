@@ -10,6 +10,6 @@ import junit.framework.TestCase;
 public class SpearheadTest extends TestCase {
   public void testSimple() {
     Tensor polygon = Spearhead.of(Tensors.vector(-0.806, -0.250, -0.524), RealScalar.of(0.1));
-    Sign.requirePositive(PolygonArea.FUNCTION.apply(polygon));
+    Sign.requirePositive(PolygonArea.of(polygon));
   }
 }

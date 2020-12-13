@@ -10,6 +10,6 @@ public class StarPointsTest extends TestCase {
   public void testSimple() {
     Tensor polygon = StarPoints.of(4, RealScalar.ONE, RealScalar.of(0.3));
     assertEquals(polygon.length(), 8);
-    Sign.requirePositive(PolygonArea.FUNCTION.apply(polygon));
+    Sign.requirePositive(PolygonArea.of(polygon));
   }
 }
