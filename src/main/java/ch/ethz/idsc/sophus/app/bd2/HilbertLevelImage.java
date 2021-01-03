@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.app.bd2;
 
 import java.awt.image.BufferedImage;
 
-import ch.ethz.idsc.sophus.app.ArrayPlotRender;
-import ch.ethz.idsc.sophus.app.api.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
+import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ConstantArray;

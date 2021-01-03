@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.image.BufferedImage;
 
-import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.gui.win.AbstractDemoHelper;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

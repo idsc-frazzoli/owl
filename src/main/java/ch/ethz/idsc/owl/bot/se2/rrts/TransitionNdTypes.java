@@ -3,11 +3,11 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.RnGeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.Se2AbstractGeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
+import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.RnGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 
 /* package */ enum TransitionNdTypes {

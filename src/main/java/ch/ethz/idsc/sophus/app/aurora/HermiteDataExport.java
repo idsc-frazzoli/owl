@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.aurora;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -17,6 +16,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.sophus.opt.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.ref.d1.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
-import ch.ethz.idsc.sophus.app.api.MixedLogWeightings;
+import ch.ethz.idsc.sophus.opt.MixedLogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

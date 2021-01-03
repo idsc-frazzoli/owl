@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.gui.win.AbstractDemo;
 import ch.ethz.idsc.tensor.Tensor;
 
 class EspFrame extends AbstractDemo {

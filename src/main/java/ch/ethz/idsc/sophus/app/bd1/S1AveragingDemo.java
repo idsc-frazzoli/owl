@@ -7,10 +7,10 @@ import java.awt.geom.Path2D;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.PointsRender;
-import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
+import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gui.ren.PathRender;
+import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.krg.Kriging;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

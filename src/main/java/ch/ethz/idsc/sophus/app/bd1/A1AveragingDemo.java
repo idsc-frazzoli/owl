@@ -5,7 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.util.Arrays;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

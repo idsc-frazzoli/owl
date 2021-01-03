@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.Se2ClothoidDisplay;
-import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
+import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import junit.framework.TestCase;
 
 public class TransitionNdTypesTest extends TestCase {

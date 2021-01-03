@@ -20,7 +20,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.gui.win.AbstractDemo;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
   // ---
   private final SpinnerLabel<Integer> spinnerUse = SpinnerLabel.of(2, 3, 4, 5, 6, 7, 8);
   private final GridRender gridRender;
-  private final Tensor template = Array.fill(() -> RealScalar.ZERO, 8, 10);
+  private final Tensor template = Array.fill(() -> RealScalar.ZERO, 9, 10);
 
   public UbongoDesigner() {
     spinnerUse.setValue(4);

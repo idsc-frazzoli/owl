@@ -13,12 +13,12 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.PathRender;
-import ch.ethz.idsc.sophus.app.PointsRender;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.bd2.GenesisDequeProperties;
 import ch.ethz.idsc.sophus.gbc.GenesisDeque;
 import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate.Evaluation;
+import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gui.ren.PathRender;
+import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

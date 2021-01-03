@@ -8,7 +8,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.lane.LaneInterface;
-import ch.ethz.idsc.sophus.app.PathRender;
+import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class LaneRender implements RenderInterface {

@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedRadiusGeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedRadiusGeodesicCenterFilter;
+import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bdn;
 
-import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
+import ch.ethz.idsc.sophus.gui.win.AbstractDemoHelper;
 import junit.framework.TestCase;
 
 public class R2DeformationDemoTest extends TestCase {
