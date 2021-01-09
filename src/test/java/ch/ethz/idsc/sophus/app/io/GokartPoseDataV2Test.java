@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.io;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
@@ -14,17 +15,7 @@ public class GokartPoseDataV2Test extends TestCase {
   }
 
   public void testListUnmodifiable() {
-    try {
-      GokartPoseDataV2.INSTANCE.list().clear();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GokartPoseDataV2.RACING_DAY.list().clear();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GokartPoseDataV2.INSTANCE.list().clear());
+    AssertFail.of(() -> GokartPoseDataV2.RACING_DAY.list().clear());
   }
 }

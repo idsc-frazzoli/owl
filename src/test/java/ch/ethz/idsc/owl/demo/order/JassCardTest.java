@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.demo.order;
 
 import ch.ethz.idsc.owl.demo.order.JassCard.Color;
 import ch.ethz.idsc.owl.demo.order.JassCard.Type;
+import ch.ethz.idsc.owl.math.AssertFail;
 import junit.framework.TestCase;
 
 public class JassCardTest extends TestCase {
@@ -15,18 +16,8 @@ public class JassCardTest extends TestCase {
     JassCard card1 = new JassCard(Color.EICHEL, Type.ACE, true);
     JassCard card2 = new JassCard(Color.SCHELLE, Type.ACE, true);
     JassCard card3 = new JassCard(Color.SCHELLE, Type.ACE, true);
-    try {
-      card1.cheatChecker(card2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      card2.cheatChecker(card3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> card1.cheatChecker(card2));
+    AssertFail.of(() -> card2.cheatChecker(card3));
   }
 
   public void testIsLess() {

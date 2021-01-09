@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
 import ch.ethz.idsc.tensor.num.Pi;
 
+// TODO crashes when only 2 control points exist
 /* package */ class S1BarycentricCoordinateDemo extends A1BarycentricCoordinateDemo {
   public S1BarycentricCoordinateDemo() {
     super(LogWeightings.list());

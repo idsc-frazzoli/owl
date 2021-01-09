@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
         Tensor origin = controlPointsAll.get(0);
         Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-        Tensor weights = new HsInfluence(matrix).leverages_sqrt();
+        Tensor weights = HsInfluence.of(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor sequence = result.extract(1, result.length());
         Tensor origin = result.get(0);
         Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-        Tensor weights = new HsInfluence(matrix).leverages_sqrt();
+        Tensor weights = HsInfluence.of(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();

@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.sca.Abs;
 
+// TODO behaves counter intuitively!?
 /* package */ class R1AveragingDemo extends A1AveragingDemo {
   public R1AveragingDemo() {
     super(R2GeodesicDisplay.INSTANCE);

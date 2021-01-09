@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.gui.win;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -37,12 +38,7 @@ public class GeometricLayerTest extends TestCase {
     geometricLayer.popMatrix();
     geometricLayer.popMatrix();
     assertEquals(mouseSe2State, geometricLayer.getMouseSe2State());
-    try {
-      geometricLayer.popMatrix();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> geometricLayer.popMatrix());
   }
 
   public void testVector() {
@@ -60,12 +56,7 @@ public class GeometricLayerTest extends TestCase {
   public void testStackFail() {
     GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
     geometricLayer.popMatrix();
-    try {
-      geometricLayer.popMatrix();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> geometricLayer.popMatrix());
   }
 
   public void testSerializableFail() {

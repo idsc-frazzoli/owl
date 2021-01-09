@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.opt;
 
 import java.util.Objects;

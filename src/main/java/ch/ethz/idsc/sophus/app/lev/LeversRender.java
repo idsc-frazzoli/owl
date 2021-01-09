@@ -236,7 +236,7 @@ public class LeversRender {
       TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
       Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
       Tensor w1 = new Mahalanobis(matrix).leverages_sqrt();
-      Tensor w2 = new HsInfluence(matrix).leverages_sqrt();
+      Tensor w2 = HsInfluence.of(matrix).leverages_sqrt();
       Chop._05.requireClose(w1, w2);
       renderWeights(w1);
     }
@@ -474,7 +474,7 @@ public class LeversRender {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-      Tensor influence = new HsInfluence(matrix).matrix();
+      Tensor influence = HsInfluence.of(matrix).matrix();
       // ---
       graphics.setFont(FONT_MATRIX);
       MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
@@ -489,7 +489,7 @@ public class LeversRender {
       // HsProjection hsProjection = ;
       // Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
       Tensor projections = Tensor.of(sequence.stream() //
-          .map(point -> new HsInfluence(new HsDesign(vectorLogManifold).matrix(sequence, point)).matrix()));
+          .map(point -> HsInfluence.of(new HsDesign(vectorLogManifold).matrix(sequence, point)).matrix()));
       // ---
       graphics.setFont(FONT_MATRIX);
       int index = 0;

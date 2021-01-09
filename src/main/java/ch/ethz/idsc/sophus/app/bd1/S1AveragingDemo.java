@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
-// TODO what does this demo do!?
+// TODO what does this demo do: there is no curve shown
 /* package */ class S1AveragingDemo extends AnAveragingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 

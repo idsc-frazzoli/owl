@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rice.Duncan1StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
@@ -59,12 +60,7 @@ public class AbstractEpisodeIntegratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, integrator, //
         init);
     assertEquals(episodeIntegrator.tail(), init);
-    try {
-      episodeIntegrator.move(Tensors.vector(1), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> episodeIntegrator.move(Tensors.vector(1), RealScalar.of(3)));
   }
 
   public void testRice1Units() {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.gui.win;
 
+import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -28,11 +29,6 @@ public class DubinsGeneratorTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      DubinsGenerator.of(Tensors.vector(1, 2, 3, 4), Tensors.fromString("{{1, 0, 0}, {1, 0, 0.3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DubinsGenerator.of(Tensors.vector(1, 2, 3, 4), Tensors.fromString("{{1, 0, 0}, {1, 0, 0.3}}")));
   }
 }
