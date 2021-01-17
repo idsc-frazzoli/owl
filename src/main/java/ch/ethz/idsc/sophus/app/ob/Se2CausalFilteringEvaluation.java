@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.red.Total;
         errors.append(xyaDiff);
       }
     }
-    return (Scalar) Total.of(errors);
+    return Total.ofVector(errors);
   }
 
   /** @param alpha: filter parameter

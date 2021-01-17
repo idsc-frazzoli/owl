@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.sim;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -13,10 +14,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   public static Tensor create(int resolution) {
     Tensor localPoints = Tensors.empty();
     for (Tensor _xn : Subdivide.of(0, 1, resolution - 1)) {
-      double xn = _xn.Get().number().doubleValue();
+      double xn = ((Scalar) _xn).number().doubleValue();
       double dist = 0.6 + 1.5 * xn + xn * xn;
       for (Tensor _yn : Subdivide.of(-0.5, 0.5, resolution - 1)) {
-        double y = _yn.Get().number().doubleValue();
+        double y = ((Scalar) _yn).number().doubleValue();
         Tensor probe = Tensors.vector(dist, y * dist);
         localPoints.append(probe);
       }

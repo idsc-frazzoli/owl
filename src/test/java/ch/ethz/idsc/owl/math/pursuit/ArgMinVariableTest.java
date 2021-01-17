@@ -63,7 +63,7 @@ public class ArgMinVariableTest extends TestCase {
       assertEquals(Dimensions.of(tensor), Arrays.asList(200, 3));
       assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
     }
-    Scalar mean_duration = N.DOUBLE.of(Mean.of(timings).Get()); // in seconds
+    Scalar mean_duration = N.DOUBLE.of((Scalar) Mean.of(timings)); // in seconds
     assertTrue(Scalars.lessEquals(mean_duration, RealScalar.of(2.3))); // datahaki -> 0.20723770650000004
   }
 }

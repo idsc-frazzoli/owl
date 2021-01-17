@@ -16,6 +16,6 @@ public enum SymGeodesic implements GeodesicInterface {
 
   @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    return SymScalar.of(p.Get(), q.Get(), scalar);
+    return SymScalar.of((Scalar) p, (Scalar) q, scalar);
   }
 }

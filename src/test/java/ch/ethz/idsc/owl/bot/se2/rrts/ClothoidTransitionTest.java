@@ -43,7 +43,7 @@ public class ClothoidTransitionTest extends TestCase {
     ClothoidTransition clothoidTransition = ClothoidTransition.of(CLOTHOID_BUILDER, start, end);
     TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(0.2));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
-    assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
+    assertTrue(transitionWrap.spacing().stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
   }
 
   public void testSingularPoint() {

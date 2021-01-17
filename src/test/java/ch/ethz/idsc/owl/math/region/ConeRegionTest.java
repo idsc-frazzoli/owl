@@ -72,7 +72,7 @@ public class ConeRegionTest extends TestCase {
 
   public void testNegativeBug() {
     for (Tensor _radius : Subdivide.of(0.1, 3 * Math.PI, 10)) {
-      ConeRegion coneRegion = new ConeRegion(Tensors.vector(0, 0, 6 * Math.PI), _radius.Get());
+      ConeRegion coneRegion = new ConeRegion(Tensors.vector(0, 0, 6 * Math.PI), (Scalar) _radius);
       for (Tensor tensor : RandomVariate.of(NormalDistribution.standard(), 50, 2))
         Sign.requirePositiveOrZero(coneRegion.distance(tensor));
     }

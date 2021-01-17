@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.swing.JToggleButton;
 
@@ -63,9 +62,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
     // ---
     Tensor _effective = control;
     // ---
-    Integer[] array = Ordering.INCREASING.of(_effective.get(Tensor.ALL, 0));
-    Tensor x = Tensor.of(Stream.of(array).map(i -> _effective.get(i, 0)));
-    Tensor y = Tensor.of(Stream.of(array).map(i -> _effective.get(i, 1)));
+    int[] array = Ordering.INCREASING.of(_effective.get(Tensor.ALL, 0));
+    Tensor x = Tensor.of(Arrays.stream(array).mapToObj(i -> _effective.get(i, 0)));
+    Tensor y = Tensor.of(Arrays.stream(array).mapToObj(i -> _effective.get(i, 1)));
     ScalarTensorFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, x, y);
     Clip clip = Clips.interval(x.Get(0), Last.of(x));

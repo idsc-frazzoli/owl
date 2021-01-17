@@ -23,7 +23,7 @@ class TnWrap implements CoordinateWrap, Serializable {
   public TnWrap(Tensor extension) {
     this.extension = extension;
     for (Tensor _n : extension) {
-      Scalar n = _n.Get();
+      Scalar n = (Scalar) _n;
       mod_distance.add(Mod.function(n, n.multiply(NEGATIVE_HALF)));
     }
   }

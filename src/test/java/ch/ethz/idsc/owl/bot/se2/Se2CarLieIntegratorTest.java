@@ -44,7 +44,7 @@ public class Se2CarLieIntegratorTest extends TestCase {
     Distribution distribution = UniformDistribution.of(-0.3, +0.3);
     Distribution speeds = UniformDistribution.of(0, 3);
     for (Tensor _ratio : RandomVariate.of(distribution, 100)) {
-      Scalar ratio = _ratio.Get();
+      Scalar ratio = (Scalar) _ratio;
       Scalar speed = RandomVariate.of(speeds);
       Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
       Tensor lookAhead = Se2CarLieIntegrator.INSTANCE.spin(Array.zeros(3), u);

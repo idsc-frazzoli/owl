@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -51,7 +52,7 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
     collection.add(Array.zeros(2));
     for (Tensor amp : Subdivide.of(0, 1, seg).extract(1, seg + 1))
       for (Tensor u : CirclePoints.of(resolution))
-        collection.add(u.multiply(amp.Get()));
+        collection.add(u.multiply((Scalar) amp));
     return collection;
   }
 }

@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.gbc.HsCoordinates;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.InsideConvexHullCoordinate;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -39,6 +40,6 @@ public class InsideConvexHullLogWeighting implements LogWeighting {
       Tensor sequence, Tensor values) {
     TensorUnaryOperator tensorUnaryOperator = operator(biinvariant, vectorLogManifold, variogram, sequence);
     Objects.requireNonNull(values);
-    return point -> tensorUnaryOperator.apply(point).dot(values).Get();
+    return point -> (Scalar) tensorUnaryOperator.apply(point).dot(values);
   }
 }

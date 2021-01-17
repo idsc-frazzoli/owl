@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Exp;
       Tensor above = Tensors.empty();
       Tensor below = Tensors.empty();
       for (Tensor _t : DOMAIN) {
-        Scalar t = _t.Get();
+        Scalar t = (Scalar) _t;
         Se2GroupElement se2GroupElement = new Se2GroupElement(clothoid.apply(t));
         Scalar curvature = lagrangeQuadraticD.apply(t);
         Scalar radius = Exp.FUNCTION.apply(curvature.multiply(curvature).negate());

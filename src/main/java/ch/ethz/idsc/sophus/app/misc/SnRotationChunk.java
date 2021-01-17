@@ -28,7 +28,7 @@ public class SnRotationChunk implements RenderInterface {
 
   public SnRotationChunk(int dimension, int numel, int max_size, double speed, ColorDataGradient colorDataGradient) {
     this.colorDataGradient = colorDataGradient;
-    boundedLinkedList = new BoundedLinkedList<Tensor>(max_size);
+    boundedLinkedList = new BoundedLinkedList<>(max_size);
     RandomSampleInterface randomSampleInterface = SnRandomSample.of(dimension);
     samples = RandomSample.of(randomSampleInterface, numel);
     Tensor angle = RandomSample.of(randomSampleInterface).multiply(RealScalar.of(speed));

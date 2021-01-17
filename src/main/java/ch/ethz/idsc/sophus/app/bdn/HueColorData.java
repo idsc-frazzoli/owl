@@ -29,7 +29,7 @@ public enum HueColorData {
     Tensor sats = Subdivide.of(1.0, 0.2, sep - 1);
     for (int index = 0; index < max; ++index) {
       for (Tensor sat : sats)
-        tensor.append(ColorFormat.toVector(Hue.of(offset.number().doubleValue(), sat.Get().number().doubleValue(), 1.0, 1.0)));
+        tensor.append(ColorFormat.toVector(Hue.of(offset.number().doubleValue(), ((Scalar) sat).number().doubleValue(), 1.0, 1.0)));
       offset = MOD.apply(offset.add(goldenAngle));
     }
     return StrictColorDataIndexed.of(tensor);

@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 public class Se2CarFlowsTest extends TestCase {
   public void testRadUnits() {
     Scalar speed = Quantity.of(2, "m*s^-1");
-    Scalar rate_max = (Scalar) Quantity.of(1, "rad*m^-1").map(UnitSystem.SI());
+    Scalar rate_max = UnitSystem.SI().apply(Quantity.of(1, "rad*m^-1"));
     FlowsInterface carFlows = Se2CarFlows.standard(speed, rate_max);
     Collection<Tensor> collection = carFlows.getFlows(8);
     Tensor flow = collection.iterator().next();
@@ -32,7 +32,7 @@ public class Se2CarFlowsTest extends TestCase {
 
   public void testRadRadius() {
     Scalar speed = Quantity.of(1.423, "m*s^-1");
-    Scalar rate = (Scalar) Quantity.of(2.384, "rad*m^-1").map(UnitSystem.SI());
+    Scalar rate = UnitSystem.SI().apply(Quantity.of(2.384, "rad*m^-1"));
     Tensor flow = Se2CarFlows.singleton(speed, rate);
     Tensor u = flow;
     Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");
@@ -45,7 +45,7 @@ public class Se2CarFlowsTest extends TestCase {
 
   public void testUnits() {
     Scalar speed = Quantity.of(2, "m*s^-1");
-    Scalar rate_max = (Scalar) Quantity.of(1, "m^-1").map(UnitSystem.SI());
+    Scalar rate_max = UnitSystem.SI().apply(Quantity.of(1, "m^-1"));
     FlowsInterface carFlows = Se2CarFlows.standard(speed, rate_max);
     Collection<Tensor> collection = carFlows.getFlows(8);
     Tensor flow = collection.iterator().next();
@@ -57,7 +57,7 @@ public class Se2CarFlowsTest extends TestCase {
 
   public void testRadius() {
     Scalar speed = Quantity.of(1.423, "m*s^-1");
-    Scalar rate = (Scalar) Quantity.of(2.384, "m^-1").map(UnitSystem.SI());
+    Scalar rate = UnitSystem.SI().apply(Quantity.of(2.384, "m^-1"));
     Tensor flow = Se2CarFlows.singleton(speed, rate);
     Tensor u = flow;
     Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");

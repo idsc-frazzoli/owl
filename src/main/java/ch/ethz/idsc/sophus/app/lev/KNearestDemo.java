@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);
     Tensor weights = tensorUnaryOperator.apply(origin);
     // ---
-    Integer[] integers = Ordering.INCREASING.of(weights);
+    int[] integers = Ordering.INCREASING.of(weights);
     Tensor shape = geodesicDisplay.shape();
     for (int index = 0; index < sequence.length(); ++index) {
       Tensor point = sequence.get(integers[index]);

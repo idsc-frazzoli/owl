@@ -27,6 +27,7 @@ import ch.ethz.idsc.sophus.lie.r2.IterativeMeanValueCoordinate;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointCoordinate;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -92,7 +93,7 @@ public enum PolygonCoordinates implements LogWeighting {
       Tensor sequence, Tensor values) {
     TensorUnaryOperator tensorUnaryOperator = operator(biinvariant, vectorLogManifold, variogram, sequence);
     Objects.requireNonNull(values);
-    return point -> tensorUnaryOperator.apply(point).dot(values).Get();
+    return point -> (Scalar) tensorUnaryOperator.apply(point).dot(values);
   }
 
   public static List<LogWeighting> list() {

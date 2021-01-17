@@ -22,7 +22,6 @@ import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.HsInfluence;
 import ch.ethz.idsc.sophus.hs.Mahalanobis;
 import ch.ethz.idsc.sophus.hs.TangentSpace;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
@@ -50,6 +49,7 @@ import ch.ethz.idsc.tensor.img.LinearColorDataGradient;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
+import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -236,7 +236,7 @@ public class LeversRender {
       TangentSpace tangentSpace = vectorLogManifold.logAt(origin);
       Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
       Tensor w1 = new Mahalanobis(matrix).leverages_sqrt();
-      Tensor w2 = HsInfluence.of(matrix).leverages_sqrt();
+      Tensor w2 = InfluenceMatrix.of(matrix).leverages_sqrt();
       Chop._05.requireClose(w1, w2);
       renderWeights(w1);
     }
@@ -349,7 +349,7 @@ public class LeversRender {
       Tensor poly = Tensors.empty();
       graphics.setStroke(STROKE_TANGENT);
       for (Tensor p : sequence) {
-        Scalar factor = origin.dot(p).Get().reciprocal();
+        Scalar factor = ((Scalar) origin.dot(p)).reciprocal();
         Tensor point = p.multiply(factor);
         poly.append(point);
         graphics.setColor(new Color(255, 0, 0, 64));
@@ -473,13 +473,13 @@ public class LeversRender {
   public void renderInfluenceX(ColorDataGradient colorDataGradient) {
     if (Tensors.nonEmpty(sequence)) {
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
-      Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-      Tensor influence = HsInfluence.of(matrix).matrix();
+      Tensor design = new HsDesign(vectorLogManifold).matrix(sequence, origin);
+      Tensor matrix = InfluenceMatrix.of(design).matrix();
       // ---
       graphics.setFont(FONT_MATRIX);
       MatrixRender matrixRender = MatrixRender.absoluteOne(graphics, CONSTANT, colorDataGradient);
       matrixRender.setScalarMapper(Round._2);
-      renderMatrix(origin, matrixRender, influence);
+      renderMatrix(origin, matrixRender, matrix);
     }
   }
 
@@ -489,7 +489,7 @@ public class LeversRender {
       // HsProjection hsProjection = ;
       // Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
       Tensor projections = Tensor.of(sequence.stream() //
-          .map(point -> HsInfluence.of(new HsDesign(vectorLogManifold).matrix(sequence, point)).matrix()));
+          .map(point -> InfluenceMatrix.of(new HsDesign(vectorLogManifold).matrix(sequence, point)).matrix()));
       // ---
       graphics.setFont(FONT_MATRIX);
       int index = 0;

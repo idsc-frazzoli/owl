@@ -8,6 +8,7 @@ import java.util.List;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -30,7 +31,7 @@ public enum MixedLogWeightings implements LogWeighting {
         ScalarUnaryOperator variogram, Tensor sequence, Tensor values) {
       TensorUnaryOperator tensorUnaryOperator = //
           operator(biinvariant, vectorLogManifold, variogram, sequence);
-      return point -> tensorUnaryOperator.apply(point).dot(values).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point).dot(values);
     }
   },;
 

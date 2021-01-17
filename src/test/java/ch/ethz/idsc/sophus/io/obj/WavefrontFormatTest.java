@@ -50,7 +50,7 @@ public class WavefrontFormatTest extends TestCase {
         Tensor normals = wavefrontObject.normals();
         Tensor faces = wavefrontObject.faces();
         normals.add(faces); // test if tensors have identical structure
-        Scalar index_max = normals.flatten(-1).reduce(Max::of).get().Get();
+        Scalar index_max = (Scalar) normals.flatten(-1).reduce(Max::of).get();
         assertEquals(index_max.number().intValue() + 1, wavefront.normals().length());
       }
     }

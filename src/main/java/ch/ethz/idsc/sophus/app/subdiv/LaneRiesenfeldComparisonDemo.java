@@ -118,11 +118,11 @@ import ch.ethz.idsc.tensor.red.Quantile;
       if (!visualSet2.visualRows().isEmpty()) {
         Tensor tensorMin = Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
             .map(MinMax::of).map(MinMax::min));
-        double min = Quantile.of(tensorMin).apply(RationalScalar.of(1, CURVE_SUBDIVISION_SCHEMES.size() - 1)).Get().number().doubleValue();
+        double min = Quantile.of(tensorMin).apply(RationalScalar.of(1, CURVE_SUBDIVISION_SCHEMES.size() - 1)).number().doubleValue();
         Tensor tensorMax = Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
             .map(MinMax::of).map(MinMax::max));
-        double max = Quantile.of(tensorMax).apply(RationalScalar.of(CURVE_SUBDIVISION_SCHEMES.size() - 1, CurveSubdivisionHelper.LANE_RIESENFELD.size() - 1))
-            .Get().number().doubleValue();
+        double max = Quantile.of(tensorMax) //
+            .apply(RationalScalar.of(CURVE_SUBDIVISION_SCHEMES.size() - 1, CurveSubdivisionHelper.LANE_RIESENFELD.size() - 1)).number().doubleValue();
         if (min != max)
           jFreeChart2.getXYPlot().getRangeAxis().setRange(1.1 * min, 1.1 * max);
       }

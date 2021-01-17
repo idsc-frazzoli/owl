@@ -62,7 +62,8 @@ public class ClothoidTransitionSpaceTest extends TestCase {
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(10)), res));
       assertNotSame(start, wrap.samples().get(0));
       Tolerance.CHOP.requireClose(end, Last.of(wrap.samples()));
-      assertTrue(wrap.spacing().extract(0, 10).stream().map(Tensor::Get) //
+      assertTrue(wrap.spacing().extract(0, 10).stream() //
+          .map(Scalar.class::cast) //
           .map(Sign::requirePositive) //
           .allMatch(s -> Scalars.lessEquals(s, res)));
     }

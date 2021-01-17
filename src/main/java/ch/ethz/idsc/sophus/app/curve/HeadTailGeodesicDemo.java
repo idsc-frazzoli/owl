@@ -65,14 +65,14 @@ import ch.ethz.idsc.tensor.sca.Round;
     // ---
     graphics.setColor(Color.LIGHT_GRAY);
     for (Tensor _t : domain) {
-      Tensor pq = scalarTensorFunction.apply(_t.Get());
+      Tensor pq = scalarTensorFunction.apply((Scalar) _t);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(pq));
       graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();
     }
     graphics.setColor(Color.BLUE);
     for (Tensor _t : Subdivide.of(0, 1, 1)) {
-      Tensor pq = scalarTensorFunction.apply(_t.Get());
+      Tensor pq = scalarTensorFunction.apply((Scalar) _t);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(pq));
       graphics.draw(geometricLayer.toPath2D(shape, true));
       geometricLayer.popMatrix();

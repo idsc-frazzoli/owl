@@ -21,7 +21,7 @@ public enum DigitSumDivisibilityPreorder {
   /** @param x strictly positive
    * @return */
   static Scalar totalDigits(Scalar x) {
-    return Total.of(IntegerDigits.of(Sign.requirePositive(x))).Get();
+    return Total.ofVector(IntegerDigits.of(Sign.requirePositive(x)));
   }
 
   private static final BinaryRelation<Scalar> BINARY_RELATION_SCALAR = //

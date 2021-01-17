@@ -39,7 +39,7 @@ public class Tse2CarFlows implements FlowsInterface, Serializable {
     List<Tensor> list = new ArrayList<>();
     for (Tensor rate : Subdivide.of(rate_max.negate(), rate_max, resolution))
       for (Tensor acc : accelerations)
-        list.add(Tse2CarHelper.singleton(rate.Get(), acc.Get()));
+        list.add(Tse2CarHelper.singleton((Scalar) rate, (Scalar) acc));
     return Collections.unmodifiableList(list);
   }
 }

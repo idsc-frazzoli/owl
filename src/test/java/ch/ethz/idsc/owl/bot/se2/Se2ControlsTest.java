@@ -36,7 +36,7 @@ public class Se2ControlsTest extends TestCase {
   public void testMaxRate() {
     List<Tensor> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(RealScalar.of(-.1), RealScalar.of(0.3), 5))
-      list.add(Se2CarFlows.singleton(RealScalar.of(2), angle.Get()));
+      list.add(Se2CarFlows.singleton(RealScalar.of(2), (Scalar) angle));
     Scalar maxR = Se2Controls.maxTurning(list);
     assertEquals(maxR, RealScalar.of(0.6));
   }
@@ -44,7 +44,7 @@ public class Se2ControlsTest extends TestCase {
   public void testMaxRate2() {
     List<Tensor> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(RealScalar.of(-.3), RealScalar.of(0.1), 5))
-      list.add(Se2CarFlows.singleton(RealScalar.of(2), angle.Get()));
+      list.add(Se2CarFlows.singleton(RealScalar.of(2), (Scalar) angle));
     Scalar maxR = Se2Controls.maxTurning(list);
     assertEquals(maxR, RealScalar.of(0.6));
   }

@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.num.Pi;
       Tensor origin, Tensor sequence, Tensor weights, //
       ColorDataGradient cdg, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
-    Integer[] integers = Ordering.INCREASING.of(weights);
+    int[] integers = Ordering.INCREASING.of(weights);
     ColorDataGradient colorDataGradientF = cdg.deriveWithOpacity(RationalScalar.HALF);
     ColorDataGradient colorDataGradientD = cdg;
     Tensor shape = geodesicDisplay.shape();

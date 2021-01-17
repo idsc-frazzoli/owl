@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
@@ -23,7 +24,7 @@ public class DubinsTransitionTest extends TestCase {
     Transition transition = transitionSpace.connect(start, end);
     TransitionWrap transitionWrap = transition.wrapped(RealScalar.of(0.3));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
-    assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
+    assertTrue(transitionWrap.spacing().stream().map(Scalar.class::cast).allMatch(Sign::isPositive));
   }
 
   public void testTrivial() {

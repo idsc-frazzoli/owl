@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //
         .map(this::pointcost));
-    return cost.dot(dts).Get();
+    return (Scalar) cost.dot(dts);
   }
 
   @Override // from CostFunction

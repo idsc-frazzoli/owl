@@ -64,7 +64,7 @@ public class Se2CarFlows implements FlowsInterface, Serializable {
     List<Tensor> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(rate_max.negate(), rate_max, resolution))
       for (Tensor speed : speeds)
-        list.add(singleton(speed.Get(), angle.Get()));
+        list.add(singleton((Scalar) speed, (Scalar) angle));
     return Collections.unmodifiableList(list);
   }
 }

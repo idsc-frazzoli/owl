@@ -14,7 +14,6 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.HsDesign;
-import ch.ethz.idsc.sophus.hs.HsInfluence;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
@@ -23,6 +22,7 @@ import ch.ethz.idsc.sophus.math.TensorMapping;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
 
 /* package */ class Se2CoveringInvarianceDemo extends LogWeightingDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
         Tensor origin = controlPointsAll.get(0);
         Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-        Tensor weights = HsInfluence.of(matrix).leverages_sqrt();
+        Tensor weights = InfluenceMatrix.of(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensor sequence = result.extract(1, result.length());
         Tensor origin = result.get(0);
         Tensor matrix = new HsDesign(vectorLogManifold).matrix(sequence, origin);
-        Tensor weights = HsInfluence.of(matrix).leverages_sqrt();
+        Tensor weights = InfluenceMatrix.of(matrix).leverages_sqrt();
         LeversRender leversRender = //
             LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();

@@ -139,7 +139,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     for (int j = 0; j < 2 * radius + 1; ++j) {
       ref.append(RealScalar.of(j - radius).divide(RealScalar.of(2 * radius + 1)));
     }
-    ref = Tensor.of(ref.stream().map(x -> smoothingKernel.apply((Scalar) x)));
+    ref = Tensor.of(ref.stream().map(Scalar.class::cast).map(smoothingKernel));
     Scalar powerOf2Length = Power.of(2, Ceiling.of(Log.base(2).apply(RealScalar.of(ref.length()))));
     ref = PadRight.zeros(powerOf2Length.number().intValue()).apply(ref);
     ref = ref.divide(Total.ofVector(ref)).multiply(RealScalar.of(Math.sqrt(ref.length())));

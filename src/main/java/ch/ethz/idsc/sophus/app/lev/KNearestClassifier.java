@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.red.Tally;
@@ -30,12 +29,11 @@ import ch.ethz.idsc.tensor.red.Tally;
     if (weights.length() != labels.length)
       throw TensorRuntimeException.of(weights);
     // ---
-    int[] values = Ordering.INCREASING.stream(weights) //
-        .limit(k) //
-        .mapToInt(i -> labels[i]) //
-        .toArray();
     // TODO this is not finished yet!
-    Map<Tensor, Long> map = Tally.of(Tensors.vectorInt(values));
+    Map<Tensor, Long> map = Tally.of(Ordering.INCREASING.stream(weights) //
+        .limit(k) //
+        .map(i -> labels[i]) //
+        .map(RealScalar::of));
     Scalar lab = null;
     int cmp = 0;
     for (Entry<Tensor, Long> entry : map.entrySet())

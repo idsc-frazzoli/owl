@@ -47,7 +47,7 @@ public enum LogWeightings implements LogWeighting {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           operator(biinvariant, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
-      return point -> tensorUnaryOperator.apply(point).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
   },
   /***************************************************/
@@ -65,7 +65,7 @@ public enum LogWeightings implements LogWeighting {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           operator(biinvariant, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
-      return point -> tensorUnaryOperator.apply(point).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
   },
   /***************************************************/
@@ -83,7 +83,7 @@ public enum LogWeightings implements LogWeighting {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           operator(biinvariant, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
-      return point -> tensorUnaryOperator.apply(point).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
   },
   /***************************************************/
@@ -123,7 +123,7 @@ public enum LogWeightings implements LogWeighting {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           operator(biinvariant, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
-      return point -> tensorUnaryOperator.apply(point).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
   }, //
   INVERSE_COORDINATE {
@@ -141,7 +141,7 @@ public enum LogWeightings implements LogWeighting {
       TensorUnaryOperator tensorUnaryOperator = CrossAveraging.of( //
           operator(biinvariant, vectorLogManifold, variogram, sequence), //
           RnBiinvariantMean.INSTANCE, values);
-      return point -> tensorUnaryOperator.apply(point).Get();
+      return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
   }, //
   ;

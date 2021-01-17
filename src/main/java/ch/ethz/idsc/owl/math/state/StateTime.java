@@ -44,7 +44,7 @@ public final class StateTime implements Serializable {
 
   @Override // from Object
   public int hashCode() {
-    return Objects.hash(x, time);
+    return x.hashCode() + 31 * time.hashCode();
   }
 
   @Override // from Object
