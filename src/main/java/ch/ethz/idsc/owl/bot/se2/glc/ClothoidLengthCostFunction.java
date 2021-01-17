@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 
 /** only applied in {@link ClothoidPursuitControl} resp. {@link Se2Letter5Demo} */
 /* package */ class ClothoidLengthCostFunction implements TensorScalarFunction {
@@ -29,9 +30,6 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     Clothoid clothoid = CLOTHOID_BUILDER.curve(xya.map(Scalar::zero), xya);
     if (isCompliant.test(clothoid.curvature().absMax()))
       return clothoid.length();
-    // TODO bad design
-    if (xya.Get(0) instanceof Quantity)
-      return Quantity.of(DoubleScalar.POSITIVE_INFINITY, ((Quantity) xya.Get(0)).unit());
-    return DoubleScalar.POSITIVE_INFINITY;
+    return Quantity.of(DoubleScalar.POSITIVE_INFINITY, QuantityUnit.of(xya.Get(0)));
   }
 }

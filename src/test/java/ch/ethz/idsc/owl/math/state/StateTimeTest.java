@@ -22,6 +22,7 @@ public class StateTimeTest extends TestCase {
     assertFalse(s1.equals(s3));
   }
 
+  @SuppressWarnings("unlikely-arg-type")
   public void testEquals() {
     StateTime s1 = new StateTime(Tensors.vector(1, 0, 1), RealScalar.of(2));
     assertFalse(s1.equals(null));

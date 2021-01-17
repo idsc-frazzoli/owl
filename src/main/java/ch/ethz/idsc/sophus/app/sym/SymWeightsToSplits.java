@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+// TODO check class, design is suspicious
 public class SymWeightsToSplits {
   public final Tensor weights;
   public final Tensor tree;

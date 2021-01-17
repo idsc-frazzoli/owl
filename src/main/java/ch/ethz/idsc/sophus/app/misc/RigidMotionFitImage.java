@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static Tensor shufflePoints(int n) {
     Distribution distribution = NormalDistribution.standard();
     Tensor random = RandomVariate.of(distribution, n, 2);
-    Tensor mean = Mean.of(random);
-    return Tensor.of(random.stream().map(row -> row.subtract(mean)));
+    Tensor mean = Mean.of(random).negate();
+    return Tensor.of(random.stream().map(mean::add));
   }
 
   public static void main(String[] args) throws IOException {

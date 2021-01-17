@@ -104,7 +104,7 @@ import ch.ethz.idsc.tensor.red.Mean;
           Tensor scaling = Array.zeros(control.length());
           scaling.set(distances.get(0), 0);
           for (int index = 1; index < distances.length(); ++index)
-            scaling.set(Mean.of(distances.extract(index - 1, index + 1)), index);
+            scaling.set((Scalar) Mean.of(distances.extract(index - 1, index + 1)), index);
           scaling.set((Scalar) Last.of(distances), control.length() - 1);
           // ---
           for (int index = 0; index < control.length(); ++index) {
