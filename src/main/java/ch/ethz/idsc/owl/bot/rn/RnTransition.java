@@ -38,6 +38,6 @@ public class RnTransition extends AbstractTransition {
   }
 
   private int steps(Scalar minResolution) {
-    return Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))).number().intValue();
+    return Ceiling.intValueExact(length().divide(Sign.requirePositive(minResolution)));
   }
 }

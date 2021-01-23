@@ -18,13 +18,13 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   @Override
   public Tensor f(Tensor x, Tensor u) {
     Tensor spot = x.get(5);
-    int sx = spot.Get(0).number().intValue();
-    int sy = spot.Get(1).number().intValue();
+    int sx = Scalars.intValueExact(spot.Get(0));
+    int sy = Scalars.intValueExact(spot.Get(1));
     if (Scalars.nonZero(x.Get(sx, sy)))
       throw TensorRuntimeException.of(x);
     Tensor vacant = spot.add(u);
-    int px = vacant.Get(0).number().intValue();
-    int py = vacant.Get(1).number().intValue();
+    int px = Scalars.intValueExact(vacant.Get(0));
+    int py = Scalars.intValueExact(vacant.Get(1));
     Tensor y = x.copy();
     y.set(y.Get(px, py), sx, sy);
     y.set(RealScalar.ZERO, px, py);

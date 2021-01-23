@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.glc.core.StateTimeFlows;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -18,8 +19,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
   public KlotskiFlows(KlotskiProblem klotskiProblem) {
     Tensor size = klotskiProblem.size();
-    lx = size.Get(0).number().intValue();
-    ly = size.Get(1).number().intValue();
+    lx = Scalars.intValueExact(size.Get(0));
+    ly = Scalars.intValueExact(size.Get(1));
   }
 
   @Override // from StateTimeFlows
@@ -27,9 +28,9 @@ import ch.ethz.idsc.tensor.Tensors;
     Collection<Tensor> controls = new ArrayList<>();
     int index = 0;
     for (Tensor stone : stateTime.state()) {
-      int type = stone.Get(0).number().intValue();
-      int px = stone.Get(1).number().intValue();
-      int py = stone.Get(2).number().intValue();
+      int type = Scalars.intValueExact(stone.Get(0));
+      int px = Scalars.intValueExact(stone.Get(1));
+      int py = Scalars.intValueExact(stone.Get(2));
       if (0 < px)
         controls.add(Tensors.vector(index, -1, 0));
       if (0 < py)

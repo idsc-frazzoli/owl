@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.kl;
 
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiObstacleRegion implements Region<Tensor> {
@@ -9,8 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
    * @return */
   public static Region<Tensor> fromSize(Tensor size) {
     return new KlotskiObstacleRegion( //
-        size.Get(0).number().intValue(), //
-        size.Get(1).number().intValue());
+        Scalars.intValueExact(size.Get(0)), //
+        Scalars.intValueExact(size.Get(1)));
   }
 
   /***************************************************/
@@ -26,9 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
   public boolean isMember(Tensor state) {
     int[][] array = new int[sx][sy];
     for (Tensor stone : state) {
-      int index = stone.Get(0).number().intValue();
-      int px = stone.Get(1).number().intValue();
-      int py = stone.Get(2).number().intValue();
+      int index = Scalars.intValueExact(stone.Get(0));
+      int px = Scalars.intValueExact(stone.Get(1));
+      int py = Scalars.intValueExact(stone.Get(2));
       switch (index) {
       case 0:
         ++array[px + 0][py + 0];

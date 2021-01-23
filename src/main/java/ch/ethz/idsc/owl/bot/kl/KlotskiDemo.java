@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
@@ -65,7 +66,9 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
         GlcNode nextNode = optional.get();
         {
           klotskiFrame._board = nextNode.state();
-          tableBuilder.appendRow(Tensors.vector(expandCount, domainMap.size(), queue.size(), nextNode.costFromRoot().number().intValue()));
+          tableBuilder.appendRow(Tensors.vector( //
+              expandCount, domainMap.size(), queue.size(), //
+              Scalars.intValueExact(nextNode.costFromRoot())));
         }
         System.out.println(String.format("#=%5d q=%3d $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
         standardTrajectoryPlanner.expand(nextNode);

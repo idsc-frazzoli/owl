@@ -59,7 +59,9 @@ public abstract class WaypointFollowing {
       }
     };
     timer = new Timer("PlanningTimer");
-    timer.schedule(timerTask, 10, 1000 / replanningRate.number().intValue());
+    int period = 1000 / replanningRate.number().intValue();
+    // System.out.println("period="+period);
+    timer.schedule(timerTask, 10, period);
   }
 
   public final void flagShutdown() {

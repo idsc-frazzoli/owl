@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
@@ -31,7 +32,7 @@ class EspRender implements RenderInterface {
     for (int px = 0; px < 5; ++px)
       for (int py = 0; py < 5; ++py)
         if (EspFlows.isField(px, py)) {
-          int value = board.Get(px, py).number().intValue();
+          int value = Scalars.intValueExact(board.Get(px, py));
           // System.out.println(px + " " + value);
           switch (value) {
           case 0:

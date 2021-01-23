@@ -10,6 +10,7 @@ import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
 import ch.ethz.idsc.sophus.hs.r2.R2TranslationFamily;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -50,7 +51,7 @@ public class TrajectoryR2TranslationFamily extends R2TranslationFamily {
 
   @Override // from AbstractTranslationFamily
   public Tensor function_apply(Scalar scalar) {
-    return list.get(Math.min(index(scalar).number().intValue(), limit));
+    return list.get(Math.min(Scalars.intValueExact(index(scalar)), limit));
   }
 
   private Scalar index(Scalar scalar) {

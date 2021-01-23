@@ -73,9 +73,9 @@ public class FloodFill2D {
   // point to pixel map similar to ImageRegion
   private void populate(Tensor point, Scalar ttl) {
     // using a hash set to prevent duplicates does not help to speed up
-    int c0 = point.Get(0).number().intValue();
+    int c0 = Scalars.intValueExact(point.Get(0));
     if (0 <= c0 && c0 < dimensions.get(0)) {
-      int c1 = point.Get(1).number().intValue();
+      int c1 = Scalars.intValueExact(point.Get(1));
       if (0 <= c1 && c1 < dimensions.get(1) && //
           Scalars.isZero(array.Get(c0, c1)) && //
           Scalars.isZero(image.Get(c0, c1))) {

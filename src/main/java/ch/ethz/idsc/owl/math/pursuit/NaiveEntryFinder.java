@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Floor;
 
 public final class NaiveEntryFinder extends TrajectoryEntryFinder implements Serializable {
   private static final long serialVersionUID = -1368129406422150082L;
@@ -19,8 +20,8 @@ public final class NaiveEntryFinder extends TrajectoryEntryFinder implements Ser
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar var) {
-    int index = var.number().intValue();
-    return new TrajectoryEntry(0 <= index && index < waypoints.length()//
+    int index = Floor.intValueExact(var);
+    return new TrajectoryEntry(0 <= index && index < waypoints.length() //
         ? waypoints.get(index)
         : null, var);
   }

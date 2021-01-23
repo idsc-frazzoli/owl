@@ -56,14 +56,14 @@ public class ClothoidTransition extends AbstractTransition {
   public Tensor sampled(Scalar minResolution) {
     Sign.requirePositive(minResolution);
     Tensor uniform = Subdivide.of(_0, _1, //
-        Math.max(1, Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue()));
+        Math.max(1, Ceiling.intValueExact(length().divide(minResolution))));
     return Tensor.of(uniform.stream().skip(1).map(Scalar.class::cast).map(clothoid));
   }
 
   @Override // from Transition
   public TransitionWrap wrapped(Scalar minResolution) {
     Sign.requirePositive(minResolution);
-    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
+    int steps = Ceiling.intValueExact(length().divide(minResolution));
     Tensor samples = linearized(length().divide(RealScalar.of(steps)));
     return new TransitionWrap( //
         Drop.head(samples, 1), //
@@ -76,7 +76,7 @@ public class ClothoidTransition extends AbstractTransition {
     LagrangeQuadraticD lagrangeQuadraticD = clothoid.curvature();
     if (lagrangeQuadraticD.isZero(Tolerance.CHOP))
       return Tensors.of(clothoid.apply(_0), clothoid.apply(_1));
-    int intervals = Ceiling.FUNCTION.apply(clothoid.length().divide(minResolution)).number().intValue();
+    int intervals = Ceiling.intValueExact(clothoid.length().divide(minResolution));
     Tensor uniform = Subdivide.of(_0, _1, Math.min(Math.max(1, intervals), MAX_INTERVALS));
     InverseCDF inverseCDF = //
         (InverseCDF) EqualizingDistribution.fromUnscaledPDF(uniform.map(lagrangeQuadraticD).map(Abs.FUNCTION));

@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
@@ -41,8 +42,8 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
   public KlotskiPlot(KlotskiProblem klotskiProblem, int res) {
     Tensor size = klotskiProblem.size();
-    sx = size.Get(0).number().intValue();
-    sy = size.Get(1).number().intValue();
+    sx = Scalars.intValueExact(size.Get(0));
+    sy = Scalars.intValueExact(size.Get(1));
     frame = klotskiProblem.frame();
     border = klotskiProblem.getBorder();
     this.RES = res;
@@ -81,7 +82,7 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
       // int count = 0;
       graphics.setColor(STONE_GOAL);
       for (Tensor stone : board) {
-        int index = stone.Get(0).number().intValue();
+        int index = Scalars.intValueExact(stone.Get(0));
         geometricLayer.pushMatrix(Se2Matrix.translation(stone.extract(1, 3)));
         {
           Tensor polygon = Tensors.empty();

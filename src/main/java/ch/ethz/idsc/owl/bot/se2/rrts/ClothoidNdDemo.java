@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
@@ -96,7 +97,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     RrtsNodeCollection rrtsNodeCollection = limit //
         ? rrtsNodeCollection2
         : rrtsNodeCollection1;
-    int _value = value.number().intValue();
+    int _value = Scalars.intValueExact(value);
     graphics.setColor(new Color(255, 0, 0, 128));
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicDisplay.geodesicInterface();
     Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(10));

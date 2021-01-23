@@ -142,6 +142,6 @@ public class Tse2CarEntity extends Tse2Entity {
   public Tensor coords_X() {
     ScalarSummaryStatistics scalarSummaryStatistics = //
         shape.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
-    return Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 2);
+    return Subdivide.increasing(scalarSummaryStatistics.getClip(), 2);
   }
 }

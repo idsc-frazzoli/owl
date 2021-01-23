@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param minResolution strictly positive
    * @return */
   private int steps(Scalar minResolution) {
-    return Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))).number().intValue();
+    return Scalars.intValueExact(Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))));
   }
 
   @Override // from Transition
@@ -57,8 +57,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (dubinsPath.type().containsStraight() && //
         Scalars.lessThan(minResolution, dubinsPath.length(1))) {
       ScalarTensorFunction scalarTensorFunction = dubinsPath.unit(start());
-      int s0 = Ceiling.FUNCTION.apply(dubinsPath.length(0).divide(minResolution)).number().intValue();
-      int s2 = Ceiling.FUNCTION.apply(dubinsPath.length(2).divide(minResolution)).number().intValue();
+      int s0 = Ceiling.intValueExact(dubinsPath.length(0).divide(minResolution));
+      int s2 = Ceiling.intValueExact(dubinsPath.length(2).divide(minResolution));
       Tensor segments = dubinsPath.segments().divide(length());
       Tensor p0 = s0 == 0 ? Tensors.empty() : Subdivide.of(segments.Get(0).zero(), segments.Get(0), s0);
       Tensor p2 = s2 == 0 ? Tensors.empty() : Subdivide.of(segments.Get(1), segments.Get(2), s2);

@@ -40,7 +40,7 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
       @Override // from Transition
       public TransitionWrap wrapped(Scalar minResolution) {
         Sign.requirePositive(minResolution);
-        int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
+        int steps = Ceiling.intValueExact(length().divide(minResolution));
         if (steps < 1)
           throw TensorRuntimeException.of(length(), RealScalar.of(steps));
         Tensor samples = sampled(length().divide(RealScalar.of(steps)));

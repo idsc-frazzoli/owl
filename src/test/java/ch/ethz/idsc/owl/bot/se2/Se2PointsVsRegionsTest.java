@@ -26,7 +26,7 @@ public class Se2PointsVsRegionsTest extends TestCase {
     Tensor SHAPE = ResourceData.of("/gokart/footprint/20171201.csv");
     ScalarSummaryStatistics scalarSummaryStatistics = //
         SHAPE.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
-    Tensor x_coords = Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 3);
+    Tensor x_coords = Subdivide.increasing(scalarSummaryStatistics.getClip(), 3);
     Tensor center = Tensors.vector(2, 0);
     Region<Tensor> region = new EllipsoidRegion(center, Tensors.vector(1, 1));
     Region<Tensor> query = Se2PointsVsRegions.line(x_coords, region);

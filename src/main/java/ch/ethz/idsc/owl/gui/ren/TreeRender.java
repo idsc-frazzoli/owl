@@ -9,7 +9,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-import java.util.DoubleSummaryStatistics;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
@@ -18,9 +17,13 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** renders the edges between nodes
  * 
@@ -60,24 +63,21 @@ public class TreeRender implements RenderInterface {
     private final Collection<? extends StateCostNode> collection;
     private final Tensor polygon;
     private final TreeColor treeColor;
-    private final double min;
+    private final Clip clip;
     private final long count;
-    private final double inverse;
+    private final Scalar inverse;
 
     public Render(Collection<? extends StateCostNode> collection) {
       this.collection = collection;
       polygon = ConvexHull.of(collection.stream().map(StateCostNode::state).map(Extract2D.FUNCTION), Chop._10);
       treeColor = TreeColor.ofDimensions(collection.iterator().next().state().length());
-      DoubleSummaryStatistics doubleSummaryStatistics = collection.stream() //
+      ScalarSummaryStatistics scalarSummaryStatistics = collection.stream() //
           .map(StateCostNode::costFromRoot) //
-          .map(Scalar::number) //
-          .mapToDouble(Number::doubleValue) //
-          .filter(Double::isFinite) //
-          .summaryStatistics();
-      min = doubleSummaryStatistics.getMin();
-      double max = doubleSummaryStatistics.getMax();
-      count = doubleSummaryStatistics.getCount();
-      inverse = (treeColor.nodeColor.length() - 1) / (max - min);
+          .filter(DeterminateScalarQ::of) //
+          .collect(ScalarSummaryStatistics.collector());
+      clip = scalarSummaryStatistics.getClip();
+      count = scalarSummaryStatistics.getCount();
+      inverse = RealScalar.of(treeColor.nodeColor.length() - 1);
     }
 
     @Override // from RenderInterface
@@ -89,15 +89,14 @@ public class TreeRender implements RenderInterface {
       // ---
       if (count <= nodeBound) // don't draw tree beyond certain node count
         for (StateCostNode node : collection) {
-          double value = node.costFromRoot().number().doubleValue();
-          final double interp = (value - min) * inverse;
-          graphics.setColor(treeColor.nodeColor.getColor((int) interp));
+          int interp = clip.rescale(node.costFromRoot()).multiply(inverse).number().intValue();
+          graphics.setColor(treeColor.nodeColor.getColor(interp));
           final Point2D p1 = geometricLayer.toPoint2D(node.state());
           graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
           StateCostNode parent = node.parent();
           if (Objects.nonNull(parent)) {
             Point2D p2 = geometricLayer.toPoint2D(parent.state());
-            graphics.setColor(treeColor.edgeColor.getColor((int) interp));
+            graphics.setColor(treeColor.edgeColor.getColor(interp));
             Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
             graphics.draw(shape);
           }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Flatten;
@@ -24,9 +25,9 @@ import ch.ethz.idsc.tensor.alg.Flatten;
   }
 
   public Tensor mirrorStone(Tensor stone) {
-    int type = stone.Get(0).number().intValue();
-    int px = stone.Get(1).number().intValue();
-    int py = stone.Get(2).number().intValue();
+    int type = Scalars.intValueExact(stone.Get(0));
+    int px = Scalars.intValueExact(stone.Get(1));
+    int py = Scalars.intValueExact(stone.Get(2));
     return Tensors.vector(type, px, sy - py - Block.values()[type].wy);
   }
 
