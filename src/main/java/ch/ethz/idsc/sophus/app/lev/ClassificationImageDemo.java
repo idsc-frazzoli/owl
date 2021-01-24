@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
@@ -42,7 +44,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
-// FIXME app does not work at all! 
 /* package */ class ClassificationImageDemo extends LogWeightingDemo implements ActionListener {
   private static final int REFINEMENT = 160;
   private static final Random RANDOM = new Random();
@@ -109,7 +110,8 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       timerFrame.jToolBar.add(jButtonShuffle);
     }
     spinnerLabels.addSpinnerListener(v -> recompute());
-    setLogWeighting(LogWeightings.DISTANCES);
+    System.out.println("here");
+    spinnerLogWeighting.setValue(LogWeightings.DISTANCES);
     shuffle(spinnerCount.getValue());
     spinnerLabels.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "label");
     spinnerImage.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "image");
@@ -118,11 +120,26 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       jButtonExport.addActionListener(this);
       timerFrame.jToolBar.add(jButtonExport);
     }
+    {
+      timerFrame.geometricComponent.jComponent.addMouseMotionListener(new MouseMotionListener() {
+        @Override
+        public void mouseMoved(MouseEvent e) {
+          if (isPositioningOngoing())
+            recompute();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+          // ---
+        }
+      });
+    }
   }
 
   private BufferedImage bufferedImage;
 
   final void shuffle(int n) {
+    System.out.println("shuffle");
     RandomSampleInterface randomSampleInterface = geodesicDisplay().randomSampleInterface();
     setControlPointsSe2(RandomSample.of(randomSampleInterface, n));
     // assignment of random labels to points
@@ -135,11 +152,13 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     System.out.println("recomp");
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
-    Classification classification = spinnerLabels.getValue().apply(vector);
+    Labels labels = Objects.requireNonNull(spinnerLabels.getValue());
+    Objects.requireNonNull(vector);
+    Classification classification = labels.apply(vector);
     TensorUnaryOperator operator = operator(getGeodesicControlPoints());
     ColorDataLists colorDataLists = spinnerColor.getValue();
     TensorUnaryOperator tensorUnaryOperator = //
-        spinnerImage.getValue().operator(classification, operator, colorDataLists.strict());
+        spinnerImage.getValue().operator(classification, operator, colorDataLists.cyclic());
     int resolution = spinnerRes.getValue();
     bufferedImage = ImageFormat.of(geodesicArrayPlot.raster(resolution, tensorUnaryOperator, Array.zeros(4)));
   }
@@ -152,7 +171,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
     }
     // ---
-    render(geometricLayer, graphics, geodesicDisplay, getGeodesicControlPoints(), vector, spinnerColor.getValue().strict());
+    render(geometricLayer, graphics, geodesicDisplay, getGeodesicControlPoints(), vector, spinnerColor.getValue().cyclic());
   }
 
   static void render(GeometricLayer geometricLayer, Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor vector,

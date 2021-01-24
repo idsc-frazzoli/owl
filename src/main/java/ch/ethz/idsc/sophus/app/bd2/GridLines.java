@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Mod;
@@ -27,12 +26,14 @@ import ch.ethz.idsc.tensor.sca.Mod;
 
   @Override
   public Scalar apply(Tensor point) {
-    for (Scalar scalar : ScalarArray.ofVector(tensorUnaryOperator.apply(point)))
+    for (Tensor _scalar : tensorUnaryOperator.apply(point)) {
+      Scalar scalar = (Scalar) _scalar;
       if (DeterminateScalarQ.of(scalar)) {
         if (CLIP.isInside(MOD.apply(scalar)))
           return RealScalar.ZERO;
       } else
         return DoubleScalar.INDETERMINATE;
+    }
     return RealScalar.ONE;
   }
 }
