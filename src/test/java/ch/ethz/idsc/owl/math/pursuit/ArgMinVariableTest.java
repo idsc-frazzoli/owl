@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
-import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

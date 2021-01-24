@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
 import ch.ethz.idsc.sophus.hs.r2.R2TranslationFamily;
-import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

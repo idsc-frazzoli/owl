@@ -1,7 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.lane;
 
-import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
 import ch.ethz.idsc.tensor.red.ArgMin;

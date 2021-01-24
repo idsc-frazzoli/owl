@@ -45,7 +45,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   public SphereFitDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
     // ---
-    timerFrame.geometricComponent.addRenderInterface(pathRenderBall);
     timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
     // ---
     Tensor blub = Tensors.fromString(
@@ -66,6 +65,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
         Scalar radius = optional.get().radius();
         geometricLayer.pushMatrix(Se2Matrix.translation(center));
         pathRenderBall.setCurve(CirclePoints.of(40).multiply(radius), true);
+        pathRenderBall.render(geometricLayer, graphics);
         geometricLayer.popMatrix();
       }
     }

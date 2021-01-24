@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.math.ClipCover;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
@@ -23,7 +22,7 @@ public class ArrayPlotRender implements RenderInterface {
     Rescale rescale = new Rescale(tensor);
     return new ArrayPlotRender( //
         rescale.result(), //
-        ClipCover.of(rescale.scalarSummaryStatistics()), //
+        rescale.scalarSummaryStatistics().getClip(), //
         colorDataGradient, //
         magnify);
   }

@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
     List<Integer> dims = Dimensions.of(wgs);
     Tensor wgp = ArrayReshape.of(Transpose.of(wgs, 0, 2, 1), dims.get(0), dims.get(1) * dims.get(2));
     Rescale rescale = new Rescale(wgp);
-    Clip clip = ClipCover.of(rescale.scalarSummaryStatistics());
+    Clip clip = rescale.scalarSummaryStatistics().getClip();
     return new ArrayPlotRender( //
         rescale.result(), //
         coverZero ? ClipCover.of(clip, RealScalar.ZERO) : clip, //

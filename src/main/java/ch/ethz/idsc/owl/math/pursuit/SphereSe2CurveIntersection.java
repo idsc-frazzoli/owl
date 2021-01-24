@@ -1,8 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
