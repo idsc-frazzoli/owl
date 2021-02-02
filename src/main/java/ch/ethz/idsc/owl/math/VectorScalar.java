@@ -104,13 +104,18 @@ public class VectorScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
+  public Scalar zero() {
+    return new VectorScalar(vector.map(Scalar::zero));
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
     throw TensorRuntimeException.of(this);
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return new VectorScalar(vector.map(Scalar::zero));
+  public Number number() {
+    throw TensorRuntimeException.of(this);
   }
 
   /***************************************************/

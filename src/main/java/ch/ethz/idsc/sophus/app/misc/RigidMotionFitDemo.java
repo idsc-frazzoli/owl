@@ -13,16 +13,25 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
+import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.sophus.hs.r2.Se2RigidMotionFit;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.math.GroupElement;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class RigidMotionFitDemo extends ControlPointsDemo {
   private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(0.2));
@@ -37,19 +46,21 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   public RigidMotionFitDemo() {
     super(false, GeodesicDisplays.R2_ONLY);
     setMidpointIndicated(false);
-    shufflePoints(5);
     // ---
     spinnerLength.addSpinnerListener(this::shufflePoints);
     spinnerLength.setList(Arrays.asList(3, 4, 5, 6, 7, 8, 9, 10));
-    spinnerLength.setValue(4);
+    spinnerLength.setValue(5);
     spinnerLength.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
+    shufflePoints(spinnerLength.getValue());
   }
 
   private synchronized void shufflePoints(int n) {
     Distribution distribution = NormalDistribution.of(0, 2);
     points = RandomVariate.of(distribution, n, 2);
+    Tensor xya = RandomVariate.of(distribution, 3);
     setControlPointsSe2(Tensor.of(points.stream() //
-        .map(Tensor::copy) //
+        .map(new Se2Bijection(xya).forward()) //
         .map(row -> row.append(RealScalar.ZERO))));
   }
 
@@ -59,13 +70,24 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     {
       Tensor target = Tensor.of(getGeodesicControlPoints().stream().map(R2GeodesicDisplay.INSTANCE::project));
-      Tensor mouse = Se2RigidMotionFit.of(points, target);
+      Tensor solve = Se2RigidMotionFit.of(points, target);
       POINTS_RENDER_RESULT //
-          .show(Se2GeodesicDisplay.INSTANCE::matrixLift, Se2GeodesicDisplay.INSTANCE.shape(), Tensors.of(mouse)) //
+          .show(Se2GeodesicDisplay.INSTANCE::matrixLift, Se2GeodesicDisplay.INSTANCE.shape(), Tensors.of(solve)) //
           .render(geometricLayer, graphics);
+      {
+        Tensor domain = Subdivide.increasing(Clips.unit(), 10);
+        GroupElement groupElement = Se2CoveringGroup.INSTANCE.element(solve);
+        for (Tensor p : points) {
+          Tensor xya_0 = Append.of(p, RealScalar.ZERO);
+          Tensor xya_1 = groupElement.combine(xya_0);
+          ScalarTensorFunction scalarTensorFunction = Se2CoveringGeodesic.INSTANCE.curve(xya_0, xya_1);
+          Tensor tensor = domain.map(scalarTensorFunction);
+          new PathRender(Color.CYAN, 1.5f).setCurve(tensor, false).render(geometricLayer, graphics);
+        }
+      }
       graphics.setColor(Color.RED);
       for (int index = 0; index < points.length(); ++index)
-        graphics.draw(geometricLayer.toPath2D(Tensors.of(points.get(index), target.get(index))));
+        graphics.draw(geometricLayer.toLine2D(points.get(index), target.get(index)));
     }
     renderControlPoints(geometricLayer, graphics);
     POINTS_RENDER_POINTS //

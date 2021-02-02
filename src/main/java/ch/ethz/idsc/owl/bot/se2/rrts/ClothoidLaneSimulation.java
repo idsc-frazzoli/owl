@@ -127,8 +127,16 @@ import ch.ethz.idsc.tensor.sca.Clips;
         List<MinMax> minMaxes = visualSet.visualRows().stream().map(VisualRow::points).filter(Tensors::nonEmpty) //
             .map(points -> MinMax.of(points.get(Tensor.ALL, 1))).collect(Collectors.toList());
         jFreeChart.getXYPlot().getRangeAxis().setRange( //
-            Math.max(0., 0.9 * minMaxes.stream().map(MinMax::min).map(Scalar.class::cast).reduce(Min::of).get().number().doubleValue()), //
-            1.1 * minMaxes.stream().map(MinMax::max).map(Scalar.class::cast).reduce(Max::of).get().number().doubleValue());
+            Math.max(0., 0.9 * minMaxes.stream() //
+                .map(MinMax::min) //
+                .map(Scalar.class::cast) //
+                .reduce(Min::of) //
+                .get().number().doubleValue()), //
+            1.1 * minMaxes.stream() //
+                .map(MinMax::max) //
+                .map(Scalar.class::cast) //
+                .reduce(Max::of) //
+                .get().number().doubleValue());
         File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
         ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
       }

@@ -125,13 +125,20 @@ public class JetScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
+  public Scalar zero() {
+    return new JetScalar(vector.map(Scalar::zero));
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return new JetScalar(vector.map(Scalar::zero));
+  public Scalar one() {
+    Tensor result = vector.map(Scalar::zero);
+    result.set(Scalar::one, 0);
+    return new JetScalar(result);
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from AbstractScalar

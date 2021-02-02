@@ -77,13 +77,18 @@ public class RootScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
-    return n().number();
+  public Scalar zero() {
+    return re.zero().add(im.zero());
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return re.zero().add(im.zero());
+  public Scalar one() {
+    return re.one();
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    return n().number();
   }
 
   /***************************************************/

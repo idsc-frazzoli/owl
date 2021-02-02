@@ -54,12 +54,17 @@ public final class AnyScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
+  public Scalar zero() {
     throw new UnsupportedOperationException();
   }
 
   @Override // from Scalar
-  public Scalar zero() {
+  public Scalar one() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from Scalar
+  public Number number() {
     throw new UnsupportedOperationException();
   }
 
