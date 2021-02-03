@@ -8,8 +8,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.nd.EuclideanNdCenter;
-import ch.ethz.idsc.tensor.opt.nd.NdCluster;
-import ch.ethz.idsc.tensor.opt.nd.NdEntry;
+import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdMap;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 
@@ -34,9 +33,9 @@ public final class RnRrtsNodeCollection implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    NdCluster<RrtsNode> cluster = ndMap.buildCluster(EuclideanNdCenter.of(end), k_nearest);
+    Collection<NdMatch<RrtsNode>> cluster = ndMap.cluster(EuclideanNdCenter.of(end), k_nearest);
     return cluster.stream() //
-        .map(NdEntry::value) //
+        .map(NdMatch::value) //
         .collect(Collectors.toList());
   }
 

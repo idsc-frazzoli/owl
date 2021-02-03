@@ -163,6 +163,8 @@ public enum LogWeightings implements LogWeighting {
         WEIGHTING, //
         COORDINATE, //
         LAGRAINATE, //
+        new NdTreeWeighting(4), //
+        new NdTreeWeighting(6), //
         KRIGING, //
         KRIGING_COORDINATE, //
         INVERSE_COORDINATE);

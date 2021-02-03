@@ -80,7 +80,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
         // ---
         for (Tensor lambda : lambdas)
           tableBuilder.appendRow(s1, s2, lambda);
-        // LONGTERM
         // Optional<Scalar> optional = clothoidSolutions.shortest();
         // if (optional.isPresent())
         // tableShortes.appendRow(s1, s2, optional.get());

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.nd.NdEntry;
+import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdMap;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 
@@ -46,15 +46,15 @@ public final class NdTypeRrtsNodeCollection implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    return ndMap.buildCluster(ndType.ndCenterTo(end), k_nearest).stream() //
-        .map(NdEntry::value) //
+    return ndMap.cluster(ndType.ndCenterTo(end), k_nearest).stream() //
+        .map(NdMatch::value) //
         .collect(Collectors.toList());
   }
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
-    return ndMap.buildCluster(ndType.ndCenterFrom(start), k_nearest).stream() //
-        .map(NdEntry::value) //
+    return ndMap.cluster(ndType.ndCenterFrom(start), k_nearest).stream() //
+        .map(NdMatch::value) //
         .collect(Collectors.toList());
   }
 }

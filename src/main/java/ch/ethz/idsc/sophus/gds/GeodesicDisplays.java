@@ -22,6 +22,7 @@ public enum GeodesicDisplays {
       H2GeodesicDisplay.INSTANCE, //
       So3GeodesicDisplay.INSTANCE, //
       He1GeodesicDisplay.INSTANCE, //
+      R2SGeodesicDisplay.INSTANCE, //
       Dt1GeodesicDisplay.INSTANCE);
   // ---
   /** requires biinvariant mean */
