@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.opt;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import ch.ethz.idsc.sophus.hs.Biinvariant;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
-public class NdTreeWeighting implements LogWeighting {
+public class NdTreeWeighting implements LogWeighting, Serializable {
   private final int limit;
 
   public NdTreeWeighting(int limit) {

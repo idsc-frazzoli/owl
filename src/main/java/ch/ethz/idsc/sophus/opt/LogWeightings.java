@@ -106,7 +106,7 @@ public enum LogWeightings implements LogWeighting {
       Kriging kriging = Kriging.interpolation(tensorUnaryOperator, sequence, values);
       return point -> (Scalar) kriging.estimate(point);
     }
-  }, //
+  },
   /***************************************************/
   KRIGING_COORDINATE {
     @Override // from LogWeighting
@@ -125,7 +125,7 @@ public enum LogWeightings implements LogWeighting {
           RnBiinvariantMean.INSTANCE, values);
       return point -> (Scalar) tensorUnaryOperator.apply(point);
     }
-  }, //
+  },
   INVERSE_COORDINATE {
     @Override // from LogWeighting
     public TensorUnaryOperator operator( //

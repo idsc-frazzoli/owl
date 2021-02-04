@@ -21,7 +21,7 @@ public enum GeodesicCausalFilters {
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       return GeodesicIIRn.of(geodesicExtrapolation, geodesicInterface, radius, alpha);
     }
-  }, //
+  },
   GEODESIC_IIR {
     @Override
     public TensorUnaryOperator supply( //
@@ -30,7 +30,7 @@ public enum GeodesicCausalFilters {
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       return GeodesicFIRn.of(geodesicExtrapolation, geodesicInterface, radius, alpha);
     }
-  }, //
+  },
   BIINVARIANT_MEAN_FIR {
     @Override
     public TensorUnaryOperator supply( //
@@ -39,7 +39,7 @@ public enum GeodesicCausalFilters {
           geodesicDisplay.biinvariantMean(), MonomialExtrapolationMask.INSTANCE);
       return GeodesicFIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
-  }, //
+  },
   BIINVARIANT_MEAN_IIR {
     @Override
     public TensorUnaryOperator supply( //

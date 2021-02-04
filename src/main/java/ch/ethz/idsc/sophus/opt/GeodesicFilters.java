@@ -19,14 +19,14 @@ public enum GeodesicFilters {
         SplitInterface splitInterface, ScalarUnaryOperator smoothingKernel, BiinvariantMean biinvariantMean) {
       return GeodesicCenter.of(splitInterface, smoothingKernel);
     }
-  }, //
+  },
   GEODESIC_MID {
     @Override
     public TensorUnaryOperator supply( //
         SplitInterface splitInterface, ScalarUnaryOperator smoothingKernel, BiinvariantMean biinvariantMean) {
       return GeodesicCenterMidSeeded.of(splitInterface, smoothingKernel);
     }
-  }, //
+  },
   BIINVARIANT_MEAN {
     @Override
     public TensorUnaryOperator supply( //
