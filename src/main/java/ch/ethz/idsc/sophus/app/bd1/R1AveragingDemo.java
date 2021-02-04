@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
-import ch.ethz.idsc.sophus.krg.Kriging;
+import ch.ethz.idsc.sophus.itp.Kriging;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
-import ch.ethz.idsc.sophus.krg.RadialBasisFunctionInterpolation;
+import ch.ethz.idsc.sophus.itp.RadialBasisFunctionInterpolation;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

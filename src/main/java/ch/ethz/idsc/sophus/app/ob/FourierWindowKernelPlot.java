@@ -15,12 +15,10 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fft.SpectrogramArray;
@@ -29,6 +27,8 @@ import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.sca.win.HammingWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class FourierWindowKernelPlot {
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.red.Mean;
   public FourierWindowKernelPlot(GokartPoseData gokartPoseData, int radius) {
     this.gokartPoseData = gokartPoseData;
     this.radius = radius;
-    spectrogramArray = SpectrogramArray.of(WINDOW_DURATION, gokartPoseData.getSampleRate());
+    spectrogramArray = SpectrogramArray.of(WINDOW_DURATION, gokartPoseData.getSampleRate(), HammingWindow.FUNCTION);
   }
 
   private void process() throws IOException {
@@ -52,8 +52,8 @@ import ch.ethz.idsc.tensor.red.Mean;
       Tensor tempX = Tensors.empty();
       Tensor tempY = Tensors.empty();
       Tensor tempA = Tensors.empty();
-      for (ScalarUnaryOperator smoothingKernel : SmoothingKernel.values()) {
-        TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
+      for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+        TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, windowFunctions.get());
         TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, radius);
         Tensor smoothd = centerFilter.apply(control);
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       VisualRow visualRow = visualSet.add( //
           xAxis, //
           Tensor.of(yAxis.append(yAxis).flatten(1)).extract(xAxis.length() / 2, xAxis.length() * 3 / 2));
-      visualRow.setLabel(SmoothingKernel.values()[index].toString());
+      visualRow.setLabel(WindowFunctions.values()[index].toString());
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);

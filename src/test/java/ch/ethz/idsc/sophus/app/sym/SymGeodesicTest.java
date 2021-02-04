@@ -4,13 +4,13 @@ package ch.ethz.idsc.sophus.app.sym;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 import junit.framework.TestCase;
 
 public class SymGeodesicTest extends TestCase {
@@ -23,7 +23,7 @@ public class SymGeodesicTest extends TestCase {
     Scalar evaluate = s3.evaluate();
     assertEquals(evaluate, RationalScalar.of(3, 2));
     TensorUnaryOperator tensorUnaryOperator = //
-        GeodesicCenter.of(SymGeodesic.INSTANCE, SmoothingKernel.DIRICHLET);
+        GeodesicCenter.of(SymGeodesic.INSTANCE, WindowFunctions.DIRICHLET.get());
     Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     assertEquals(tensor.toString(), "{{{0, 1, 1/2}, 2, 1/5}, {2, {3, 4, 1/2}, 4/5}, 1/2}");

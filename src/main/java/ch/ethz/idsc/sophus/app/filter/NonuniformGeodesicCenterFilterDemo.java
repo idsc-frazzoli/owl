@@ -38,7 +38,7 @@ public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKerne
           .apply(navigableMapStateTime()).values().stream());
     } else {
       NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = NonuniformFixedIntervalGeodesicCenter
-          .of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+          .of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue().get());
       refined = Tensor.of(
           NonuniformFixedIntervalGeodesicCenterFilter.of(nonuniformFixedIntervalGeodesicCenter, RationalScalar.of(spinnerRadius.getValue(), samplingFrequency))
               .apply(navigableMapStateTime()).values().stream());

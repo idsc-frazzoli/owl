@@ -28,7 +28,6 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,6 +41,7 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class CurveDecimationDemo extends GeodesicDatasetDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
@@ -103,7 +103,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
     TensorUnaryOperator tensorUnaryOperator = CenterFilter.of( //
-        GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), spinnerLabelWidth.getValue());
+        GeodesicCenter.of(Se2Geodesic.INSTANCE, WindowFunctions.GAUSSIAN.get()), spinnerLabelWidth.getValue());
     _control = tensorUnaryOperator.apply(gokartPoseData.getPose(name, limit));
   }
 

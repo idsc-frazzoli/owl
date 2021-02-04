@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -18,6 +17,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
     System.out.println("smooth");
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          CenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
+          CenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, WindowFunctions.GAUSSIAN.get()), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
       Put.of(HomeDirectory.file("MH_04_difficult_poses_smooth.file"), smooth);

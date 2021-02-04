@@ -8,8 +8,8 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.nd.EuclideanNdCenter;
-import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdMap;
+import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 
 public final class RnRrtsNodeCollection implements RrtsNodeCollection {

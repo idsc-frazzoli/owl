@@ -8,12 +8,12 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.s2.Loxodrome;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ enum LoxodromeData {
   ;
@@ -34,11 +35,12 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
     tensor = Tensor.of(tensor.stream().map(NORMALIZE));
     Export.of(HomeDirectory.file("loxodrome_noise.csv"), tensor);
     GeodesicInterface geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
-    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+      ScalarUnaryOperator smoothingKernel = windowFunctions.get();
       TensorUnaryOperator tensorUnaryOperator = //
           CenterFilter.of(GeodesicCenter.of(geodesicInterface, smoothingKernel), 7);
       Tensor smooth = tensorUnaryOperator.apply(tensor);
-      Export.of(HomeDirectory.file("loxodrome_" + smoothingKernel.name().toLowerCase() + ".csv"), smooth);
+      Export.of(HomeDirectory.file("loxodrome_" + smoothingKernel + ".csv"), smooth);
     }
   }
 }

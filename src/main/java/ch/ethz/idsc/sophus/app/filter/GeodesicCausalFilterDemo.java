@@ -21,10 +21,10 @@ import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.opt.GeodesicCausalFilters;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /* package */ class GeodesicCausalFilterDemo extends AbstractDatasetKernelDemo {
@@ -51,10 +51,10 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int radius = spinnerRadius.getValue();
     if (0 < radius) {
-      SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+      ScalarUnaryOperator windowFunctions = spinnerKernel.getValue().get();
       Se2BiinvariantMeans se2BiinvariantMean = Se2BiinvariantMeans.FILTER;
       GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-      TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
+      TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, windowFunctions);
       // ---
       GeodesicCausalFilters geodesicCausalFilters = spinnerCausalFilter.getValue();
       TensorUnaryOperator tensorUnaryOperator = null;
@@ -67,11 +67,11 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
         break;
       case BIINVARIANT_MEAN_FIR:
         tensorUnaryOperator = //
-            BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
+            BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(windowFunctions), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       case BIINVARIANT_MEAN_IIR:
         tensorUnaryOperator = //
-            BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
+            BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(windowFunctions), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       }
       return tensorUnaryOperator.apply(control());

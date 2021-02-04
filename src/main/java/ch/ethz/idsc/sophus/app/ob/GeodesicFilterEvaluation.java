@@ -7,13 +7,13 @@ import java.util.List;
 
 import ch.ethz.idsc.java.io.HtmlUtf8;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ enum GeodesicFilterEvaluation {
   ;
@@ -48,16 +48,16 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       htmlUtf8.appendln(
           "<tr><td width = 200>Minimizers: </td><td width = 200>alpha</td><td width = 200>WindowSize</td><td width = 200>Kernel</td><td width = 200>Resulting Error</td><td width = 200>Unit</td></tr>");
       htmlUtf8.appendln("<tr><td width = 200>Pose</td><td width = 200>" + minimizingAlphas.Get(0) + "</td><td width = 200>" + minimizingWindowSizes.Get(0)
-          + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "</td><td width = 200>"
+          + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "</td><td width = 200>"
           + minimizingErrors.Get(0) + "</td><td width = 200>[m]</td></tr>");
       htmlUtf8.appendln("<tr><td width = 200>Orientation</td><td width = 200>" + minimizingAlphas.Get(1) + "</td><td width = 200>"
-          + minimizingWindowSizes.Get(1) + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(1))]
+          + minimizingWindowSizes.Get(1) + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(1))]
           + "</td><td width = 200>" + minimizingErrors.Get(1) + "</td><td width = 200>[rad]</td></tr>");
       htmlUtf8.appendln("<tr><td width = 200>Pose change</td><td width = 200>" + minimizingAlphas.Get(2) + "</td><td width = 200>"
-          + minimizingWindowSizes.Get(2) + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(2))]
+          + minimizingWindowSizes.Get(2) + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(2))]
           + "</td><td width = 200>" + minimizingErrors.Get(2).divide(time(data)) + "</td><td width = 200>[m/s]</td></tr>");
       htmlUtf8.appendln("<tr><td width = 200>Orientation change</td><td width = 200>" + minimizingAlphas.Get(3) + "</td><td width = 200>"
-          + minimizingWindowSizes.Get(3) + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(3))]
+          + minimizingWindowSizes.Get(3) + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(3))]
           + "</td><td width = 200>" + minimizingErrors.Get(3).divide(time(data)) + "</td><td width = 200>[rad/s]</td></tr>");
       htmlUtf8.appendln("</table>");
       htmlUtf8.appendln("<p>resulting errors refer to average error per measurement</p>");
@@ -101,16 +101,16 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     htmlUtf8.appendln(
         "<tr><td width = 200>Minimizers: </td><td width = 200>alpha</td><td width = 200>WindowSize</td><td width = 200>Kernel</td><td width = 200>Resulting Error</td><td width = 200>Unit</td></tr>");
     htmlUtf8.appendln("<tr><td width = 200>Pose</td><td width = 200>" + minimizingAlphas.Get(0) + "</td><td width = 200>" + minimizingWindowSizes.Get(0)
-        + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "</td><td width = 200>"
+        + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "</td><td width = 200>"
         + minimizingErrors.Get(0) + "</td><td width = 200>[m]</td></tr>");
     htmlUtf8.appendln("<tr><td width = 200>Orientation</td><td width = 200>" + minimizingAlphas.Get(1) + "</td><td width = 200>" + minimizingWindowSizes.Get(1)
-        + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(1))] + "</td><td width = 200>"
+        + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(1))] + "</td><td width = 200>"
         + minimizingErrors.Get(1) + "</td><td width = 200>[rad]</td></tr>");
     htmlUtf8.appendln("<tr><td width = 200>Pose change</td><td width = 200>" + minimizingAlphas.Get(2) + "</td><td width = 200>" + minimizingWindowSizes.Get(2)
-        + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(2))] + "</td><td width = 200>"
+        + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(2))] + "</td><td width = 200>"
         + minimizingErrors.Get(2).divide(time(data)) + "</td><td width = 200>[m/s]</td></tr>");
     htmlUtf8.appendln("<tr><td width = 200>Orientation change</td><td width = 200>" + minimizingAlphas.Get(3) + "</td><td width = 200>"
-        + minimizingWindowSizes.Get(3) + "</td><td width = 200>" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(3))]
+        + minimizingWindowSizes.Get(3) + "</td><td width = 200>" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(3))]
         + "</td><td width = 200>" + minimizingErrors.Get(3).divide(time(data)) + "</td><td width = 200>[rad/s]</td></tr>");
     htmlUtf8.appendln("</table>");
   }

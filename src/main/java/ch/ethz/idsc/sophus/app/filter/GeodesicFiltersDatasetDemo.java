@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.opt.GeodesicFilters;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+    ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     GeodesicFilters geodesicFilters = spinnerFilters.getValue();
     TensorUnaryOperator tensorUnaryOperator = geodesicFilters.from(geodesicDisplay, smoothingKernel);
     return Nest.of( //
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     GeodesicFilters geodesicFilters = spinnerFilters.getValue();
     switch (geodesicFilters) {
     case GEODESIC:
-      return GeodesicCenterSymLinkImage.of(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
+      return GeodesicCenterSymLinkImage.of(spinnerKernel.getValue().get(), spinnerRadius.getValue()).bufferedImage();
     default:
       return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     }

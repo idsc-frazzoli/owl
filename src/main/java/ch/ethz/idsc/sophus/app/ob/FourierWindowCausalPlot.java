@@ -24,7 +24,6 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.Decibel;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.opt.GeodesicCausalFilters;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -42,6 +41,8 @@ import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
+import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 
 /* package */ class FourierWindowCausalPlot {
   private final GokartPoseData gokartPoseData;
@@ -61,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     // ---
-    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(Quantity.of(1, "s"), gokartPoseData.getSampleRate());
+    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(Quantity.of(1, "s"), gokartPoseData.getSampleRate(), HammingWindow.FUNCTION);
     // ---
     Tensor smoothedX = Tensors.empty();
     Tensor smoothedY = Tensors.empty();
@@ -146,7 +147,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   public static void main(String[] args) throws IOException {
     FourierWindowCausalPlot fourierWindowCausalPlot = //
-        new FourierWindowCausalPlot(GokartPoseDataV1.INSTANCE, SmoothingKernel.GAUSSIAN, 7, RealScalar.of(0.8));
+        new FourierWindowCausalPlot(GokartPoseDataV1.INSTANCE, GaussianWindow.FUNCTION, 7, RealScalar.of(0.8));
     int limit = 1;
     fourierWindowCausalPlot.process(limit);
   }

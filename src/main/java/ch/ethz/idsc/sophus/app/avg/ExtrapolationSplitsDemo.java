@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override // from GeodesicAverageDemo
   SymScalar symScalar(Tensor vector) {
-    return (SymScalar) GeodesicExtrapolation.of(SymGeodesic.INSTANCE, spinnerKernel.getValue()).apply(vector);
+    return (SymScalar) GeodesicExtrapolation.of(SymGeodesic.INSTANCE, spinnerKernel.getValue().get()).apply(vector);
   }
 
   public static void main(String[] args) {

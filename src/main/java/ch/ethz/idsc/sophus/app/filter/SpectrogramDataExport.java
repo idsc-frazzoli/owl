@@ -12,11 +12,12 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class SpectrogramDataExport {
   private final GokartPoseData gokartPoseData;
@@ -27,23 +28,24 @@ import ch.ethz.idsc.tensor.io.Export;
 
   private void process(File ROOT) throws IOException {
     List<String> dataSource = gokartPoseData.list();
-    List<SmoothingKernel> kernel = Arrays.asList(SmoothingKernel.GAUSSIAN, SmoothingKernel.HAMMING, SmoothingKernel.BLACKMAN);
+    List<WindowFunctions> kernel = Arrays.asList(WindowFunctions.GAUSSIAN, WindowFunctions.HAMMING, WindowFunctions.BLACKMAN);
     // iterate over data
     for (String data : dataSource) {
       // iterate over Kernels
       // load data
       Tensor control = gokartPoseData.getPose(data, Integer.MAX_VALUE);
-      for (SmoothingKernel smoothingKernel : kernel) {
+      for (WindowFunctions windowFunctions : kernel) {
+        ScalarUnaryOperator smoothingKernel = windowFunctions.get();
         // iterate over radius
         // Create Geod. Center instance
         TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
         for (int radius = 0; radius < 15; radius++) {
           // Create new Geod. Center
           Tensor refined = CenterFilter.of(tensorUnaryOperator, radius).apply(control);
-          System.out.println(data + smoothingKernel.toString() + radius);
+          System.out.println(data + smoothingKernel + radius);
           System.err.println(speeds(refined));
           // export velocities
-          Export.of(new File(ROOT, "190319/" + data.replace('/', '_') + "_" + smoothingKernel.toString() + "_" + radius + ".csv"), refined);
+          Export.of(new File(ROOT, "190319/" + data.replace('/', '_') + "_" + smoothingKernel + "_" + radius + ".csv"), refined);
         }
       }
     }

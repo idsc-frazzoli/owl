@@ -21,10 +21,12 @@ import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.ext.Timing;
@@ -97,8 +99,10 @@ import ch.ethz.idsc.tensor.sca.Round;
     try {
       TensorScalarFunction tensorScalarFunction = function(sequence, values);
       GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      ScalarUnaryOperator suo = Round.toMultipleOf(RationalScalar.of(2, 10));
+      TensorScalarFunction tsf = t -> suo.apply(tensorScalarFunction.apply(t));
       Timing timing = Timing.started();
-      Tensor matrix = geodesicArrayPlot.raster(resolution, tensorScalarFunction, DoubleScalar.INDETERMINATE);
+      Tensor matrix = geodesicArrayPlot.raster(resolution, tsf, DoubleScalar.INDETERMINATE);
       System.out.println(timing.seconds());
       // ---
       if (jToggleThresh.isSelected())
@@ -121,9 +125,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values)
-    // .map(Round._3)
-    );
+    BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values).map(Round._3));
     // if (Objects.isNull(bufferedImage))
     // recompute();
     if (Objects.nonNull(bufferedImage)) {

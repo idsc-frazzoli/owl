@@ -15,8 +15,8 @@ import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.so2.So2FilterBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2PhongBiinvariantMean;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+    ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     Se2BiinvariantMeans se2BiinvariantMean = spinnerFilters.getValue();
     TensorUnaryOperator tensorUnaryOperator = BiinvariantMeanCenter.of(se2BiinvariantMean, smoothingKernel);
     return Nest.of( //

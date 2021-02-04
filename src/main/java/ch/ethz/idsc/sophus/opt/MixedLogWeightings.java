@@ -7,7 +7,7 @@ import java.util.List;
 
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.krg.RadialBasisFunctionWeighting;
+import ch.ethz.idsc.sophus.itp.RadialBasisFunctionWeighting;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;

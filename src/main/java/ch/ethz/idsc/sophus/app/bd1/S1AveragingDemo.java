@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
-import ch.ethz.idsc.sophus.krg.Kriging;
+import ch.ethz.idsc.sophus.itp.Kriging;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
-// TODO what does this demo do: there is no curve shown
+// FIXME what does this demo do: there is no curve shown
 /* package */ class S1AveragingDemo extends AnAveragingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 

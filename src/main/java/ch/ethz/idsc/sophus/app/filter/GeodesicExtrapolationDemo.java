@@ -14,9 +14,9 @@ import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolationFilter;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /* package */ class GeodesicExtrapolationDemo extends AbstractDatasetKernelDemo implements BufferedImageSupplier {
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     super.updateState();
     // ---
     TensorUnaryOperator tensorUnaryOperator = //
-        GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+        GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue().get());
     refined = GeodesicExtrapolationFilter.of(tensorUnaryOperator, geodesicDisplay().geodesicInterface(), spinnerRadius.getValue()).apply(control());
   }
 
@@ -43,13 +43,13 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
   @Override // from BufferedImageSupplier
   public BufferedImage bufferedImage() {
-    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+    ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     int radius = spinnerRadius.getValue();
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(SymGeodesic.INSTANCE, smoothingKernel);
     Tensor vector = Tensor.of(IntStream.range(0, radius + 1).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImage.FONT_SMALL);
-    symLinkImage.title(smoothingKernel.name() + "[" + (radius + 1) + "]");
+    symLinkImage.title(smoothingKernel + "[" + (radius + 1) + "]");
     return symLinkImage.bufferedImage();
   }
 

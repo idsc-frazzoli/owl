@@ -5,14 +5,14 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ abstract class KernelSplitsDemo extends GeodesicSplitsDemo {
-  final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
+  final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
 
   public KernelSplitsDemo() {
-    spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
-    spinnerKernel.setValue(SmoothingKernel.DIRICHLET);
+    spinnerKernel.setList(Arrays.asList(WindowFunctions.values()));
+    spinnerKernel.setValue(WindowFunctions.DIRICHLET);
     spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
   }
 }

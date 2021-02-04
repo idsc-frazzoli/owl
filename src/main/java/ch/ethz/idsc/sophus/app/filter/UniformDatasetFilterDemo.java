@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 
 /* package */ abstract class UniformDatasetFilterDemo extends AbstractDatasetFilterDemo {
   private static final ScalarUnaryOperator MAGNITUDE_PER_SECONDS = QuantityMagnitude.SI().in("s^-1");
@@ -102,7 +103,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
           visualSet.add(domain, signal);
           // ---
           if (spectrogram) {
-            Tensor image = Spectrogram.of(signal, COLOR_DATA_GRADIENT);
+            Tensor image = Spectrogram.of(signal, DirichletWindow.FUNCTION, COLOR_DATA_GRADIENT);
             BufferedImage bufferedImage = ImageFormat.of(image);
             int wid = bufferedImage.getWidth() * MAGNIFY;
             int hgt = bufferedImage.getHeight() * MAGNIFY;

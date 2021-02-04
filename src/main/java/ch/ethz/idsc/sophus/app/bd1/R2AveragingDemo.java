@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.bd1;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO should be continuously updated when points are dragged
 /* package */ class R2AveragingDemo extends A2AveragingDemo {
   public R2AveragingDemo() {
     super(GeodesicDisplays.R2_H2);

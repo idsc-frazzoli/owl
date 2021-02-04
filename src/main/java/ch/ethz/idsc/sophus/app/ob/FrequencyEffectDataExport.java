@@ -11,20 +11,21 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ enum FrequencyEffectDataExport {
   ;
-  private static void export(Tensor tensor, String filterType, int index, int radius, SmoothingKernel smoothingKernel) throws IOException {
+  private static void export(Tensor tensor, String filterType, int index, int radius, ScalarUnaryOperator smoothingKernel) throws IOException {
     String name = "030619_" + filterType + "_" + smoothingKernel.toString() + "_" + radius + "_" + index + ".csv";
     Export.of(new File(name), tensor);
   }
 
-  public static void processFilterComparison(Tensor control, int index, int radius, SmoothingKernel smoothingKernel) {
+  public static void processFilterComparison(Tensor control, int index, int radius, ScalarUnaryOperator smoothingKernel) {
     // ==================== GeodesicCenter(Lefteeded) (Normal) ===========
     TensorUnaryOperator geodesicLeftSeeded = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
     Tensor groupSmoothedGCL = CenterFilter.of(geodesicLeftSeeded, radius).apply(control);
@@ -49,13 +50,14 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       List<String> list = GokartPoseDataV1.INSTANCE.list();
       Iterator<String> iterator = list.iterator();
       int index = 0;
-      for (SmoothingKernel sk : SmoothingKernel.values()) {
+      for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+        ScalarUnaryOperator smoothingKernel = windowFunctions.get();
         while (iterator.hasNext() && index < 200) {
           Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
               iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
           index++;
-          System.out.println(radius + " " + sk + " " + index);
-          processFilterComparison(control, index, radius, sk);
+          System.out.println(radius + " " + smoothingKernel + " " + index);
+          processFilterComparison(control, index, radius, smoothingKernel);
         }
       }
     }

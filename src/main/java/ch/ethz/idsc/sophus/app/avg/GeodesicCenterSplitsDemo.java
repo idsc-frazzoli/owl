@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override
   SymScalar symScalar(Tensor vector) {
     if (vector.length() % 2 == 1)
-      return (SymScalar) GeodesicCenter.of(SymGeodesic.INSTANCE, spinnerKernel.getValue()).apply(vector);
+      return (SymScalar) GeodesicCenter.of(SymGeodesic.INSTANCE, spinnerKernel.getValue().get()).apply(vector);
     return null;
   }
 

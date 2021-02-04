@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -17,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class ParameterMinimizer {
   private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
@@ -41,20 +41,20 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     Scalar err_xdot = RealScalar.of(10_000);
     Scalar err_adot = RealScalar.of(10_000);
     // starting values of kernels
-    SmoothingKernel smoothingKernel_x = SmoothingKernel.DIRICHLET;
-    SmoothingKernel smoothingKernel_a = SmoothingKernel.DIRICHLET;
-    SmoothingKernel smoothingKernel_xdot = SmoothingKernel.DIRICHLET;
-    SmoothingKernel smoothingKernel_adot = SmoothingKernel.DIRICHLET;
+    WindowFunctions smoothingKernel_x = WindowFunctions.DIRICHLET;
+    WindowFunctions smoothingKernel_a = WindowFunctions.DIRICHLET;
+    WindowFunctions smoothingKernel_xdot = WindowFunctions.DIRICHLET;
+    WindowFunctions smoothingKernel_adot = WindowFunctions.DIRICHLET;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     // define our 'truth' signal
-    TensorUnaryOperator centerFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+    TensorUnaryOperator centerFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, WindowFunctions.GAUSSIAN.get());
     Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control);
     Tensor alpharange = Subdivide.of(0.1, 1, 50);
     // Iterate over Kernels, then windowsize and then alphas
-    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+    for (WindowFunctions smoothingKernel : WindowFunctions.values()) {
       // SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
       System.out.println(smoothingKernel.toString());
-      TensorUnaryOperator causalFilter = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
+      TensorUnaryOperator causalFilter = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel.get());
       // Arbitrary upper limit of windowsize
       for (int windowSize = 1; windowSize < 25; windowSize++) {
         for (int index = 0; index < alpharange.length(); index++) {

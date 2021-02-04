@@ -14,7 +14,6 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -27,6 +26,8 @@ import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class GeodesicCurveEvaluation {
   public static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
@@ -97,7 +98,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public void windowSizeCurves() throws IOException {
-    TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
+    TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, WindowFunctions.GAUSSIAN.get());
     Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control());
     // optimal windowsize for each parameter
     Scalar alpha_x = minimizingAlphas.Get(0);
@@ -105,10 +106,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Scalar alpha_xdot = minimizingAlphas.Get(2);
     Scalar alpha_adot = minimizingAlphas.Get(3);
     // optimal Kernels for each parameter
-    SmoothingKernel smoothingKernel_x = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(0))];
-    SmoothingKernel smoothingKernel_a = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(1))];
-    SmoothingKernel smoothingKernel_xdot = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(2))];
-    SmoothingKernel smoothingKernel_adot = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(3))];
+    WindowFunctions smoothingKernel_x = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(0))];
+    WindowFunctions smoothingKernel_a = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(1))];
+    WindowFunctions smoothingKernel_xdot = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(2))];
+    WindowFunctions smoothingKernel_adot = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(3))];
     // this will be our y-axis
     Tensor result_x = Tensors.empty();
     Tensor result_a = Tensors.empty();
@@ -121,22 +122,22 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     // for (int windowSize = 1; windowSize < windowRange.length(); windowSize++) {
     for (int windowSize = 1; windowSize <= windowRange.length(); windowSize++) {
       // pose
-      TensorUnaryOperator causalFilter_x = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_x);
+      TensorUnaryOperator causalFilter_x = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_x.get());
       Tensor refinedCausal_x = GeodesicIIRnFilter.of(causalFilter_x, geodesicInterface, windowSize, alpha_x).apply(control());
       Tensor error_x = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedCausal_x, refinedCenter).Get(0);
       result_x.append(error_x);
       // orientation
-      TensorUnaryOperator causalFilter_a = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_a);
+      TensorUnaryOperator causalFilter_a = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_a.get());
       Tensor refinedCausal_a = GeodesicIIRnFilter.of(causalFilter_a, geodesicInterface, windowSize, alpha_a).apply(control());
       Tensor error_a = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedCausal_a, refinedCenter).Get(1);
       result_a.append(error_a);
       // pose velocity
-      TensorUnaryOperator causalFilter_xdot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_xdot);
+      TensorUnaryOperator causalFilter_xdot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_xdot.get());
       Tensor refinedCausal_xdot = GeodesicIIRnFilter.of(causalFilter_xdot, geodesicInterface, windowSize, alpha_xdot).apply(control());
       Tensor error_xdot = GEODESIC_ERROR_EVALUATION.evaluate1ErrorSeperated(refinedCausal_xdot, refinedCenter).Get(0);
       result_xdot.append(error_xdot);
       // orientation velocity
-      TensorUnaryOperator causalFilter_adot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_adot);
+      TensorUnaryOperator causalFilter_adot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_adot.get());
       Tensor refinedCausal_adot = GeodesicIIRnFilter.of(causalFilter_adot, geodesicInterface, windowSize, alpha_adot).apply(control());
       Tensor error_adot = GEODESIC_ERROR_EVALUATION.evaluate1ErrorSeperated(refinedCausal_adot, refinedCenter).Get(1);
       result_adot.append(error_adot);
@@ -148,7 +149,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public void alphaCurves() throws IOException {
-    TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
+    TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, GaussianWindow.FUNCTION);
     Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control());
     // optimal windowsize for each parameter
     int win_x = Scalars.intValueExact(minimizingWindowSize.Get(0));
@@ -156,10 +157,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     int win_xdot = Scalars.intValueExact(minimizingWindowSize.Get(2));
     int win_adot = Scalars.intValueExact(minimizingWindowSize.Get(3));
     // optimal Kernels for each parameter
-    SmoothingKernel smoothingKernel_x = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(0))];
-    SmoothingKernel smoothingKernel_a = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(1))];
-    SmoothingKernel smoothingKernel_xdot = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(2))];
-    SmoothingKernel smoothingKernel_adot = SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(3))];
+    WindowFunctions smoothingKernel_x = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(0))];
+    WindowFunctions smoothingKernel_a = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(1))];
+    WindowFunctions smoothingKernel_xdot = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(2))];
+    WindowFunctions smoothingKernel_adot = WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(3))];
     // this will be our y-axis
     Tensor result_x = Tensors.empty();
     Tensor result_a = Tensors.empty();
@@ -170,22 +171,22 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Tensor alpharange = Subdivide.of(0.1, 1, 50);
     for (int index = 0; index < alpharange.length(); index++) {
       // pose
-      TensorUnaryOperator causalFilter_x = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_x);
+      TensorUnaryOperator causalFilter_x = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_x.get());
       Tensor refinedCausal_x = GeodesicIIRnFilter.of(causalFilter_x, geodesicInterface, win_x, alpharange.Get(index)).apply(control());
       Tensor error_x = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedCausal_x, refinedCenter).Get(0);
       result_x.append(error_x);
       // orientation
-      TensorUnaryOperator causalFilter_a = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_a);
+      TensorUnaryOperator causalFilter_a = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_a.get());
       Tensor refinedCausal_a = GeodesicIIRnFilter.of(causalFilter_a, geodesicInterface, win_a, alpharange.Get(index)).apply(control());
       Tensor error_a = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedCausal_a, refinedCenter).Get(1);
       result_a.append(error_a);
       // pose velocity
-      TensorUnaryOperator causalFilter_xdot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_xdot);
+      TensorUnaryOperator causalFilter_xdot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_xdot.get());
       Tensor refinedCausal_xdot = GeodesicIIRnFilter.of(causalFilter_xdot, geodesicInterface, win_xdot, alpharange.Get(index)).apply(control());
       Tensor error_xdot = GEODESIC_ERROR_EVALUATION.evaluate1ErrorSeperated(refinedCausal_xdot, refinedCenter).Get(0);
       result_xdot.append(error_xdot);
       // orientation velocity
-      TensorUnaryOperator causalFilter_adot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_adot);
+      TensorUnaryOperator causalFilter_adot = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_adot.get());
       Tensor refinedCausal_adot = GeodesicIIRnFilter.of(causalFilter_adot, geodesicInterface, win_adot, alpharange.Get(index)).apply(control());
       Tensor error_adot = GEODESIC_ERROR_EVALUATION.evaluate1ErrorSeperated(refinedCausal_adot, refinedCenter).Get(1);
       result_adot.append(error_adot);

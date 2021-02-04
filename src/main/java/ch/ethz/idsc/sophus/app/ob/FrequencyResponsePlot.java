@@ -9,7 +9,6 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class FrequencyResponsePlot {
   private Tensor minimizingAlphas;
@@ -37,7 +37,8 @@ import ch.ethz.idsc.tensor.sca.Exp;
   }
 
   private Tensor process(String string, int signal) {
-    Function<Integer, Tensor> windowSideSampler = HalfWindowSampler.of(SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(signal))]);
+    Function<Integer, Tensor> windowSideSampler = //
+        HalfWindowSampler.of(WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(signal))].get());
     Scalar b = minimizingAlphas.Get(signal);
     Tensor a = windowSideSampler.apply(1 + Scalars.intValueExact(minimizingFilterlengths.Get(signal)))
         .multiply(RealScalar.ONE.subtract(minimizingAlphas.Get(signal)));
@@ -82,19 +83,19 @@ import ch.ethz.idsc.tensor.sca.Exp;
         visualSet.setAxesLabelY("Magnitude Gain [-]");
       {
         VisualRow visualRow = visualSet.add(domain, values_x);
-        visualRow.setLabel("x_" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "_" + minimizingFilterlengths.Get(0));
+        visualRow.setLabel("x_" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(0))] + "_" + minimizingFilterlengths.Get(0));
       }
       {
         VisualRow visualRow = visualSet.add(domain, values_a);
-        visualRow.setLabel("a_" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(1))] + "_" + minimizingFilterlengths.Get(1));
+        visualRow.setLabel("a_" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(1))] + "_" + minimizingFilterlengths.Get(1));
       }
       {
         VisualRow visualRow = visualSet.add(domain, values_xdot);
-        visualRow.setLabel("xdot_" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(2))] + "_" + minimizingFilterlengths.Get(2));
+        visualRow.setLabel("xdot_" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(2))] + "_" + minimizingFilterlengths.Get(2));
       }
       {
         VisualRow visualRow = visualSet.add(domain, values_adot);
-        visualRow.setLabel("adot_" + SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(3))] + "_" + minimizingFilterlengths.Get(3));
+        visualRow.setLabel("adot_" + WindowFunctions.values()[Scalars.intValueExact(minimizingKernels.Get(3))] + "_" + minimizingFilterlengths.Get(3));
       }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       File file = HomeDirectory.Pictures(FrequencyResponsePlot.class.getSimpleName() + "_" + ylabel + "_Test.png");

@@ -23,7 +23,6 @@ import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.math.Decibel;
 import ch.ethz.idsc.sophus.opt.GeodesicFilters;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -32,6 +31,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.PadRight;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fft.Fourier;
@@ -49,10 +49,11 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ enum FourierWindowPlot {
   ;
-  private static void phasePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
+  private static void phasePlot(Tensor data, int radius, String signal, ScalarUnaryOperator smoothingKernel) throws IOException {
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
       // System.out.println((Scalar) GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s")));
@@ -87,7 +88,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
-  private static void magniutdePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
+  private static void magniutdePlot(Tensor data, int radius, String signal, ScalarUnaryOperator smoothingKernel) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data) {
       yData.append(FrequencyResponse.MAGNITUDE.apply(meanData));
@@ -134,7 +135,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
-  private static Tensor linearResponse(SmoothingKernel smoothingKernel, int radius) {
+  private static Tensor linearResponse(ScalarUnaryOperator smoothingKernel, int radius) {
     Tensor ref = Tensors.empty();
     for (int j = 0; j < 2 * radius + 1; ++j) {
       ref.append(RealScalar.of(j - radius).divide(RealScalar.of(2 * radius + 1)));
@@ -148,7 +149,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   private static void process( //
       GokartPoseData gokartPoseData, Map<GeodesicFilters, TensorUnaryOperator> map, //
-      int radius, int limit, SmoothingKernel smoothingKernel) throws IOException {
+      int radius, int limit, ScalarUnaryOperator smoothingKernel) throws IOException {
     int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
     int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
     TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);
@@ -184,7 +185,8 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   public static void main(String[] args) throws IOException {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
-    SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
+    WindowFunctions windowFunctions = WindowFunctions.GAUSSIAN;
+    ScalarUnaryOperator smoothingKernel = windowFunctions.get();
     Map<GeodesicFilters, TensorUnaryOperator> map = new EnumMap<>(GeodesicFilters.class);
     map.put(GeodesicFilters.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(GeodesicFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));

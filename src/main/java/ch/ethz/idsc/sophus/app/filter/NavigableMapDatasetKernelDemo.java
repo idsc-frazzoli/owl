@@ -7,16 +7,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ abstract class NavigableMapDatasetKernelDemo extends NavigableMapDatasetFilterDemo {
-  protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
+  protected final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
   public NavigableMapDatasetKernelDemo() {
     {
-      spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
-      spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
+      spinnerKernel.setList(Arrays.asList(WindowFunctions.values()));
+      spinnerKernel.setValue(WindowFunctions.GAUSSIAN);
       spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
       spinnerKernel.addSpinnerListener(value -> updateStateTime());
     }
@@ -30,7 +31,7 @@ import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 
   @Override // from DatasetFilterDemo
   protected final String plotLabel() {
-    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+    ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     int radius = spinnerRadius.getValue();
     return smoothingKernel + " [" + radius + "]";
   }

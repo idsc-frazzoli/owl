@@ -4,12 +4,12 @@ package ch.ethz.idsc.sophus.app.bd2;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
-import ch.ethz.idsc.sophus.gbc.Genesis;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateLevel;
 import ch.ethz.idsc.sophus.lie.r2.ThreePointWeighting;
+import ch.ethz.idsc.sophus.math.Genesis;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;

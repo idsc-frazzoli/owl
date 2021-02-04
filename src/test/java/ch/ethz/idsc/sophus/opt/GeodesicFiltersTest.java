@@ -16,10 +16,12 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 import junit.framework.TestCase;
 
 public class GeodesicFiltersTest extends TestCase {
@@ -28,7 +30,7 @@ public class GeodesicFiltersTest extends TestCase {
     Tensor control = gokartPoseData.getPose(lines.get(0), 250);
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
+    ScalarUnaryOperator smoothingKernel = WindowFunctions.GAUSSIAN.get();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     int radius = 7;
     Map<GeodesicFilters, Tensor> map = new EnumMap<>(GeodesicFilters.class);
@@ -56,7 +58,7 @@ public class GeodesicFiltersTest extends TestCase {
     Tensor control = GokartPoseDataV2.RACING_DAY.getPose(name, 1_000_000);
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
+    ScalarUnaryOperator smoothingKernel = WindowFunctions.GAUSSIAN.get();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     for (int radius : new int[] { 0, 10 }) {
       for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {

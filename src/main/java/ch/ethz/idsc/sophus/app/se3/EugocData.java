@@ -7,13 +7,13 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ enum EugocData {
   ;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
+          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, WindowFunctions.GAUSSIAN.get()), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_gauss.file"), smooth);
       Tensor delta = Se2Differences.INSTANCE.apply(smooth);
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
+          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, WindowFunctions.HAMMING.get()), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_hammi.file"), smooth);
       Tensor delta = Se2Differences.INSTANCE.apply(smooth);

@@ -13,8 +13,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.nd.EuclideanNdCenter;
 import ch.ethz.idsc.tensor.opt.nd.NdCenterInterface;
-import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdMap;
+import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.sca.Sign;
 

@@ -20,7 +20,6 @@ import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedRadiusGeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedRadiusGeodesicCenterFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
-import ch.ethz.idsc.sophus.opt.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,12 +29,13 @@ import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ class NonuniformityEvaluation {
   private static final NonuniformFixedRadiusGeodesicCenter NONUNIFORM_FIXED_RADIUS_GEODESIC_CENTER = //
       NonuniformFixedRadiusGeodesicCenter.of(Se2Geodesic.INSTANCE);
   private static final NonuniformFixedIntervalGeodesicCenter NONUNIFORM_FIXED_INTERVAL_GEODESIC_CENTER = //
-      NonuniformFixedIntervalGeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+      NonuniformFixedIntervalGeodesicCenter.of(Se2Geodesic.INSTANCE, WindowFunctions.GAUSSIAN.get());
   private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
       new GeodesicErrorEvaluation(Se2Manifold.HS_EXP);
 
