@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
         Biinvariants.METRIC, //
-        Biinvariants.TARGET, //
+        Biinvariants.LEVERAGES, //
         Biinvariants.GARDEN);
   }
 

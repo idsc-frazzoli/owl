@@ -63,7 +63,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
     spinnerLogWeighting.addSpinnerListener(spinnerListener);
     {
       spinnerBiinvariant.setArray(Biinvariants.values());
-      spinnerBiinvariant.setValue(Biinvariants.TARGET);
+      spinnerBiinvariant.setValue(Biinvariants.LEVERAGES);
       spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }

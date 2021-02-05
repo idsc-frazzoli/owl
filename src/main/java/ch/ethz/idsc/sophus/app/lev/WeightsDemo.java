@@ -64,8 +64,8 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
         Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //
-            ? new Biinvariant[] { Biinvariants.TARGET, Biinvariants.HARBOR, Biinvariants.GARDEN, Biinvariants.METRIC }
-            : new Biinvariant[] { Biinvariants.TARGET, Biinvariants.HARBOR, Biinvariants.GARDEN };
+            ? new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, Biinvariants.METRIC }
+            : new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN };
         Tensor matrix = Tensors.empty();
         int[] minIndex = new int[biinvariants.length];
         VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();

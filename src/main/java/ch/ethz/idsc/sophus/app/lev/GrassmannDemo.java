@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     GeodesicDisplay geodesicDisplay = Se2CoveringGeodesicDisplay.INSTANCE;
     geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.TARGET);
+    setBiinvariant(Biinvariants.LEVERAGES);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     jToggleNeutral.setSelected(true);

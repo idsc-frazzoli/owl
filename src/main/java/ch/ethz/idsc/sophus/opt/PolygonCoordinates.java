@@ -8,13 +8,13 @@ import java.util.Objects;
 import java.util.Set;
 
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
-import ch.ethz.idsc.sophus.gbc.Amplifiers;
 import ch.ethz.idsc.sophus.gbc.HsCoordinates;
-import ch.ethz.idsc.sophus.gbc.IterativeAffineCoordinate;
-import ch.ethz.idsc.sophus.gbc.IterativeTargetCoordinate;
 import ch.ethz.idsc.sophus.gbc.LagrangeCoordinate;
 import ch.ethz.idsc.sophus.gbc.MetricCoordinate;
-import ch.ethz.idsc.sophus.gbc.TargetCoordinate;
+import ch.ethz.idsc.sophus.gbc.LeveragesGenesis;
+import ch.ethz.idsc.sophus.gbc.amp.Amplifiers;
+import ch.ethz.idsc.sophus.gbc.it.IterativeAffineCoordinate;
+import ch.ethz.idsc.sophus.gbc.it.IterativeTargetCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.InverseDistanceWeighting;
@@ -55,12 +55,12 @@ public enum PolygonCoordinates implements LogWeighting {
   ITERATIVE_EX_20(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 20)), //
   ITERATIVE_EX_30(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 30)), //
   ITERATIVE_EX_50(new IterativeAffineCoordinate(Amplifiers.EXP.supply(5), 50)), //
-  TARGET(TargetCoordinate.of(InversePowerVariogram.of(2))), //
-  ITERATIVE_IL_0(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 0)), //
-  ITERATIVE_IL_1(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 1)), //
-  ITERATIVE_IL_2(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 2)), //
-  ITERATIVE_IL_3(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 3)), //
-  ITERATIVE_IL_5(IterativeCoordinate.of(TargetCoordinate.of(InversePowerVariogram.of(2)), 5)), //
+  TARGET(LeveragesGenesis.of(InversePowerVariogram.of(2))), //
+  ITERATIVE_IL_0(IterativeCoordinate.of(LeveragesGenesis.of(InversePowerVariogram.of(2)), 0)), //
+  ITERATIVE_IL_1(IterativeCoordinate.of(LeveragesGenesis.of(InversePowerVariogram.of(2)), 1)), //
+  ITERATIVE_IL_2(IterativeCoordinate.of(LeveragesGenesis.of(InversePowerVariogram.of(2)), 2)), //
+  ITERATIVE_IL_3(IterativeCoordinate.of(LeveragesGenesis.of(InversePowerVariogram.of(2)), 3)), //
+  ITERATIVE_IL_5(IterativeCoordinate.of(LeveragesGenesis.of(InversePowerVariogram.of(2)), 5)), //
   ;
 
   private static final Set<PolygonCoordinates> CONVEX = //

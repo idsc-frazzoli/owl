@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ abstract class A2AveragingDemo extends AnAveragingDemo {
@@ -93,8 +94,8 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   private final BufferedImage computeImage(Tensor tensor) {
     System.out.print("computeImage ");
-    Tensor sequence = tensor.get(0);
-    Tensor values = tensor.get(1);
+    Tensor sequence = tensor.get(0).map(N.DOUBLE);
+    Tensor values = tensor.get(1).map(N.DOUBLE);
     int resolution = spinnerRes.getValue();
     try {
       TensorScalarFunction tensorScalarFunction = function(sequence, values);

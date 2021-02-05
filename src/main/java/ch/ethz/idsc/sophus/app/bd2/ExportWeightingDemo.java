@@ -77,7 +77,7 @@ public abstract class ExportWeightingDemo extends ScatteredSetWeightingDemo impl
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
         Biinvariants.METRIC, //
-        Biinvariants.TARGET, //
+        Biinvariants.LEVERAGES, //
         Biinvariants.GARDEN, //
         Biinvariants.HARBOR);
   }

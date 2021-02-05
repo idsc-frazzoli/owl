@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.TARGET);
+    setBiinvariant(Biinvariants.LEVERAGES);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
