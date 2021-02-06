@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     return new SymWeights(root).vector();
   }
 
-  // ---
+  /***************************************************/
   private final Tensor sum = Array.zeros(0);
   private int max = 0;
 
