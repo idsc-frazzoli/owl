@@ -18,10 +18,10 @@ import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ abstract class GeodesicSplitsDemo extends ControlPointsDemo {
+/* package */ abstract class AbstractSplitsDemo extends ControlPointsDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 13);
 
-  public GeodesicSplitsDemo() {
+  public AbstractSplitsDemo() {
     super(true, GeodesicDisplays.ALL);
   }
 

@@ -18,9 +18,11 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
+/** TODO investigate, this produces some nice results for kriging+metric+power */
 /* package */ class R1RadialBasisFunctionDemo extends A1AveragingDemo {
   public R1RadialBasisFunctionDemo() {
     super(R2GeodesicDisplay.INSTANCE);
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 2, 0}, {2, -1, 0}}"));
   }
 
   @Override
@@ -36,9 +38,8 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
       Tensor sequence = support.map(Tensors::of);
       Tensor domain = domain();
       try {
-        TensorUnaryOperator weightingInterface = operator(sequence);
         TensorUnaryOperator tensorUnaryOperator = //
-            RadialBasisFunctionInterpolation.of(weightingInterface, sequence, funceva);
+            RadialBasisFunctionInterpolation.of(operator(sequence), sequence, funceva);
         Tensor result = Tensor.of(domain.stream().map(Tensors::of).map(tensorUnaryOperator));
         new PathRender(Color.BLUE, 1.25f) //
             .setCurve(Transpose.of(Tensors.of(domain, result)), false) //

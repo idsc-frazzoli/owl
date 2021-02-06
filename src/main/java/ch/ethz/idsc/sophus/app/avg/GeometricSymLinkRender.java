@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 
+import ch.ethz.idsc.java.lang.Refactor;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.sym.SymLink;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /** visualization of the geometric geodesic average */
+@Refactor(reason = "implementation is general")
 /* package */ class GeometricSymLinkRender {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);

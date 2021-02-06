@@ -8,7 +8,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.crv.spline.BezierFunction;
+import ch.ethz.idsc.sophus.crv.bezier.BezierFunction;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;

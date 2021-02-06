@@ -21,8 +21,8 @@ public enum MixedLogWeightings implements LogWeighting {
     public TensorUnaryOperator operator( //
         Biinvariant biinvariant, VectorLogManifold vectorLogManifold, //
         ScalarUnaryOperator variogram, Tensor sequence) {
-      return WeightingOperators.wrap( //
-          RadialBasisFunctionWeighting.of(biinvariant.var_dist(vectorLogManifold, variogram, sequence)), //
+      return RadialBasisFunctionWeighting.of( //
+          biinvariant.var_dist(vectorLogManifold, variogram, sequence), //
           sequence);
     }
 

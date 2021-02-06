@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.sym;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.crv.spline.BezierFunction;
+import ch.ethz.idsc.sophus.crv.bezier.BezierFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
