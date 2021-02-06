@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.geo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

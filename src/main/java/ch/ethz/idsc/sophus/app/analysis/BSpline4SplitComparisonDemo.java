@@ -1,4 +1,5 @@
-package ch.ethz.idsc.sophus.app.curve;
+// code by jph
+package ch.ethz.idsc.sophus.app.analysis;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.MeanDefect;

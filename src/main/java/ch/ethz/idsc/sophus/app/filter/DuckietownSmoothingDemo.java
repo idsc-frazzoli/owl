@@ -15,10 +15,10 @@ import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.curve.KnotsBSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
@@ -117,8 +117,8 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
-    DeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
-    SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
+    DeBoor deBoor = scalarTensorFunction.deBoor(parameter);
+    SymLinkImage symLinkImage = SymLinkImages.deboor(deBoor.knots(), deBoor.degree() + 1, parameter);
     return symLinkImage.bufferedImage();
   }
 

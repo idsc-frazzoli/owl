@@ -10,6 +10,7 @@ import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
@@ -62,7 +63,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     GeodesicFilters geodesicFilters = spinnerFilters.getValue();
     switch (geodesicFilters) {
     case GEODESIC:
-      return GeodesicCenterSymLinkImage.of(spinnerKernel.getValue().get(), spinnerRadius.getValue()).bufferedImage();
+      return SymLinkImages.ofGC(spinnerKernel.getValue().get(), spinnerRadius.getValue()).bufferedImage();
     default:
       return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     }

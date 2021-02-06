@@ -5,15 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
-import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
@@ -31,7 +27,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.DeBoor;
 
 // TODO JPH demo does not seem correct
-/* package */ class GeodesicDeBoorDemo extends AbstractCurveDemo implements BufferedImageSupplier {
+/* package */ public class GeodesicDeBoorDemo extends AbstractCurveDemo implements BufferedImageSupplier {
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
   public GeodesicDeBoorDemo() {
@@ -49,7 +45,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     final int upper = control.length() - 1;
     final Scalar parameter = sliderRatio().multiply(RealScalar.of(upper));
     Tensor knots = Range.of(0, 2 * upper);
-    bufferedImage = symLinkImage(knots, control.length(), parameter).bufferedImage();
+    bufferedImage = SymLinkImages.deboor(knots, control.length(), parameter).bufferedImage();
     // ---
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
@@ -82,15 +78,6 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
   @Override
   public BufferedImage bufferedImage() {
     return bufferedImage;
-  }
-
-  private static SymLinkImage symLinkImage(Tensor knots, int length, Scalar scalar) {
-    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
-    ScalarTensorFunction scalarTensorFunction = DeBoor.of(SymGeodesic.INSTANCE, knots, vector);
-    Tensor tensor = scalarTensorFunction.apply(scalar);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
-    symLinkImage.title("DeBoor" + knots + " at " + scalar);
-    return symLinkImage;
   }
 
   public static void main(String[] args) {

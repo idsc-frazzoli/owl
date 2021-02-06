@@ -6,17 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
-import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
@@ -30,10 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.DeBoor;
 
-public class KnotsBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
+/* package */ class KnotsBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
   private final JSlider jSliderExponent = new JSlider(0, 100, 100);
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -61,8 +57,8 @@ public class KnotsBSplineFunctionDemo extends AbstractCurveDemo implements Buffe
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, control);
     {
-      DeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
-      SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
+      DeBoor deBoor = scalarTensorFunction.deBoor(parameter);
+      SymLinkImage symLinkImage = SymLinkImages.deboor(deBoor.knots(), deBoor.degree() + 1, parameter);
       bufferedImage = symLinkImage.bufferedImage();
     }
     // ---
@@ -87,17 +83,6 @@ public class KnotsBSplineFunctionDemo extends AbstractCurveDemo implements Buffe
   @Override // from BufferedImageSupplier
   public BufferedImage bufferedImage() {
     return bufferedImage;
-  }
-
-  public static SymLinkImage deboor(DeBoor geodesicDeBoor, int length, Scalar scalar) {
-    Tensor knots = geodesicDeBoor.knots();
-    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
-    // Tensor vector = knots.map(s->s.subtract(knots.Get(0))).map(SymScalar::leaf);
-    ScalarTensorFunction scalarTensorFunction = DeBoor.of(SymGeodesic.INSTANCE, knots, vector);
-    Tensor tensor = scalarTensorFunction.apply(scalar);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
-    symLinkImage.title("DeBoor at " + scalar);
-    return symLinkImage;
   }
 
   public static void main(String[] args) {

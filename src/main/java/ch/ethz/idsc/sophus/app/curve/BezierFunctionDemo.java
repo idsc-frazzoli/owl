@@ -11,18 +11,16 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.bezier.BezierFunction;
-import ch.ethz.idsc.sophus.crv.bezier.BezierMask;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
 /* package */ class BezierFunctionDemo extends AbstractCurvatureDemo {
@@ -60,16 +58,13 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
     {
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
       if (Objects.nonNull(biinvariantMean)) {
-        Tensor render = Tensor.of(domain.stream() //
-            .map(Scalar.class::cast) //
-            .map(BezierMask.of(sequence.length())) //
-            .map(mask -> biinvariantMean.mean(sequence, mask)) //
-            .map(geodesicDisplay::toPoint));
+        Tensor refined = domain.map(BezierFunction.of(biinvariantMean, sequence));
+        Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
         new PathRender(Color.RED, 1.25f).setCurve(render, false).render(geometricLayer, graphics);
       }
     }
-    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), sequence);
-    Tensor refined = domain.map(scalarTensorFunction);
+    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Tensor refined = domain.map(BezierFunction.of(geodesicInterface, sequence));
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     Curvature2DRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)

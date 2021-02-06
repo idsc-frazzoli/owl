@@ -6,17 +6,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
-import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
@@ -36,7 +32,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ class GeodesicBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
+/* package */ public class GeodesicBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -55,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = sliderRatio().multiply(RealScalar.of(upper));
-    bufferedImage = symLinkImage(degree, upper + 1, parameter).bufferedImage();
+    bufferedImage = SymLinkImages.symLinkImageGBSF(degree, upper + 1, parameter).bufferedImage();
     // ---
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
@@ -110,15 +106,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override
   public BufferedImage bufferedImage() {
     return bufferedImage;
-  }
-
-  /* package */ static SymLinkImage symLinkImage(int degree, int length, Scalar scalar) {
-    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
-    ScalarTensorFunction scalarTensorFunction = GeodesicBSplineFunction.of(SymGeodesic.INSTANCE, degree, vector);
-    Tensor tensor = scalarTensorFunction.apply(scalar);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
-    symLinkImage.title("DeBoor[" + degree + "] at " + scalar);
-    return symLinkImage;
   }
 
   public static void main(String[] args) {

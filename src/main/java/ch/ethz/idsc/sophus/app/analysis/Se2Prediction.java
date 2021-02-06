@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.aurora;
+package ch.ethz.idsc.sophus.app.analysis;
 
 import java.io.IOException;
 

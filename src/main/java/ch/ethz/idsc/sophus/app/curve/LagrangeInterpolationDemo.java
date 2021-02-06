@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -55,6 +56,7 @@ import ch.ethz.idsc.tensor.sca.N;
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
+    setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
   }
 
   @Override // from RenderInterface

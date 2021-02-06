@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.N;
         }
       }
       // ---
-      ScalarTensorFunction scalarTensorFunction = // 
+      ScalarTensorFunction scalarTensorFunction = //
           BarycentricRationalInterpolation.of(support, spinnerDegree.getValue());
       Tensor basis = domain.map(scalarTensorFunction);
       {
