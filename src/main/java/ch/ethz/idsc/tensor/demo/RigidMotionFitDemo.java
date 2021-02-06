@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.tensor.demo;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.tensor.demo;
 
 import ch.ethz.idsc.sophus.gui.win.AbstractDemoHelper;
 import junit.framework.TestCase;
