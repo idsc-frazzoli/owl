@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
   // ---
   protected final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
 
-  GeodesicFiltersDemo() {
+  public GeodesicFiltersDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
     // ---
     timerFrame.jToolBar.addSeparator();

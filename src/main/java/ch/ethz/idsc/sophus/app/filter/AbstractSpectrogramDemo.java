@@ -30,23 +30,24 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
-import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
-/* package */ abstract class UniformDatasetFilterDemo extends AbstractDatasetFilterDemo {
+/* package */ abstract class AbstractSpectrogramDemo extends AbstractDatasetFilterDemo {
   private static final ScalarUnaryOperator MAGNITUDE_PER_SECONDS = QuantityMagnitude.SI().in("s^-1");
   // ---
   private final GokartPoseData gokartPoseData;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  protected final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
   // TODO JPH refactor
   protected Tensor _control = null;
   // protected final SpinnerLabel<ColorDataGradients> spinnerLabelCDG = new SpinnerLabel<>();
 
-  protected UniformDatasetFilterDemo(GokartPoseData gokartPoseData) {
+  protected AbstractSpectrogramDemo(GokartPoseData gokartPoseData) {
     this(GeodesicDisplays.CL_SE2_R2, gokartPoseData);
   }
 
-  protected UniformDatasetFilterDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
+  protected AbstractSpectrogramDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
     super(list);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
@@ -61,6 +62,12 @@ import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
       spinnerLabelLimit.setIndex(4);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
+    }
+    {
+      spinnerKernel.setList(Arrays.asList(WindowFunctions.values()));
+      spinnerKernel.setValue(WindowFunctions.GAUSSIAN);
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "smoothing kernel");
+      spinnerKernel.addSpinnerListener(value -> updateState());
     }
   }
 
@@ -103,7 +110,8 @@ import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
           visualSet.add(domain, signal);
           // ---
           if (spectrogram) {
-            Tensor image = Spectrogram.of(signal, DirichletWindow.FUNCTION, COLOR_DATA_GRADIENT);
+            ScalarUnaryOperator window = spinnerKernel.getValue().get();
+            Tensor image = Spectrogram.of(signal, window, COLOR_DATA_GRADIENT);
             BufferedImage bufferedImage = ImageFormat.of(image);
             int wid = bufferedImage.getWidth() * MAGNIFY;
             int hgt = bufferedImage.getHeight() * MAGNIFY;

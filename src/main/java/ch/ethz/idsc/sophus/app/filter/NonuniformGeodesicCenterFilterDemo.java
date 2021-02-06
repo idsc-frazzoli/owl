@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKernelDemo {
+/* package */ class NonuniformGeodesicCenterFilterDemo extends AbstractNavigableMapDemo {
   private Tensor refined = Tensors.empty();
   protected final JToggleButton jToggleFixedRadius = new JToggleButton("fixedRadius");
   // interval manuell gekoppelt an sampling frequency

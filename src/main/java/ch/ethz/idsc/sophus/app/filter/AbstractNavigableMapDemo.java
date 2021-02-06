@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
 
@@ -26,11 +28,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
-/* package */ abstract class NavigableMapDatasetFilterDemo extends AbstractDatasetFilterDemo {
+/* package */ abstract class AbstractNavigableMapDemo extends AbstractDatasetFilterDemo {
   private final JSlider jSlider = new JSlider(1, 999, 200);
   // ---
   protected Tensor _time = null;
@@ -38,6 +42,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected Tensor _quality = null;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  protected final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
+  protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
   protected void updateStateTime() {
     _time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.Get(0)));
@@ -57,7 +63,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     return navigableMapStateTime;
   }
 
-  public NavigableMapDatasetFilterDemo() {
+  public AbstractNavigableMapDemo() {
     super(GeodesicDisplays.CL_SE2_R2);
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
@@ -76,6 +82,18 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.addSpinnerListener(type -> updateStateTime());
     }
     timerFrame.jToolBar.addSeparator();
+    {
+      spinnerKernel.setList(Arrays.asList(WindowFunctions.values()));
+      spinnerKernel.setValue(WindowFunctions.GAUSSIAN);
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
+      spinnerKernel.addSpinnerListener(value -> updateStateTime());
+    }
+    {
+      spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
+      spinnerRadius.setValue(3);
+      spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+      spinnerRadius.addSpinnerListener(value -> updateStateTime());
+    }
     // ---
     timerFrame.jToolBar.add(jSlider);
   }
@@ -90,7 +108,11 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   /** @return */
-  protected abstract String plotLabel();
+  protected String plotLabel() {
+    ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
+    int radius = spinnerRadius.getValue();
+    return smoothingKernel + " [" + radius + "]";
+  }
 
   @Override
   protected void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {

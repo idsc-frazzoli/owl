@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,18 +12,11 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
-/* package */ abstract class AbstractDatasetKernelDemo extends UniformDatasetFilterDemo {
-  protected final SpinnerLabel<WindowFunctions> spinnerKernel = new SpinnerLabel<>();
+/* package */ abstract class AbstractDatasetKernelDemo extends AbstractSpectrogramDemo {
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
   protected AbstractDatasetKernelDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
     super(list, gokartPoseData);
-    {
-      spinnerKernel.setList(Arrays.asList(WindowFunctions.values()));
-      spinnerKernel.setValue(WindowFunctions.GAUSSIAN);
-      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "smoothing kernel");
-      spinnerKernel.addSpinnerListener(value -> updateState());
-    }
     {
       spinnerRadius.setList(IntStream.range(0, 25).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(1);
