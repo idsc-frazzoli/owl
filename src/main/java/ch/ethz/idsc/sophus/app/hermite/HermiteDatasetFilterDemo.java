@@ -39,8 +39,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  // private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
-  // private static final Color COLOR_FILTR = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
@@ -48,7 +46,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   // ---
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
-  // private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleAdjoint = new JToggleButton("ad");
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
@@ -65,16 +62,10 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
-    // {
-    // spinnerLabelScheme.setArray(HermiteSubdivisions.values());
-    // spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
-    // spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
-    // }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
       spinnerLabelLevel.setValue(1);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "level");
-      // spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     {

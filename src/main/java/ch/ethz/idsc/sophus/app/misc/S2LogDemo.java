@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.hermite;
+package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.Graphics2D;
 

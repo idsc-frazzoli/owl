@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.lev;
+package ch.ethz.idsc.sophus.app.curve;
 
 import ch.ethz.idsc.sophus.gui.win.AbstractDemoHelper;
 import junit.framework.TestCase;

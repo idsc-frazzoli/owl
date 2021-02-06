@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.itp.LinearInterpolation;
       Interpolation interpolation = LinearInterpolation.of(Tensors.of(weights, blend));
       Tensor map = Tensor.of(Subdivide.of(0.0, 1.0, 20).stream() //
           .map(Scalar.class::cast) //
-          .map(value -> interpolation.at(value)) //
+          .map(interpolation::at) //
           .map(w -> biinvariantMean.mean(controlPoints, w)) //
           .map(geodesicDisplay::toPoint));
       Path2D path2d = geometricLayer.toPath2D(map);

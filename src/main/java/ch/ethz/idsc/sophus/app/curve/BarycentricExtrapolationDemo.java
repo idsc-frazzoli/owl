@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.lev;
+package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,6 +10,7 @@ import java.awt.geom.Line2D;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
