@@ -20,8 +20,6 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class MendelbretDemo implements TensorUnaryOperator {
-  private static final long serialVersionUID = -6865051309927138968L;
-  // ---
   private final Tensor c;
 
   public MendelbretDemo(Tensor c) {
