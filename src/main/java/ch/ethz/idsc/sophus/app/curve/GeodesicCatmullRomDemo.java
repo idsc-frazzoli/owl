@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class GeodesicCatmullRomDemo extends CurvatureDemo {
+public class GeodesicCatmullRomDemo extends AbstractCurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JSlider jSlider = new JSlider(0, 1000, 500);
   private final JSlider jSliderExponent = new JSlider(0, 1000, 500);

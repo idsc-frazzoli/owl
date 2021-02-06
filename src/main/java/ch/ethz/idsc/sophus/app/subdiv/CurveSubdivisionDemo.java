@@ -22,7 +22,7 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.StandardMenu;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.curve.CurvatureDemo;
+import ch.ethz.idsc.sophus.app.curve.AbstractCurvatureDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** split interface and biinvariant mean based curve subdivision */
-/* package */ class CurveSubdivisionDemo extends CurvatureDemo {
+/* package */ class CurveSubdivisionDemo extends AbstractCurvatureDemo {
   private final PathRender pathRender = new PathRender(new Color(0, 255, 0, 128));
   final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

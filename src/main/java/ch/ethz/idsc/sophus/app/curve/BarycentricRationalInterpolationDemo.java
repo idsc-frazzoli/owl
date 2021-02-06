@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.crv.spline.BarycentricRationalInterpolation;
+import ch.ethz.idsc.sophus.crv.bri.BarycentricRationalInterpolation;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
       spinnerDegree.setValue(1);
       spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "degree");
     }
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {2, 0, 0}, {4, 3, 1}, {5, -1, -2}}"));
   }
 
   @Override

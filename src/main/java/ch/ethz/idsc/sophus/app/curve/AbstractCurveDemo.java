@@ -17,18 +17,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public abstract class BaseCurvatureDemo extends CurvatureDemo {
+public abstract class AbstractCurveDemo extends AbstractCurvatureDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
-  public BaseCurvatureDemo() {
+  public AbstractCurveDemo() {
     this(GeodesicDisplays.ALL);
   }
 
-  public BaseCurvatureDemo(List<GeodesicDisplay> list) {
+  public AbstractCurveDemo(List<GeodesicDisplay> list) {
     super(list);
     // ---
     spinnerDegree.setList(DEGREES);

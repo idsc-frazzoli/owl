@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.owl.lane.StableLanes;
-import ch.ethz.idsc.sophus.app.curve.BaseCurvatureDemo;
+import ch.ethz.idsc.sophus.app.curve.AbstractCurveDemo;
 import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringClothoidDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Serialization;
 
-/* package */ class LaneConsumptionDemo extends BaseCurvatureDemo {
+/* package */ class LaneConsumptionDemo extends AbstractCurveDemo {
   private final LaneRender laneRender = new LaneRender();
   private LaneInterface lane = null;
 

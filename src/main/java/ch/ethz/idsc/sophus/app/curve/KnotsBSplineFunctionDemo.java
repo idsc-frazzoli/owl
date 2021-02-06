@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.DeBoor;
 
-public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
+public class KnotsBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
   private final JSlider jSliderExponent = new JSlider(0, 100, 100);
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 

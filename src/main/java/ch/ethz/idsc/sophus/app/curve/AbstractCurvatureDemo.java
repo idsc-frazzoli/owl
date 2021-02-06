@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /** class is used in other projects outside of owl */
-public abstract class CurvatureDemo extends ControlPointsDemo {
+public abstract class AbstractCurvatureDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
@@ -29,11 +29,11 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   private final JToggleButton jToggleGraph = new JToggleButton("graph");
   public final JToggleButton jToggleCurvature = new JToggleButton("crvtp");
 
-  public CurvatureDemo() {
+  public AbstractCurvatureDemo() {
     this(GeodesicDisplays.ALL);
   }
 
-  public CurvatureDemo(List<GeodesicDisplay> list) {
+  public AbstractCurvatureDemo(List<GeodesicDisplay> list) {
     super(true, list);
     // ---
     jToggleCurvature.setSelected(true);

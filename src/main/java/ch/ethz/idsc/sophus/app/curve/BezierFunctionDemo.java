@@ -1,24 +1,31 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import java.util.Objects;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.bezier.BezierFunction;
+import ch.ethz.idsc.sophus.crv.bezier.BezierMask;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
+import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
+import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
-/* package */ class BezierFunctionDemo extends CurvatureDemo {
+/* package */ class BezierFunctionDemo extends AbstractCurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   public BezierFunctionDemo() {
@@ -33,6 +40,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
   }
 
   @Override // from RenderInterface
@@ -41,15 +49,26 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---
-    Tensor control = getGeodesicControlPoints();
-    int n = control.length();
+    Tensor sequence = getGeodesicControlPoints();
+    int n = sequence.length();
     if (0 == n)
       return Tensors.empty();
-    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control);
     int levels = spinnerRefine.getValue();
     Tensor domain = n <= 1 //
         ? Tensors.vector(0)
-        : Subdivide.of(0, n / (double) (n - 1), 1 << levels);
+        : Subdivide.of(0.0, n / (double) (n - 1), 1 << levels);
+    {
+      BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
+      if (Objects.nonNull(biinvariantMean)) {
+        Tensor render = Tensor.of(domain.stream() //
+            .map(Scalar.class::cast) //
+            .map(BezierMask.of(sequence.length())) //
+            .map(mask -> biinvariantMean.mean(sequence, mask)) //
+            .map(geodesicDisplay::toPoint));
+        new PathRender(Color.RED, 1.25f).setCurve(render, false).render(geometricLayer, graphics);
+      }
+    }
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), sequence);
     Tensor refined = domain.map(scalarTensorFunction);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     Curvature2DRender.of(render, false, geometricLayer, graphics);

@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ class GeodesicBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
+/* package */ class GeodesicBSplineFunctionDemo extends AbstractCurveDemo implements BufferedImageSupplier {
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 

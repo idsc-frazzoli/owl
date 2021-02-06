@@ -14,7 +14,7 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.crv.spline.BarycentricRationalInterpolation;
+import ch.ethz.idsc.sophus.crv.bri.BarycentricRationalInterpolation;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
@@ -84,7 +84,8 @@ import ch.ethz.idsc.tensor.sca.N;
         }
       }
       // ---
-      ScalarTensorFunction scalarTensorFunction = BarycentricRationalInterpolation.of(support, spinnerDegree.getValue());
+      ScalarTensorFunction scalarTensorFunction = // 
+          BarycentricRationalInterpolation.of(support, spinnerDegree.getValue());
       Tensor basis = domain.map(scalarTensorFunction);
       {
         Tensor curve = Transpose.of(Tensors.of(domain, basis.dot(funceva)));
