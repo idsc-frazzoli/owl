@@ -40,7 +40,8 @@ import ch.ethz.idsc.tensor.red.Entrywise;
 
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
-/* package */ class R2ScatteredSetCoordinateDemo extends ScatteredSetWeightingDemo {
+// TODO possibly only recompute when points have changed
+/* package */ class R2ScatteredSetCoordinateDemo extends AbstractScatteredSetWeightingDemo {
   private static final double RANGE = 5;
   // ---
   private final JToggleButton jToggleButtonAxes = new JToggleButton("axes");

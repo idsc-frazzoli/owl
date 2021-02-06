@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.bd1;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -85,6 +88,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   }
 
   private final Cache<Tensor, BufferedImage> cache = Cache.of(this::computeImage, 1);
+  private double computeTime = 0;
 
   @Override
   protected final void recompute() {
@@ -93,7 +97,6 @@ import ch.ethz.idsc.tensor.sca.Round;
   }
 
   private final BufferedImage computeImage(Tensor tensor) {
-    System.out.print("computeImage ");
     Tensor sequence = tensor.get(0).map(N.DOUBLE);
     Tensor values = tensor.get(1).map(N.DOUBLE);
     int resolution = spinnerRes.getValue();
@@ -104,7 +107,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       TensorScalarFunction tsf = t -> suo.apply(tensorScalarFunction.apply(t));
       Timing timing = Timing.started();
       Tensor matrix = geodesicArrayPlot.raster(resolution, tsf, DoubleScalar.INDETERMINATE);
-      System.out.println(timing.seconds());
+      computeTime = timing.seconds();
       // ---
       if (jToggleThresh.isSelected())
         matrix = matrix.map(Round.FUNCTION); // effectively maps to 0 or 1
@@ -126,9 +129,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
-    BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values).map(Round._3));
-    // if (Objects.isNull(bufferedImage))
-    // recompute();
+    BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values));
     if (Objects.nonNull(bufferedImage)) {
       RenderQuality.setDefault(graphics); // default so that raster becomes visible
       Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
@@ -139,6 +140,9 @@ import ch.ethz.idsc.tensor.sca.Round;
     LeversRender leversRender = //
         LeversRender.of(geodesicDisplay, sequence, values, geometricLayer, graphics);
     leversRender.renderWeights(values);
+    graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+    graphics.setColor(Color.GRAY);
+    graphics.drawString("compute: " + RealScalar.of(computeTime).map(Round._3), 0, 30);
   }
 
   void prepare() {

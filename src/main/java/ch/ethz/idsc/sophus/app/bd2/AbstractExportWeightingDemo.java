@@ -11,7 +11,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
-import ch.ethz.idsc.sophus.app.bdn.ScatteredSetWeightingDemo;
+import ch.ethz.idsc.sophus.app.bdn.AbstractScatteredSetWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
@@ -25,11 +25,11 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 
-public abstract class ExportWeightingDemo extends ScatteredSetWeightingDemo implements ActionListener {
+public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWeightingDemo implements ActionListener {
   private static final int REFINEMENT = 120; // presentation 60
   private final JButton jButtonExport = new JButton("export");
 
-  public ExportWeightingDemo( //
+  public AbstractExportWeightingDemo( //
       boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     {

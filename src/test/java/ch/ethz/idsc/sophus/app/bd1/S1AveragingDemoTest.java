@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class S1AveragingDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.offscreen(new S1AveragingDemo());
+    AbstractDemoHelper.offscreen(new S1KrigingDemo());
   }
 }

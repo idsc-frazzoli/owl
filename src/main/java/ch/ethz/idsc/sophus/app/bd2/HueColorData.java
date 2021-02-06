@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.bdn;
+package ch.ethz.idsc.sophus.app.bd2;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-public enum HueColorData {
+/* package */ enum HueColorData {
   ;
   private static final Mod MOD = Mod.function(1);
 

@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ abstract class A2ScatteredSetCoordinateDemo extends ExportWeightingDemo {
+/* package */ abstract class A2ScatteredSetCoordinateDemo extends AbstractExportWeightingDemo {
   private final JToggleButton jToggleAxes = new JToggleButton("axes");
   // ---
   private RenderInterface renderInterface;

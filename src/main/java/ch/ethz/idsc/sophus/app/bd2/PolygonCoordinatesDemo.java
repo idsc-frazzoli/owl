@@ -15,7 +15,6 @@ import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.java.io.HtmlUtf8;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.bdn.HueColorData;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.H2GeodesicDisplay;

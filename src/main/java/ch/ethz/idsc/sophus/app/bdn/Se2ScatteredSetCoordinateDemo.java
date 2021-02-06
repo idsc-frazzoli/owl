@@ -14,7 +14,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.bd2.ExportWeightingDemo;
+import ch.ethz.idsc.sophus.app.bd2.AbstractExportWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.num.Pi;
 
-/* package */ class Se2ScatteredSetCoordinateDemo extends ExportWeightingDemo {
+/* package */ class Se2ScatteredSetCoordinateDemo extends AbstractExportWeightingDemo {
   private static final Font FONT = new Font(Font.DIALOG, Font.BOLD, 14);
   private static final double RANGE = 3;
   // ---

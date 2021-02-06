@@ -32,10 +32,10 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
 // FIXME what does this demo do: there is no curve shown
-/* package */ class S1AveragingDemo extends AnAveragingDemo {
+/* package */ class S1KrigingDemo extends AnAveragingDemo {
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
-  public S1AveragingDemo() {
+  public S1KrigingDemo() {
     super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
     timerFrame.geometricComponent.setOffset(500, 500);
@@ -90,6 +90,6 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public static void main(String[] args) {
-    new S1AveragingDemo().setVisible(1000, 800);
+    new S1KrigingDemo().setVisible(1000, 800);
   }
 }

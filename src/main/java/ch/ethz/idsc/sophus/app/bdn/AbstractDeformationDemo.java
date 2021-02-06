@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ abstract class AbstractDeformationDemo extends ScatteredSetWeightingDemo {
+/* package */ abstract class AbstractDeformationDemo extends AbstractScatteredSetWeightingDemo {
   private static final PointsRender POINTS_RENDER_POINTS = //
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255));
   private static final Stroke STROKE = //
