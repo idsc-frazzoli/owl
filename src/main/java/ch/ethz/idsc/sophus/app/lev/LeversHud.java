@@ -29,12 +29,12 @@ public enum LeversHud {
       leversRender.renderEllipseIdentity();
       leversRender.renderWeightsLength();
       break;
-   // TODO reintroduce
-//    case AETHER:
-//      leversRender.renderTangentsPtoX(false); // boolean: no tangent plane
-//      leversRender.renderEllipseIdentityP();
-//      leversRender.renderWeightsLength();
-//      break;
+    // TODO reintroduce
+    // case AETHER:
+    // leversRender.renderTangentsPtoX(false); // boolean: no tangent plane
+    // leversRender.renderEllipseIdentityP();
+    // leversRender.renderWeightsLength();
+    // break;
     case LEVERAGES:
       leversRender.renderTangentsXtoP(false); // boolean: no tangent plane
       if (leversRender.getSequence().length() <= 2)

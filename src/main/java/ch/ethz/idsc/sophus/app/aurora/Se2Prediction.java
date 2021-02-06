@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.demo.math3;
+package ch.ethz.idsc.sophus.app.aurora;
 
 import java.io.IOException;
 

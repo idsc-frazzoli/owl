@@ -19,10 +19,10 @@ import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
-import ch.ethz.idsc.sophus.hs.PrimAlgorithm;
-import ch.ethz.idsc.sophus.hs.PrimAlgorithm.Edge;
-import ch.ethz.idsc.sophus.hs.PrimAlgorithm.EdgeComparator;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.MinimumSpanningTree;
+import ch.ethz.idsc.sophus.math.MinimumSpanningTree.Edge;
+import ch.ethz.idsc.sophus.math.MinimumSpanningTree.EdgeComparator;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     DisjointSets disjointSets = DisjointSets.allocate(sequence.length());
     if (0 < sequence.length()) {
       Tensor matrix = distanceMatrix(sequence);
-      List<Edge> list = PrimAlgorithm.of(matrix);
+      List<Edge> list = MinimumSpanningTree.of(matrix);
       Collections.sort(list, new EdgeComparator(matrix));
       int count = Math.max(0, list.size() - splits);
       {
