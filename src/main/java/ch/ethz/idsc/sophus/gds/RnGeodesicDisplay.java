@@ -69,7 +69,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override
   public LieExponential lieExponential() {
-    return RnManifold.HS_EXP;
+    return RnManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

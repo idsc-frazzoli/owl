@@ -71,7 +71,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
 
   @Override
   public LieExponential lieExponential() {
-    return R2SManifold.HS_EXP;
+    return R2SManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

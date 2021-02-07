@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ abstract class HermiteArray {
-  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.HS_EXP;
+  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
   static final HsTransport HS_TRANSPORT = Se2CoveringTransport.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;

@@ -88,7 +88,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override
   public LieExponential lieExponential() {
-    return null; // FIXME
+    return So3Manifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

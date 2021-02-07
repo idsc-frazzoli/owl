@@ -60,9 +60,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         Tensor m3 = d3.lo(p, q, r);
         // ---
         {
-          Tensor v1 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m1)).tangent();
-          Tensor v2 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m2)).tangent();
-          Tensor v3 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.HS_EXP.exponential(m3)).tangent();
+          Tensor v1 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.INSTANCE.exponential(m1)).tangent();
+          Tensor v2 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.INSTANCE.exponential(m2)).tangent();
+          Tensor v3 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.INSTANCE.exponential(m3)).tangent();
           Tensor err = Tensors.of( //
               Norm._2.ofVector(v1), //
               Norm._2.ofVector(v2), //

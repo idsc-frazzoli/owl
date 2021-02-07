@@ -85,7 +85,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   private void processAll() throws IOException {
-    HsExponential hsExponential = Se2CoveringManifold.HS_EXP;
+    HsExponential hsExponential = Se2CoveringManifold.INSTANCE;
     HsTransport hsTransport = Se2CoveringTransport.INSTANCE;
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     {

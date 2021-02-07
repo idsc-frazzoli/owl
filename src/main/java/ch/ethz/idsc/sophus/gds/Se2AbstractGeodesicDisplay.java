@@ -4,13 +4,8 @@ package ch.ethz.idsc.sophus.gds;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
-import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieVectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
@@ -45,18 +40,8 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   }
 
   @Override // from GeodesicDisplay
-  public final HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), Se2CoveringExponential.INSTANCE);
-  }
-
-  @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
     return Se2CoveringTransport.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public final VectorLogManifold vectorLogManifold() {
-    return LieVectorLogManifold.of(lieGroup(), Se2CoveringExponential.INSTANCE::log);
   }
 
   @Override // from GeodesicDisplay

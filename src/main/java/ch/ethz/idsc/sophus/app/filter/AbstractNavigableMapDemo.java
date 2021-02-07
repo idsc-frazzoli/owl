@@ -119,7 +119,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(geodesicDisplay.lieExponential());
-      LieDifferences lieDifferencesTime = new LieDifferences(RnManifold.HS_EXP);
+      LieDifferences lieDifferencesTime = new LieDifferences(RnManifold.INSTANCE);
       Tensor timeDifference = lieDifferencesTime.apply(Tensor.of(navigableMapStateTime().keySet().stream())).map(x -> x.reciprocal());
       Tensor speeds = timeDifference.pmul(lieDifferences.apply(refined));
       if (0 < speeds.length()) {

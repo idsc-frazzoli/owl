@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 
 /* package */ abstract class ProxyHermite {
-  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.HS_EXP;
+  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
   static final HsTransport HS_TRANSPORT = Se2CoveringTransport.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;

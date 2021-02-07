@@ -81,7 +81,7 @@ public enum Dt1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return DtManifold.HS_EXP;
+    return DtManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

@@ -30,7 +30,7 @@ public class HermiteSubdivisionsTest extends TestCase {
     cp2.set(Tensor::negate, Tensor.ALL, 1);
     for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
-          RnManifold.HS_EXP, //
+          RnManifold.INSTANCE, //
           RnTransport.INSTANCE, //
           RnBiinvariantMean.INSTANCE);
       TensorIteration ti1 = hermiteSubdivision.string(RealScalar.ONE, cp1);
@@ -50,7 +50,7 @@ public class HermiteSubdivisionsTest extends TestCase {
     cp2.set(Tensor::negate, Tensor.ALL, 1);
     for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
-          Se2Manifold.HS_EXP, //
+          Se2Manifold.INSTANCE, //
           Se2CoveringTransport.INSTANCE, //
           Se2BiinvariantMeans.LINEAR);
       TensorIteration ti1 = hermiteSubdivision.string(RealScalar.ONE, cp1);
@@ -68,7 +68,7 @@ public class HermiteSubdivisionsTest extends TestCase {
     Tensor control = ConstantArray.of(Tensors.fromString("{{2, 3, 1}, {0, 0, 0}}"), 10);
     for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
-          Se2Manifold.HS_EXP, //
+          Se2Manifold.INSTANCE, //
           Se2CoveringTransport.INSTANCE, //
           Se2BiinvariantMeans.LINEAR);
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
@@ -89,7 +89,7 @@ public class HermiteSubdivisionsTest extends TestCase {
     for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
       // System.out.println(hermiteSubdivisions);
       HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
-          Se2Manifold.HS_EXP, //
+          Se2Manifold.INSTANCE, //
           Se2CoveringTransport.INSTANCE, //
           Se2BiinvariantMeans.LINEAR);
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
