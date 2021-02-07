@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param minResolution strictly positive
    * @return */
   private int steps(Scalar minResolution) {
-    return Scalars.intValueExact(Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))));
+    return Ceiling.intValueExact(length().divide(Sign.requirePositive(minResolution)));
   }
 
   @Override // from Transition

@@ -69,7 +69,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       }
     }
     CurveDecimation curveDecimation = HsCurveDecimation.STANDARD.of( //
-        geodesicDisplay.vectorLogManifold(), //
         geodesicDisplay.hsExponential(), //
         RealScalar.ONE);
     Tensor decimate = curveDecimation.apply(sequence);
