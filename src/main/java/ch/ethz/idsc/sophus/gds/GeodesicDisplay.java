@@ -6,6 +6,7 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -42,6 +43,8 @@ public interface GeodesicDisplay {
 
   /** @return lie group if the space is a lie group, or null if function is not applicable */
   LieGroup lieGroup();
+
+  LieExponential lieExponential();
 
   HsExponential hsExponential();
 

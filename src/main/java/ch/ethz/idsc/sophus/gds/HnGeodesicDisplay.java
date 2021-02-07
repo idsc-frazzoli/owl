@@ -11,6 +11,7 @@ import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
 import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnMetric;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -53,6 +54,11 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final LieExponential lieExponential() {
     return null;
   }
 

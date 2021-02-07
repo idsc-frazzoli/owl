@@ -69,6 +69,11 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
     return R2SGroup.INSTANCE;
   }
 
+  @Override
+  public LieExponential lieExponential() {
+    return R2SManifold.HS_EXP;
+  }
+
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), R2SExponential.INSTANCE);

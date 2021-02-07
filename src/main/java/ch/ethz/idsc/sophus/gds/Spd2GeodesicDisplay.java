@@ -11,6 +11,7 @@ import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
 import ch.ethz.idsc.sophus.hs.spd.SpdMatrixExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -86,6 +87,11 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
     return null;
   }
 

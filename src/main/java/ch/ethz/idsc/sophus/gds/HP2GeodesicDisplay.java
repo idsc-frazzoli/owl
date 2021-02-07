@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.h2.H2Geodesic;
 import ch.ethz.idsc.sophus.hs.h2.H2Metric;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -67,6 +68,11 @@ public enum HP2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
+    return null;
+  }
+
+  @Override
+  public LieExponential lieExponential() {
     return null;
   }
 

@@ -67,6 +67,11 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
     return RnGroup.INSTANCE;
   }
 
+  @Override
+  public LieExponential lieExponential() {
+    return RnManifold.HS_EXP;
+  }
+
   @Override // from GeodesicDisplay
   public final HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), RnExponential.INSTANCE);

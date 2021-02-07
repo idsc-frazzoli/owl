@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.hs.HsDifferences;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -118,8 +118,8 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
   protected void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
-      HsDifferences lieDifferences = new HsDifferences(geodesicDisplay.hsExponential());
-      HsDifferences lieDifferencesTime = new HsDifferences(RnManifold.HS_EXP);
+      LieDifferences lieDifferences = new LieDifferences(geodesicDisplay.lieExponential());
+      LieDifferences lieDifferencesTime = new LieDifferences(RnManifold.HS_EXP);
       Tensor timeDifference = lieDifferencesTime.apply(Tensor.of(navigableMapStateTime().keySet().stream())).map(x -> x.reciprocal());
       Tensor speeds = timeDifference.pmul(lieDifferences.apply(refined));
       if (0 < speeds.length()) {

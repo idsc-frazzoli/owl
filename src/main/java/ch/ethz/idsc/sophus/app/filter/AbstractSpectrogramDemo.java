@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.hs.HsDifferences;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -94,7 +94,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
       Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
-      HsDifferences lieDifferences = new HsDifferences(geodesicDisplay.hsExponential());
+      LieDifferences lieDifferences = new LieDifferences(geodesicDisplay.lieExponential());
       Scalar sampleRate = MAGNITUDE_PER_SECONDS.apply(gokartPoseData.getSampleRate());
       Tensor speeds = lieDifferences.apply(refined).multiply(sampleRate);
       if (0 < speeds.length()) {

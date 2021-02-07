@@ -72,6 +72,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
+    return HeManifold.HS_EXP;
+  }
+
+  @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
     return LieExponential.of(lieGroup(), HeExponential.INSTANCE);
   }

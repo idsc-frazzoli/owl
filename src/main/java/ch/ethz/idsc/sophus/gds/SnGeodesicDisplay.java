@@ -15,6 +15,7 @@ import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.hs.sn.SnMetric;
 import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.hs.sn.SnTransport;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -52,6 +53,11 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final LieExponential lieExponential() {
     return null;
   }
 

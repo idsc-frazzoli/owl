@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -57,6 +58,11 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
 
   @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final LieExponential lieExponential() {
     return null;
   }
 

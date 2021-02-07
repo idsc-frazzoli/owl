@@ -6,8 +6,10 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.dt.DtBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.dt.DtExponential;
 import ch.ethz.idsc.sophus.lie.dt.DtGeodesic;
 import ch.ethz.idsc.sophus.lie.dt.DtGroup;
 import ch.ethz.idsc.sophus.lie.dt.DtManifold;
@@ -70,6 +72,11 @@ public enum Dt1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return DtGroup.INSTANCE;
+  }
+
+  @Override
+  public LieExponential lieExponential() {
+    return LieExponential.of(DtGroup.INSTANCE, DtExponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

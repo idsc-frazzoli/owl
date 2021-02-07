@@ -5,10 +5,12 @@ import java.util.Random;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -42,6 +44,11 @@ public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return Se2Group.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
+    return Se2Manifold.HS_EXP;
   }
 
   @Override // from GeodesicDisplay

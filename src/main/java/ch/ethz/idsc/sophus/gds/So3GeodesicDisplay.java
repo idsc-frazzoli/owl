@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
@@ -83,6 +84,11 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return SonGroup.INSTANCE;
+  }
+
+  @Override
+  public LieExponential lieExponential() {
+    return null; // FIXME
   }
 
   @Override // from GeodesicDisplay
