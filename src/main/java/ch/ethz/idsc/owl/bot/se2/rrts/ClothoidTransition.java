@@ -22,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
-  private static final long serialVersionUID = -8721699305603353735L;
   private static final Scalar _0 = RealScalar.of(0.0);
   private static final Scalar _1 = RealScalar.of(1.0);
   private static final int MAX_INTERVALS = 511;

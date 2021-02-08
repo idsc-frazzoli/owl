@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.red.Max;
  * 
  * The cost does not account for other criteria such as curvature. */
 public final class Se2MinTimeGoalManager extends AbstractMinTimeGoalManager {
-  private static final long serialVersionUID = 6106958896972741665L;
   // ---
   private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;

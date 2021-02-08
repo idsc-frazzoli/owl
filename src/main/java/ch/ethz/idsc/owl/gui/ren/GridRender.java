@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.N;
  * new GridRender(Subdivide.of(0, 50, 5));
  * </pre> */
 public class GridRender implements RenderInterface, Serializable {
-  private static final long serialVersionUID = 4958870067661930095L;
   private static final Color COLOR_DEFAULT = new Color(224, 224, 224, 128);
   // ---
   private final Tensor x_grid;

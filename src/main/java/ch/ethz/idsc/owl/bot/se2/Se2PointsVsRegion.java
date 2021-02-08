@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** used in se2 animation demo to check if footprint of vehicle intersects with obstacle region */
 /* package */ class Se2PointsVsRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = 97371638387362303L;
-  // ---
   private final Tensor points;
   private final Region<Tensor> region;
 

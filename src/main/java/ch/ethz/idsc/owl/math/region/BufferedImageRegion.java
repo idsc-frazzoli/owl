@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 
 /** region in R2 */
 public class BufferedImageRegion implements Region<Tensor>, RenderInterface, Serializable {
-  private static final long serialVersionUID = -8850307868881383383L;
-  // ---
   private transient final BufferedImage bufferedImage;
   private transient final AffineFrame affineFrame;
   private final Tensor pixel2model;

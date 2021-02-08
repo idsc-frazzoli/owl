@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class EulerLieIntegrator implements Integrator, LieIntegrator, Serializable {
-  private static final long serialVersionUID = -2716863936994450537L;
-
   /** @param lieGroup
    * @param exponential
    * @return */

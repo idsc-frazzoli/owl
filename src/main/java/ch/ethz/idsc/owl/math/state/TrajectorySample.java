@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** container class that bundles information to follow a trajectory */
 public class TrajectorySample implements Serializable {
-  private static final long serialVersionUID = 2670278888522481519L;
-
   /** @param stateTime
    * @return first entry of a trajectory that does not specify flow */
   public static TrajectorySample head(StateTime stateTime) {

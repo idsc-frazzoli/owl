@@ -28,8 +28,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
  * Lipschitz L == |lambda| */
 public class Rice1StateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = -1342905536438749626L;
-
   /** @param mu
    * @return */
   public static StateSpaceModel of(Scalar mu) {

@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 /** the distance used in the ellipsoid is Euclidean.
  * perhaps more suitable for the state space model would be a logarithmic distance */
 /* package */ class LvGoalInterface extends SimpleTrajectoryRegionQuery implements GoalInterface {
-  private static final long serialVersionUID = 8670533814833423994L;
-
   /** @param center
    * @param radius
    * @return */

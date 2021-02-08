@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** wrapper for obstacle and goal queries */
 public class CatchyTrajectoryRegionQuery extends SimpleTrajectoryRegionQuery implements StateTimeCollector {
-  private static final long serialVersionUID = 5434628354121264139L;
-
   /** @param region that is queried with tensor = StateTime::state
    * @return */
   public static TrajectoryRegionQuery timeInvariant(Region<Tensor> region) {

@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
 /* package */ class Tse2PurePursuitControl extends StateTrajectoryControl {
-  private static final long serialVersionUID = 6082199498300663190L;
-  // ---
   private final Scalar lookAhead;
   private final Clip clip;
 

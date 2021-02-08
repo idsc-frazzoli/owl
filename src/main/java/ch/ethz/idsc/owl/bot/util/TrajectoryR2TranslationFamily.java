@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 public class TrajectoryR2TranslationFamily extends R2TranslationFamily {
-  private static final long serialVersionUID = 8521760396390593808L;
-
   /** @param stateIntegrator
    * @param initial
    * @param flow

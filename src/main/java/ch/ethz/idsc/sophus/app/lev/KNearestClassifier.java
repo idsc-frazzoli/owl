@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.red.Tally;
 
 /* package */ class KNearestClassifier extends Classifier {
-  private static final long serialVersionUID = -7406315834820479028L;
-  // ---
   private final int k;
 
   /** @param labels

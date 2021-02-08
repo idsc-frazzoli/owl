@@ -17,8 +17,6 @@ import java.util.Objects;
  * 
  * @param <T> type of elements to compare */
 public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
-  private static final long serialVersionUID = 1285683075960610358L;
-
   /** @param <T>
    * @param orderComparator
    * @return */

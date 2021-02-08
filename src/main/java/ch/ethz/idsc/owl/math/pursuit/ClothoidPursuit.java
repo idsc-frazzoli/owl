@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class ClothoidPursuit implements PursuitInterface, Serializable {
-  private static final long serialVersionUID = 197010915928459902L;
   private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
 
   /** @param lookAhead trajectory point {px, py, pa} */

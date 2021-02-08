@@ -11,8 +11,6 @@ import ch.ethz.idsc.owl.math.order.SingleEboTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {
-  private static final long serialVersionUID = -5659055423851485668L;
-
   /** @param glcNode
    * @param slacks vector of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */

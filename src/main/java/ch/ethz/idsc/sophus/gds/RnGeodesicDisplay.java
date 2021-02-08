@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final long serialVersionUID = -3588927420417722918L;
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.04)).unmodifiable();
   private static final TensorUnaryOperator PAD = PadRight.zeros(2);
   // ---

@@ -26,7 +26,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class ClothoidPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
-  private static final long serialVersionUID = -8088615067878305419L;
   private final static int MAX_LEVEL = 20;
   private final static int REFINEMENT = 2;
   // ---

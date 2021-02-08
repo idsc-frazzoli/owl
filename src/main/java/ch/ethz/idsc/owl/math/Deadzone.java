@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 public class Deadzone implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 503752331132872901L;
-
   public static Deadzone of(Clip clip) {
     return new Deadzone(Objects.requireNonNull(clip));
   }

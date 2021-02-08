@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class R3GeodesicDisplay extends RnGeodesicDisplay {
-  private static final long serialVersionUID = -6988815014157296705L;
   private static final Tensor CIRCLE = Arrowhead.of(RealScalar.of(0.3)).unmodifiable();
   // ---
   public static final GeodesicDisplay INSTANCE = new R3GeodesicDisplay();

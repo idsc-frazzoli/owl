@@ -12,8 +12,6 @@ import java.util.Objects;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RegionIntersection.html">RegionIntersection</a> */
 public class RegionIntersection<T> implements Region<T>, Serializable {
-  private static final long serialVersionUID = 6159013873727185734L;
-
   /** combines a collection of {@link Region}s into one region.
    * Membership is defined as membership in all of the regions in the collection.
    * The input collection is not copied but used by reference.

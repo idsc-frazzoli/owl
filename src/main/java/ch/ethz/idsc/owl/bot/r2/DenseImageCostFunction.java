@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * a given trajectory is mapped to the pixels and costs are
  * weighted according to the traverse time */
 public final class DenseImageCostFunction extends ImageCostFunction {
-  private static final long serialVersionUID = 9010011850320190533L;
-
   public DenseImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     super(image, range, outside);
   }

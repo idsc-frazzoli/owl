@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class ArgMinClassifier extends Classifier {
-  private static final long serialVersionUID = -1195269817756763913L;
-
   /** @param labels */
   public ArgMinClassifier(Tensor labels) {
     super(Primitives.toIntArray(labels));

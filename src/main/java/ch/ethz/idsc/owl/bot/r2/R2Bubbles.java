@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.io.Primitives;
  * root = ( -2.0, -2.0 )
  * goal = ( 2.0, 2.0 ) */
 public final class R2Bubbles extends ImplicitFunctionRegion implements Serializable {
-  private static final long serialVersionUID = -9044059072315681728L;
   public static final ImplicitFunctionRegion INSTANCE = new R2Bubbles();
 
   private R2Bubbles() {

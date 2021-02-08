@@ -21,8 +21,6 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * see also
  * <a href="https://en.wikipedia.org/wiki/Ackermann_steering_geometry">Ackermann steering geometry</a> */
 public class AckermannSteering implements Serializable {
-  private static final long serialVersionUID = 5077513552750106683L;
-  // ---
   private final Scalar factor;
 
   /** function works with {@link Quantity}.

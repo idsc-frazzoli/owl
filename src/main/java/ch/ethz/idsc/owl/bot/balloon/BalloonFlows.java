@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class BalloonFlows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = -1532821451396704733L;
-
   /** @param u_max with units [K * s^-1]
    * @return new ApFlows instance */
   public static FlowsInterface of(Scalar u_max) {

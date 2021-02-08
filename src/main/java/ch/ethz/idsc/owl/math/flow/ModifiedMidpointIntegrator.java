@@ -11,8 +11,6 @@ import ch.ethz.idsc.tensor.ext.Integers;
 
 /** Numerical Recipes 3rd Edition Section 17.3.1 */
 public class ModifiedMidpointIntegrator implements Integrator, Serializable {
-  private static final long serialVersionUID = 190455027872487851L;
-
   /** @param n strictly positive
    * @return */
   public static Integrator of(int n) {

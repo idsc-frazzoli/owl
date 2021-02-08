@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 public class ComboTransitionCostFunction implements TransitionCostFunction, Serializable {
-  private static final long serialVersionUID = 8745471747192804750L;
-
   /** @param transitionCostFunctions
    * @return */
   public static TransitionCostFunction of(TransitionCostFunction... transitionCostFunctions) {

@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** DO NOT USE THIS ON A REAL ROBOT */
 public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
-  private static final long serialVersionUID = 3416992505669536414L;
-
   /** @param radius non-negative
    * @throws Exception if given radius is negative */
   public PseudoSe2CurveIntersection(Scalar radius) {

@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder implements Serializable {
-  private static final long serialVersionUID = -5214613031148364548L;
-  // ---
   private final BinaryAverage binaryAverage;
 
   /** @param binaryAverage non-null */

@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class ApFlows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = 4684877933160172452L;
-
   /** @param aoa_max unitless
    * @param thrusts vector with unit [N]
    * @return new ApFlows instance */

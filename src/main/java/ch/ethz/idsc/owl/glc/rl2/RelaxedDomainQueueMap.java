@@ -12,8 +12,6 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class RelaxedDomainQueueMap implements Serializable {
-  private static final long serialVersionUID = -480883855891053078L;
-  // ---
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;

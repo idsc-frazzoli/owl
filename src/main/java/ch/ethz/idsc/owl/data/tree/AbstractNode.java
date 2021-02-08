@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
  * 
  * parent is member here, therefore the class implements {@link Serializable} */
 public abstract class AbstractNode<T extends Node> implements Node, Serializable {
-  private static final long serialVersionUID = -7311784293706617550L;
   /** parent is null for root node */
   private T parent = null;
 

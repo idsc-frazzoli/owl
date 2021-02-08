@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidCurvatureQuery implements TransitionRegionQuery, Serializable {
-  private static final long serialVersionUID = 1654410870685114429L;
   private final Clip clip;
 
   /** @param clip with positive width */

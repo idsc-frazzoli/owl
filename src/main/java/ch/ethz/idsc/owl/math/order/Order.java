@@ -6,8 +6,6 @@ import java.util.function.BiPredicate;
 
 /** See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures" */
 public final class Order<T> implements OrderComparator<T>, Serializable {
-  private static final long serialVersionUID = -3334408276169135763L;
-  // ---
   private final BiPredicate<T, T> binaryRelation;
 
   /** @param binaryRelation reflexive and transitive

@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * membership in the region for coordinates (x, y) that evaluate the noise function above a given threshold. */
 public class R2NoiseRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = -4764773164905556576L;
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap2D(SimplexContinuousNoise.FUNCTION);
   // ---

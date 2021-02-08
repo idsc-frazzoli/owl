@@ -53,8 +53,6 @@ public final class GeometricComponent {
   /***************************************************/
   /** public access to final JComponent: attach mouse listeners, get/set properties, ... */
   public final JComponent jComponent = new JComponent() {
-    private static final long serialVersionUID = -5620696520262366762L;
-    // ---
     private final IntervalClock intervalClock = new IntervalClock();
 
     @Override

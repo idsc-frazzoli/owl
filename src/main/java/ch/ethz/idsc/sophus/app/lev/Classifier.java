@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class Classifier implements Classification, Serializable {
-  private static final long serialVersionUID = 9128362149180675054L;
-
   /** @param labels
    * @return */
   public static Classification argMin(Tensor labels) {

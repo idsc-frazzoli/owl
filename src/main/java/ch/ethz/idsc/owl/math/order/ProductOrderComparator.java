@@ -9,8 +9,6 @@ import java.util.List;
  * An element x precedes y if it precedes y in all coordinates.
  * See Chapter 2.7.4 in "Multi-Objective Optimization Using Preference Structures" */
 public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
-  private static final long serialVersionUID = -6710022039964962652L;
-  // ---
   private final List<OrderComparator<? extends Object>> orderComparators;
 
   /** @param orderComparators */

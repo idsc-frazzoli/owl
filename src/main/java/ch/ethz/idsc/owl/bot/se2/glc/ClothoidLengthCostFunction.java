@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.qty.QuantityUnit;
 
 /** only applied in {@link ClothoidPursuitControl} resp. {@link Se2Letter5Demo} */
 /* package */ class ClothoidLengthCostFunction implements TensorScalarFunction {
-  private static final long serialVersionUID = 1553933332028711398L;
   private static final ClothoidBuilder CLOTHOID_BUILDER = ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder();
   // ---
   private final Predicate<Scalar> isCompliant;

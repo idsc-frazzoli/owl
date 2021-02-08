@@ -11,8 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * @see AffineTransform */
 /* package */ class AffineFrame implements Serializable {
-  private static final long serialVersionUID = 8095402316910476872L;
-  // ---
   private final double m00;
   private final double m01;
   private final double m02;

@@ -8,8 +8,6 @@ import java.util.List;
  * See Chapter 2.7.5 in "Multi-Objective Optimization Using Preference Structures"
  */
 public class LexicographicOrder<T> implements OrderComparator<List<T>>, Serializable {
-  private static final long serialVersionUID = 411290198862753779L;
-  // ---
   private final List<OrderComparator<T>> comparatorList;
 
   public LexicographicOrder(List<OrderComparator<T>> comparatorList) {

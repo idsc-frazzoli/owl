@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
 /* package */ class PurePursuitControl extends LookAheadControl {
-  private static final long serialVersionUID = -8154694492303932027L;
-
   /** @param lookAhead distance
    * @param maxTurningRate */
   public PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {

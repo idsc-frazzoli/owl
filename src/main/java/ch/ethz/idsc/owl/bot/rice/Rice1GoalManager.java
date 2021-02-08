@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
 /* package */ class Rice1GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
-  private static final long serialVersionUID = 7714055313030400520L;
   // ---
   private final Tensor center;
   private final Tensor radius;

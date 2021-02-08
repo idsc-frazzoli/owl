@@ -30,8 +30,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * implementation for n-dimensional position and velocity */
 public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = -553872794578703409L;
-
   /** @param mu
    * @return */
   public static StateSpaceModel of(Scalar mu) {

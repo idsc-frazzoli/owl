@@ -30,8 +30,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       if (bytes[index] != 0) // promote non-black to white
         bytes[index] = -1;
     JFrame frame = new JFrame() {
-      private static final long serialVersionUID = 3754411986255071307L;
-
       @Override
       public void paint(Graphics graphics) {
         graphics.drawImage(bufferedImage, 0, 0, null);

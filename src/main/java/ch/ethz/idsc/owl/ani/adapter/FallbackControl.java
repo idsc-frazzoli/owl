@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.N;
 
 public class FallbackControl implements EntityControl, Serializable {
-  private static final long serialVersionUID = -5890911376286601643L;
-
   /** @param fallback control */
   public static EntityControl of(Tensor fallback) {
     return new FallbackControl(N.DOUBLE.of(fallback).unmodifiable());

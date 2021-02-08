@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final long serialVersionUID = -1427005059920670135L;
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
   // ---
   private final int dimensions;

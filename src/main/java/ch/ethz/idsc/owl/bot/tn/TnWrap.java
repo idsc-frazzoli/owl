@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 class TnWrap implements CoordinateWrap, Serializable {
-  private static final long serialVersionUID = -5378614858696892223L;
   private static final Scalar NEGATIVE_HALF = RationalScalar.HALF.negate();
   // ---
   private final Tensor extension;

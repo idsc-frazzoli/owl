@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class BalloonPlannerConstraint implements PlannerConstraint, Serializable {
-  private static final long serialVersionUID = 6736365553364701752L;
   /** constants of the hot air balloon */
   private final Clip vertSpeed_clip;
 

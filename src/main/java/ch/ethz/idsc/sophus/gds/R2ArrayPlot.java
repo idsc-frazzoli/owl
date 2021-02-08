@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /* package */ class R2ArrayPlot implements GeodesicArrayPlot, Serializable {
-  private static final long serialVersionUID = -705026929080183510L;
-  // ---
   private final Scalar radius;
 
   public R2ArrayPlot(Scalar radius) {

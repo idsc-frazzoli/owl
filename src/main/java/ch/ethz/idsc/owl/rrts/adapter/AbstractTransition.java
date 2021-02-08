@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** suggested base class for all implementations of {@link Transition} */
 public abstract class AbstractTransition implements Transition, Serializable {
-  private static final long serialVersionUID = 2562936412012115620L;
-  // ---
   private final Tensor start;
   private final Tensor end;
   private final Scalar length;

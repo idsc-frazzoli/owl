@@ -28,8 +28,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
  * --
  * WR speedR */
 public class TwdDuckieFlows extends TwdFlows {
-  private static final long serialVersionUID = -2651480385414264465L;
-
   /** @param maxSpeed [m*s^-1]
    * @param halfWidth [m*rad^-1] */
   public TwdDuckieFlows(Scalar maxSpeed, Scalar halfWidth) {

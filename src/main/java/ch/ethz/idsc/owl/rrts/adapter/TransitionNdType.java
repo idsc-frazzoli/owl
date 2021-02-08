@@ -11,8 +11,6 @@ import ch.ethz.idsc.tensor.opt.nd.NdCenterInterface;
 
 /** Remark: TensorDifference would be sufficient but that would result in an inconvenience. */
 public class TransitionNdType implements NdType, Serializable {
-  private static final long serialVersionUID = -3501402000383124148L;
-  // ---
   private final TransitionSpace transitionSpace;
 
   /** @param transitionSpace non-null */
@@ -23,8 +21,6 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterTo(Tensor center) {
     return new AbstractNdCenter(center) {
-      private static final long serialVersionUID = -4424401684519460839L;
-
       @Override // from VectorNormInterface
       public Scalar ofVector(Tensor other) {
         return transitionSpace.connect(other, center).length();
@@ -35,8 +31,6 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterFrom(Tensor center) {
     return new AbstractNdCenter(center) {
-      private static final long serialVersionUID = 4032242568225527082L;
-
       @Override // from VectorNormInterface
       public Scalar ofVector(Tensor other) {
         return transitionSpace.connect(center, other).length();

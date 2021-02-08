@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class AccMaxClassifier extends Classifier {
-  private static final long serialVersionUID = 7049220361700246250L;
-
   /** @param labels */
   public AccMaxClassifier(Tensor labels) {
     super(Primitives.toIntArray(labels));

@@ -7,8 +7,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiAdapter implements KlotskiProblem, Serializable {
-  private static final long serialVersionUID = -3962192118597074295L;
-
   /** @param board
    * @param name
    * @param stateTimeRaster

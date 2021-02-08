@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
  * the implementation of the twd flows assumes that the two wheels are independent
  * from each other. */
 public class TwdForwardFlows extends TwdFlows {
-  private static final long serialVersionUID = -7700767509811983494L;
-
   /** @param maxSpeed [m*s^-1]
    * @param halfWidth [m*rad^-1] */
   public TwdForwardFlows(Scalar maxSpeed, Scalar halfWidth) {

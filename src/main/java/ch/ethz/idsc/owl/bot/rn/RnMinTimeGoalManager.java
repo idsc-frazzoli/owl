@@ -25,8 +25,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>The goal region underlying the target area as well as the heuristic is
  * {@link BallRegion}. */
 public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
-  private static final long serialVersionUID = 6739873250328673234L;
-
   /** @param regionWithDistance
    * @param controls */
   public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Tensor> controls) {

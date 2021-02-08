@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** intersection of SE2 curve with 2-dimensional sphere centered at (0, 0) and given radius. */
 public class SphereSe2CurveIntersection extends AssistedCurveIntersection {
-  private static final long serialVersionUID = 8450152156806370542L;
-
   /** @param radius non-negative
    * @throws Exception if given radius is negative */
   public SphereSe2CurveIntersection(Scalar radius) {

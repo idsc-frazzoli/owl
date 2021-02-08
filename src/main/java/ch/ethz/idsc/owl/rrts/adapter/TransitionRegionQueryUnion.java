@@ -9,8 +9,6 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 
 public class TransitionRegionQueryUnion implements TransitionRegionQuery, Serializable {
-  private static final long serialVersionUID = 7548737815140893138L;
-
   /** @param queries
    * @return */
   public static TransitionRegionQuery wrap(TransitionRegionQuery... queries) {

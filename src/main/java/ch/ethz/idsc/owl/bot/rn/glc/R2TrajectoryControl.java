@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 public class R2TrajectoryControl extends StateTrajectoryControl {
-  private static final long serialVersionUID = -5933675545043954557L;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
 

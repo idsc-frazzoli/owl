@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** region in R^n */
 public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializable {
-  private static final long serialVersionUID = 2465291970918724766L;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   /** orthogonal is normalized to have Euclidean length 1

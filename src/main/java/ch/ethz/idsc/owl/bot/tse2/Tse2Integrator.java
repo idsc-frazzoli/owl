@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
 /** exact integration of state for a period h during which a constant acceleration is assumed. */
 public class Tse2Integrator implements Integrator, Serializable {
-  private static final long serialVersionUID = -7488802643359645459L;
-  // ---
   private final Clip v_range;
 
   /** @param v_range */

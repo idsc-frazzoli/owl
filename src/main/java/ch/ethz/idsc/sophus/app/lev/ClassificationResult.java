@@ -7,8 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 public class ClassificationResult implements Serializable {
-  private static final long serialVersionUID = -6445198222552301848L;
-  // ---
   private final int label;
   private final Scalar confidence;
 

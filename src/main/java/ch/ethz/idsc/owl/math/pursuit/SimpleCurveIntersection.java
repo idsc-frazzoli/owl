@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * the point that is the result of (linear-)interpolation is the
  * result of the intersection. */
 public abstract class SimpleCurveIntersection implements CurveIntersection, Serializable {
-  private static final long serialVersionUID = -1513687797399951766L;
-  // ---
   private final Scalar radius;
   private final BinaryAverage binaryAverage;
 

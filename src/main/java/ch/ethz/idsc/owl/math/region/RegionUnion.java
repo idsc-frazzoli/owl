@@ -12,8 +12,6 @@ import java.util.Objects;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RegionUnion.html">RegionUnion</a> */
 public class RegionUnion<T> implements Region<T>, Serializable {
-  private static final long serialVersionUID = 3107972257028734633L;
-
   /** combines a collection of {@link Region}s into one Region.
    * Membership is defined as membership in any of the regions in the collection.
    * The input collection is not copied but used by reference.

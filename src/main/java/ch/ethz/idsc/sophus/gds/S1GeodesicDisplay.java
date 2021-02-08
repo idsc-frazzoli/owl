@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class S1GeodesicDisplay extends SnGeodesicDisplay {
-  private static final long serialVersionUID = 6398104295573497654L;
   public static final GeodesicDisplay INSTANCE = new S1GeodesicDisplay();
 
   /***************************************************/

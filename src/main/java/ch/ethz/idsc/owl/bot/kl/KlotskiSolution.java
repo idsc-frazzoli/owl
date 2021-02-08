@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiSolution implements Serializable {
-  private static final long serialVersionUID = -3336403264136437122L;
   // ---
   public final KlotskiProblem klotskiProblem;
   public final List<StateTime> list;

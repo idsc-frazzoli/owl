@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class SetNode<T extends Node> extends AbstractNode<T> {
-  private static final long serialVersionUID = 1987945037146026075L;
-  // ---
   private final Set<T> next = new HashSet<>();
 
   @Override // from Node

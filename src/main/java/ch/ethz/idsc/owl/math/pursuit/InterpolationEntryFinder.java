@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 public class InterpolationEntryFinder extends TrajectoryEntryFinder implements Serializable {
-  private static final long serialVersionUID = 3389123007057094353L;
   public static final TrajectoryEntryFinder INSTANCE = new InterpolationEntryFinder();
 
   /***************************************************/

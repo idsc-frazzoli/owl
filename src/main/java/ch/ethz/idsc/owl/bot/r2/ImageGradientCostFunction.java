@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
 
 /** class is not used */
 /* package */ class ImageGradientCostFunction implements CostFunction, Serializable {
-  private static final long serialVersionUID = 1487469863171648602L;
   // ---
   private final ImageGradientInterpolation imageGradientInterpolation;
 

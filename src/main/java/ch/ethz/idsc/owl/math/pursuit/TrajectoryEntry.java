@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** container for TrajectoryEntryFinder results */
 public final class TrajectoryEntry implements Serializable {
-  private static final long serialVersionUID = -565431146754108963L;
-  // ---
   private final Tensor point;
   private final Scalar variable;
 

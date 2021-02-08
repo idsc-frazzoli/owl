@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class RegionDifference<T> implements Region<T>, Serializable {
-  private static final long serialVersionUID = -1440350908129230518L;
-
   /** @param belongs
    * @param butNot
    * @return belongs \ butNot */

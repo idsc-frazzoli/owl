@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class DeltaCoastingControl implements EntityControl, Serializable {
-  private static final long serialVersionUID = -5758005359853723489L;
   private final ImageGradientInterpolation imageGradientInterpolation;
   private final Scalar u_norm;
 

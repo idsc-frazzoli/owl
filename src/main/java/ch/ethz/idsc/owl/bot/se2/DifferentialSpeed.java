@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** class determines the no-slip velocity for tires at an offset from the center of
  * the rear axis depending on the steering angle of the tires at the front axis */
 public class DifferentialSpeed implements Serializable {
-  private static final long serialVersionUID = 7532000190871671131L;
-
   /** Diagram:
    * 
    * -- y_offset [positive]

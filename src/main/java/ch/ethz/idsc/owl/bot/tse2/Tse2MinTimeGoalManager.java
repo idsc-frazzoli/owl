@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * because the se2 flows assume constant speed.
  * For Tse2, the min-time to reach goal formula is more complicated. */
 public final class Tse2MinTimeGoalManager extends AbstractMinTimeGoalManager {
-  private static final long serialVersionUID = 5355592884540320435L;
-  // ---
   private final Tse2ComboRegion tse2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;

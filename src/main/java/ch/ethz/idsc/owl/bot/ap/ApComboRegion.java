@@ -11,8 +11,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class ApComboRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = 5090336548863586717L;
-
   /** @param goal = {zCenter, velocityCenter, gammaCenter} defining center of goal region
    * @param radiusVector = {zRadius, velocityCenter, gammaCenter} defining radii of goal region
    * @return new ApComboRegion */

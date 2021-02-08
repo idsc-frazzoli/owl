@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** cost function that penalizes the switching between forwards and backwards driving */
 // DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
 public final class Se2ShiftCostFunction implements CostFunction, Serializable {
-  private static final long serialVersionUID = 6462820240712790607L;
-  // ---
   private final Scalar shiftPenalty;
 
   public Se2ShiftCostFunction(Scalar shiftPenalty) {

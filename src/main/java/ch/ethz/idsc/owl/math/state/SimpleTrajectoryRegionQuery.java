@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /** simple wrapper for obstacle and goal queries
  * implementation is used throughout the repository */
 public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, Serializable {
-  private static final long serialVersionUID = -7544985500178332835L;
-
   /** @param region that is queried with tensor = StateTime::state
    * @return
    * @throws Exception if given region is null */

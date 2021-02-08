@@ -21,7 +21,6 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * @param x = {position (horizontal) [m], height [m], vertical velocity [m*s^-1], incremental air temperature (theta) [K]}
  * @param u = proportional of heat delivered to air mass by the burner [K*s^-1] */
 /* package */ class BalloonStateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = 4056475506705303600L;
   /** parameters of the state space model */
   private final Scalar tau1;
   private final Scalar tau2;

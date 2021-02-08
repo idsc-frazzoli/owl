@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * however, this requires to flip the y coordinate when extracting coordinates */
 // API class name may not be ideal
 public class FlipYXTensorInterp<T> implements Serializable {
-  private static final long serialVersionUID = 2402906336069447187L;
-  // ---
   private final Tensor image;
   private final Tensor scale;
   private final int dim1;

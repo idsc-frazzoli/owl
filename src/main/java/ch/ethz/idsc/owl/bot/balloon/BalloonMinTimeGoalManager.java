@@ -21,7 +21,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** heuristic computes minimum time to goal
  * e.g. shortest path to goal (euclidean distance) travelled with maximum speed */
 /* package */ class BalloonMinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
-  private static final long serialVersionUID = -6848545944390525919L;
   // ---
   private final BallRegion ballRegion;
   /** unit of maxSpeed is velocity, e.g. [m/s] */

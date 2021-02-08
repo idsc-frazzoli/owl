@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.N;
 
 public abstract class TwdFlows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = -4048896716632008640L;
   // ---
   private final Scalar maxSpeedHalf;
   private final Scalar halfWidth;

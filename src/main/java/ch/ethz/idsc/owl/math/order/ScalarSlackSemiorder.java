@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Scalars;
  * OrderComparison.STRICTLY_SUCCEDES if y + slack less than x, or
  * OrderComparison.INDIFFERENT if neither of above. */
 public class ScalarSlackSemiorder implements OrderComparator<Scalar>, Serializable {
-  private static final long serialVersionUID = 1712929256140857198L;
-  // ---
   private final Scalar slack;
 
   /** @param slack */

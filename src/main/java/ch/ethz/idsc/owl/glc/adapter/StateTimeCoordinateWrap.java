@@ -9,8 +9,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class StateTimeCoordinateWrap implements Function<StateTime, Tensor>, Serializable {
-  private static final long serialVersionUID = 2276617980874570810L;
-  // ---
   private final CoordinateWrap coordinateWrap;
 
   public StateTimeCoordinateWrap(CoordinateWrap coordinateWrap) {

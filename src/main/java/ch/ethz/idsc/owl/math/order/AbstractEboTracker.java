@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** immutable */
 /* package */ class Pair<K> implements Serializable {
-  private static final long serialVersionUID = 8040899072374950986L;
-  // ---
   private final K key;
   private final Tensor value;
 
@@ -47,8 +45,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
 public abstract class AbstractEboTracker<K> implements EboTracker<K>, Serializable {
-  private static final long serialVersionUID = -4996819797785521668L;
-  // ---
   private final Tensor slacks;
   private final Collection<Pair<K>> candidateSet;
   protected final int dim;

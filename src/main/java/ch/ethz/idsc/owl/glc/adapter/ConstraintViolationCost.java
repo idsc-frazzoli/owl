@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class ConstraintViolationCost implements CostFunction, Serializable {
-  private static final long serialVersionUID = -4613782908642221972L;
-
   /** Transforms the given planner constraint to a cost function by counting
    * constraint violations. A violation incurs a predefined unit cost.
    * 

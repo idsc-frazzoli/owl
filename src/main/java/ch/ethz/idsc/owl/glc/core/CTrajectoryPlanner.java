@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** base class for classic generalized label correction implementation */
 public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializable {
-  private static final long serialVersionUID = 247754171529975215L;
-  // ---
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   private final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;

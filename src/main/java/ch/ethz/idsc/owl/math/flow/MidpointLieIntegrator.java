@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class MidpointLieIntegrator implements Integrator, Serializable {
-  private static final long serialVersionUID = -8841637427613829000L;
-
   /** @param lieGroup
    * @param exponential
    * @return */

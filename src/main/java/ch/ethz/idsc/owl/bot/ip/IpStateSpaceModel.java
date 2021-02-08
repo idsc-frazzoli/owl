@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * from Analysis and Synthesis of Single-Input Single-Output Control Systems, 3rd edition
  * p.13, p.53 */
 /* package */ class IpStateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = 8346238075386282523L;
   // ---
   private final Scalar M;
   private final Scalar m;

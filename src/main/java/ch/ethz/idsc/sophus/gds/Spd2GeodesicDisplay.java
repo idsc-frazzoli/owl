@@ -6,10 +6,10 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
+import ch.ethz.idsc.sophus.hs.spd.Spd0Exponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
-import ch.ethz.idsc.sophus.hs.spd.SpdMatrixExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -69,12 +69,12 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     Tensor sim = xya2sim(xya);
-    return SpdMatrixExponential.INSTANCE.exp(sim);
+    return Spd0Exponential.INSTANCE.exp(sim);
   }
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor sym) {
-    Tensor sim = SpdMatrixExponential.INSTANCE.log(sym);
+    Tensor sim = Spd0Exponential.INSTANCE.log(sym);
     return sim2xya(sim).extract(0, 2);
   }
 

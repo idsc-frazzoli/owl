@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.alg.Append;
 
 /** StateTime is immutable, contents of instance do not change after construction */
 public final class StateTime implements Serializable {
-  private static final long serialVersionUID = 1794230395292395224L;
-  // ---
   private final Tensor x;
   private final Scalar time;
 

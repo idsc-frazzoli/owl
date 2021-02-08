@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.io.Primitives;
  *
  * positive return value (including zero) means inside obstacle region */
 /* package */ class R3Tubes extends ImplicitFunctionRegion implements Serializable {
-  private static final long serialVersionUID = -961799276697776268L;
-
   /** 3-dimensional tube network
    * the challenge is to find the path through narrow passages along the diagonal
    *

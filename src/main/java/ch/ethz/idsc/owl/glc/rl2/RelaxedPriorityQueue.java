@@ -11,7 +11,6 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 
 /** all implemented methods are final */
 public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Serializable {
-  private static final long serialVersionUID = -1539366618964856446L;
   /** holds the node which have not yet been expanded */
   private final Collection<GlcNode> collection = new HashSet<>();
 

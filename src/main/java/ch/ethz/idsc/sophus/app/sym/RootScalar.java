@@ -24,8 +24,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** Q[Sqrt[n]] */
 public class RootScalar extends AbstractScalar implements //
     AbsInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
-  private static final long serialVersionUID = -8350662238616853906L;
-
   /** creator with package visibility
    * 
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}

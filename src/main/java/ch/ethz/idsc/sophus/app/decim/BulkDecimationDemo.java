@@ -10,7 +10,7 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.decim.CurveDecimation;
-import ch.ethz.idsc.sophus.crv.decim.HsCurveDecimation;
+import ch.ethz.idsc.sophus.crv.decim.LineDistances;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
@@ -68,8 +68,8 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
         pathRender.render(geometricLayer, graphics);
       }
     }
-    CurveDecimation curveDecimation = HsCurveDecimation.STANDARD.of( //
-        geodesicDisplay.hsExponential(), //
+    CurveDecimation curveDecimation = CurveDecimation.of( //
+        LineDistances.STANDARD.supply(geodesicDisplay.hsExponential()), //
         RealScalar.ONE);
     Tensor decimate = curveDecimation.apply(sequence);
     {

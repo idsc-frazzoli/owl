@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ReversalTransitionSpace implements TransitionSpace, Serializable {
-  private static final long serialVersionUID = 8699063221622993149L;
-
   /** @param transitionSpace
    * @return */
   public static TransitionSpace of(TransitionSpace transitionSpace) {
@@ -35,8 +33,6 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   public DirectedTransition connect(Tensor start, Tensor end) {
     Transition transition = transitionSpace.connect(end, start);
     return new ReversalTransition(transition) {
-      private static final long serialVersionUID = 2406638042439631935L;
-
       @Override // from Transition
       public TransitionWrap wrapped(Scalar minResolution) {
         Sign.requirePositive(minResolution);

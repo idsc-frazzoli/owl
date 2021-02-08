@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * Lipschitz L == Norm._2.ofMatrix(a) */
 public class LinearStateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = 4909778127381829689L;
-  // ---
   private final Tensor a;
   private final Tensor b;
   private final Tensor c;

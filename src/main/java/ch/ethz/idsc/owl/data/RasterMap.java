@@ -9,8 +9,6 @@ import java.util.Map;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RasterMap<T> implements Serializable {
-  private static final long serialVersionUID = 4799383696687983280L;
-  // ---
   private final Map<Tensor, T> map = new HashMap<>(); // actual storage
 
   public abstract Tensor toKey(Tensor tensor);

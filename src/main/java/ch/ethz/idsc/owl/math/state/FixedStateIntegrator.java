@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** trajectory integration with fixed step size over given time period */
 public class FixedStateIntegrator implements StateIntegrator, Serializable {
-  private static final long serialVersionUID = 5001853715843015798L;
-
   /** @param integrator
    * @param timeStep non-negative period of one step
    * @param trajectorySize number of steps

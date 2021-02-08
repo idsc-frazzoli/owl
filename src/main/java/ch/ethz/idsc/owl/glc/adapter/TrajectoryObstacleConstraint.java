@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * non-empty intersection of the trajectory with the region represents a constraint
  * violation. */
 public class TrajectoryObstacleConstraint implements PlannerConstraint, Serializable {
-  private static final long serialVersionUID = -8518727700775596156L;
-  // ---
   private final TrajectoryRegionQuery trajectoryRegionQuery;
 
   public TrajectoryObstacleConstraint(TrajectoryRegionQuery trajectoryRegionQuery) {

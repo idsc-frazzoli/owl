@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 public final class TwdTrajectoryControl extends StateTrajectoryControl {
-  private static final long serialVersionUID = 8337899394294610945L;
-
   @Override // from StateTrajectoryControl
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
     return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));

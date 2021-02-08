@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.itp.BinaryAverage;
 
 public abstract class AssistedCurveIntersection extends SimpleCurveIntersection //
     implements AssistedCurveIntersectionInterface {
-  private static final long serialVersionUID = -997110149837468110L;
-
   /** @param radius non-negative
    * @param binaryAverage
    * @throws Exception if given radius is negative */

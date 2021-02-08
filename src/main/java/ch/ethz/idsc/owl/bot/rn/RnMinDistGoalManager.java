@@ -25,8 +25,6 @@ import ch.ethz.idsc.tensor.red.Norm;
  * 
  * @see BallRegion */
 public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
-  private static final long serialVersionUID = 300711556775789486L;
-
   /** creates a spherical region in R^n with given center and radius.
    * min distance to goal is measured in Euclidean distance.
    * the distance is independent from the max speed.

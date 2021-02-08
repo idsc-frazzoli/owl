@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** controls for position and velocity */
 class SatelliteControls implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = -570440257343252733L;
   private static final Tensor ZEROS = N.DOUBLE.of(Array.zeros(2));
   // ---
   private final Scalar amp;

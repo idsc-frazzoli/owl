@@ -30,7 +30,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final long serialVersionUID = -6745241051654206790L;
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.4)).unmodifiable();
   private static final Scalar RADIUS = RealScalar.of(7);
   // ---

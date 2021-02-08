@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.num.Rationalize;
 /** for single integrator state space
  * use with {@link EulerIntegrator} */
 public class R2RationalFlows extends R2Flows {
-  private static final long serialVersionUID = -6128111983725835975L;
   private static final ScalarUnaryOperator RATIONALIZE = Rationalize.withDenominatorLessEquals(100);
 
   /** @param speed */

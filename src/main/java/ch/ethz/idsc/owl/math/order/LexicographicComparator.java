@@ -10,8 +10,6 @@ import java.util.List;
  * precedes y_i and for all indices j smaller than i x_j is indifferent y_j.
  * See Chapter 2.7.5 in "Multi-Objective Optimization Using Preference Structures" */
 public class LexicographicComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
-  private static final long serialVersionUID = 1025283736886613911L;
-  // ---
   private final List<OrderComparator<? extends Object>> orderComparators;
 
   public LexicographicComparator(List<OrderComparator<? extends Object>> orderComparators) {

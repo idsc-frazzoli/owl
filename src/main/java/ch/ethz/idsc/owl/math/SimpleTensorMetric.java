@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 // TODO design/naming not good
 public class SimpleTensorMetric implements TensorMetric, Serializable {
-  private static final long serialVersionUID = 6581698364137060336L;
-  // ---
   private final TensorDifference tensorDifference;
 
   /** @param tensorDifference that returns a vector */

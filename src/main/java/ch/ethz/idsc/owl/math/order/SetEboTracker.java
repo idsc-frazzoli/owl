@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
 public class SetEboTracker<K> extends AbstractEboTracker<K> {
-  private static final long serialVersionUID = -8989199142695514499L;
-
   /** @param slacks
    * @return */
   public static <K> EboTracker<K> withList(Tensor slacks) {

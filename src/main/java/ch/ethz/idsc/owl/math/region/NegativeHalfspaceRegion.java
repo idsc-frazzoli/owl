@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * region in R^n */
 public class NegativeHalfspaceRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = -4833066525697705965L;
-  // ---
   private final int index;
 
   /** @param index of state coordinate that when negative is inside the region */

@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** LONGTERM implementation can be made more efficient */
 public class LidarRaytracer implements Serializable {
-  private static final long serialVersionUID = 578312907722875357L;
-  // ---
   private final Tensor directions;
   private final Scalar max_range;
   private final List<Tensor> localRays;

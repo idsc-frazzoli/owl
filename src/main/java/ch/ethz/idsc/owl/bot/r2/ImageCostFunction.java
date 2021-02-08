@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public abstract class ImageCostFunction implements CostFunction, Serializable {
-  private static final long serialVersionUID = -6988471566142753633L;
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
   // ---
   private final Tensor image;

@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** suggested base class for a goal region with cost function based on elapsed time */
 public abstract class AbstractMinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
-  private static final long serialVersionUID = -962637313172629151L;
-  // ---
   private final Region<Tensor> region;
 
   public AbstractMinTimeGoalManager(Region<Tensor> region) {

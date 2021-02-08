@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
  * 
  * Hint: the use of {@link BufferedImageRegion} is preferred. */
 public class ImageRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = -4367231856807545658L;
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
 
   /** @param bufferedImage

@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class DubinsTransition extends AbstractTransition {
-  private static final long serialVersionUID = -1743309639365084076L;
   // ---
   private final DubinsPath dubinsPath;
 

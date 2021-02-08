@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.sca.Ramp;
  * 
  * the cost increment may be zero therefore, min cost to goal also is zero */
 public class R2NoiseCostFunction implements CostFunction, Serializable {
-  private static final long serialVersionUID = 4192352535614661893L;
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap2D(SimplexContinuousNoise.FUNCTION);
   // ---

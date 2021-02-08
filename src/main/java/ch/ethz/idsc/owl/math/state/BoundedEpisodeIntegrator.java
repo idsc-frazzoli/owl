@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** integrates along given flow with time steps that do not exceed a predefined threshold */
 public class BoundedEpisodeIntegrator extends AbstractEpisodeIntegrator {
-  private static final long serialVersionUID = -8084246282878630370L;
-  // ---
   private final Scalar maxStep;
 
   /** @param stateSpaceModel

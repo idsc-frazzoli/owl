@@ -23,8 +23,6 @@ import ch.ethz.idsc.tensor.sca.Ramp;
  * 
  * objective is minimum path length */
 /* package */ class TnGoalManager implements Region<Tensor>, CostFunction, Serializable {
-  private static final long serialVersionUID = 3198121268722187408L;
-  // ---
   private final TensorMetric tensorMetric;
   private final Tensor center;
   private final Scalar radius;

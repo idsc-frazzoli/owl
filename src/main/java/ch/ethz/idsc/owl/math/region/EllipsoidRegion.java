@@ -20,8 +20,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * @see BallRegion */
 public class EllipsoidRegion extends ImplicitFunctionRegion implements Serializable {
-  private static final long serialVersionUID = 4643672203800862631L;
-  // ---
   private final Tensor center;
   private final Tensor radius;
   private final Tensor invert;

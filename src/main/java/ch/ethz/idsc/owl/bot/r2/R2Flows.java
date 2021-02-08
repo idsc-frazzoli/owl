@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** for single integrator state space
  * use with {@link EulerIntegrator} */
 public class R2Flows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = 4893622056376969394L;
   // ---
   private final Scalar speed;
 

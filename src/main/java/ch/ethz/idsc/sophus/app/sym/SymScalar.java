@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class SymScalar extends ScalarAdapter implements Serializable {
-  private static final long serialVersionUID = -2568750536235700162L;
-
   /** @param p
    * @param q
    * @param ratio

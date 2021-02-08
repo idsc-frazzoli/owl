@@ -22,8 +22,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * For a detailed description, see Chapter 7.1 in "Multi-Objective Optimization Using Preference Structures". */
 public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanner {
-  private static final long serialVersionUID = -7819878107479377372L;
-  // ---
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;

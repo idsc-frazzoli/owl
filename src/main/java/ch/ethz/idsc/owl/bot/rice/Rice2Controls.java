@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 /** controls for position and velocity */
 /* package */ class Rice2Controls implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = 985987643300517915L;
-
   /** @param mu coefficient, any real number
    * @param num amplitude resolution
    * @return */

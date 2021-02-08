@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** for images only rigid transformations are allowed */
 public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
-  private static final long serialVersionUID = -583251702819189659L;
   // ---
   private final ImageRegion imageRegion;
   private final R2RigidFamily rigidFamily;

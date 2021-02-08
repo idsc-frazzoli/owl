@@ -23,8 +23,6 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * <p>The default value drops time information and only considers
  * {@link StateTime#state()}. */
 public class EtaRaster implements StateTimeRaster, Serializable {
-  private static final long serialVersionUID = 6440201623022294280L;
-
   /** @param eta
    * @return uniform raster for {@link StateTime#state()} */
   @SuppressWarnings("unchecked")

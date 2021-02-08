@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** heuristic adds max speed of available control to max norm of image gradient */
 /* package */ class DeltaMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
-  private static final long serialVersionUID = -5872021748589222234L;
   // ---
   private final RegionWithDistance<Tensor> regionWithDistance;
   /** unit of maxSpeed is velocity, e.g. [m/s] */

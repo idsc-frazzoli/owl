@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /** class bundles the capabilities of a given
  * cost function and trajectory region query */
 public final class GoalAdapter implements GoalInterface, Serializable {
-  private static final long serialVersionUID = 930030915643373206L;
-  // ---
   private final TrajectoryRegionQuery trajectoryRegionQuery;
   private final CostFunction costFunction;
 

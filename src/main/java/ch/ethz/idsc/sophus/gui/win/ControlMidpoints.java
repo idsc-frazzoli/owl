@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.alg.Last;
  * 
  * {1, 2, 3} -> {1, 3/2, 5/2, 3} */
 /* package */ class ControlMidpoints implements CurveSubdivision, Serializable {
-  private static final long serialVersionUID = -3450099028527863807L;
-
   /** @param midpointInterface
    * @return */
   public static CurveSubdivision of(MidpointInterface midpointInterface) {

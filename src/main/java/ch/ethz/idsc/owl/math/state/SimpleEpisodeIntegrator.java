@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * implementation is fast and should only be applied for simple {@link StateSpaceModel}s */
 public class SimpleEpisodeIntegrator extends AbstractEpisodeIntegrator {
-  private static final long serialVersionUID = -3771399869184347142L;
-
   public SimpleEpisodeIntegrator(StateSpaceModel stateSpaceModel, Integrator integrator, StateTime stateTime) {
     super(stateSpaceModel, integrator, stateTime);
   }

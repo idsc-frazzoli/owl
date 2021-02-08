@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** StateTimeRegion that depends on time */
 public final class TimeDependentRegion implements Region<StateTime>, Serializable {
-  private static final long serialVersionUID = -4323613052514950395L;
-  // ---
   private final Region<Tensor> region;
 
   /** @param region */

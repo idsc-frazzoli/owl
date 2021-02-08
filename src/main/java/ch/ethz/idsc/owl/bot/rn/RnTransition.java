@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnTransition extends AbstractTransition {
-  private static final long serialVersionUID = -1215870956510202391L;
-
   public RnTransition(Tensor start, Tensor end) {
     super(start, end, Norm._2.between(start, end));
   }

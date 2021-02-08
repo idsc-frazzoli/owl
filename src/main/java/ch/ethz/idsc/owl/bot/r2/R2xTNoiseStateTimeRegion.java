@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * membership in the region for coordinates (x, y, t) that evaluate the noise function above a given threshold */
 public class R2xTNoiseStateTimeRegion implements Region<StateTime>, Serializable {
-  private static final long serialVersionUID = -4312318581038110544L;
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap3D(SimplexContinuousNoise.FUNCTION);
   // ---

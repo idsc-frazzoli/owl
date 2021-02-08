@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Tensors;
  * 
  * https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations */
 /* package */ class LvStateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = 2310829577574057182L;
-
   /** see documentation of public constructor
    * 
    * @param f0

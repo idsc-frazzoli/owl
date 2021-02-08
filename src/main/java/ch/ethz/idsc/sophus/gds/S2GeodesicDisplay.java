@@ -26,7 +26,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class S2GeodesicDisplay extends SnGeodesicDisplay {
-  private static final long serialVersionUID = 1259749711079115640L;
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
   // ---
   public static final GeodesicDisplay INSTANCE = new S2GeodesicDisplay();

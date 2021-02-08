@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /** slightly different from {@link ImageCostFunction}
  * because evaluation only happens at last state of trajectory */
 public final class SparseImageCostFunction extends ImageCostFunction {
-  private static final long serialVersionUID = -2456868661128582895L;
-
   public SparseImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     super(image, range, outside);
   }

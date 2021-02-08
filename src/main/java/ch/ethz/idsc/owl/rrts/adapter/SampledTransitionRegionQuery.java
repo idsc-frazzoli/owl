@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SampledTransitionRegionQuery implements TransitionRegionQuery, StateTimeCollector, Serializable {
-  private static final long serialVersionUID = 56590161895594590L;
-  // ---
   private final Region<Tensor> region;
   private final Scalar dt;
 

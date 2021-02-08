@@ -22,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** rotated gradient of potential function */
 public class ImageGradientInterpolation implements Serializable {
-  private static final long serialVersionUID = -7959254689270045123L;
   private static final Tensor ZEROS = Tensors.vectorDouble(0, 0).unmodifiable();
 
   /** @param image

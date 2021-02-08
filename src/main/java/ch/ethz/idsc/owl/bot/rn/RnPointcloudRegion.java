@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnPointcloudRegion implements Region<Tensor>, Serializable {
-  private static final long serialVersionUID = -6445665212828747006L;
-
   /** Example:
    * The points of a point cloud in the 2-dimensional plane are encoded as a N x 2 matrix.
    * 

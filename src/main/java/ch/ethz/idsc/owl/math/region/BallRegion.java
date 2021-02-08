@@ -25,8 +25,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <li>negative nowhere
  * </ul> */
 public class BallRegion extends ImplicitRegionWithDistance implements Serializable {
-  private static final long serialVersionUID = -3054166683698105650L;
-  // ---
   private final Tensor center;
   private final Scalar radius;
 

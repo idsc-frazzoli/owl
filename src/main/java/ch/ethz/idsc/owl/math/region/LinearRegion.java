@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** interval region in R^1 */
 public class LinearRegion extends ImplicitRegionWithDistance implements Serializable {
-  private static final long serialVersionUID = 5037639400928196007L;
-  // ---
   private final Scalar center;
   private final Scalar radius;
 

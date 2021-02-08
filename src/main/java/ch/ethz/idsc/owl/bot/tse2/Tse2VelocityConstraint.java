@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * this constraint is obsolete when using the {@link Tse2Integrator}
  * which already bounds the velocity */
 /* package */ class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
-  private static final long serialVersionUID = -9103998034916725315L;
-  // ---
   private final Clip clip;
 
   public Tse2VelocityConstraint(Clip clip) {

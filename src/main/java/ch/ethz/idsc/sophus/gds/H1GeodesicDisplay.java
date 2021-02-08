@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class H1GeodesicDisplay extends HnGeodesicDisplay {
-  private static final long serialVersionUID = -6568005848773333587L;
   public static final GeodesicDisplay INSTANCE = new H1GeodesicDisplay();
 
   /***************************************************/

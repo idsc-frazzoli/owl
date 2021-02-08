@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 
 /** lane of constant width */
 public class StableLane implements LaneInterface, Serializable {
-  private static final long serialVersionUID = -806304361438979698L;
   /** the offset vectors are not magic constants but are multiplied by width */
   private final static Tensor OFS_L = Tensors.vector(0, +1, 0).unmodifiable();
   private final static Tensor OFS_R = Tensors.vector(0, -1, 0).unmodifiable();

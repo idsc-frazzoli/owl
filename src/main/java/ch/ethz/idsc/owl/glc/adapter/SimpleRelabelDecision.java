@@ -21,7 +21,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * exact precision, numerical inaccuracies, and quantities.
  * in the long term this universality may not be desirable. */
 public class SimpleRelabelDecision implements RelabelDecision, Serializable {
-  private static final long serialVersionUID = 394063251608551635L;
   public static final RelabelDecision DEFAULT = new SimpleRelabelDecision(Chop._06);
 
   /** @param slack minimum threshold of improvement by a candidate

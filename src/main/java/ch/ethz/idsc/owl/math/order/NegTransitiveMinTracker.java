@@ -16,8 +16,6 @@ import java.util.Objects;
  * 
  * @param <T> type of elements to compare */
 public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
-  private static final long serialVersionUID = 6142602567330658110L;
-
   /** @param <T>
    * @param orderComparator
    * @return */

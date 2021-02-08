@@ -21,8 +21,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializable {
-  private static final long serialVersionUID = 8618865266782617833L;
-  // ---
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---

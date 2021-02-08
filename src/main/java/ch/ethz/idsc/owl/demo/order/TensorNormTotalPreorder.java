@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.red.Norm;
  * 
  * binary relation that is reflexive and transitive, but not antisymmetric */
 public class TensorNormTotalPreorder implements BinaryRelation<Tensor>, Serializable {
-  private static final long serialVersionUID = -697613708997610444L;
-  // ---
   private final Norm norm;
 
   public TensorNormTotalPreorder(Norm norm) {

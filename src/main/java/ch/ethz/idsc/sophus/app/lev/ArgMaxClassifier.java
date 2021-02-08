@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class ArgMaxClassifier extends Classifier {
-  private static final long serialVersionUID = -3563037568609725517L;
-
   /** @param labels */
   public ArgMaxClassifier(Tensor labels) {
     super(Primitives.toIntArray(labels));

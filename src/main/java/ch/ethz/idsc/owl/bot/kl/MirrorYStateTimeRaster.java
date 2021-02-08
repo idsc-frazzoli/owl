@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Flatten;
 
 /* package */ class MirrorYStateTimeRaster implements StateTimeRaster, Serializable {
-  private static final long serialVersionUID = 2365175006504481924L;
   // ---
   private final int sy;
 

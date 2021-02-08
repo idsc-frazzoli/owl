@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.N;
 
 public class Se2CarFlows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = -5208204361181485725L;
-
   /** the turning radius of the flow is the reciprocal of the given rate
    * 
    * @param speed, positive for forward, and negative for backward, unit [m/s]

@@ -8,8 +8,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class InvariantFlows implements StateTimeFlows, Serializable {
-  private static final long serialVersionUID = 4791847743074236371L;
-  // ---
   private final Collection<Tensor> collection;
 
   public InvariantFlows(Collection<Tensor> collection) {

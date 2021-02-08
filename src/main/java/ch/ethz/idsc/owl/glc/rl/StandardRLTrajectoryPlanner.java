@@ -23,8 +23,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
-  private static final long serialVersionUID = 8234621485350033963L;
-  // ---
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;

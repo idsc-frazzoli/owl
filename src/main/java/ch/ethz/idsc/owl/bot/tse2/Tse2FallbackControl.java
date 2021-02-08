@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class Tse2FallbackControl implements EntityControl, Serializable {
-  private static final long serialVersionUID = -7243750061857364062L;
-  // ---
   private final Scalar magnitude;
 
   public Tse2FallbackControl(Scalar magnitude) {

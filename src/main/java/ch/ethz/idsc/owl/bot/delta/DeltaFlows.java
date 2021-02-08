@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
 /* package */ class DeltaFlows implements FlowsInterface, Serializable {
-  private static final long serialVersionUID = 6442797602246644039L;
   // ---
   private final Scalar amp;
 

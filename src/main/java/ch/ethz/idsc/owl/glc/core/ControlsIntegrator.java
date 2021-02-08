@@ -44,8 +44,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * Since the integration is independent for all controls,
  * the implementation can be carried out in parallel. */
 public class ControlsIntegrator implements Serializable {
-  private static final long serialVersionUID = 455476774197913823L;
-  // ---
   private final StateIntegrator stateIntegrator;
   private final StateTimeFlows stateTimeFlows;
   private final CostFunction costFunction;

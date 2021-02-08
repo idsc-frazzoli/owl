@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ abstract class Se2TrajectoryControl extends StateTrajectoryControl implements TrajectoryTargetRender {
-  private static final long serialVersionUID = -8304665693540803547L;
   // ---
   protected final Clip clip;
 

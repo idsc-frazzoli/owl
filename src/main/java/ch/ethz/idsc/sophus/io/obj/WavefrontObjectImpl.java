@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class WavefrontObjectImpl implements WavefrontObject, Serializable {
-  private static final long serialVersionUID = 6977846549177204564L;
-  // ---
   private final String string;
   private final Tensor faces = Tensors.empty();
   private final Tensor normals = Tensors.empty();

@@ -29,8 +29,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Tensor image = ArrayPlot.of(imageCostFunction.image(), ColorDataGradients.CLASSIC);
     BufferedImage bufferedImage = ImageFormat.of(image);
     JFrame frame = new JFrame() {
-      private static final long serialVersionUID = 7112286276978185065L;
-
       @Override
       public void paint(Graphics graphics) {
         graphics.drawImage(bufferedImage, 0, 0, null);

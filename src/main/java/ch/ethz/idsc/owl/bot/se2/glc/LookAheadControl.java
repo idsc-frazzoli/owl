@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ abstract class LookAheadControl extends Se2TrajectoryControl {
-  private static final long serialVersionUID = -8193052170872245848L;
   // ---
   final Scalar lookAhead;
   /** for drawing only */

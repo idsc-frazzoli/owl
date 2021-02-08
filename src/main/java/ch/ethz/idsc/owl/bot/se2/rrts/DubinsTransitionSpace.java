@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class DubinsTransitionSpace implements TransitionSpace, Serializable {
-  private static final long serialVersionUID = 7812734580997993092L;
-
   /** @param radius positive
    * @param comparator
    * @return

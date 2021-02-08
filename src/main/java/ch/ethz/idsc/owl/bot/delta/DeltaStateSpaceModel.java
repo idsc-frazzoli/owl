@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
  * Lipschitz L == imageGradientInterpolation.maxNormGradient() */
 /* package */ class DeltaStateSpaceModel implements StateSpaceModel, Serializable {
-  private static final long serialVersionUID = 943423494880513910L;
   // ---
   private final ImageGradientInterpolation imageGradientInterpolation;
 

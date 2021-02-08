@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
 /** @see Se2ComboRegion */
 public class Se2SphereRandomSample implements RandomSampleInterface, Serializable {
-  private static final long serialVersionUID = -8030557490594302400L;
-
   /** @param apex
    * @param radius non-negative
    * @param heading non-negative
