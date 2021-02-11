@@ -23,8 +23,8 @@ public enum LeversHud {
     leversRender.renderLevers();
     // ---
     Biinvariants biinvariants = (Biinvariants) biinvariant;
-    switch (biinvariants) {
-    case METRIC:
+    switch (biinvariants.name()) {
+    case "METRIC":
       leversRender.renderTangentsXtoP(false); // boolean: no tangent plane
       leversRender.renderEllipseIdentity();
       leversRender.renderWeightsLength();
@@ -35,7 +35,7 @@ public enum LeversHud {
     // leversRender.renderEllipseIdentityP();
     // leversRender.renderWeightsLength();
     // break;
-    case LEVERAGES:
+    case "LEVERAGES":
       leversRender.renderTangentsXtoP(false); // boolean: no tangent plane
       if (leversRender.getSequence().length() <= 2)
         leversRender.renderMahalanobisFormXEV(colorDataGradient);
@@ -48,12 +48,12 @@ public enum LeversHud {
     // leversRender.renderInfluenceX(colorDataGradient);
     // leversRender.renderWeightsLeveragesSqrt();
     // break;
-    case GARDEN:
+    case "GARDEN":
       leversRender.renderTangentsPtoX(false); // boolean: no tangent planes
       leversRender.renderEllipseMahalanobisP(); // no evs
       leversRender.renderWeightsGarden();
       break;
-    case HARBOR:
+    case "HARBOR":
       leversRender.renderInfluenceX(colorDataGradient);
       leversRender.renderInfluenceP(colorDataGradient);
       break;

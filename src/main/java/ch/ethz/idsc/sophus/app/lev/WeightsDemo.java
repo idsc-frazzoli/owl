@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Spd2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
@@ -64,7 +65,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
         Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //
-            ? new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, Biinvariants.METRIC }
+            ? new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, MetricBiinvariant.RIEMANN }
             : new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN };
         Tensor matrix = Tensors.empty();
         int[] minIndex = new int[biinvariants.length];

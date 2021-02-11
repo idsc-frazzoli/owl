@@ -11,13 +11,13 @@ import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.lie.so.SoGroup;
+import ch.ethz.idsc.sophus.lie.so.SoTransport;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
-import ch.ethz.idsc.sophus.lie.son.SonGroup;
-import ch.ethz.idsc.sophus.lie.son.SonTransport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -82,7 +82,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return SonGroup.INSTANCE;
+    return SoGroup.INSTANCE;
   }
 
   @Override
@@ -97,7 +97,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return SonTransport.INSTANCE;
+    return SoTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

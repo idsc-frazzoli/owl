@@ -27,6 +27,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
@@ -50,7 +51,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
-        Biinvariants.METRIC, //
+        MetricBiinvariant.RIEMANN, //
         Biinvariants.LEVERAGES, //
         Biinvariants.GARDEN);
   }

@@ -4,30 +4,43 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.crv.bri.BarycentricRationalInterpolation;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.itp.BarycentricMetricInterpolation;
+import ch.ethz.idsc.sophus.itp.BarycentricRationalInterpolation;
+import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.fig.ListPlot;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 
 /* package */ class BarycentricRationalInterpolationDemo extends ControlPointsDemo {
+  private static final int WIDTH = 400;
+  private static final int HEIGHT = 300;
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
+  private final JToggleButton jToggleLagra = new JToggleButton("Lagr.");
+  private final JToggleButton jToggleBasis = new JToggleButton("basis");
 
   public BarycentricRationalInterpolationDemo() {
     super(true, GeodesicDisplays.METRIC);
@@ -37,9 +50,14 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
       spinnerBeta.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "beta");
     }
     {
-      spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4));
+      spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7));
       spinnerDegree.setValue(1);
       spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "degree");
+    }
+    timerFrame.jToolBar.add(jToggleLagra);
+    {
+      jToggleBasis.setSelected(true);
+      timerFrame.jToolBar.add(jToggleBasis);
     }
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {2, 0, 0}, {4, 3, 1}, {5, -1, -2}}"));
   }
@@ -54,14 +72,35 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     Tensor knots = tensorUnaryOperator.apply(control);
     if (1 < control.length()) {
       Tensor domain = Subdivide.of(knots.get(0), Last.of(knots), 25 * control.length());
-      ScalarTensorFunction scalarTensorFunction = //
-          BarycentricRationalInterpolation.of(knots, spinnerDegree.getValue());
       BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-      Tensor points = Tensor.of(domain.map(scalarTensorFunction).stream() //
-          .map(weights -> biinvariantMean.mean(control, weights)));
-      new PathRender(Color.BLUE) //
-          .setCurve(points, false) //
+      Tensor basis2 = domain.map(jToggleLagra.isSelected() //
+          ? BarycentricMetricInterpolation.la(knots, InversePowerVariogram.of(2))
+          : BarycentricMetricInterpolation.of(knots, InversePowerVariogram.of(2)));
+      new PathRender(Color.RED) //
+          .setCurve(Tensor.of(basis2.stream().map(weights -> biinvariantMean.mean(control, weights))), false) //
           .render(geometricLayer, graphics);
+      Tensor basis1 = domain.map(BarycentricRationalInterpolation.of(knots, spinnerDegree.getValue()));
+      new PathRender(Color.BLUE) //
+          .setCurve(Tensor.of(basis1.stream().map(weights -> biinvariantMean.mean(control, weights))), false) //
+          .render(geometricLayer, graphics);
+      if (jToggleBasis.isSelected()) {
+        {
+          VisualSet visualSet = new VisualSet();
+          for (Tensor values : Transpose.of(basis2))
+            visualSet.add(domain, values);
+          JFreeChart jFreeChart = ListPlot.of(visualSet);
+          Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+          jFreeChart.draw(graphics, new Rectangle(dimension.width - WIDTH, dimension.height - HEIGHT, WIDTH, HEIGHT));
+        }
+        {
+          VisualSet visualSet = new VisualSet();
+          for (Tensor values : Transpose.of(basis1))
+            visualSet.add(domain, values);
+          JFreeChart jFreeChart = ListPlot.of(visualSet);
+          Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+          jFreeChart.draw(graphics, new Rectangle(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+        }
+      }
     }
     // ---
     renderControlPoints(geometricLayer, graphics);

@@ -17,6 +17,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -76,7 +77,7 @@ public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWe
 
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
-        Biinvariants.METRIC, //
+        MetricBiinvariant.RIEMANN, //
         Biinvariants.LEVERAGES, //
         Biinvariants.GARDEN, //
         Biinvariants.HARBOR);

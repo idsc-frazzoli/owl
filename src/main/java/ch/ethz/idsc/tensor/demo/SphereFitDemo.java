@@ -14,8 +14,8 @@ import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
@@ -95,7 +95,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     {
-      Biinvariant biinvariant = Biinvariants.METRIC;
+      Biinvariant biinvariant = MetricBiinvariant.RIEMANN;
       TensorUnaryOperator weightingInterface = //
           biinvariant.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);

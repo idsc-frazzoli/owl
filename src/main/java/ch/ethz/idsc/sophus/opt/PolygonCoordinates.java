@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import ch.ethz.idsc.sophus.gbc.AffineCoordinate;
-import ch.ethz.idsc.sophus.gbc.HsCoordinates;
 import ch.ethz.idsc.sophus.gbc.LagrangeCoordinate;
 import ch.ethz.idsc.sophus.gbc.LeveragesGenesis;
 import ch.ethz.idsc.sophus.gbc.MetricCoordinate;
@@ -16,6 +15,7 @@ import ch.ethz.idsc.sophus.gbc.amp.Amplifiers;
 import ch.ethz.idsc.sophus.gbc.it.IterativeAffineCoordinate;
 import ch.ethz.idsc.sophus.gbc.it.IterativeTargetCoordinate;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
+import ch.ethz.idsc.sophus.hs.HsGenesis;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.itp.InverseDistanceWeighting;
 import ch.ethz.idsc.sophus.lie.r2.Barycenter;
@@ -78,10 +78,11 @@ public enum PolygonCoordinates implements LogWeighting {
       VectorLogManifold vectorLogManifold, // with 2 dimensional tangent space
       ScalarUnaryOperator variogram, // <- ignored
       Tensor sequence) {
-    return WeightingOperators.wrap( //
-        HsCoordinates.wrap(vectorLogManifold, CONVEX.contains(this) //
+    return HsGenesis.wrap( //
+        vectorLogManifold, //
+        CONVEX.contains(this) //
             ? InsideConvexHullCoordinate.of(genesis)
-            : InsidePolygonCoordinate.of(genesis)), //
+            : InsidePolygonCoordinate.of(genesis), //
         sequence);
   }
 
