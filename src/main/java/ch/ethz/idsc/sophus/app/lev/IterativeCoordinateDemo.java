@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateMatrix;

@@ -2,30 +2,41 @@
 package ch.ethz.idsc.sophus.gds;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
 import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnMetric;
 import ch.ethz.idsc.sophus.hs.hn.HnMetricBiinvariant;
+import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnTransport;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.ply.StarPoints;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
 public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
   private static final Tensor STAR_POINTS = StarPoints.of(6, 0.12, 0.04).unmodifiable();
+  protected static final Scalar RADIUS = RealScalar.of(2.5);
   // ---
   private final int dimensions;
 
@@ -44,8 +55,18 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
+  public final Tensor project(Tensor xya) {
+    return HnWeierstrassCoordinate.toPoint(xya.extract(0, dimensions));
+  }
+
+  @Override // from GeodesicDisplay
   public final TensorUnaryOperator tangentProjection(Tensor xyz) {
     return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final Tensor matrixLift(Tensor p) {
+    return Se2Matrix.translation(p);
   }
 
   @Override // from GeodesicDisplay
@@ -61,6 +82,11 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override // from GeodesicDisplay
   public final LieExponential lieExponential() {
     return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final VectorLogManifold vectorLogManifold() {
+    return HnManifold.INSTANCE;
   }
 
   @Override
@@ -91,6 +117,18 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   @Override
   public final LineDistance lineDistance() {
     return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public final RandomSampleInterface randomSampleInterface() {
+    Distribution distribution = UniformDistribution.of(RADIUS.negate(), RADIUS);
+    return new RandomSampleInterface() {
+      @Override
+      public Tensor randomSample(Random random) {
+        // return VectorQ.requireLength(RandomVariate.of(distribution, random, 2).append(RealScalar.ZERO), 3);
+        return HnWeierstrassCoordinate.toPoint(RandomVariate.of(distribution, random, dimensions));
+      }
+    };
   }
 
   @Override

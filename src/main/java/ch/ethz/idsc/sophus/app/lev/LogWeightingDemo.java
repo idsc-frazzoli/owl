@@ -9,7 +9,6 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.math.var.Variograms;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
@@ -83,7 +82,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
   }
 
   protected final Biinvariant biinvariant() {
-    return spinnerBiinvariant.getValue().from(geodesicDisplay());
+    return bitype().from(geodesicDisplay());
   }
 
   protected final Bitype bitype() {

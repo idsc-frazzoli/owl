@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.gds;
 
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RadialGradientPaint;
@@ -46,14 +45,14 @@ public abstract class GeodesicDisplayRender implements RenderInterface {
         geodesicDisplay instanceof Rp2GeodesicDisplay) {
       render_s2(geometricLayer, graphics);
     } else //
-    if (geodesicDisplay instanceof HP2GeodesicDisplay) {
-      Paint paint = new GradientPaint( //
-          geometricLayer.toPoint2D(0, 0), BORDER, //
-          geometricLayer.toPoint2D(0, 5), CENTER);
-      graphics.setPaint(paint);
-      Tensor box = Tensors.fromString("{{-20, 0}, {+20, 0}, {+20, 5}, {-20, 5}}");
-      graphics.fill(geometricLayer.toPath2D(box));
-    } else //
+    // if (geodesicDisplay instanceof HP2GeodesicDisplay) {
+    // Paint paint = new GradientPaint( //
+    // geometricLayer.toPoint2D(0, 0), BORDER, //
+    // geometricLayer.toPoint2D(0, 5), CENTER);
+    // graphics.setPaint(paint);
+    // Tensor box = Tensors.fromString("{{-20, 0}, {+20, 0}, {+20, 5}, {-20, 5}}");
+    // graphics.fill(geometricLayer.toPath2D(box));
+    // } else //
     if (geodesicDisplay instanceof H1GeodesicDisplay) {
       Tensor points = //
           Tensor.of(H1_DOMAIN.map(Tensors::of).stream().map(HnWeierstrassCoordinate::toPoint));

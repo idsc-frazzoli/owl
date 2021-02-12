@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
   private static List<Biinvariant> distinct() {
     return Arrays.asList( //
-        MetricBiinvariant.RIEMANN, //
+        MetricBiinvariant.RIEMANN, // FIXME should be retrieved from bitype
         Biinvariants.LEVERAGES, //
         Biinvariants.GARDEN);
   }

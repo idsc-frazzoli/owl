@@ -17,7 +17,6 @@ import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
