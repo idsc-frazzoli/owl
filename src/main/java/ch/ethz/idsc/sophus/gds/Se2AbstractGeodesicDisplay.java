@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.gds;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
@@ -45,8 +46,8 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
   }
 
   @Override // from GeodesicDisplay
-  public final boolean isMetricBiinvariant() {
-    return false;
+  public final Biinvariant metricBiinvariant() {
+    return null;
   }
 
   @Override

@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.lie.r2.RotationMatrix;
       timerFrame.jToolBar.add(jToggleAnimate);
     }
     setControlPointsSe2(R2PointCollection.MISC);
-    setBiinvariant(Biinvariants.GARDEN);
+    setBitype(Bitype.GARDEN);
   }
 
   private static Tensor random(double toc, int index) {
@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.lie.r2.RotationMatrix;
       Tensor sequence = getSequence();
       Tensor origin = optional.get();
       LeversRender leversRender = LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      LeversHud.render(biinvariant(), leversRender);
+      LeversHud.render(bitype(), leversRender);
     }
   }
 

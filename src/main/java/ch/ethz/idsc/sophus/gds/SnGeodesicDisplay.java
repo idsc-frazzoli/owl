@@ -5,9 +5,11 @@ import java.io.Serializable;
 import java.util.Random;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.hs.sn.SnLineDistance;
@@ -76,8 +78,8 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final boolean isMetricBiinvariant() {
-    return true;
+  public final Biinvariant metricBiinvariant() {
+    return MetricBiinvariant.RIEMANN;
   }
 
   @Override // from GeodesicDisplay

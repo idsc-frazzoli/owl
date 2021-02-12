@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.JToggleButton;
@@ -18,7 +19,6 @@ import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Spd2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
-import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
@@ -64,9 +64,10 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       leversRender.renderIndexP();
       // ---
       if (geodesicDisplay.dimensions() < sequence.length()) {
-        Biinvariant[] biinvariants = geodesicDisplay.isMetricBiinvariant() //
-            ? new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, MetricBiinvariant.RIEMANN }
-            : new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN };
+        Biinvariant metric = geodesicDisplay.metricBiinvariant();
+        Biinvariant[] biinvariants = Objects.isNull(metric) //
+            ? new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN }
+            : new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, metric };
         Tensor matrix = Tensors.empty();
         int[] minIndex = new int[biinvariants.length];
         VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
@@ -81,7 +82,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
           minIndex[index] = ArgMin.of(weights);
           matrix.append(weights);
         }
-        System.out.println(Tensors.vectorInt(minIndex));
+        // System.out.println(Tensors.vectorInt(minIndex));
         // System.out.println("---");
         ColorDataIndexed colorDataIndexed = ColorDataLists._097.strict();
         for (int index = 0; index < sequence.length(); ++index) {
@@ -94,7 +95,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
         int fheight = fontMetrics.getAscent();
         for (Biinvariant biinvariant : biinvariants) {
           graphics.setColor(colorDataIndexed.getColor(index));
-          graphics.drawString(((Biinvariants) biinvariant).title(), 2, (index + 1) * fheight);
+          graphics.drawString(biinvariant.toString(), 2, (index + 1) * fheight);
           ++index;
         }
       }

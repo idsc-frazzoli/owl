@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
@@ -91,8 +92,8 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
   }
 
   @Override // from GeodesicDisplay
-  public final boolean isMetricBiinvariant() {
-    return false;
+  public final Biinvariant metricBiinvariant() {
+    return null;
   }
 
   @Override

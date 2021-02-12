@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.gds;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
@@ -59,8 +60,8 @@ public interface GeodesicDisplay {
    * @throws Exception if functionality is not supported */
   TensorMetric parametricDistance();
 
-  /** @return whether biinvariant scalar product exists */
-  boolean isMetricBiinvariant();
+  /** @return metric biinvariant or null if metric is not biinvariant */
+  Biinvariant metricBiinvariant();
 
   /** @return biinvariantMean, or null, if geodesic space does not support the computation of an biinvariant mean */
   BiinvariantMean biinvariantMean();

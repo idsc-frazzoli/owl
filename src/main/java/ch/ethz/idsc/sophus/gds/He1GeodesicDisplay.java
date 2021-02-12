@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.gds;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
@@ -92,8 +93,8 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public boolean isMetricBiinvariant() {
-    return false;
+  public Biinvariant metricBiinvariant() {
+    return null;
   }
 
   @Override // from GeodesicDisplay

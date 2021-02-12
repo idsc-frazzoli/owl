@@ -75,11 +75,11 @@ import ch.ethz.idsc.tensor.ext.Timing;
       Tensor sequence = getSequence();
       Tensor origin = optional.get();
       LeversHud.render( //
-          MetricBiinvariant.RIEMANN, //
+          Bitype.METRIC1, //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics));
       TensorMapping actionL = lieGroupOps.actionL(Tensors.vector(7, 0, 0));
       LeversHud.render( //
-          biinvariant(), //
+          bitype(), //
           LeversRender.of(geodesicDisplay, actionL.slash(sequence), actionL.apply(origin), geometricLayer, graphics));
     }
   }

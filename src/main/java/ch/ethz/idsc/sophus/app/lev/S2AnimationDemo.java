@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Tensor origin = optional.get();
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
-      LeversHud.render(biinvariant(), leversRender);
+      LeversHud.render(bitype(), leversRender);
     }
   }
 

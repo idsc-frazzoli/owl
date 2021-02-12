@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 public abstract class LogWeightingDemo extends LogWeightingBase {
   private static final Tensor BETAS = Tensors.fromString("{0, 1/2, 1, 3/2, 7/4, 2, 5/2, 3}");
   // ---
-  private final SpinnerLabel<Biinvariant> spinnerBiinvariant = new SpinnerLabel<>();
+  private final SpinnerLabel<Bitype> spinnerBiinvariant = new SpinnerLabel<>();
   private final SpinnerLabel<Variograms> spinnerVariogram = SpinnerLabel.of(Variograms.values());
   private final SpinnerLabel<Scalar> spinnerBeta = new SpinnerLabel<>();
   private final SpinnerListener<LogWeighting> spinnerListener = new SpinnerListener<LogWeighting>() {
@@ -52,7 +52,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
       logWeighting.equals(LogWeightings.KRIGING) || //
       logWeighting.equals(LogWeightings.KRIGING_COORDINATE)) {
         spinnerVariogram.setValue(Variograms.POWER);
-        setBiinvariant(Biinvariants.HARBOR);
+        setBitype(Bitype.HARBOR);
         spinnerBeta.setValueSafe(RationalScalar.of(3, 2));
       }
     }
@@ -62,8 +62,8 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
     super(addRemoveControlPoints, list, array);
     spinnerLogWeighting.addSpinnerListener(spinnerListener);
     {
-      spinnerBiinvariant.setArray(Biinvariants.values());
-      spinnerBiinvariant.setValue(Biinvariants.LEVERAGES);
+      spinnerBiinvariant.setArray(Bitype.values());
+      spinnerBiinvariant.setValue(Bitype.LEVERAGES1);
       spinnerBiinvariant.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "distance");
       spinnerBiinvariant.addSpinnerListener(v -> recompute());
     }
@@ -78,11 +78,15 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
     timerFrame.jToolBar.addSeparator();
   }
 
-  protected final void setBiinvariant(Biinvariant biinvariant) {
+  protected final void setBitype(Bitype biinvariant) {
     spinnerBiinvariant.setValue(biinvariant);
   }
 
   protected final Biinvariant biinvariant() {
+    return spinnerBiinvariant.getValue().from(geodesicDisplay());
+  }
+
+  protected final Bitype bitype() {
     return spinnerBiinvariant.getValue();
   }
 

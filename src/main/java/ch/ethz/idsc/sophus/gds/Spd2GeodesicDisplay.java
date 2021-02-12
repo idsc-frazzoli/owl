@@ -2,9 +2,11 @@
 package ch.ethz.idsc.sophus.gds;
 
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
+import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.spd.Spd0Exponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdBiinvariantMean;
@@ -116,8 +118,8 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public boolean isMetricBiinvariant() {
-    return true;
+  public Biinvariant metricBiinvariant() {
+    return MetricBiinvariant.RIEMANN;
   }
 
   @Override // from GeodesicDisplay

@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.LEVERAGES);
+    setBitype(Bitype.LEVERAGES1);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.Tensors;
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       leversRender.renderSurfaceP();
-      LeversHud.render(biinvariant(), leversRender, null);
+      LeversHud.render(bitype(), leversRender, null);
       VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
       HsDesign hsDesign = new HsDesign(vectorLogManifold);
       try {

@@ -1,13 +1,14 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /** Creates a card of the game jassen with the attributes color and card type
  * 
  * https://en.wikipedia.org/wiki/Jass */
-/* package */ class JassCard {
-  public static enum Color {
+/* package */ class JassCard implements Serializable {
+  public static enum Farbe {
     ROSEN, EICHEL, SCHILTEN, SCHELLE
   }
 
@@ -21,12 +22,12 @@ import java.util.Objects;
     }
   }
 
-  private final Color color;
+  private final Farbe farbe;
   private final Type type;
   private final boolean isTrumpf;
 
-  public JassCard(Color color, Type type, boolean isTrumpf) {
-    this.color = color;
+  public JassCard(Farbe farbe, Type type, boolean isTrumpf) {
+    this.farbe = farbe;
     this.type = type;
     this.isTrumpf = isTrumpf;
   }
@@ -44,7 +45,7 @@ import java.util.Objects;
       throw new RuntimeException("card duplicate in deck");
     if (isTrumpf && //
         jassCard.isTrumpf && //
-        !color.equals(jassCard.color))
+        !farbe.equals(jassCard.farbe))
       throw new RuntimeException("multi color trumpf");
   }
 
@@ -60,7 +61,7 @@ import java.util.Objects;
     if (!isTrumpf && jassCard.isTrumpf)
       return true;
     if (!isTrumpf && !jassCard.isTrumpf)
-      if (color.equals(jassCard.color) && type.compareTo(jassCard.type) < 0)
+      if (farbe.equals(jassCard.farbe) && type.compareTo(jassCard.type) < 0)
         return true;
     return false;
   }
@@ -69,7 +70,7 @@ import java.util.Objects;
   public boolean equals(Object object) {
     if (object instanceof JassCard) {
       JassCard jassCard = (JassCard) object;
-      return color.equals(jassCard.color) //
+      return farbe.equals(jassCard.farbe) //
           && type.equals(jassCard.type) //
           && isTrumpf == jassCard.isTrumpf;
     }
@@ -78,6 +79,6 @@ import java.util.Objects;
 
   @Override
   public int hashCode() {
-    return Objects.hash(color, type, isTrumpf);
+    return Objects.hash(farbe, type, isTrumpf);
   }
 }

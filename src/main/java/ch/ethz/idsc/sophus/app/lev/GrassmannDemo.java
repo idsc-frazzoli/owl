@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
     GeodesicDisplay geodesicDisplay = Se2CoveringGeodesicDisplay.INSTANCE;
     geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
-    setBiinvariant(Biinvariants.LEVERAGES);
+    setBitype(Bitype.LEVERAGES1);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     jToggleNeutral.setSelected(true);
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       LeversRender leversRender = //
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       ColorDataGradient colorDataGradient = spinnerColorData.getValue().deriveWithOpacity(RealScalar.of(0.5));
-      LeversHud.render(biinvariant(), leversRender, colorDataGradient);
+      LeversHud.render(bitype(), leversRender, colorDataGradient);
     } else {
       renderControlPoints(geometricLayer, graphics);
     }

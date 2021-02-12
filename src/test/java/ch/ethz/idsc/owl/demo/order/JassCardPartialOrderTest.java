@@ -1,18 +1,18 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
-import ch.ethz.idsc.owl.demo.order.JassCard.Color;
+import ch.ethz.idsc.owl.demo.order.JassCard.Farbe;
 import ch.ethz.idsc.owl.demo.order.JassCard.Type;
 import ch.ethz.idsc.owl.math.AssertFail;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import junit.framework.TestCase;
 
 public class JassCardPartialOrderTest extends TestCase {
-  final JassCard A = new JassCard(Color.ROSEN, Type.ACE, true);
-  final JassCard B = new JassCard(Color.ROSEN, Type.JACK, true);
-  final JassCard C = new JassCard(Color.EICHEL, Type.QUEEN, false);
-  final JassCard D = new JassCard(Color.EICHEL, Type.SEVEN, false);
-  final JassCard E = new JassCard(Color.SCHELLE, Type.ACE, false);
+  final JassCard A = new JassCard(Farbe.ROSEN, Type.ACE, true);
+  final JassCard B = new JassCard(Farbe.ROSEN, Type.JACK, true);
+  final JassCard C = new JassCard(Farbe.EICHEL, Type.QUEEN, false);
+  final JassCard D = new JassCard(Farbe.EICHEL, Type.SEVEN, false);
+  final JassCard E = new JassCard(Farbe.SCHELLE, Type.ACE, false);
 
   public void testAIsTrumpfBIsNot() {
     // since A is Trumpf and B is not: A > B
