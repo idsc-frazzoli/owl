@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
@@ -48,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
-    if (control.length() % 2 == 1) {
+    if (!Integers.isEven(control.length())) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
       for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {

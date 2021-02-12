@@ -6,6 +6,7 @@ import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /* package */ class GeodesicCenterSplitsDemo extends AbstractKernelSplitsDemo {
   public GeodesicCenterSplitsDemo() {
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   SymScalar symScalar(Tensor vector) {
-    if (vector.length() % 2 == 1)
+    if (!Integers.isEven(vector.length()))
       return (SymScalar) GeodesicCenter.of(SymGeodesic.INSTANCE, spinnerKernel.getValue().get()).apply(vector);
     return null;
   }

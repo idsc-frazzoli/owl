@@ -57,8 +57,7 @@ public class Se2CarFlows implements FlowsInterface, Serializable {
 
   @Override // from FlowsInterface
   public Collection<Tensor> getFlows(int resolution) {
-    if (resolution % 2 == 1)
-      ++resolution;
+    resolution += resolution & 1;
     List<Tensor> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(rate_max.negate(), rate_max, resolution))
       for (Tensor speed : speeds)

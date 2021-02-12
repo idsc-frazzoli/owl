@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.itp.DeBoor;
@@ -47,7 +48,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
         Tensor domain = Subdivide.of(0, 1, 100);
         Tensor domahi = Subdivide.of(1, 2, 100);
         Tensor knots = Tensors.fromString(jTextField.getText());
-        if (knots.length() % 2 == 0) {
+        if (Integers.isEven(knots.length())) {
           int degree = knots.length() >> 1;
           int length = degree + 1;
           // ---

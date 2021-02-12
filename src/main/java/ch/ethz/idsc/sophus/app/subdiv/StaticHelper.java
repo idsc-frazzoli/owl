@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /* package */ enum StaticHelper {
   ;
@@ -33,7 +34,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
       Tensor prev = refined;
       refined = tensorUnaryOperator.apply(refined);
       if (isDual && //
-          level % 2 == 1 && //
+          !Integers.isEven(level) && //
           !cyclic && //
           1 < control.length())
         refined = Join.of( //
