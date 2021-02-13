@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** objective is minimum path length
@@ -33,7 +33,7 @@ public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery 
   @Override
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     StateTime from = glcNode.stateTime();
-    return Norm._2.between(from.state(), Lists.getLast(trajectory).state());
+    return VectorNorm2.between(from.state(), Lists.getLast(trajectory).state());
   }
 
   @Override

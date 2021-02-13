@@ -1,11 +1,11 @@
 // code by mg, jph
 package ch.ethz.idsc.owl.bot.rn;
 
+import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /** shortest distance from given point to a collection of points
  * 
@@ -21,15 +21,15 @@ public class SimpleRnPointcloudDistance implements TensorScalarFunction {
   /** @param points
    * @param norm
    * @return */
-  public static TensorScalarFunction of(Tensor points, Norm norm) {
+  public static TensorScalarFunction of(Tensor points, TensorNorm norm) {
     return new SimpleRnPointcloudDistance(points, norm);
   }
 
   /***************************************************/
   private final Tensor points;
-  private final Norm norm;
+  private final TensorNorm norm;
 
-  private SimpleRnPointcloudDistance(Tensor points, Norm norm) {
+  private SimpleRnPointcloudDistance(Tensor points, TensorNorm norm) {
     this.points = points;
     this.norm = norm;
   }
@@ -37,7 +37,7 @@ public class SimpleRnPointcloudDistance implements TensorScalarFunction {
   @Override
   public Scalar apply(Tensor point) {
     return points.stream() //
-        .map(vector -> norm.between(vector, point)) //
+        .map(vector -> norm.norm(vector.subtract(point))) // TODO simplify!
         .min(Scalars::compare).get();
   }
 }

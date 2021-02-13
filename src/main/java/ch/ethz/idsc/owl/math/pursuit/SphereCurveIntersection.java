@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 /** intersection of curve with n-dimensional sphere centered at (0, ..., 0) and given radius.
  * 
@@ -18,6 +18,6 @@ public class SphereCurveIntersection extends AssistedCurveIntersection {
 
   @Override // from SimpleCurveIntersection
   protected final Scalar distance(Tensor tensor) {
-    return Norm._2.ofVector(tensor);
+    return VectorNorm2.of(tensor);
   }
 }

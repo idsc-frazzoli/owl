@@ -21,8 +21,8 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterTo(Tensor center) {
     return new AbstractNdCenter(center) {
-      @Override // from VectorNormInterface
-      public Scalar ofVector(Tensor other) {
+      @Override // from NdCenterInterface
+      public Scalar distance(Tensor other) {
         return transitionSpace.connect(other, center).length();
       }
     };
@@ -31,8 +31,8 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterFrom(Tensor center) {
     return new AbstractNdCenter(center) {
-      @Override // from VectorNormInterface
-      public Scalar ofVector(Tensor other) {
+      @Override // from NdCenterInterface
+      public Scalar distance(Tensor other) {
         return transitionSpace.connect(center, other).length();
       }
     };

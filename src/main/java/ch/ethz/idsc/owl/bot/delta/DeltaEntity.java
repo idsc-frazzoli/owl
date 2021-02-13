@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
+    return VectorNorm2Squared.between(x, y);
   }
 
   @Override

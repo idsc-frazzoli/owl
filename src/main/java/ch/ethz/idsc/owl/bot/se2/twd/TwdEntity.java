@@ -30,8 +30,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class TwdEntity extends Se2Entity {
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from TensorMetric
   public Scalar distance(Tensor x, Tensor y) {
-    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
+    return VectorNorm2.of(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }
 
   @Override

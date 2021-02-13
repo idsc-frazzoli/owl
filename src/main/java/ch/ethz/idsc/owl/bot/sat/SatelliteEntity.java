@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
 /* package */ class SatelliteEntity extends AbstractCircularEntity {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5, 6, 6).unmodifiable();
@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override
   public Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y); // non-negative
+    return VectorNorm2Squared.between(x, y); // non-negative
   }
 
   @Override

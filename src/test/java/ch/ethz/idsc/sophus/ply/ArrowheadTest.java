@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Mean;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
@@ -33,6 +32,6 @@ public class ArrowheadTest extends TestCase {
 
   public void testMean() {
     Tensor tensor = Mean.of(Arrowhead.of(2));
-    Chop.NONE.requireAllZero(tensor);
+    assertEquals(tensor, tensor.map(Scalar::zero));
   }
 }

@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
@@ -61,7 +61,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     Tensor axis = xya.divide(radius);
-    Scalar norm = Norm._2.ofVector(axis);
+    Scalar norm = VectorNorm2.of(axis);
     if (Scalars.lessThan(RealScalar.ONE, norm))
       axis = axis.divide(norm);
     return Rodrigues.vectorExp(axis);

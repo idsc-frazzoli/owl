@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Put;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Abs;
 
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
           Tensor t_prediction = tensorUnaryOperator.apply(pqr);
           Tensor t_measured = sequence.get(3);
           {
-            Scalar err = Norm._2.between(t_prediction.extract(0, 2), t_measured.extract(0, 2));
+            Scalar err = VectorNorm2.between(t_prediction.extract(0, 2), t_measured.extract(0, 2));
             err_xy.set(err::add, i, j);
           }
           {

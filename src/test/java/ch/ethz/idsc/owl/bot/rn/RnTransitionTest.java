@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import junit.framework.TestCase;
 
 public class RnTransitionTest extends TestCase {
@@ -41,7 +41,7 @@ public class RnTransitionTest extends TestCase {
     Tensor spacing = transitionWrap.spacing();
     assertEquals(samples.length(), spacing.length());
     ExactTensorQ.of(spacing);
-    Tensor diffnor = Tensor.of(Differences.of(samples).stream().map(Norm._2::ofVector));
+    Tensor diffnor = Tensor.of(Differences.of(samples).stream().map(VectorNorm2::of));
     assertEquals(spacing.extract(0, diffnor.length()), diffnor);
   }
 

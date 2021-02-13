@@ -24,8 +24,8 @@ import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.nrm.VectorNorm1;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ abstract class HermiteArray {
   static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     // return Log.FUNCTION.apply(Norm._1.ofVector(vector).add(RealScalar.ONE));
     // Tensor vector = Flatten.of(Differences.of(Tensor.of(refined.stream().map(point -> point.get(1)))));
     // return Norm._1.ofVector(Differences.of(vector));
-    return Norm._1.ofVector(vector);
+    return VectorNorm1.of(vector);
   }
 
   final Tensor getMatrix() {

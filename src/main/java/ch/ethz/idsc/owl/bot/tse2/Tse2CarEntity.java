@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -99,7 +99,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.ofVector(Tse2Wrap.INSTANCE.difference(x, y));
+    return VectorNorm2Squared.of(Tse2Wrap.INSTANCE.difference(x, y));
   }
 
   /** @param goal

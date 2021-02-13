@@ -21,13 +21,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -48,8 +47,8 @@ import ch.ethz.idsc.tensor.sca.N;
     final Tensor shape = getControlPointShape(); // .multiply(RealScalar.of(0.3));
     if (1 < control.length()) {
       // TODO check for zero norm below
-      Tensor sequence = Tensor.of(control.stream().map(Normalize.with(Norm._2)));
-      Tensor funceva = Tensor.of(control.stream().map(Norm._2::ofVector));
+      Tensor sequence = Tensor.of(control.stream().map(VectorNorm2.NORMALIZE));
+      Tensor funceva = Tensor.of(control.stream().map(VectorNorm2::of));
       Tensor cvarian = getControlPointsSe2().get(Tensor.ALL, 2).multiply(RationalScalar.HALF).map(Abs.FUNCTION);
       // ---
       graphics.setColor(new Color(0, 128, 128));

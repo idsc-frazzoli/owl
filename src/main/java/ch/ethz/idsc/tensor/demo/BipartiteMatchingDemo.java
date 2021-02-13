@@ -14,8 +14,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class BipartiteMatchingDemo extends ControlPointsDemo {
   private static final Tensor CIRCLE = CirclePoints.of(5).multiply(RealScalar.of(3));
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     if (0 < control.length()) {
       new PathRender(Color.GRAY).setCurve(CIRCLE, true).render(geometricLayer, graphics);
       Tensor matrix = Tensors.matrix((i, j) -> //
-      Norm._2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
+      VectorNorm2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
       int[] matching = bipartiteMatching.matching();
       graphics.setColor(Color.RED);

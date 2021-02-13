@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 import ch.ethz.idsc.tensor.io.GifAnimationWriter;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
 /* package */ enum R2DemoSlow {
@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if
       Scalar cost = goalNode.costFromRoot();
-      Scalar lowerBound = Ramp.of(Norm._2.between(stateGoal, stateRoot).subtract(radius));
+      Scalar lowerBound = Ramp.of(VectorNorm2.between(stateGoal, stateRoot).subtract(radius));
       if (Scalars.lessThan(cost, lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
     }

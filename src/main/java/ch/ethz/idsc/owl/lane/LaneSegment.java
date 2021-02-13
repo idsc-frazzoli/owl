@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.lane;
 import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public class LaneSegment implements LaneInterface {
   /** @param laneInterface
@@ -13,8 +13,8 @@ public class LaneSegment implements LaneInterface {
    * @param end
    * @return */
   public static LaneInterface of(LaneInterface laneInterface, Tensor start, Tensor end) {
-    int fromIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(start::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
-    int toIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(end::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
+    int fromIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(start::subtract).map(Extract2D.FUNCTION).map(VectorNorm2::of)));
+    int toIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(end::subtract).map(Extract2D.FUNCTION).map(VectorNorm2::of)));
     return new LaneSegment(laneInterface, fromIdx, toIdx);
   }
 
@@ -31,9 +31,9 @@ public class LaneSegment implements LaneInterface {
   @Override // from LaneInterface
   public Tensor controlPoints() {
     int fromIdx = ArgMin.of(Tensor.of(laneInterface.controlPoints().stream() //
-        .map(laneInterface.midLane().get(this.fromIdx)::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
+        .map(laneInterface.midLane().get(this.fromIdx)::subtract).map(Extract2D.FUNCTION).map(VectorNorm2::of)));
     int toIdx = ArgMin.of(Tensor.of(laneInterface.controlPoints().stream() //
-        .map(laneInterface.midLane().get(this.toIdx)::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
+        .map(laneInterface.midLane().get(this.toIdx)::subtract).map(Extract2D.FUNCTION).map(VectorNorm2::of)));
     int idx = Math.floorMod(toIdx - fromIdx, laneInterface.controlPoints().length());
     return RotateLeft.of(laneInterface.controlPoints(), fromIdx).extract(0, idx + 1);
   }

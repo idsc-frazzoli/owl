@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     }
 
     @Override // from ClothoidNdCenter
-    public final Scalar ofVector(Tensor p) {
+    public final Scalar distance(Tensor p) {
       Clothoid clothoid = clothoid(p);
       Scalar cost = clothoid.length();
       return clip.isInside(clothoid.curvature().absMax()) //

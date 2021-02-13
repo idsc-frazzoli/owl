@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.alg.Insert;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.Det;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -68,7 +68,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       Tensor mouse_dist = Tensor.of(midpoints.stream() //
           .map(geodesicDisplay::toPoint) //
           .map(mouse.extract(0, 2)::subtract) //
-          .map(Norm._2::ofVector));
+          .map(VectorNorm2::of));
       ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
       index = argMinValue.index();
     }
@@ -91,7 +91,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         final boolean hold;
         {
-          Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+          Tensor mouse_dist = Tensor.of(control.stream() //
+              .map(mouse::subtract) //
+              .map(Extract2D.FUNCTION) //
+              .map(VectorNorm2::of));
           ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
           Optional<Scalar> value = argMinValue.value(getPositioningThreshold());
           hold = value.isPresent() && isPositioningEnabled();
@@ -147,7 +150,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             // released();
           } else {
             {
-              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+              Tensor mouse_dist = Tensor.of(control.stream() //
+                  .map(mouse::subtract) //
+                  .map(Extract2D.FUNCTION) //
+                  .map(VectorNorm2::of));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }
@@ -167,7 +173,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         case MouseEvent.BUTTON3: // remove point
           if (addRemoveControlPoints) {
             if (!isPositioningOngoing()) {
-              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+              Tensor mouse_dist = Tensor.of(control.stream() //
+                  .map(mouse::subtract) //
+                  .map(Extract2D.FUNCTION) //
+                  .map(VectorNorm2::of));
               ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
               min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             }

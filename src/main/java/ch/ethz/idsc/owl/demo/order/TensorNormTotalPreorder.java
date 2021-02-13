@@ -6,9 +6,9 @@ import java.io.Serializable;
 import ch.ethz.idsc.owl.math.order.BinaryRelation;
 import ch.ethz.idsc.owl.math.order.Order;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
+import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /** Total preorder for tensor norms.
  * 
@@ -17,15 +17,15 @@ import ch.ethz.idsc.tensor.red.Norm;
  * 
  * binary relation that is reflexive and transitive, but not antisymmetric */
 public class TensorNormTotalPreorder implements BinaryRelation<Tensor>, Serializable {
-  private final Norm norm;
+  private final TensorNorm tensorNorm;
 
-  public TensorNormTotalPreorder(Norm norm) {
-    this.norm = norm;
+  public TensorNormTotalPreorder(TensorNorm norm) {
+    this.tensorNorm = norm;
   }
 
   @Override // from BinaryRelation
   public boolean test(Tensor x, Tensor y) {
-    return Scalars.lessEquals(norm.of(x), norm.of(y));
+    return Scalars.lessEquals(tensorNorm.norm(x), tensorNorm.norm(y));
   }
 
   /** @return total preorder comparator that never returns INCOMPARABLE */

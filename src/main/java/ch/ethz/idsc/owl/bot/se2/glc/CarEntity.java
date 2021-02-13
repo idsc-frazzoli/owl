@@ -32,8 +32,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -106,7 +106,7 @@ public class CarEntity extends Se2Entity {
   public final Scalar distance(Tensor x, Tensor y) {
     // Se2Wrap.INSTANCE.difference uses the logarithm internally and is proportional
     // to the geodesic connection between x and y that allows side slip
-    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
+    return VectorNorm2.of(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }
 
   protected RegionWithDistance<Tensor> goalRegion = null;

@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 /* package */ class DeltaCoastingControl implements EntityControl, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   @Override // from EntityControl
   public Optional<Tensor> control(StateTime tail, Scalar now) {
     Tensor u = imageGradientInterpolation.get(tail.state());
-    Scalar norm = Norm._2.ofVector(u);
+    Scalar norm = VectorNorm2.of(u);
     if (Scalars.lessThan(u_norm, norm))
       u = u.multiply(u_norm).divide(norm);
     return Optional.of(u.negate());

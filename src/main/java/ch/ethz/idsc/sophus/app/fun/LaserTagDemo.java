@@ -18,19 +18,16 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.Cross;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class LaserTagDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.strict().deriveWithAlpha(128);
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   // ---
   private static final String TEXT = "WILLKOMMEN IN"; // "NIEDERSACHSEN";
   private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
@@ -63,9 +60,9 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor p = control.get(index - 1);
       Tensor q = control.get(index);
       Tensor r = control.get(index + 1);
-      Tensor d1 = NORMALIZE.apply(p.subtract(q));
-      Tensor d2 = NORMALIZE.apply(r.subtract(q));
-      Tensor o1 = NORMALIZE.apply(d1.add(d2));
+      Tensor d1 = VectorNorm2.NORMALIZE.apply(p.subtract(q));
+      Tensor d2 = VectorNorm2.NORMALIZE.apply(r.subtract(q));
+      Tensor o1 = VectorNorm2.NORMALIZE.apply(d1.add(d2));
       Tensor o2 = Cross.of(o1);
       geometricLayer.pushMatrix(Se2Matrix.translation(q));
       Tensor polygon = Tensors.of(o2, o1.negate(), o2.negate());

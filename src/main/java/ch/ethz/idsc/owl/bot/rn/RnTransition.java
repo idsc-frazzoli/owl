@@ -8,13 +8,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnTransition extends AbstractTransition {
   public RnTransition(Tensor start, Tensor end) {
-    super(start, end, Norm._2.between(start, end));
+    super(start, end, VectorNorm2.between(start, end));
   }
 
   @Override // from Transition

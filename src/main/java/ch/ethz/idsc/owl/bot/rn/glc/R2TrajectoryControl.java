@@ -11,13 +11,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
 public class R2TrajectoryControl extends StateTrajectoryControl {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
 
   @Override
@@ -25,8 +22,8 @@ public class R2TrajectoryControl extends StateTrajectoryControl {
     Tensor state = tail.state();
     for (TrajectorySample trajectorySample : trailAhead) {
       Tensor diff = trajectorySample.stateTime().state().subtract(state);
-      if (Scalars.lessThan(THRESHOLD, Norm._2.ofVector(diff)))
-        return Optional.of(NORMALIZE.apply(diff));
+      if (Scalars.lessThan(THRESHOLD, VectorNorm2.of(diff)))
+        return Optional.of(VectorNorm2.NORMALIZE.apply(diff));
     }
     // System.out.println("fail custom control");
     return Optional.empty();
@@ -34,6 +31,6 @@ public class R2TrajectoryControl extends StateTrajectoryControl {
 
   @Override // from StateTrajectoryControl
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
+    return VectorNorm2Squared.between(x, y);
   }
 }

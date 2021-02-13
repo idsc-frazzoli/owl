@@ -5,12 +5,12 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNormInfinity;
 import junit.framework.TestCase;
 
 public class TensorNormTotalPreorderTest extends TestCase {
   public void testSimple() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     assertEquals(weakOrderComparator.compare(Tensors.vector(1, 3), Tensors.vector(3, 12)), OrderComparison.STRICTLY_PRECEDES);
     assertEquals(weakOrderComparator.compare(Tensors.vector(12, 3), Tensors.vector(3, 12)), OrderComparison.INDIFFERENT);
@@ -19,13 +19,13 @@ public class TensorNormTotalPreorderTest extends TestCase {
   }
 
   public void testVector() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
     OrderComparison weakOrderComparison = tensorNormWeakOrder.comparator().compare(Tensors.vector(0, 1, 2), Tensors.vector(0, 2, 1));
     assertEquals(weakOrderComparison, OrderComparison.INDIFFERENT);
   }
 
   public void testMatrix() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
     Tensor m1 = Tensors.fromString("{{1, 2}, {2, 3}}");
     Tensor m2 = Tensors.fromString("{{2, 1}, {2, 3}}");
     Tensor m3 = Tensors.fromString("{{1, 1}, {2, 3}}");

@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.itp.Interpolation;
 import ch.ethz.idsc.tensor.itp.LinearInterpolation;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder implements Serializable {
   public static final TrajectoryEntryFinder SPHERE_RN = new IntersectionEntryFinder(SphereCurveIntersection::new);
@@ -32,7 +32,7 @@ public final class IntersectionEntryFinder extends TrajectoryEntryFinder impleme
 
   @Override // from TrajectoryEntryFinder
   protected Stream<Scalar> sweep_variables(Tensor waypoints) {
-    MinMax minmax = MinMax.of(Tensor.of(waypoints.stream().map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
+    MinMax minmax = MinMax.of(Tensor.of(waypoints.stream().map(Extract2D.FUNCTION).map(VectorNorm2::of)));
     Interpolation interpolation = LinearInterpolation.of(Tensors.of(minmax.min(), minmax.max()));
     return IntStream.range(0, waypoints.length()) //
         .mapToObj(i -> RationalScalar.of(i, waypoints.length() - 1)) //

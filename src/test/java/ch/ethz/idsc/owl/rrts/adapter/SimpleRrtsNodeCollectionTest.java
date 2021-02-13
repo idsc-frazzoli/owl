@@ -9,10 +9,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
 
 public class SimpleRrtsNodeCollectionTest extends TestCase {
@@ -23,11 +23,11 @@ public class SimpleRrtsNodeCollectionTest extends TestCase {
       rrtsNodeCollection.insert(RrtsNode.createRoot(RandomVariate.of(distribution, 3), RealScalar.of(10)));
     Tensor center = Tensors.vector(0.5, 0.5, 0.5);
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(center, 3)) {
-      Scalar scalar = Norm._2.between(center, rrtsNode.state());
+      Scalar scalar = VectorNorm2.between(center, rrtsNode.state());
       assertTrue(Scalars.lessThan(scalar, RealScalar.of(0.3)));
     }
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(center, 3)) {
-      Scalar scalar = Norm._2.between(center, rrtsNode.state());
+      Scalar scalar = VectorNorm2.between(center, rrtsNode.state());
       assertTrue(Scalars.lessThan(scalar, RealScalar.of(0.3)));
     }
   }

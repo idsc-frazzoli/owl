@@ -11,8 +11,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -53,7 +53,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
       return RealScalar.ZERO;
     return Scalars.lessThan(angle, semi_pi_half) //
         ? (Scalar) normal.dot(local)
-        : Norm._2.ofVector(local);
+        : VectorNorm2.of(local);
   }
 
   /** @return {x, y, angle} */

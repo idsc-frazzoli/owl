@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Timing;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.MatrixNormInfinity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 import junit.framework.TestCase;
@@ -43,7 +43,7 @@ public class GeodesicFiltersTest extends TestCase {
     for (GeodesicFilters lieGroupFilters : GeodesicFilters.values()) {
       Tensor diff = map.get(lieGroupFilters).subtract(map.get(GeodesicFilters.BIINVARIANT_MEAN));
       diff.set(So2.MOD, Tensor.ALL, 2);
-      Scalar norm = Norm.INFINITY.ofMatrix(diff);
+      Scalar norm = MatrixNormInfinity.of(diff);
       Chop._02.requireZero(norm);
     }
   }

@@ -6,13 +6,13 @@ import java.util.Collection;
 
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.nrm.NormalizeTotal;
 import ch.ethz.idsc.tensor.opt.nd.EuclideanNdCenter;
 import ch.ethz.idsc.tensor.opt.nd.NdMatch;
 import ch.ethz.idsc.tensor.opt.nd.NdTreeMap;

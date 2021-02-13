@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
@@ -57,7 +57,8 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if
       Scalar cost = goalNode.costFromRoot();
-      Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
+      // FIXME abs!?
+      Scalar lowerBound = Ramp.of(VectorNorm2.of(stateGoal.subtract(stateRoot)).subtract(radius));
       if (Scalars.lessThan(cost, lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
     }

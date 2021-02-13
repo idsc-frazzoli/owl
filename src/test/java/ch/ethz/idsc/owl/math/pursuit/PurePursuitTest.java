@@ -10,19 +10,15 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class PurePursuitTest extends TestCase {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
-
   public void testRatioForwardLeftPositiveXUnit() {
     Tensor tensor = Tensors.fromString("{{.2[m], 0[m]}, {1[m], 1[m]}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, Quantity.of(1.0, "m"));
@@ -78,8 +74,8 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, 0}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
-    Tensor normal = NORMALIZE.apply(dir);
-    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(1, 0)));
+    Tensor normal = VectorNorm2.NORMALIZE.apply(dir);
+    Chop._12.requireClose(normal, VectorNorm2.NORMALIZE.apply(Tensors.vector(1, 0)));
     Optional<Scalar> optional = purePursuit.firstRatio();
     Scalar rate = optional.get();
     assertTrue(Scalars.isZero(rate));
@@ -110,8 +106,8 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0, 0}, {-1, -1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
-    Tensor normal = NORMALIZE.apply(dir);
-    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(-1, -1)));
+    Tensor normal = VectorNorm2.NORMALIZE.apply(dir);
+    Chop._12.requireClose(normal, VectorNorm2.NORMALIZE.apply(Tensors.vector(-1, -1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 
@@ -119,8 +115,8 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0, 0}, {-1, 1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
-    Tensor normal = NORMALIZE.apply(dir);
-    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(-1, 1)));
+    Tensor normal = VectorNorm2.NORMALIZE.apply(dir);
+    Chop._12.requireClose(normal, VectorNorm2.NORMALIZE.apply(Tensors.vector(-1, 1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 
@@ -128,8 +124,8 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0, 0.3}, {0, 1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
-    Tensor normal = NORMALIZE.apply(dir);
-    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(0, 1)));
+    Tensor normal = VectorNorm2.NORMALIZE.apply(dir);
+    Chop._12.requireClose(normal, VectorNorm2.NORMALIZE.apply(Tensors.vector(0, 1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 

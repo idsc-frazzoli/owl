@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.FoldList;
 import ch.ethz.idsc.tensor.fig.VisualRow;
 import ch.ethz.idsc.tensor.fig.VisualSet;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 public class CurveVisualSet {
   private static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
@@ -28,7 +28,7 @@ public class CurveVisualSet {
   /** @param points {{x1, y1}, {x2, y2}, ..., {xn, yn}} */
   public CurveVisualSet(Tensor points) {
     differences = Differences.of(points);
-    differencesNorm = Tensor.of(differences.stream().map(Norm._2::ofVector));
+    differencesNorm = Tensor.of(differences.stream().map(VectorNorm2::of));
     curvature = Curvature2D.string(points);
     arcLength0 = Accumulate.of(differencesNorm);
     arcLength1 = FoldList.of(Tensor::add, RealScalar.ZERO, differencesNorm);

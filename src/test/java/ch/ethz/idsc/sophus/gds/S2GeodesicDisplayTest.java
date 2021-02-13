@@ -8,12 +8,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
 
 public class S2GeodesicDisplayTest extends TestCase {
@@ -26,12 +24,11 @@ public class S2GeodesicDisplayTest extends TestCase {
     GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     Tensor xyz = geodesicDisplay.project(Tensors.vector(1, 2, 0));
     Tensor xy = geodesicDisplay.toPoint(xyz);
-    Tolerance.CHOP.requireClose(Norm._2.ofVector(xy), RealScalar.ONE);
+    Tolerance.CHOP.requireClose(VectorNorm2.of(xy), RealScalar.ONE);
   }
 
   public void testTangent() {
-    TensorUnaryOperator normalize = Normalize.with(Norm._2);
-    Tensor xyz = normalize.apply(Tensors.vector(1, 0.3, 0.5));
+    Tensor xyz = VectorNorm2.NORMALIZE.apply(Tensors.vector(1, 0.3, 0.5));
     Tensor matrix = S2GeodesicDisplay.tangentSpace(xyz);
     assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
     Tolerance.CHOP.requireAllZero(matrix.dot(xyz));

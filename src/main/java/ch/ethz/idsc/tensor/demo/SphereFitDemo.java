@@ -28,11 +28,11 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
 import ch.ethz.idsc.tensor.opt.rn.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.rn.SphereFit;
 import ch.ethz.idsc.tensor.opt.rn.WeiszfeldMethod;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {
@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     {
       new PathRender(Color.GRAY).setCurve(CIRCLE, true).render(geometricLayer, graphics);
       Tensor matrix = Tensors.matrix((i, j) -> //
-      Norm._2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
+      VectorNorm2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
       int[] matching = bipartiteMatching.matching();
       graphics.setColor(Color.RED);

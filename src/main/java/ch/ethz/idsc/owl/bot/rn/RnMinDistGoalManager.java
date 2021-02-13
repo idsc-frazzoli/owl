@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 /** objective is minimum path length.
  * path length is measured in Euclidean distance using Norm._2::ofVector.
@@ -47,7 +47,7 @@ public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     // assumes that flow is along a straight line
-    return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
+    return VectorNorm2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
   }
 
   @Override // from HeuristicFunction

@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ImageFormat;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.red.Norm;
 
 // 4 22 35
 /* package */ class BipartitionImage {
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor points1 = RandomVariate.of(UniformDistribution.unit(), random, 9, 2);
     Tensor points2 = RandomVariate.of(UniformDistribution.unit(), random, 13, 2);
     // Tensor cost = points1.stream().map(p -> Tensor.of(points2.stream().map(r -> Norm._2.between(p, r))));
-    Tensor matrix = Tensors.matrix((i, j) -> Norm._2.between(points1.get(i), points2.get(j)), points1.length(), points2.length());
+    Tensor matrix = Tensors.matrix((i, j) -> VectorNorm2.between(points1.get(i), points2.get(j)), points1.length(), points2.length());
     BipartiteMatching hungarianAlgorithm = BipartiteMatching.of(matrix);
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2_2);
     RenderQuality.setQuality(graphics);

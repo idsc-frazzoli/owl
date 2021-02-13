@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from StateTrajectoryControl
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
-    return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
+    return VectorNorm2Squared.of(Se2Wrap.INSTANCE.difference(x, y));
   }
 
   @Override // from AbstractEntity

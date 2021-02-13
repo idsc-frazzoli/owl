@@ -50,9 +50,9 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
 import ch.ethz.idsc.tensor.mat.Mahalanobis;
-import ch.ethz.idsc.tensor.red.Hypot;
+import ch.ethz.idsc.tensor.nrm.Hypot;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Round;
 
@@ -319,7 +319,7 @@ public class LeversRender {
     // ---
     if (tangentPlane) {
       if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
-        Scalar max = vs.stream().map(Norm._2::ofVector).reduce(Max::of).orElse(RealScalar.ONE);
+        Scalar max = vs.stream().map(VectorNorm2::of).reduce(Max::of).orElse(RealScalar.ONE);
         graphics.setColor(COLOR_PLANE);
         graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(max), true));
       }
