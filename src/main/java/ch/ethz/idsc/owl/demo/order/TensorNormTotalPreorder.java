@@ -19,8 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
 public class TensorNormTotalPreorder implements BinaryRelation<Tensor>, Serializable {
   private final TensorNorm tensorNorm;
 
-  public TensorNormTotalPreorder(TensorNorm norm) {
-    this.tensorNorm = norm;
+  public TensorNormTotalPreorder(TensorNorm tensorNorm) {
+    this.tensorNorm = tensorNorm;
   }
 
   @Override // from BinaryRelation

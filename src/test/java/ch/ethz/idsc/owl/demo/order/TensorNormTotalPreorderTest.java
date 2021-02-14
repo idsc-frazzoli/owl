@@ -1,10 +1,16 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.order.OrderComparator;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
+import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.nrm.MatrixNormInfinity;
 import ch.ethz.idsc.tensor.nrm.VectorNormInfinity;
 import junit.framework.TestCase;
 
@@ -24,8 +30,9 @@ public class TensorNormTotalPreorderTest extends TestCase {
     assertEquals(weakOrderComparison, OrderComparison.INDIFFERENT);
   }
 
-  public void testMatrix() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+  public void testMatrix() throws ClassNotFoundException, IOException {
+    TensorNormTotalPreorder tensorNormWeakOrder = //
+        Serialization.copy(new TensorNormTotalPreorder((TensorNorm & Serializable) MatrixNormInfinity::of));
     Tensor m1 = Tensors.fromString("{{1, 2}, {2, 3}}");
     Tensor m2 = Tensors.fromString("{{2, 1}, {2, 3}}");
     Tensor m3 = Tensors.fromString("{{1, 1}, {2, 3}}");
