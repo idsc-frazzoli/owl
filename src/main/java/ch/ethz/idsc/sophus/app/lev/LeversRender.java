@@ -23,7 +23,6 @@ import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.hs.sn.TSnProjection;
 import ch.ethz.idsc.sophus.math.Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -400,7 +399,7 @@ public class LeversRender {
       vs = CIRCLE;
     else //
     if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
-      vs = CIRCLE.dot(TSnProjection.of(p));
+      vs = CIRCLE; // .dot(TSnProjection.of(p));
     else //
     if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay) {
       vs = Tensor.of(CIRCLE.stream().map(PadRight.zeros(3)));

@@ -76,13 +76,23 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
       Tensor basis2 = domain.map(jToggleLagra.isSelected() //
           ? BarycentricMetricInterpolation.la(knots, InversePowerVariogram.of(2))
           : BarycentricMetricInterpolation.of(knots, InversePowerVariogram.of(2)));
-      new PathRender(Color.RED) //
-          .setCurve(Tensor.of(basis2.stream().map(weights -> biinvariantMean.mean(control, weights))), false) //
-          .render(geometricLayer, graphics);
+      try {
+        Tensor curve = Tensor.of(basis2.stream().map(weights -> biinvariantMean.mean(control, weights)));
+        new PathRender(Color.RED) //
+            .setCurve(curve, false) //
+            .render(geometricLayer, graphics);
+      } catch (Exception exception) {
+        System.err.println("no can do");
+      }
       Tensor basis1 = domain.map(BarycentricRationalInterpolation.of(knots, spinnerDegree.getValue()));
-      new PathRender(Color.BLUE) //
-          .setCurve(Tensor.of(basis1.stream().map(weights -> biinvariantMean.mean(control, weights))), false) //
-          .render(geometricLayer, graphics);
+      try {
+        Tensor curve = Tensor.of(basis1.stream().map(weights -> biinvariantMean.mean(control, weights)));
+        new PathRender(Color.BLUE) //
+            .setCurve(curve, false) //
+            .render(geometricLayer, graphics);
+      } catch (Exception exception) {
+        System.err.println("no can do");
+      }
       if (jToggleBasis.isSelected()) {
         {
           VisualSet visualSet = new VisualSet();

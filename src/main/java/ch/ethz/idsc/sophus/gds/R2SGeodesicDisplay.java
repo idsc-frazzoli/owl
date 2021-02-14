@@ -10,7 +10,6 @@ import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieTransport;
-import ch.ethz.idsc.sophus.lie.r2s.R2SBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGeodesic;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGroup;
 import ch.ethz.idsc.sophus.lie.r2s.R2SManifold;
@@ -96,7 +95,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return R2SBiinvariantMean.INSTANCE;
+    return null;
   }
 
   @Override
