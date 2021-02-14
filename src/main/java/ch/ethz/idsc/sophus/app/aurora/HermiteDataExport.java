@@ -9,10 +9,10 @@ import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
@@ -86,7 +86,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   private void processAll() throws IOException {
     HsExponential hsExponential = Se2CoveringManifold.INSTANCE;
-    HsTransport hsTransport = Se2CoveringTransport.INSTANCE;
+    HsTransport hsTransport = LieTransport.INSTANCE;
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     {
       HermiteSubdivision hermiteSubdivision = //

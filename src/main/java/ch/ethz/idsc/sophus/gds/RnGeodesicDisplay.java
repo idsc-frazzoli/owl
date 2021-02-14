@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
@@ -19,7 +20,6 @@ import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnLineDistance;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -80,7 +80,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
-    return RnTransport.INSTANCE;
+    return LieTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

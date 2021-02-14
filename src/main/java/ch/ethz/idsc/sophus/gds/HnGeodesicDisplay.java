@@ -15,10 +15,10 @@ import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
 import ch.ethz.idsc.sophus.hs.hn.HnManifold;
 import ch.ethz.idsc.sophus.hs.hn.HnMetric;
 import ch.ethz.idsc.sophus.hs.hn.HnMetricBiinvariant;
+import ch.ethz.idsc.sophus.hs.hn.HnTransport;
 import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -96,7 +96,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
-    return RnTransport.INSTANCE;
+    return HnTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

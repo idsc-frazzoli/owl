@@ -13,9 +13,9 @@ import ch.ethz.idsc.sophus.hs.spd.SpdBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.hs.spd.SpdManifold;
 import ch.ethz.idsc.sophus.hs.spd.SpdMetric;
+import ch.ethz.idsc.sophus.hs.spd.SpdTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -104,7 +104,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE;
+    return SpdTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

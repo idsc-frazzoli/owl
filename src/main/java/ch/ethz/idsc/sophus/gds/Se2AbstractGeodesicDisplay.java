@@ -6,8 +6,8 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.HsTransport;
+import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
@@ -42,7 +42,7 @@ public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Ser
 
   @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
-    return Se2CoveringTransport.INSTANCE;
+    return LieTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

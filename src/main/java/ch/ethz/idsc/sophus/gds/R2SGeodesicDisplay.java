@@ -10,12 +10,12 @@ import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.r2s.R2SBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.r2s.R2SExponential;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGeodesic;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGroup;
 import ch.ethz.idsc.sophus.lie.r2s.R2SManifold;
-import ch.ethz.idsc.sophus.lie.rn.RnTransport;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -83,7 +83,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsTransport hsTransport() {
-    return RnTransport.INSTANCE;
+    return LieTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

@@ -9,8 +9,8 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
+import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringManifold;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringTransport;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 
 /* package */ abstract class ProxyHermite {
   static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
-  static final HsTransport HS_TRANSPORT = Se2CoveringTransport.INSTANCE;
+  static final HsTransport HS_TRANSPORT = LieTransport.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;
   private static final int ROWS = 135 * 1;
