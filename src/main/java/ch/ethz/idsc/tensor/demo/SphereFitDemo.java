@@ -17,7 +17,9 @@ import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
+import ch.ethz.idsc.sophus.lie.rn.WeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.math.SpatialMedian;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -30,9 +32,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
-import ch.ethz.idsc.tensor.opt.rn.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.rn.SphereFit;
-import ch.ethz.idsc.tensor.opt.rn.WeiszfeldMethod;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {

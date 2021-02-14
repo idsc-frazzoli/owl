@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.lie.rn.RigidMotionFit;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -14,7 +15,6 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.opt.rn.RigidMotionFit;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;

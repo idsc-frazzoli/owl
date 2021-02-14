@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.rn.RigidMotionFit;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.opt.rn.RigidMotionFit;
 
 /** Reference:
  * "Weighted Averages on Surfaces"
