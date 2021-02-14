@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
 import ch.ethz.idsc.sophus.hs.rpn.RpnMetric;
 import ch.ethz.idsc.sophus.hs.rpn.RpnRandomSample;
@@ -82,11 +81,6 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
     return SnFastMean.INSTANCE; // TODO
-  }
-
-  @Override // from GeodesicDisplay
-  public final VectorLogManifold vectorLogManifold() {
-    return RpnManifold.INSTANCE;
   }
 
   @Override

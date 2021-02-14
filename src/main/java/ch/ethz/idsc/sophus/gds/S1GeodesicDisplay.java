@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.gds;
 
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.hs.sn.SnManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -42,10 +40,5 @@ public class S1GeodesicDisplay extends SnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor xy) {
     return Se2Matrix.translation(toPoint(xy));
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
-    return SnManifold.INSTANCE;
   }
 }

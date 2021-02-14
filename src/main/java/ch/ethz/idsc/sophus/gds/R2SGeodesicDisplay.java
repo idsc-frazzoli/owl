@@ -7,12 +7,10 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.r2s.R2SBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.r2s.R2SExponential;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGeodesic;
 import ch.ethz.idsc.sophus.lie.r2s.R2SGroup;
 import ch.ethz.idsc.sophus.lie.r2s.R2SManifold;
@@ -78,7 +76,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), R2SExponential.INSTANCE);
+    return R2SManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -99,11 +97,6 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return R2SBiinvariantMean.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
-    return R2SManifold.INSTANCE;
   }
 
   @Override

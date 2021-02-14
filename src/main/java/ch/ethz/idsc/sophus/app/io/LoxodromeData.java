@@ -6,7 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.s2.Loxodrome;
+import ch.ethz.idsc.sophus.hs.sn.S2Loxodrome;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 /* package */ enum LoxodromeData {
   ;
   public static void main(String[] args) throws IOException {
-    Tensor tensor = Subdivide.of(0, 4.5, 250).map(AbsSquared.FUNCTION).map(Loxodrome.of(RealScalar.of(0.15)));
+    Tensor tensor = Subdivide.of(0, 4.5, 250).map(AbsSquared.FUNCTION).map(S2Loxodrome.of(RealScalar.of(0.15)));
     Export.of(HomeDirectory.file("loxodrome_exact.csv"), tensor);
     Tensor noise = RandomVariate.of(NormalDistribution.of(0, 0.05), Dimensions.of(tensor));
     tensor = tensor.add(noise);

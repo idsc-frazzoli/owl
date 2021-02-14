@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       Tensor origin = optional.get();
-      VectorLogManifold vectorLogManifold = geodesicDisplay().vectorLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay().hsExponential();
       final Tensor sequence = getSequence();
       final Tensor levers2 = Tensor.of(sequence.stream().map(vectorLogManifold.logAt(origin)::vectorLog));
       {

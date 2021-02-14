@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   public Tensor distanceMatrix(Tensor sequence) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    TensorUnaryOperator tuo = biinvariant().distances(geodesicDisplay.vectorLogManifold(), sequence);
+    TensorUnaryOperator tuo = biinvariant().distances(geodesicDisplay.hsExponential(), sequence);
     Tensor matrix = Tensor.of(sequence.stream().map(tuo));
     return SymmetricMatrixQ.of(matrix) //
         ? matrix

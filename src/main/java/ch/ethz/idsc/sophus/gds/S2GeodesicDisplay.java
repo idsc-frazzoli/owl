@@ -3,9 +3,7 @@ package ch.ethz.idsc.sophus.gds;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.hs.s2.S2Exponential;
-import ch.ethz.idsc.sophus.hs.s2.S2Manifold;
+import ch.ethz.idsc.sophus.hs.sn.TSnProjection;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -48,7 +46,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
   /** @param xyz normalized vector, point on 2-dimensional sphere
    * @return 2 x 3 matrix with rows spanning the space tangent to given xyz */
   /* package */ static Tensor tangentSpace(Tensor xyz) {
-    return new S2Exponential(xyz).projection();
+    return TSnProjection.of(xyz);
   }
 
   @Override // from GeodesicDisplay
@@ -97,10 +95,5 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public GeodesicArrayPlot geodesicArrayPlot() {
     return S2ArrayPlot.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
-    return S2Manifold.INSTANCE;
   }
 }

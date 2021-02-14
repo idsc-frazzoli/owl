@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     if (optional.isPresent()) {
       Tensor sequence = getSequence();
       Tensor origin = optional.get();
-      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay.hsExponential();
       TensorUnaryOperator tensorUnaryOperator = //
           logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);
       Tensor weights = tensorUnaryOperator.apply(origin);

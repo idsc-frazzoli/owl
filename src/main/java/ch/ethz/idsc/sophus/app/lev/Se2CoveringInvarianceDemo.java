@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     if (0 < controlPointsAll.length()) {
-      VectorLogManifold vectorLogManifold = geodesicDisplay.vectorLogManifold();
+      VectorLogManifold vectorLogManifold = geodesicDisplay.hsExponential();
       {
         Tensor sequence = controlPointsAll.extract(1, controlPointsAll.length());
         Tensor origin = controlPointsAll.get(0);

@@ -70,7 +70,7 @@ public abstract class LogWeightingBase extends AbstractPlaceDemo {
   protected abstract TensorUnaryOperator operator(VectorLogManifold vectorLogManifold, Tensor sequence);
 
   protected final TensorUnaryOperator operator(Tensor sequence) {
-    return operator(geodesicDisplay().vectorLogManifold(), sequence);
+    return operator(geodesicDisplay().hsExponential(), sequence);
   }
 
   protected abstract TensorScalarFunction function(Tensor sequence, Tensor values);

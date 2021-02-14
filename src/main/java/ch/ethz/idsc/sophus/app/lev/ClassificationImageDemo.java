@@ -201,7 +201,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator operator = logWeighting.operator( //
           biinvariant, //
-          geodesicDisplay().vectorLogManifold(), //
+          geodesicDisplay().hsExponential(), //
           variogram(), //
           sequence);
       System.out.print("computing " + biinvariant);

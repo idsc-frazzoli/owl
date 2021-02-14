@@ -89,7 +89,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
       }
       for (LogWeighting logWeighting : array) {
         TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
-            null, geodesicDisplay.vectorLogManifold(), null, sequence);
+            null, geodesicDisplay.hsExponential(), null, sequence);
         System.out.print("computing " + logWeighting);
         // GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
         int refinement = resolution();

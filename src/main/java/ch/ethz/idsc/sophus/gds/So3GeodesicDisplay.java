@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -115,11 +114,6 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return So3BiinvariantMean.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
-    return So3Manifold.INSTANCE;
   }
 
   @Override

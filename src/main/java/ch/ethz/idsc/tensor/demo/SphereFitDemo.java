@@ -97,7 +97,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     {
       Biinvariant biinvariant = MetricBiinvariant.RIEMANN;
       TensorUnaryOperator weightingInterface = //
-          biinvariant.weighting(geodesicDisplay.vectorLogManifold(), InversePowerVariogram.of(1), control);
+          biinvariant.weighting(geodesicDisplay.hsExponential(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);
       Optional<Tensor> optional = spatialMedian.uniform(control);
       if (optional.isPresent()) {

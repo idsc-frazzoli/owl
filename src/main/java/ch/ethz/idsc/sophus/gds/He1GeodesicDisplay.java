@@ -6,12 +6,10 @@ import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieTransport;
 import ch.ethz.idsc.sophus.lie.he.HeBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.he.HeExponential;
 import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
 import ch.ethz.idsc.sophus.lie.he.HeGroup;
 import ch.ethz.idsc.sophus.lie.he.HeManifold;
@@ -79,7 +77,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return LieExponential.of(lieGroup(), HeExponential.INSTANCE);
+    return HeManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -100,11 +98,6 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
     return HeBiinvariantMean.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
-    return HeManifold.INSTANCE;
   }
 
   @Override

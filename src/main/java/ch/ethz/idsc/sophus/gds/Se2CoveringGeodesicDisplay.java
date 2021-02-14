@@ -5,7 +5,6 @@ import java.util.Random;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametric;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -52,11 +51,6 @@ public class Se2CoveringGeodesicDisplay extends Se2AbstractGeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public HsExponential hsExponential() {
-    return Se2CoveringManifold.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
-  public VectorLogManifold vectorLogManifold() {
     return Se2CoveringManifold.INSTANCE;
   }
 

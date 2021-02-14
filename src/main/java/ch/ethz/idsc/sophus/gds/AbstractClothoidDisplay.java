@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsExponential;
 import ch.ethz.idsc.sophus.hs.HsTransport;
-import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -78,11 +77,6 @@ public abstract class AbstractClothoidDisplay implements GeodesicDisplay, Serial
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return null;
-  }
-
-  @Override // from GeodesicDisplay
-  public final VectorLogManifold vectorLogManifold() {
     return null;
   }
 

@@ -51,7 +51,7 @@ public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWe
       Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
           biinvariant, //
-          geodesicDisplay().vectorLogManifold(), //
+          geodesicDisplay().hsExponential(), //
           variogram(), //
           sequence);
       System.out.print("computing " + biinvariant);
