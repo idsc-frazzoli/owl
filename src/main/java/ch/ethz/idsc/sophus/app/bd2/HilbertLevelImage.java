@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 /* package */ enum HilbertLevelImage {
   ;
   public static BufferedImage of(GeodesicDisplay geodesicDisplay, Tensor sequence, int res, ColorDataGradient colorDataGradient, int max) {
-    TensorUnaryOperator tuo = IterativeGenesis.counts(geodesicDisplay.hsExponential(), sequence, max);
+    TensorUnaryOperator tuo = IterativeGenesis.counts(geodesicDisplay.hsManifold(), sequence, max);
     int sequence_length = IterativeGenesis.values().length;
     Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence_length);
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();

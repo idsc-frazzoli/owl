@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    HsExponential hsExponential = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
+    HsManifold hsExponential = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
     // ---
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor p = sequence.get(0);

@@ -193,7 +193,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-        geodesicDisplay.hsExponential(), //
+        geodesicDisplay.hsManifold(), //
         geodesicDisplay.hsTransport(), //
         geodesicDisplay.biinvariantMean());
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);

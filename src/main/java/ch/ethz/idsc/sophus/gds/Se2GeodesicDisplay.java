@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.gds;
 import java.util.Random;
 
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -53,7 +53,7 @@ public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public HsExponential hsExponential() {
+  public HsManifold hsManifold() {
     return Se2Manifold.INSTANCE;
   }
 

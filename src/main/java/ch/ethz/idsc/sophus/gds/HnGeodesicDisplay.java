@@ -7,7 +7,7 @@ import java.util.Random;
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.hn.HnBiinvariantMean;
 import ch.ethz.idsc.sophus.hs.hn.HnGeodesic;
@@ -84,7 +84,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override
-  public final HsExponential hsExponential() {
+  public final HsManifold hsManifold() {
     return HnManifold.INSTANCE;
   }
 

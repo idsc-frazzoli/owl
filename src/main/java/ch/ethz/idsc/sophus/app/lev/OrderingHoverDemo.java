@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor sequence = RandomVariate.of(distribution, spinnerLength.getValue(), 3);
     setControlPointsSe2(sequence);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    VectorLogManifold vectorLogManifold = geodesicDisplay.hsExponential();
+    VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
     tensorUnaryOperator = //
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), getGeodesicControlPoints());
   }

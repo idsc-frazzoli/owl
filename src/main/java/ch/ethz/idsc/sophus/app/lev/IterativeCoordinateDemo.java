@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.Tensors;
           LeversRender.of(geodesicDisplay, sequence, origin, geometricLayer, graphics);
       leversRender.renderSurfaceP();
       LeversHud.render(bitype(), leversRender, null);
-      VectorLogManifold vectorLogManifold = geodesicDisplay.hsExponential();
+      VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
       HsDesign hsDesign = new HsDesign(vectorLogManifold);
       try {
         Tensor matrix = IterativeCoordinateMatrix.of(spinnerTotal.getValue()).origin(hsDesign.matrix(sequence, origin));

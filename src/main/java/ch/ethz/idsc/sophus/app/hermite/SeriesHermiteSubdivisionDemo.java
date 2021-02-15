@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.N;
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       HermiteSubdivision hermiteSubdivision = //
           spinnerLabelScheme.getValue().supply( //
-              geodesicDisplay.hsExponential(), //
+              geodesicDisplay.hsManifold(), //
               geodesicDisplay.hsTransport(), //
               geodesicDisplay.biinvariantMean());
       Tensor control = N.DOUBLE.of(_control);

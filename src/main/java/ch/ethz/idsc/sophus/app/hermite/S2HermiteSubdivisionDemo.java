@@ -125,7 +125,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
     }
     HermiteSubdivisions hermiteSubdivisions = spinnerLabelScheme.getValue();
     HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
-        geodesicDisplay.hsExponential(), //
+        geodesicDisplay.hsManifold(), //
         geodesicDisplay.hsTransport(), //
         geodesicDisplay.biinvariantMean());
     if (1 < control.length()) {

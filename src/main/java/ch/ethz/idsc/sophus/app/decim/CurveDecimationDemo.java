@@ -130,7 +130,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
     LineDistances lineDistances = spinnerType.getValue();
     CurveDecimation curveDecimation = CurveDecimation.of( //
-        lineDistances.supply(geodesicDisplay.hsExponential()), epsilon);
+        lineDistances.supply(geodesicDisplay.hsManifold()), epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Result result = curveDecimation.evaluate(control);
     Tensor simplified = result.result();

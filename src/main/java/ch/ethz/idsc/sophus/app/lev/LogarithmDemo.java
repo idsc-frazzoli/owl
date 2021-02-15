@@ -101,7 +101,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
           graphics.setColor(DOMAIN_D);
           graphics.draw(path2d);
         }
-        TangentSpace tangentSpace = geodesicDisplay.hsExponential().logAt(origin);
+        TangentSpace tangentSpace = geodesicDisplay.hsManifold().logAt(origin);
         final Tensor domain = Drop.tail(Subdivide.of(0.0, 1.0, spinnerLength.getValue()), 1);
         geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         GRID_RENDER.render(geometricLayer, graphics);

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.crv.decim.LineDistance;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
@@ -59,7 +59,7 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   }
 
   @Override
-  public final HsExponential hsExponential() {
+  public final HsManifold hsManifold() {
     return RpnManifold.INSTANCE;
   }
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.hs.HsExponential;
+import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.r2.Se2Parametric;
 import ch.ethz.idsc.sophus.lie.LieTransport;
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 
 /* package */ abstract class ProxyHermite {
-  static final HsExponential HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
+  static final HsManifold HS_EXPONENTIAL = Se2CoveringManifold.INSTANCE;
   static final HsTransport HS_TRANSPORT = LieTransport.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;

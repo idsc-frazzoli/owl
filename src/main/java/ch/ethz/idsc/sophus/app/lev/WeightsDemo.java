@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
             : new Biinvariant[] { Biinvariants.LEVERAGES, Biinvariants.HARBOR, Biinvariants.GARDEN, metric };
         Tensor matrix = Tensors.empty();
         int[] minIndex = new int[biinvariants.length];
-        VectorLogManifold vectorLogManifold = geodesicDisplay.hsExponential();
+        VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
         for (int index = 0; index < biinvariants.length; ++index) {
           TensorUnaryOperator tensorUnaryOperator = //
               logWeighting().operator( //
