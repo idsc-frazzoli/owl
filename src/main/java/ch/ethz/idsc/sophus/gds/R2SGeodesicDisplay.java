@@ -90,7 +90,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Biinvariant metricBiinvariant() {
-    return MetricBiinvariant.RIEMANN;
+    return MetricBiinvariant.EUCLIDEAN;
   }
 
   @Override // from GeodesicDisplay

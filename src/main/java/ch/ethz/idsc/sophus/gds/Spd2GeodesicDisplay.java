@@ -113,7 +113,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Biinvariant metricBiinvariant() {
-    return MetricBiinvariant.RIEMANN;
+    return MetricBiinvariant.VECTORIZE0;
   }
 
   @Override // from GeodesicDisplay

@@ -95,7 +95,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     {
-      Biinvariant biinvariant = MetricBiinvariant.RIEMANN;
+      Biinvariant biinvariant = MetricBiinvariant.EUCLIDEAN;
       TensorUnaryOperator weightingInterface = //
           biinvariant.weighting(geodesicDisplay.hsManifold(), InversePowerVariogram.of(1), control);
       SpatialMedian spatialMedian = HsWeiszfeldMethod.of(geodesicDisplay.biinvariantMean(), weightingInterface, Chop._06);

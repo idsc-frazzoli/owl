@@ -108,7 +108,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
 
   @Override // from GeodesicDisplay
   public Biinvariant metricBiinvariant() {
-    return MetricBiinvariant.RIEMANN;
+    return MetricBiinvariant.EUCLIDEAN;
   }
 
   @Override // from GeodesicDisplay

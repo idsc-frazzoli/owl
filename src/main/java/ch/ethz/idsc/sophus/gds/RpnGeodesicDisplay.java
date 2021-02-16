@@ -75,7 +75,7 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
 
   @Override // from GeodesicDisplay
   public final Biinvariant metricBiinvariant() {
-    return MetricBiinvariant.RIEMANN;
+    return MetricBiinvariant.EUCLIDEAN;
   }
 
   @Override // from GeodesicDisplay
