@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.red.Total;
       try {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         // ---
-        GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+        Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
         final ScalarTensorFunction curve = geodesicInterface.curve(sequence.get(0), sequence.get(1));
         {
           Tensor tensor = Subdivide.of(-0.5, 1.5, 55).map(curve);

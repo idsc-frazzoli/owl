@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ref.d2.CatmullClarkRefinement;
 import ch.ethz.idsc.sophus.ref.d2.SurfaceMeshRefinement;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.io.Primitives;
       geometricLayer.popMatrix();
     }
     if (ctrl.isSelected()) {
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       Tensor domain = Subdivide.of(0.0, 1.0, 10);
       Set<Tensor> set = new HashSet<>();
       for (Tensor ind : surfaceMesh.ind) {

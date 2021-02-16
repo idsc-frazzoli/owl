@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.MinimumSpanningTree;
 import ch.ethz.idsc.sophus.math.MinimumSpanningTree.Edge;
 import ch.ethz.idsc.sophus.math.MinimumSpanningTree.EdgeComparator;
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     RenderQuality.setQuality(graphics);
     Tensor sequence = getGeodesicControlPoints();
     Tensor domain = Subdivide.of(0.0, 1.0, 10);

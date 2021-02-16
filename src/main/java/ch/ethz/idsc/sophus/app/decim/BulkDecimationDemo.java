@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     if (0 == length)
       return;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);
     RenderQuality.setQuality(graphics);

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.subdiv;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.sophus.math.ParametricCurve;
 import ch.ethz.idsc.sophus.math.SplitInterface;
@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.itp.BinaryAverage;
   BSPLINE6 {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       return BSpline6CurveSubdivision.of(geodesicInterface);
     }
   },
@@ -175,14 +175,14 @@ import ch.ethz.idsc.tensor.itp.BinaryAverage;
   C2CUBIC {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       return DualC2FourPointCurveSubdivision.cubic(geodesicInterface);
     }
   },
   C2TIGHT {
     @Override
     public CurveSubdivision of(GeodesicDisplay geodesicDisplay) {
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       return DualC2FourPointCurveSubdivision.tightest(geodesicInterface);
     }
   },

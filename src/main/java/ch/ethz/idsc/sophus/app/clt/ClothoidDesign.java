@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     graphics.setColor(Color.BLUE);
     graphics.setStroke(new BasicStroke(2));
     Scalar value = spinnerBeta.getValue();
-    GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay().geodesicInterface();
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     for (int index = 0; index < sequence.length() - 2; index += 3) {
       Tensor cr = sequence.get(index + 0);

@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.lie.r2s.R2SGroup;
 import ch.ethz.idsc.sophus.lie.r2s.R2SManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.so2.So2;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +27,7 @@ public enum R2SGeodesicDisplay implements GeodesicDisplay {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return R2SGeodesic.INSTANCE;
   }
 

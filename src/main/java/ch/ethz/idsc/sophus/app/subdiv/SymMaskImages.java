@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ref.d1.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.ref.d1.BSpline3CurveSubdivision;
@@ -43,12 +43,12 @@ import ch.ethz.idsc.tensor.Tensor;
   C2CUBIC(DualC2FourPointCurveSubdivision::cubic, 6, 2, 3), //
   SIXPOINT(SixPointCurveSubdivision::new, 6, 0, 5);
 
-  private final Function<GeodesicInterface, CurveSubdivision> function;
+  private final Function<Geodesic, CurveSubdivision> function;
   private final int support;
   private final int index0;
   private final int index1;
 
-  private SymMaskImages(Function<GeodesicInterface, CurveSubdivision> function, int support, int index0, int index1) {
+  private SymMaskImages(Function<Geodesic, CurveSubdivision> function, int support, int index0, int index1) {
     this.function = function;
     this.support = support;
     this.index0 = index0;

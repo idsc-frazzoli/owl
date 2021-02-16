@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.hs.spd.SpdTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,7 +36,7 @@ public enum Spd2GeodesicDisplay implements GeodesicDisplay {
   private static final TensorUnaryOperator PAD_RIGHT = PadRight.zeros(3, 3);
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return SpdGeodesic.INSTANCE;
   }
 

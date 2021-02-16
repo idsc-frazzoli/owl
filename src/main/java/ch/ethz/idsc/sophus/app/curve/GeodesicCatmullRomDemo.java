@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -69,7 +69,7 @@ public class GeodesicCatmullRomDemo extends AbstractCurvatureDemo {
     renderControlPoints(geometricLayer, graphics);
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       Scalar exponent = RationalScalar.of(2 * jSliderExponent.getValue(), jSliderExponent.getMaximum());
       TensorUnaryOperator centripetalKnotSpacing = //
           KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), exponent);

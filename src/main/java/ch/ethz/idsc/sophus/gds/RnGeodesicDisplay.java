@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnLineDistance;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -37,7 +37,7 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final GeodesicInterface geodesicInterface() {
+  public final Geodesic geodesicInterface() {
     return RnGeodesic.INSTANCE;
   }
 

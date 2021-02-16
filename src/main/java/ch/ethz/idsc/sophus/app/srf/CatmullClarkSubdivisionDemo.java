@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.sophus.ref.d2.GeodesicCatmullClarkSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     GeodesicCatmullClarkSubdivision catmullClarkSubdivision = //
         new GeodesicCatmullClarkSubdivision(geodesicInterface);
     Tensor refined = Nest.of( //

@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -45,9 +45,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    HsManifold hsExponential = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
+    HsManifold hsManifold = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
     // ---
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor p = sequence.get(0);
     Tensor q = sequence.get(1);
     {
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       graphics.setColor(Color.BLUE);
       graphics.draw(path2d);
     }
-    Exponential exponential = hsExponential.exponential(p);
+    Exponential exponential = hsManifold.exponential(p);
     Tensor log = exponential.log(q);
     Tensor matrix = Join.of(Tensors.of(log), IdentityMatrix.of(3));
     Tensor tensor = Orthogonalize.of(matrix).extract(0, 3);

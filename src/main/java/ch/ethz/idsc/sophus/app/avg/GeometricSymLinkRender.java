@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.sym.SymLink;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   /***************************************************/
   private final GeodesicDisplay geodesicDisplay;
-  private final GeodesicInterface geodesicInterface;
+  private final Geodesic geodesicInterface;
 
   private GeometricSymLinkRender(GeodesicDisplay geodesicDisplay) {
     this.geodesicDisplay = geodesicDisplay;

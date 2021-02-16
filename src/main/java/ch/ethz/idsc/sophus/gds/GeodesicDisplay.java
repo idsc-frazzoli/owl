@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
  * but not in the library functions. */
 public interface GeodesicDisplay {
   /** @return */
-  GeodesicInterface geodesicInterface();
+  Geodesic geodesicInterface();
 
   int dimensions();
 

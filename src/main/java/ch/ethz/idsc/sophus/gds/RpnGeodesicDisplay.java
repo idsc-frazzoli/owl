@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -34,7 +34,7 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
   }
 
   @Override // from GeodesicDisplay
-  public final GeodesicInterface geodesicInterface() {
+  public final Geodesic geodesicInterface() {
     return SnGeodesic.INSTANCE; // TODO
   }
 

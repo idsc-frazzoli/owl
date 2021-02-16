@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         new PathRender(Color.RED, 1.25f).setCurve(render, false).render(geometricLayer, graphics);
       }
     }
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = domain.map(BezierFunction.of(geodesicInterface, sequence));
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     Curvature2DRender.of(render, false, geometricLayer, graphics);

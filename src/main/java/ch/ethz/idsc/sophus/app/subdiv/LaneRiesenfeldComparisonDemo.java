@@ -21,7 +21,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.CurveVisualSet;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -139,7 +139,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine(control, levels, scheme.of(geodesicDisplay), //
         CurveSubdivisionHelper.isDual(scheme), false, geodesicInterface);
     // ---

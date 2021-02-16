@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.AppendOne;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.sophus.opt.SnLineDistances;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -134,7 +134,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         .render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
     // ---
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor cp = getGeodesicControlPoints();
     ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(cp.get(0), cp.get(1));
     graphics.setStroke(STROKE);

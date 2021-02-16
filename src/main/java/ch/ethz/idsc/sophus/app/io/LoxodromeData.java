@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.hs.sn.S2Loxodrome;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     tensor = tensor.add(noise);
     tensor = Tensor.of(tensor.stream().map(VectorNorm2.NORMALIZE));
     Export.of(HomeDirectory.file("loxodrome_noise.csv"), tensor);
-    GeodesicInterface geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
+    Geodesic geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {
       ScalarUnaryOperator smoothingKernel = windowFunctions.get();
       TensorUnaryOperator tensorUnaryOperator = //

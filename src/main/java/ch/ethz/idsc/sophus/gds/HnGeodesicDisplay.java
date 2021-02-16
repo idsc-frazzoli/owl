@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.hs.hn.HnWeierstrassCoordinate;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.ply.StarPoints;
@@ -44,7 +44,7 @@ public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final GeodesicInterface geodesicInterface() {
+  public final Geodesic geodesicInterface() {
     return HnGeodesic.INSTANCE;
   }
 

@@ -30,7 +30,7 @@ import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ref.d1.BSpline1CurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -174,7 +174,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine( //
         control, levels, spinnerLabel.getValue().of(geodesicDisplay), //
         CurveSubdivisionHelper.isDual(scheme), cyclic, geodesicInterface);

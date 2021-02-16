@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.lie.so3.So3BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.lie.so3.So3Manifold;
 import ch.ethz.idsc.sophus.lie.so3.So3Metric;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -48,7 +48,7 @@ public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
   }
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return So3Geodesic.INSTANCE;
   }
 

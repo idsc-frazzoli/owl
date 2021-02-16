@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarTensorFunction scalarTensorFunction = //
         DeBoor.of(geodesicInterface, knots, control);
     GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, control);

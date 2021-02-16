@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.sn.SnExponential;
 import ch.ethz.idsc.sophus.math.Do;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.sophus.opt.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.ref.d1h.HermiteSubdivision;
@@ -101,7 +101,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
           geodesicDisplay.createTangent(xy0, xya.Get(2)).multiply(vscale));
     }));
     POINTS_RENDER_0.show(geodesicDisplay()::matrixLift, getControlPointShape(), control.get(Tensor.ALL, 0)).render(geometricLayer, graphics);
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     { // render tangents as geodesic on sphere
       for (Tensor ctrl : control) {
         Tensor p = ctrl.get(0); // point

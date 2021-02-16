@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.Exponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     Exponential exponential = Se2CoveringExponential.INSTANCE;
     // ---
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor beg = sequence.get(0);
     Tensor end = sequence.get(1);
     ScalarTensorFunction curve = geodesicInterface.curve(beg, end);

@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.hs.sn.SnRandomSample;
 import ch.ethz.idsc.sophus.hs.sn.SnTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -38,7 +38,7 @@ public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable
   }
 
   @Override // from GeodesicDisplay
-  public final GeodesicInterface geodesicInterface() {
+  public final Geodesic geodesicInterface() {
     return SnGeodesic.INSTANCE;
   }
 

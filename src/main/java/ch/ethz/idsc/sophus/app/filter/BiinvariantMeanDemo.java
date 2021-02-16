@@ -24,7 +24,7 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.SpatialMedian;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -86,7 +86,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);
     RenderQuality.setQuality(graphics);
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     for (Tensor point : sequence) {
       Tensor curve = Subdivide.of(0, 1, 20).map(geodesicInterface.curve(point, mean));
       Path2D path2d = geometricLayer.toPath2D(curve);

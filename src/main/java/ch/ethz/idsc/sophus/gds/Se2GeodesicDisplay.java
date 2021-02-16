@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2Manifold;
 import ch.ethz.idsc.sophus.lie.so2.So2;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,7 +31,7 @@ public class Se2GeodesicDisplay extends Se2AbstractGeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return Se2Geodesic.INSTANCE;
   }
 

@@ -14,83 +14,83 @@ import ch.ethz.idsc.tensor.Scalar;
 public enum HermiteSubdivisions {
   HERMITE1 {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite1Subdivisions.of(hsExponential, hsTransport, LAMBDA, MU);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite1Subdivisions.of(hsManifold, hsTransport, LAMBDA, MU);
     }
   },
   H1STANDARD {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite1Subdivisions.standard(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite1Subdivisions.standard(hsManifold, hsTransport);
     }
   },
   /***************************************************/
   HERMITE2 {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite2Subdivisions.of(hsExponential, hsTransport, LAMBDA, MU);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite2Subdivisions.of(hsManifold, hsTransport, LAMBDA, MU);
     }
   },
   H2STANDARD {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite2Subdivisions.standard(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite2Subdivisions.standard(hsManifold, hsTransport);
     }
   },
   H2MANIFOLD {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite2Subdivisions.manifold(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite2Subdivisions.manifold(hsManifold, hsTransport);
     }
   },
   /***************************************************/
   HERMITE3 {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.of(hsExponential, hsTransport, THETA, OMEGA);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.of(hsManifold, hsTransport, THETA, OMEGA);
     }
   },
   H3STANDARD {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.of(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.of(hsManifold, hsTransport);
     }
   },
   H3A1 {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.a1(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.a1(hsManifold, hsTransport);
     }
   },
   H3A2 {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.a2(hsExponential, hsTransport);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.a2(hsManifold, hsTransport);
     }
   },
   /***************************************************/
   HERMITE3_BM {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.of(hsExponential, hsTransport, biinvariantMean, THETA, OMEGA);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.of(hsManifold, hsTransport, biinvariantMean, THETA, OMEGA);
     }
   },
   H3STANDARD_BM {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.of(hsExponential, hsTransport, biinvariantMean);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.of(hsManifold, hsTransport, biinvariantMean);
     }
   },
   H3A1_BM {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.a1(hsExponential, hsTransport, biinvariantMean);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.a1(hsManifold, hsTransport, biinvariantMean);
     }
   },
   H3A2_BM {
     @Override
-    public HermiteSubdivision supply(HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
-      return Hermite3Subdivisions.a2(hsExponential, hsTransport, biinvariantMean);
+    public HermiteSubdivision supply(HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean) {
+      return Hermite3Subdivisions.a2(hsManifold, hsTransport, biinvariantMean);
     }
   };
 
@@ -106,5 +106,5 @@ public enum HermiteSubdivisions {
    * @return
    * @throws Exception if either input parameter is null */
   public abstract HermiteSubdivision supply( //
-      HsManifold hsExponential, HsTransport hsTransport, BiinvariantMean biinvariantMean);
+      HsManifold hsManifold, HsTransport hsTransport, BiinvariantMean biinvariantMean);
 }

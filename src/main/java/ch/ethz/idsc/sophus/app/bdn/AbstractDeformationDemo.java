@@ -22,7 +22,7 @@ import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.gui.ren.ArrayRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -113,7 +113,7 @@ import ch.ethz.idsc.tensor.sca.N;
     }
     boolean isTarget = jToggleTarget.isSelected();
     if (isTarget) { // connect origin and target pairs with lines/geodesics
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       graphics.setColor(new Color(128, 128, 128, 255));
       graphics.setStroke(STROKE);
       for (int index = 0; index < origin.length(); ++index) {

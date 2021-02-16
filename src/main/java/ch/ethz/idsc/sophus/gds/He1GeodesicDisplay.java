@@ -14,7 +14,7 @@ import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
 import ch.ethz.idsc.sophus.lie.he.HeGroup;
 import ch.ethz.idsc.sophus.lie.he.HeManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,7 +29,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2)).unmodifiable();
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return HeGeodesic.INSTANCE;
   }
 

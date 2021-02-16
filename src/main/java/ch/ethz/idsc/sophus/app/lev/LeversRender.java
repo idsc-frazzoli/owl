@@ -24,7 +24,7 @@ import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.math.Exponential;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -180,7 +180,7 @@ public class LeversRender {
   }
 
   private void renderLeversRescaled(Tensor rescale) {
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     int index = 0;
     graphics.setStroke(STROKE_GEODESIC);
     for (Tensor p : sequence) {
@@ -198,7 +198,7 @@ public class LeversRender {
   public void renderLeverLength() {
     TensorMetric tensorMetric = geodesicDisplay.parametricDistance();
     if (Objects.nonNull(tensorMetric)) {
-      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       graphics.setFont(FONT_MATRIX);
       FontMetrics fontMetrics = graphics.getFontMetrics();
       int fheight = fontMetrics.getAscent();
@@ -281,11 +281,11 @@ public class LeversRender {
   private static final Tensor CIRCLE = CirclePoints.of(41).unmodifiable();
 
   public void renderTangentsPtoX(boolean tangentPlane) {
-    HsManifold hsExponential = geodesicDisplay.hsManifold();
+    HsManifold hsManifold = geodesicDisplay.hsManifold();
     graphics.setStroke(STROKE_TANGENT);
     for (Tensor p : sequence) { // draw tangent at p
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-      Tensor v = hsExponential.exponential(p).log(origin);
+      Tensor v = hsManifold.exponential(p).log(origin);
       graphics.setColor(COLOR_TANGENT);
       TensorUnaryOperator tangentProjection = geodesicDisplay.tangentProjection(p);
       if (Objects.nonNull(tangentProjection))
@@ -304,8 +304,8 @@ public class LeversRender {
   }
 
   public void renderTangentsXtoP(boolean tangentPlane) {
-    HsManifold hsExponential = geodesicDisplay.hsManifold();
-    Tensor vs = Tensor.of(sequence.stream().map(hsExponential.exponential(origin)::log));
+    HsManifold hsManifold = geodesicDisplay.hsManifold();
+    Tensor vs = Tensor.of(sequence.stream().map(hsManifold.exponential(origin)::log));
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
     graphics.setStroke(STROKE_TANGENT);
     graphics.setColor(COLOR_TANGENT);
@@ -325,8 +325,8 @@ public class LeversRender {
   }
 
   public void renderPolygonXtoP() {
-    HsManifold hsExponential = geodesicDisplay.hsManifold();
-    Tensor vs = Tensor.of(sequence.stream().map(hsExponential.exponential(origin)::log));
+    HsManifold hsManifold = geodesicDisplay.hsManifold();
+    Tensor vs = Tensor.of(sequence.stream().map(hsManifold.exponential(origin)::log));
     geometricLayer.pushMatrix(geodesicDisplay.matrixLift(origin));
     graphics.setStroke(STROKE_TANGENT);
     TensorUnaryOperator tangentProjection = geodesicDisplay.tangentProjection(origin);

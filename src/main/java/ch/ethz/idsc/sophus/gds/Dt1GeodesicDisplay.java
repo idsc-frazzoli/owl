@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.lie.dt.DtGeodesic;
 import ch.ethz.idsc.sophus.lie.dt.DtGroup;
 import ch.ethz.idsc.sophus.lie.dt.DtManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +33,7 @@ public enum Dt1GeodesicDisplay implements GeodesicDisplay {
   private static final ScalarUnaryOperator MAX_X = Max.function(RealScalar.of(0.001));
 
   @Override // from GeodesicDisplay
-  public GeodesicInterface geodesicInterface() {
+  public Geodesic geodesicInterface() {
     return DtGeodesic.INSTANCE;
   }
 
