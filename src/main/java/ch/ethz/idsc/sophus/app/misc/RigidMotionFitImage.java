@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.lie.rn.RigidMotionFit;
+import ch.ethz.idsc.sophus.fit.RigidMotionFit;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

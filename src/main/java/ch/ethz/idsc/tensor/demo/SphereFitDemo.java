@@ -8,18 +8,19 @@ import java.util.Optional;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.fit.HsWeiszfeldMethod;
+import ch.ethz.idsc.sophus.fit.SpatialMedian;
+import ch.ethz.idsc.sophus.fit.SphereFit;
+import ch.ethz.idsc.sophus.fit.WeiszfeldMethod;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
-import ch.ethz.idsc.sophus.hs.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
-import ch.ethz.idsc.sophus.lie.rn.WeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.SpatialMedian;
 import ch.ethz.idsc.sophus.math.var.InversePowerVariogram;
 import ch.ethz.idsc.sophus.ply.StarPoints;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -32,7 +33,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
-import ch.ethz.idsc.tensor.opt.rn.SphereFit;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {

@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.gds.H2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
-import ch.ethz.idsc.sophus.hs.TangentSpace;
+import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.itp.ArcLengthParameterization;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
   private static final Color DOMAIN_D = new Color(192, 192, 64, 192);
   // ---
   private final SpinnerLabel<Integer> spinnerLength = new SpinnerLabel<>();
-  private final JToggleButton jToggleCtrl = new JToggleButton("neutral");
+  private final JToggleButton jToggleCtrl = new JToggleButton("show ctrl");
 
   public LogarithmDemo() {
     super(true, GeodesicDisplays.R2_H2_S2);
@@ -101,11 +101,11 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
           graphics.setColor(DOMAIN_D);
           graphics.draw(path2d);
         }
-        TangentSpace tangentSpace = geodesicDisplay.hsManifold().logAt(origin);
         final Tensor domain = Drop.tail(Subdivide.of(0.0, 1.0, spinnerLength.getValue()), 1);
         geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.vector(10, 0)));
         GRID_RENDER.render(geometricLayer, graphics);
-        Tensor planar = Tensor.of(refined.stream().map(tangentSpace::vectorLog));
+        HsDesign hsDesign = new HsDesign(geodesicDisplay.hsManifold());
+        Tensor planar = hsDesign.matrix(refined, origin);
         {
           RenderQuality.setQuality(graphics);
           Path2D path2d = geometricLayer.toPath2D(planar, true);

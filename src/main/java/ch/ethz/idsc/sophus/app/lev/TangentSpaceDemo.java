@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.gbc.it.IterativeAffineCoordinate.Evaluation;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
+import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -59,7 +60,8 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
       Tensor origin = optional.get();
       VectorLogManifold vectorLogManifold = geodesicDisplay().hsManifold();
       final Tensor sequence = getSequence();
-      final Tensor levers2 = Tensor.of(sequence.stream().map(vectorLogManifold.logAt(origin)::vectorLog));
+      HsDesign hsDesign = new HsDesign(vectorLogManifold);
+      final Tensor levers2 = hsDesign.matrix(sequence, origin);
       {
         Tensor hull = ConvexHull.of(sequence);
         PathRender pathRender = new PathRender(new Color(0, 0, 255, 128));

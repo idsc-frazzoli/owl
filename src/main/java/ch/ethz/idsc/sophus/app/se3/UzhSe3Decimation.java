@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.io.UzhSe3TxtFormat;
-import ch.ethz.idsc.sophus.crv.decim.CurveDecimation;
-import ch.ethz.idsc.sophus.crv.decim.CurveDecimation.Result;
+import ch.ethz.idsc.sophus.decim.CurveDecimation;
+import ch.ethz.idsc.sophus.decim.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.lie.se3.Se3CurveDecimation;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

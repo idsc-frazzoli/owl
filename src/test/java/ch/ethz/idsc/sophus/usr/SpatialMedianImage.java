@@ -12,7 +12,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.rn.WeiszfeldMethod;
+import ch.ethz.idsc.sophus.fit.WeiszfeldMethod;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
