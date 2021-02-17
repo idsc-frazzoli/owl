@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.opt.hun.BipartiteMatching;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     {
       new PathRender(Color.GRAY).setCurve(CIRCLE, true).render(geometricLayer, graphics);
       Tensor matrix = Tensors.matrix((i, j) -> //
-      VectorNorm2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
+      Vector2Norm.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
       int[] matching = bipartiteMatching.matching();
       graphics.setColor(Color.RED);

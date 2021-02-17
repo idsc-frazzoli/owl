@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm1;
+import ch.ethz.idsc.tensor.nrm.Vector1Norm;
 
 /* package */ class KlotskiGoalAdapter implements GoalInterface {
   private final KlotskiGoalRegion klotskiGoalRegion;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm1;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return VectorNorm1.between(x.get(0).extract(1, 3), goal_xy);
+    return Vector1Norm.between(x.get(0).extract(1, 3), goal_xy);
   }
 
   @Override

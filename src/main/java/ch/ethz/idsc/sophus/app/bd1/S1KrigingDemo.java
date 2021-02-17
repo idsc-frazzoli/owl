@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
@@ -47,8 +47,8 @@ import ch.ethz.idsc.tensor.sca.N;
     final Tensor shape = getControlPointShape(); // .multiply(RealScalar.of(0.3));
     if (1 < control.length()) {
       // TODO check for zero norm below
-      Tensor sequence = Tensor.of(control.stream().map(VectorNorm2.NORMALIZE));
-      Tensor funceva = Tensor.of(control.stream().map(VectorNorm2::of));
+      Tensor sequence = Tensor.of(control.stream().map(Vector2Norm.NORMALIZE));
+      Tensor funceva = Tensor.of(control.stream().map(Vector2Norm::of));
       Tensor cvarian = getControlPointsSe2().get(Tensor.ALL, 2).multiply(RationalScalar.HALF).map(Abs.FUNCTION);
       // ---
       graphics.setColor(new Color(0, 128, 128));

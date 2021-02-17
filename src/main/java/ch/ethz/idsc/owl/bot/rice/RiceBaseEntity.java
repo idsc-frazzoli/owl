@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 /* package */ abstract class RiceBaseEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected final TreeRender treeRender = new TreeRender();
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
   @Override
   public final Scalar distance(Tensor x, Tensor y) {
-    return VectorNorm2Squared.between(x, y); // non-negative
+    return Vector2NormSquared.between(x, y); // non-negative
   }
 
   @Override

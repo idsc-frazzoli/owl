@@ -9,14 +9,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.nrm.VectorNormInfinity;
+import ch.ethz.idsc.tensor.nrm.VectorInfinityNorm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class RepresentativeNegTransitiveMinTrackerTest extends TestCase {
   public void testDigestNotEmpty() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorInfinityNorm::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     MinTracker<Tensor> minTracker = RepresentativeNegTransitiveMinTracker.withList(weakOrderComparator);
     minTracker.digest(RealScalar.of(6));
@@ -24,7 +24,7 @@ public class RepresentativeNegTransitiveMinTrackerTest extends TestCase {
   }
 
   public void testDigestFunction() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorInfinityNorm::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     MinTracker<Tensor> minTracker = RepresentativeNegTransitiveMinTracker.withList(weakOrderComparator);
     minTracker.digest(Tensors.vector(2));
@@ -42,7 +42,7 @@ public class RepresentativeNegTransitiveMinTrackerTest extends TestCase {
   }
 
   public void testDuplicateEntries() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorInfinityNorm::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     MinTracker<Tensor> minTracker = RepresentativeNegTransitiveMinTracker.withList(weakOrderComparator);
     minTracker.digest(Tensors.vector(0, 1, 2));
@@ -56,7 +56,7 @@ public class RepresentativeNegTransitiveMinTrackerTest extends TestCase {
   }
 
   public void testWithSet() {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorInfinityNorm::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     MinTracker<Tensor> minTracker = RepresentativeNegTransitiveMinTracker.withSet(weakOrderComparator);
     minTracker.digest(Tensors.vector(0, 0, 2));
@@ -67,7 +67,7 @@ public class RepresentativeNegTransitiveMinTrackerTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorNormInfinity::of);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(VectorInfinityNorm::of);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     MinTracker<Tensor> minTracker = Serialization.copy(RepresentativeNegTransitiveMinTracker.withSet(weakOrderComparator));
     minTracker.digest(Tensors.vector(0, 1, 2));

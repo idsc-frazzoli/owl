@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** goal region is spherical
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode node, List<StateTime> trajectory, Tensor flow) {
     StateTime from = node.stateTime();
-    return VectorNorm2.between(from.state(), Lists.getLast(trajectory).state());
+    return Vector2Norm.between(from.state(), Lists.getLast(trajectory).state());
   }
 
   @Override // from HeuristicFunction

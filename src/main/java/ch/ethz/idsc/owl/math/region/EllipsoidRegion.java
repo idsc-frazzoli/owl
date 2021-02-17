@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** EllipsoidRegion implements an axis aligned elliptic region in the vector space R^n.
@@ -45,7 +45,7 @@ public class EllipsoidRegion extends ImplicitFunctionRegion implements Serializa
 
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor tensor) {
-    return VectorNorm2Squared.of(tensor.subtract(center).pmul(invert)).subtract(RealScalar.ONE);
+    return Vector2NormSquared.of(tensor.subtract(center).pmul(invert)).subtract(RealScalar.ONE);
   }
 
   public Tensor center() {

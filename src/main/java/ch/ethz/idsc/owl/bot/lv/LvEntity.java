@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 /* package */ class LvEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   private static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return VectorNorm2Squared.between(x, y); // non-negative
+    return Vector2NormSquared.between(x, y); // non-negative
   }
 
   @Override

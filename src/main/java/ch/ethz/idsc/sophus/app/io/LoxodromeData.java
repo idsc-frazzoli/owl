@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     Export.of(HomeDirectory.file("loxodrome_exact.csv"), tensor);
     Tensor noise = RandomVariate.of(NormalDistribution.of(0, 0.05), Dimensions.of(tensor));
     tensor = tensor.add(noise);
-    tensor = Tensor.of(tensor.stream().map(VectorNorm2.NORMALIZE));
+    tensor = Tensor.of(tensor.stream().map(Vector2Norm.NORMALIZE));
     Export.of(HomeDirectory.file("loxodrome_noise.csv"), tensor);
     Geodesic geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {

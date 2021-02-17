@@ -10,12 +10,12 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 public final class TwdTrajectoryControl extends StateTrajectoryControl {
   @Override // from StateTrajectoryControl
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
-    return VectorNorm2Squared.of(Se2Wrap.INSTANCE.difference(x, y));
+    return Vector2NormSquared.of(Se2Wrap.INSTANCE.difference(x, y));
   }
 
   @Override // from StateTrajectoryControl

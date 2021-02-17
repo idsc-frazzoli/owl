@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -109,7 +109,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     IntStream.range(0, rows).parallel().forEach(cx -> {
       for (int cy = 0; cy < cols; ++cy) {
         Tensor point = Tensors.of(dx.get(cx), dy.get(cy)); // in R2
-        Scalar z2 = RealScalar.ONE.subtract(VectorNorm2Squared.of(point));
+        Scalar z2 = RealScalar.ONE.subtract(Vector2NormSquared.of(point));
         if (Sign.isPositive(z2)) {
           Scalar z = Sqrt.FUNCTION.apply(z2);
           Tensor xyz = point.append(z);

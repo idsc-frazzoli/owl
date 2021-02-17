@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rn;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 public class RnPointRegion implements RegionWithDistance<Tensor> {
   private final Tensor tensor;
@@ -20,6 +20,6 @@ public class RnPointRegion implements RegionWithDistance<Tensor> {
 
   @Override // from RegionWithDistance
   public Scalar distance(Tensor element) {
-    return VectorNorm2.between(tensor, element);
+    return Vector2Norm.between(tensor, element);
   }
 }

@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
     @Override
     public Scalar map(Tensor po, Tensor p0, Tensor p1, Tensor pd) {
-      Scalar scalar = VectorNorm2.of(Cross.of(p0.subtract(po), p1.subtract(po))).multiply(factor);
+      Scalar scalar = Vector2Norm.of(Cross.of(p0.subtract(po), p1.subtract(po))).multiply(factor);
       return Clips.unit().apply(scalar);
     }
   }, //

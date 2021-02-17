@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Orthogonalize;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -48,7 +48,7 @@ public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
       return optional.get();
     xyz.set(RealScalar.ZERO, 2);
     // intersection of front and back hemisphere
-    return VectorNorm2.NORMALIZE.apply(xyz);
+    return Vector2Norm.NORMALIZE.apply(xyz);
   }
 
   @Override // from GeodesicDisplay
@@ -67,7 +67,7 @@ public class Rp2GeodesicDisplay extends RpnGeodesicDisplay {
 
   public static Optional<Tensor> optionalZ(Tensor xya) {
     Tensor xy = xya.extract(0, 2);
-    Scalar normsq = VectorNorm2Squared.of(xy);
+    Scalar normsq = Vector2NormSquared.of(xy);
     if (Scalars.lessThan(normsq, RealScalar.ONE)) {
       Scalar z = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq));
       return Optional.of(xy.append(z));

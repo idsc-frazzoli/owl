@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** region in R^n */
@@ -17,7 +17,7 @@ public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializ
    * @param distanceFromZero needed to reach the region
    * @return */
   public static ImplicitFunctionRegion normalize(Tensor orthogonal, Scalar distanceFromZero) {
-    return new HyperplaneRegion(VectorNorm2.NORMALIZE.apply(orthogonal), distanceFromZero);
+    return new HyperplaneRegion(Vector2Norm.NORMALIZE.apply(orthogonal), distanceFromZero);
   }
 
   /***************************************************/
@@ -29,7 +29,7 @@ public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializ
    * @param distanceFromZero needed to reach the region starting from position (0, ..., 0)
    * That means, if distanceFromZero is negative, (0, ..., 0) is inside the region */
   public HyperplaneRegion(Tensor normal, Scalar distanceFromZero) {
-    Chop._12.requireClose(VectorNorm2.of(normal), RealScalar.ONE);
+    Chop._12.requireClose(Vector2Norm.of(normal), RealScalar.ONE);
     this.normal = normal;
     this.distanceFromZero = distanceFromZero;
   }

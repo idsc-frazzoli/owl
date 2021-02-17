@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
@@ -24,11 +24,11 @@ public class S2GeodesicDisplayTest extends TestCase {
     GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
     Tensor xyz = geodesicDisplay.project(Tensors.vector(1, 2, 0));
     Tensor xy = geodesicDisplay.toPoint(xyz);
-    Tolerance.CHOP.requireClose(VectorNorm2.of(xy), RealScalar.ONE);
+    Tolerance.CHOP.requireClose(Vector2Norm.of(xy), RealScalar.ONE);
   }
 
   public void testTangent() {
-    Tensor xyz = VectorNorm2.NORMALIZE.apply(Tensors.vector(1, 0.3, 0.5));
+    Tensor xyz = Vector2Norm.NORMALIZE.apply(Tensors.vector(1, 0.3, 0.5));
     Tensor matrix = S2GeodesicDisplay.tangentSpace(xyz);
     assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
     Tolerance.CHOP.requireAllZero(matrix.dot(xyz));

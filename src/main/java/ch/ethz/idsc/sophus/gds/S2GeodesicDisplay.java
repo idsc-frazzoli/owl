@@ -14,8 +14,8 @@ import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.red.CopySign;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -40,7 +40,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
       return optional.get();
     xyz.set(RealScalar.ZERO, 2);
     // intersection of front and back hemisphere
-    return VectorNorm2.NORMALIZE.apply(xyz);
+    return Vector2Norm.NORMALIZE.apply(xyz);
   }
 
   /** @param xyz normalized vector, point on 2-dimensional sphere
@@ -65,7 +65,7 @@ public class S2GeodesicDisplay extends SnGeodesicDisplay {
 
   public static Optional<Tensor> optionalZ(Tensor xya) {
     Tensor xy = xya.extract(0, 2);
-    Scalar normsq = VectorNorm2Squared.of(xy);
+    Scalar normsq = Vector2NormSquared.of(xy);
     if (Scalars.lessThan(normsq, RealScalar.ONE)) {
       Scalar z = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(normsq));
       return Optional.of(xy.append(CopySign.of(z, xya.Get(2))));

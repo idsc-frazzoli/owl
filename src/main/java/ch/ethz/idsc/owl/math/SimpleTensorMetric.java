@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.math.TensorDifference;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 // TODO design/naming not good
 public class SimpleTensorMetric implements TensorMetric, Serializable {
@@ -21,6 +21,6 @@ public class SimpleTensorMetric implements TensorMetric, Serializable {
 
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
-    return VectorNorm2.of(tensorDifference.difference(p, q));
+    return Vector2Norm.of(tensorDifference.difference(p, q));
   }
 }

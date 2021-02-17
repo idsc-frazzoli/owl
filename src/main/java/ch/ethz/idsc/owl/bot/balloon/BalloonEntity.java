@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 /* package */ class BalloonEntity extends AbstractCircularEntity {
   private static final Tensor PARTITION_SCALE = Tensors.vector(2, 2, 1, 1).unmodifiable();
@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return VectorNorm2Squared.between(x, y);
+    return Vector2NormSquared.between(x, y);
   }
 
   @Override // from TrajectoryEntity

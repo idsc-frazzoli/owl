@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 /** omni-directional movement with constant speed
  * 
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 
   @Override
   public Scalar distance(Tensor x, Tensor y) {
-    return VectorNorm2Squared.between(x, y); // non-negative
+    return Vector2NormSquared.between(x, y); // non-negative
   }
 
   @Override

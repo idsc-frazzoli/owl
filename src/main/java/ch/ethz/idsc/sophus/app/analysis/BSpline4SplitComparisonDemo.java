@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -64,16 +64,16 @@ import ch.ethz.idsc.tensor.sca.Round;
           Tensor v2 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.INSTANCE.exponential(m2)).tangent();
           Tensor v3 = new MeanDefect(sequence, weights_lo, Se2CoveringManifold.INSTANCE.exponential(m3)).tangent();
           Tensor err = Tensors.of( //
-              VectorNorm2.of(v1), //
-              VectorNorm2.of(v2), //
-              VectorNorm2.of(v3)); //
+              Vector2Norm.of(v1), //
+              Vector2Norm.of(v2), //
+              Vector2Norm.of(v3)); //
           ++winm[ArgMin.of(err)];
           erm = erm.add(err);
         }
         Tensor err = Tensors.of( //
-            VectorNorm2.between(m1, m), //
-            VectorNorm2.between(m2, m), //
-            VectorNorm2.between(m3, m));
+            Vector2Norm.between(m1, m), //
+            Vector2Norm.between(m2, m), //
+            Vector2Norm.between(m3, m));
         ++wint[ArgMin.of(err)];
         ert = ert.add(err);
       }
@@ -84,9 +84,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         Tensor m3 = d3.hi(p, q, r);
         // ---
         Tensor err = Tensors.of( //
-            VectorNorm2.between(m1, m), //
-            VectorNorm2.between(m2, m), //
-            VectorNorm2.between(m3, m));
+            Vector2Norm.between(m1, m), //
+            Vector2Norm.between(m2, m), //
+            Vector2Norm.between(m3, m));
         ert = ert.add(err);
         ++wint[ArgMin.of(err)];
       }

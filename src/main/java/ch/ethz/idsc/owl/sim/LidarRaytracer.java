@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Max;
 
 /** LONGTERM implementation can be made more efficient */
@@ -41,7 +41,7 @@ public class LidarRaytracer implements Serializable {
         .map(ray -> ray.stream() //
             .filter(local -> trajectoryRegionQuery.isMember(new StateTime(forward.apply(local), time))) //
             .findFirst() //
-            .map(VectorNorm2::of) //
+            .map(Vector2Norm::of) //
             .orElse(max_range)));
   }
 

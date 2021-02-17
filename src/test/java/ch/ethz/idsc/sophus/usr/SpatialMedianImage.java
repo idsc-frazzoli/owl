@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
     Scalar dist(Scalar x, Scalar y) {
       Tensor p = INVERSE.dot(Tensors.of(x, y, RealScalar.ONE)).extract(0, 2);
-      return points.stream().map(r -> VectorNorm2.between(r, p)).reduce(Scalar::add).get();
+      return points.stream().map(r -> Vector2Norm.between(r, p)).reduce(Scalar::add).get();
     }
   }
 

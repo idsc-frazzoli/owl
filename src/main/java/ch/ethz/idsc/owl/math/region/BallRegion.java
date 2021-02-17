@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** the ball region is a special case of an {@link EllipsoidRegion}.
@@ -38,7 +38,7 @@ public class BallRegion extends ImplicitRegionWithDistance implements Serializab
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
     // ||x - center|| - radius
-    return VectorNorm2.between(x, center).subtract(radius); // result may be negative
+    return Vector2Norm.between(x, center).subtract(radius); // result may be negative
   }
 
   public Tensor center() {

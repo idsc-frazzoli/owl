@@ -5,7 +5,7 @@ import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 /** intersection of SE2 curve with 2-dimensional sphere centered at (0, 0) and given radius. */
 public class SphereSe2CurveIntersection extends AssistedCurveIntersection {
@@ -17,6 +17,6 @@ public class SphereSe2CurveIntersection extends AssistedCurveIntersection {
 
   @Override // from SimpleCurveIntersection
   protected Scalar distance(Tensor tensor) {
-    return VectorNorm2.of(Extract2D.FUNCTION.apply(tensor));
+    return Vector2Norm.of(Extract2D.FUNCTION.apply(tensor));
   }
 }

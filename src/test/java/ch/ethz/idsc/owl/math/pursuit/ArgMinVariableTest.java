@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.ext.Timing;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
@@ -31,7 +31,7 @@ public class ArgMinVariableTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}");
     TrajectoryEntryFinder entryFinder = Serialization.copy(InterpolationEntryFinder.INSTANCE);
     // ---
-    Scalar var = ArgMinVariable.using(entryFinder, t -> VectorNorm2.of(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
+    Scalar var = ArgMinVariable.using(entryFinder, t -> Vector2Norm.of(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(N.DOUBLE).map(Chop._06));
   }
 
@@ -39,7 +39,7 @@ public class ArgMinVariableTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
     TrajectoryEntryFinder entryFinder = Serialization.copy(IntersectionEntryFinder.SPHERE_SE2);
     // ---
-    Scalar var = ArgMinVariable.using(entryFinder, t -> VectorNorm2.of(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
+    Scalar var = ArgMinVariable.using(entryFinder, t -> Vector2Norm.of(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
     assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 
@@ -47,7 +47,7 @@ public class ArgMinVariableTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
     TrajectoryEntryFinder entryFinder = Serialization.copy(new GeodesicInterpolationEntryFinder(CLOTHOID_BUILDER));
     // ---
-    Scalar var = ArgMinVariable.using(entryFinder, t -> VectorNorm2.of(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
+    Scalar var = ArgMinVariable.using(entryFinder, t -> Vector2Norm.of(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
     assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 
@@ -58,7 +58,7 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.SPHERE_SE2;
     for (int i = 0; i < 20; i++) {
       Timing timing = Timing.started();
-      Scalar var = ArgMinVariable.using(entryFinder, t -> VectorNorm2.of(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
+      Scalar var = ArgMinVariable.using(entryFinder, t -> Vector2Norm.of(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
       timings.append(RealScalar.of(timing.seconds()));
       assertEquals(Dimensions.of(tensor), Arrays.asList(200, 3));
       assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));

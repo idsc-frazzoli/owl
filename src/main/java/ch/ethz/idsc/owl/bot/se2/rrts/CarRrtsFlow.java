@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 public enum CarRrtsFlow {
   ;
@@ -19,7 +19,7 @@ public enum CarRrtsFlow {
     Scalar delta = dest.time().subtract(orig.time());
     // TODO side speed should not result in forward motion! rather project
     // ... the sign of vx is not always correct when using norm!
-    Scalar vx = VectorNorm2.of(Extract2D.FUNCTION.apply(log));
+    Scalar vx = Vector2Norm.of(Extract2D.FUNCTION.apply(log));
     return Tensors.of(vx, vx.zero(), log.Get(2)).divide(delta);
   }
 }

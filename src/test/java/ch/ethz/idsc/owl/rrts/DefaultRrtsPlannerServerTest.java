@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -41,7 +41,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     Tensor goal = Tensors.vector(10, 10);
     Tensor state = Tensors.vector(0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
-    Scalar radius = VectorNorm2.between(goal, state).multiply(RationalScalar.HALF).add(RealScalar.ONE);
+    Scalar radius = Vector2Norm.between(goal, state).multiply(RationalScalar.HALF).add(RealScalar.ONE);
     Tensor center = Mean.of(Tensors.of(state, goal));
     Tensor min = center.map(scalar -> scalar.subtract(radius));
     Tensor max = center.map(scalar -> scalar.add(radius));

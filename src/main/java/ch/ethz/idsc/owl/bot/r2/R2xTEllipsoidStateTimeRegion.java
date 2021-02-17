@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 
 /** ellipsoid region that is moving with respect to time */
 public class R2xTEllipsoidStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
@@ -46,7 +46,7 @@ public class R2xTEllipsoidStateTimeRegion implements Region<StateTime>, RenderIn
     Tensor state = stateTime.state().extract(0, invert.length());
     Scalar time = stateTime.time();
     TensorUnaryOperator rev = bijectionFamily.inverse(time);
-    return Scalars.lessEquals(VectorNorm2Squared.of(rev.apply(state).pmul(invert)), RealScalar.ONE);
+    return Scalars.lessEquals(Vector2NormSquared.of(rev.apply(state).pmul(invert)), RealScalar.ONE);
   }
 
   @Override // from RenderInterface

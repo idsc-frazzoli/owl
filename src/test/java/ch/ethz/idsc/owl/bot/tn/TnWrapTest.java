@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import junit.framework.TestCase;
 
 public class TnWrapTest extends TestCase {
@@ -16,8 +16,8 @@ public class TnWrapTest extends TestCase {
   }
 
   private static Scalar _distance(TnWrap tnWrap, Tensor p, Tensor q) {
-    Scalar d1 = VectorNorm2.of(tnWrap.difference(p, q));
-    Scalar d2 = VectorNorm2.of(tnWrap.difference(q, p));
+    Scalar d1 = Vector2Norm.of(tnWrap.difference(p, q));
+    Scalar d2 = Vector2Norm.of(tnWrap.difference(q, p));
     assertEquals(d1, d2);
     return d1;
   }

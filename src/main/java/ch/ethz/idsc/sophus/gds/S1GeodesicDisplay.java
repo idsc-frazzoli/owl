@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
 public class S1GeodesicDisplay extends SnGeodesicDisplay {
@@ -21,7 +21,7 @@ public class S1GeodesicDisplay extends SnGeodesicDisplay {
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     Tensor xy = xya.extract(0, 2);
-    Scalar norm = VectorNorm2.of(xy);
+    Scalar norm = Vector2Norm.of(xy);
     return Scalars.isZero(norm) //
         ? UnitVector.of(2, 0)
         : xy.divide(norm);

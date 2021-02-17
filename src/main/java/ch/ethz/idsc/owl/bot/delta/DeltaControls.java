@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Max;
 
 /* package */ enum DeltaControls {
@@ -13,6 +13,6 @@ import ch.ethz.idsc.tensor.red.Max;
   /** @param controls
    * @return */
   public static Scalar maxSpeed(Collection<Tensor> controls) {
-    return controls.stream().map(VectorNorm2::of).reduce(Max::of).get();
+    return controls.stream().map(Vector2Norm::of).reduce(Max::of).get();
   }
 }

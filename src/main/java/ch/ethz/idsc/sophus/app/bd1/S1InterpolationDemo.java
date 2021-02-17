@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 
 /* package */ class S1InterpolationDemo extends LogWeightingDemo {
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.num.Pi;
     final Tensor shape = getControlPointShape(); // .multiply(RealScalar.of(0.3));
     if (0 < control.length()) {
       // TODO check for zero norm below
-      Tensor sequence = Tensor.of(control.stream().map(VectorNorm2.NORMALIZE));
+      Tensor sequence = Tensor.of(control.stream().map(Vector2Norm.NORMALIZE));
       Tensor target = sequence;
       graphics.setColor(Color.GREEN);
       for (int index = 0; index < target.length(); ++index)
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.num.Pi;
           .show(geodesicDisplay()::matrixLift, shape, target) //
           .render(geometricLayer, graphics);
       // ---
-      Tensor values = Tensor.of(control.stream().map(VectorNorm2::of));
+      Tensor values = Tensor.of(control.stream().map(Vector2Norm::of));
       Tensor domain = Subdivide.of(Pi.VALUE.negate(), Pi.VALUE, 511);
       Tensor spherics = domain.map(AngleVector::of);
       // ---

@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Orthogonalize;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class Se2UnprojectDemo extends ControlPointsDemo {
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Tensor matrix = Join.of(Tensors.of(log), IdentityMatrix.of(3));
     Tensor tensor = Orthogonalize.of(matrix).extract(0, 3);
     graphics.setColor(new Color(192, 192, 192, 64));
-    Scalar nl = VectorNorm2.of(log);
+    Scalar nl = Vector2Norm.of(log);
     Scalar un = RealScalar.of(0.2).divide(Sqrt.FUNCTION.apply(nl));
     for (Tensor x : Subdivide.of(nl.zero(), nl, 11))
       for (Tensor y : Subdivide.of(un.negate(), un, 5))

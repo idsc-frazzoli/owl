@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 /* package */ class CirclePointDemo extends ControlPointsDemo {
   public CirclePointDemo() {
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.nrm.VectorNorm2;
     renderControlPoints(geometricLayer, graphics);
     // ---
     Tensor sequence = getGeodesicControlPoints();
-    Tensor levers = Tensor.of(sequence.stream().map(VectorNorm2.NORMALIZE));
+    Tensor levers = Tensor.of(sequence.stream().map(Vector2Norm.NORMALIZE));
     {
       LeversRender leversRender = LeversRender.of( //
           geodesicDisplay(), sequence, Array.zeros(2), geometricLayer, graphics);
