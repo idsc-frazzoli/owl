@@ -12,7 +12,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
   // ---
   private final JToggleButton jToggleButton = new JToggleButton("varplot");
 
-  public AnAveragingDemo(List<GeodesicDisplay> geodesicDisplays) {
+  public AnAveragingDemo(List<ManifoldDisplay> geodesicDisplays) {
     super(true, geodesicDisplays, LogWeightings.averagings());
     setMidpointIndicated(false);
     spinnerLogWeighting.addSpinnerListener(v -> recompute());

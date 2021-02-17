@@ -13,12 +13,12 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
-public class R2GeodesicDisplay extends RnGeodesicDisplay {
+public class R2Display extends RnDisplay {
   private static final Scalar RADIUS = RealScalar.of(1.0);
   // ---
-  public static final GeodesicDisplay INSTANCE = new R2GeodesicDisplay();
+  public static final ManifoldDisplay INSTANCE = new R2Display();
 
-  private R2GeodesicDisplay() {
+  private R2Display() {
     super(2);
   }
 

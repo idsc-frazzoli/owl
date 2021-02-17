@@ -20,7 +20,7 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JToggleButton jToggleVarian = new JToggleButton("est/var");
   private final JToggleButton jToggleThresh = new JToggleButton("thresh");
 
-  public A2AveragingDemo(List<GeodesicDisplay> geodesicDisplays) {
+  public A2AveragingDemo(List<ManifoldDisplay> geodesicDisplays) {
     super(geodesicDisplays);
     {
       spinnerCvar.setList(Tensors.fromString("{0, 0.01, 0.1, 0.5, 1}").stream().map(Scalar.class::cast).collect(Collectors.toList()));
@@ -126,7 +126,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     prepare();
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
     BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values));

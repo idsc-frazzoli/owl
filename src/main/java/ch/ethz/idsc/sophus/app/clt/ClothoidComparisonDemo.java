@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.clt.Clothoid;
 import ch.ethz.idsc.sophus.clt.LagrangeQuadraticD;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringClothoidDisplay;
 import ch.ethz.idsc.sophus.gui.ren.CurveVisualSet;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     RenderQuality.setQuality(graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
-    GeodesicDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = Se2CoveringClothoidDisplay.INSTANCE;
     {
       Tensor shape = geodesicDisplay.shape();
       geometricLayer.pushMatrix(Se2Matrix.of(Array.zeros(3)));

@@ -11,8 +11,8 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnManifold;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     int length = sequence.length();
     Tensor domain = Range.of(-sequence.length(), 0).map(Tensors::of).unmodifiable();

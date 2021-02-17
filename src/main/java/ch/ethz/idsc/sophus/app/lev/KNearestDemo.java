@@ -14,9 +14,9 @@ import javax.swing.JTextField;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroupOps;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       jTextField.setPreferredSize(new Dimension(100, 28));
       timerFrame.jToolBar.add(jTextField);
     }
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     setLogWeighting(LogWeightings.DISTANCES);
     shuffleSnap();
   }
@@ -100,7 +100,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, Tensor sequence, Tensor origin, String p) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
     TensorUnaryOperator tensorUnaryOperator = //
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);

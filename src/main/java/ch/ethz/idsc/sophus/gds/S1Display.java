@@ -10,11 +10,11 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
-public class S1GeodesicDisplay extends SnGeodesicDisplay {
-  public static final GeodesicDisplay INSTANCE = new S1GeodesicDisplay();
+public class S1Display extends SnDisplay {
+  public static final ManifoldDisplay INSTANCE = new S1Display();
 
   /***************************************************/
-  private S1GeodesicDisplay() {
+  private S1Display() {
     super(1);
   }
 

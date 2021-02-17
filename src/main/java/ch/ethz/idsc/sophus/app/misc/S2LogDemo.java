@@ -6,10 +6,10 @@ import java.awt.Graphics2D;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
       @Override
-      public GeodesicDisplay getGeodesicDisplay() {
+      public ManifoldDisplay getGeodesicDisplay() {
         return geodesicDisplay();
       }
     });
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    S2GeodesicDisplay geodesicDisplay = (S2GeodesicDisplay) geodesicDisplay();
+    S2Display geodesicDisplay = (S2Display) geodesicDisplay();
     Tensor points = getGeodesicControlPoints(0, 1);
     if (0 < points.length()) {
       Tensor origin = points.get(0);

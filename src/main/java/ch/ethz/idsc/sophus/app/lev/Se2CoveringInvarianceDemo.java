@@ -10,9 +10,9 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
       jTextField.setPreferredSize(new Dimension(100, 28));
       timerFrame.jToolBar.add(jTextField);
     }
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     setControlPointsSe2(Tensors.fromString( //
         "{{0, 0, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}, {-2, -3, -2}, {-3, 0, 0}}"));
     setControlPointsSe2(Tensors.fromString( //
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.mat.InfluenceMatrix;
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     Tensor controlPointsAll = getGeodesicControlPoints();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);

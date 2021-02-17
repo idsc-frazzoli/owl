@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-public abstract class Se2AbstractGeodesicDisplay implements GeodesicDisplay, Serializable {
+public abstract class Se2AbstractDisplay implements ManifoldDisplay, Serializable {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();
 
   @Override // from GeodesicDisplay

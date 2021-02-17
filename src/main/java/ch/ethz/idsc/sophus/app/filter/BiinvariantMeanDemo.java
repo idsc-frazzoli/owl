@@ -17,9 +17,9 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.fit.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.fit.SpatialMedian;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2CoveringDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
         RandomVariate.of(dX), RandomVariate.of(dY), RandomVariate.of(dA)), 10).stream() //
         .map(Se2CoveringExponential.INSTANCE::exp));
     setControlPointsSe2(tensor);
-    setGeodesicDisplay(Se2CoveringGeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2CoveringDisplay.INSTANCE);
   }
 
   @Override
@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     if (0 == length)
       return;
     Tensor weights = ConstantArray.of(RationalScalar.of(1, length), length);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     Tensor mean = biinvariantMean.mean(sequence, weights);
     graphics.setColor(Color.LIGHT_GRAY);

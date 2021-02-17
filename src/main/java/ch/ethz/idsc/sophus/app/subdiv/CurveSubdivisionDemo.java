@@ -23,10 +23,10 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.StandardMenu;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.curve.AbstractCurvatureDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
@@ -85,7 +85,7 @@ import ch.ethz.idsc.tensor.red.Nest;
                 Tensor center = Mean.of(tensor);
                 center.set(RealScalar.ZERO, 2);
                 tensor = Tensor.of(tensor.stream().map(row -> row.subtract(center)));
-                setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+                setGeodesicDisplay(Se2Display.INSTANCE);
                 jToggleCyclic.setSelected(true);
                 setControlPointsSe2(tensor);
               }
@@ -156,7 +156,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     //
     if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
-      setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
+      setGeodesicDisplay(R2Display.INSTANCE);
     // ---
     if (jToggleSymi.isSelected()) {
       Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
@@ -173,7 +173,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine( //
         control, levels, spinnerLabel.getValue().of(geodesicDisplay), //

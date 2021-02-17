@@ -28,12 +28,12 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /** symmetric positive definite 2 x 2 matrices */
-public abstract class SnGeodesicDisplay implements GeodesicDisplay, Serializable {
+public abstract class SnDisplay implements ManifoldDisplay, Serializable {
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
   // ---
   private final int dimensions;
 
-  protected SnGeodesicDisplay(int dimensions) {
+  protected SnDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 

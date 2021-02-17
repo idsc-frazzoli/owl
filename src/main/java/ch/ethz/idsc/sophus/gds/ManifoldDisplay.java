@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** Hint: the interface GeodesicDisplay is intended for use in the demo layer
  * but not in the library functions. */
-public interface GeodesicDisplay {
+public interface ManifoldDisplay {
   /** @return */
   Geodesic geodesicInterface();
 

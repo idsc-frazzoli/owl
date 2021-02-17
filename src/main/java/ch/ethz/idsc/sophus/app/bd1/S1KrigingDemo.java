@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.ArcTan2D;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.sn.SnManifold;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final Tensor DOMAIN = Drop.tail(CirclePoints.of(161).map(N.DOUBLE), 80);
 
   public S1KrigingDemo() {
-    super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
+    super(Arrays.asList(R2Display.INSTANCE));
     setControlPointsSe2(Tensors.fromString("{{1, 0, 0}, {0, 1.2, 0}, {-1, 1, 0}}"));
     timerFrame.geometricComponent.setOffset(500, 500);
     timerFrame.geometricComponent.addRenderInterfaceBackground(S1FrameRender.INSTANCE);

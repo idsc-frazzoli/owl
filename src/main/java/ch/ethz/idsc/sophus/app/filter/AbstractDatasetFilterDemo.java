@@ -13,8 +13,8 @@ import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final JToggleButton jToggleConv = new JToggleButton("conv");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
 
-  public AbstractDatasetFilterDemo(List<GeodesicDisplay> list) {
+  public AbstractDatasetFilterDemo(List<ManifoldDisplay> list) {
     super(list);
     timerFrame.geometricComponent.addRenderInterfaceBackground(GRID_RENDER);
     // ---
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
     if (jToggleData.isSelected()) {
       pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
@@ -114,5 +114,5 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 
   protected abstract void differences_render( //
-      Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram);
+      Graphics2D graphics, ManifoldDisplay geodesicDisplay, Tensor refined, boolean spectrogram);
 }

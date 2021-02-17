@@ -16,12 +16,12 @@ import junit.framework.TestCase;
 
 public class S2GeodesicDisplayTest extends TestCase {
   public void testSimple() {
-    Tensor tensor = S2GeodesicDisplay.tangentSpace(Tensors.vector(0, 1, 0));
+    Tensor tensor = S2Display.tangentSpace(Tensors.vector(0, 1, 0));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3));
   }
 
   public void testInvariant() {
-    GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = S2Display.INSTANCE;
     Tensor xyz = geodesicDisplay.project(Tensors.vector(1, 2, 0));
     Tensor xy = geodesicDisplay.toPoint(xyz);
     Tolerance.CHOP.requireClose(Vector2Norm.of(xy), RealScalar.ONE);
@@ -29,13 +29,13 @@ public class S2GeodesicDisplayTest extends TestCase {
 
   public void testTangent() {
     Tensor xyz = Vector2Norm.NORMALIZE.apply(Tensors.vector(1, 0.3, 0.5));
-    Tensor matrix = S2GeodesicDisplay.tangentSpace(xyz);
+    Tensor matrix = S2Display.tangentSpace(xyz);
     assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
     Tolerance.CHOP.requireAllZero(matrix.dot(xyz));
   }
 
   public void testProjTangent() {
-    S2GeodesicDisplay s2GeodesicDisplay = (S2GeodesicDisplay) S2GeodesicDisplay.INSTANCE;
+    S2Display s2GeodesicDisplay = (S2Display) S2Display.INSTANCE;
     for (int index = 0; index < 10; ++index) {
       Tensor xya = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor xyz = s2GeodesicDisplay.project(xya);
@@ -45,6 +45,6 @@ public class S2GeodesicDisplayTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> S2GeodesicDisplay.tangentSpace(Tensors.vector(1, 1, 1)));
+    AssertFail.of(() -> S2Display.tangentSpace(Tensors.vector(1, 1, 1)));
   }
 }

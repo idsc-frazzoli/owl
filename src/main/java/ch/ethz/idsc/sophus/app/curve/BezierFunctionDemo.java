@@ -14,8 +14,8 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.bezier.BezierFunction;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
@@ -47,13 +47,13 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---

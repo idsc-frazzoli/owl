@@ -9,81 +9,68 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
+import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
+import ch.ethz.idsc.sophus.hs.rpn.RpnMetric;
+import ch.ethz.idsc.sophus.hs.rpn.RpnRandomSample;
+import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
+import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.LieTransport;
-import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.lie.rn.RnGroup;
-import ch.ethz.idsc.sophus.lie.rn.RnLineDistance;
-import ch.ethz.idsc.sophus.lie.rn.RnManifold;
-import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.PadRight;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
-public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.04)).unmodifiable();
-  private static final TensorUnaryOperator PAD = PadRight.zeros(2);
+/** symmetric positive definite 2 x 2 matrices */
+public abstract class RpnDisplay implements ManifoldDisplay, Serializable {
+  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
   // ---
   private final int dimensions;
 
-  /* package */ RnGeodesicDisplay(int dimensions) {
+  protected RpnDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 
   @Override // from GeodesicDisplay
   public final Geodesic geodesicInterface() {
-    return RnGeodesic.INSTANCE;
+    return SnGeodesic.INSTANCE; // TODO
   }
 
-  @Override // from GeodesicDisplay
+  @Override
   public final int dimensions() {
     return dimensions;
   }
 
   @Override // from GeodesicDisplay
-  public Tensor shape() {
+  public final Tensor shape() {
     return CIRCLE;
   }
 
   @Override // from GeodesicDisplay
-  public final Tensor project(Tensor xya) {
-    return xya.extract(0, dimensions);
-  }
-
-  @Override // from GeodesicDisplay
-  public final TensorUnaryOperator tangentProjection(Tensor p) {
-    return PAD;
-  }
-
-  @Override // from GeodesicDisplay
   public final LieGroup lieGroup() {
-    return RnGroup.INSTANCE;
+    return null;
+  }
+
+  @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
+    return null;
   }
 
   @Override
-  public final LieExponential lieExponential() {
-    return RnManifold.INSTANCE;
-  }
-
-  @Override // from GeodesicDisplay
   public final HsManifold hsManifold() {
-    return RnManifold.INSTANCE;
+    return RpnManifold.INSTANCE;
   }
 
-  @Override // from GeodesicDisplay
+  @Override
   public final HsTransport hsTransport() {
-    return LieTransport.INSTANCE;
+    return null;
   }
 
   @Override // from GeodesicDisplay
   public final TensorMetric parametricDistance() {
-    return RnMetric.INSTANCE;
+    return RpnMetric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -93,16 +80,21 @@ public abstract class RnGeodesicDisplay implements GeodesicDisplay, Serializable
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return RnBiinvariantMean.INSTANCE;
+    return SnFastMean.INSTANCE; // TODO
   }
 
-  @Override // from GeodesicDisplay
+  @Override
   public final LineDistance lineDistance() {
-    return RnLineDistance.INSTANCE;
+    return null;
   }
 
-  @Override // from Object
+  @Override
   public final String toString() {
-    return "R" + dimensions;
+    return "RP" + dimensions();
+  }
+
+  @Override
+  public final RandomSampleInterface randomSampleInterface() {
+    return RpnRandomSample.of(dimensions());
   }
 }

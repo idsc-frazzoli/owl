@@ -21,8 +21,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.gds.GeodesicDatasetDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
@@ -174,7 +174,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1));
       pathRenderCurve.setCurve(_control.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);

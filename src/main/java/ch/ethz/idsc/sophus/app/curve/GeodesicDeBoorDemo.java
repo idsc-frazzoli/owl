@@ -11,8 +11,8 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2CoveringDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.math.Geodesic;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
   public GeodesicDeBoorDemo() {
     addButtonDubins();
     // ---
-    setGeodesicDisplay(Se2CoveringGeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2CoveringDisplay.INSTANCE);
     // ---
     Tensor dubins = Tensors.fromString("{{1, 0, 0}, {2, 0, 2.5708}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarTensorFunction scalarTensorFunction = //
         DeBoor.of(geodesicInterface, knots, control);

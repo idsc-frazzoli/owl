@@ -19,9 +19,9 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -48,12 +48,12 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
       CurveSubdivisionSchemes.SIXPOINT);
 
   private static class Container {
-    private final GeodesicDisplay geodesicDisplay;
+    private final ManifoldDisplay geodesicDisplay;
     private final Tensor tracked;
     private final Tensor control;
     private final Tensor refined;
 
-    public Container(GeodesicDisplay geodesicDisplay, Tensor tracked, Tensor control, Tensor refined) {
+    public Container(ManifoldDisplay geodesicDisplay, Tensor tracked, Tensor control, Tensor refined) {
       this.geodesicDisplay = geodesicDisplay;
       this.tracked = tracked;
       this.control = control;
@@ -115,7 +115,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 
   private void updateState() {
     Tensor rawdata = gokartPoseData.getPose(spinnerLabelString.getValue(), spinnerLabelLimit.getValue());
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay.geodesicInterface(), GaussianWindow.FUNCTION);
     TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, spinnerLabelWidth.getValue());
     Tensor tracked = centerFilter.apply(rawdata);
@@ -137,7 +137,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     if (Objects.isNull(container))
       return;
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = container.geodesicDisplay;
+    ManifoldDisplay geodesicDisplay = container.geodesicDisplay;
     {
       Tensor tracked = container.tracked;
       pathRenderCurve.setCurve(tracked, false).render(geometricLayer, graphics);

@@ -17,8 +17,8 @@ import ch.ethz.idsc.owl.lane.StableLanes;
 import ch.ethz.idsc.sophus.app.curve.AbstractCurveDemo;
 import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.gds.Se2CoveringClothoidDisplay;
-import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2CoveringDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -40,8 +40,8 @@ import ch.ethz.idsc.tensor.ext.Serialization;
         Se2ClothoidDisplay.ANALYTIC, //
         Se2ClothoidDisplay.LEGENDRE, //
         Se2CoveringClothoidDisplay.INSTANCE, //
-        Se2CoveringGeodesicDisplay.INSTANCE, //
-        Se2GeodesicDisplay.INSTANCE));
+        Se2CoveringDisplay.INSTANCE, //
+        Se2Display.INSTANCE));
     jToggleCurvature.setSelected(false);
     // ---
     timerFrame.jToolBar.addSeparator();

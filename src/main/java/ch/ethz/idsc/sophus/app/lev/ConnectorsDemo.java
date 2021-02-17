@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.itp.LinearInterpolation;
     // ---
     Tensor controlPoints = leversRender.getSequence();
     int length = controlPoints.length();
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     graphics.setColor(Color.RED);
     for (int index = 0; index < length; ++index) {

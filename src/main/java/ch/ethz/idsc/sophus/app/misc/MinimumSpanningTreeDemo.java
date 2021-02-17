@@ -16,8 +16,8 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.util.DisjointSets;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LogWeightingDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.MinimumSpanningTree;
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     RenderQuality.setQuality(graphics);
     Tensor sequence = getGeodesicControlPoints();
@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   }
 
   public Tensor distanceMatrix(Tensor sequence) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tuo = biinvariant().distances(geodesicDisplay.hsManifold(), sequence);
     Tensor matrix = Tensor.of(sequence.stream().map(tuo));
     return SymmetricMatrixQ.of(matrix) //

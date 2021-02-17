@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.LegendImage;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.num.Pi;
   static final Scalar FACTOR = RealScalar.of(0.3);
 
   public static void of( //
-      GeodesicDisplay geodesicDisplay, //
+      ManifoldDisplay geodesicDisplay, //
       Tensor origin, Tensor sequence, Tensor weights, //
       ColorDataGradient cdg, //
       GeometricLayer geometricLayer, Graphics2D graphics) {

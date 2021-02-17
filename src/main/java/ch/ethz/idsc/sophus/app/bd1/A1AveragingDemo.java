@@ -5,7 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.util.Arrays;
 
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.N;
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final Scalar MARGIN = RealScalar.of(2);
 
-  public A1AveragingDemo(GeodesicDisplay geodesicDisplay) {
+  public A1AveragingDemo(ManifoldDisplay geodesicDisplay) {
     super(Arrays.asList(geodesicDisplay));
   }
 

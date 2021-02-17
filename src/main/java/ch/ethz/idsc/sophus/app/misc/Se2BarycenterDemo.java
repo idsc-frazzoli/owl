@@ -10,8 +10,8 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.red.Total;
     Tensor sequence = getControlPointsSe2();
     if (sequence.length() == 4)
       try {
-        GeodesicDisplay geodesicDisplay = geodesicDisplay();
+        ManifoldDisplay geodesicDisplay = geodesicDisplay();
         // ---
         Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
         final ScalarTensorFunction curve = geodesicInterface.curve(sequence.get(0), sequence.get(1));

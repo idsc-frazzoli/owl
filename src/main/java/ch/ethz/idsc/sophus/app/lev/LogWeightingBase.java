@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 public abstract class LogWeightingBase extends AbstractPlaceDemo {
   protected final SpinnerLabel<LogWeighting> spinnerLogWeighting = new SpinnerLabel<>();
 
-  public LogWeightingBase(boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
+  public LogWeightingBase(boolean addRemoveControlPoints, List<ManifoldDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list);
     {
       spinnerLogWeighting.setList(array);

@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.gui.win;
 import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 
 public enum AbstractDemoHelper {
   ;
@@ -45,7 +45,7 @@ public enum AbstractDemoHelper {
     boolean success = true;
     if (abstractDemo instanceof GeodesicDisplayDemo) {
       GeodesicDisplayDemo geodesicDisplayDemo = (GeodesicDisplayDemo) abstractDemo;
-      for (GeodesicDisplay geodesicDisplay : geodesicDisplayDemo.getGeodesicDisplays())
+      for (ManifoldDisplay geodesicDisplay : geodesicDisplayDemo.getGeodesicDisplays())
         try {
           geodesicDisplayDemo.setGeodesicDisplay(geodesicDisplay);
           geodesicDisplayDemo.render(geometricLayer, bufferedImage.createGraphics());

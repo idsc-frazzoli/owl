@@ -13,8 +13,8 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -127,7 +127,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     RenderQuality.setDefault(graphics);
     BufferedImage bufferedImage = bufferedImage(spinnerRes.getValue(), geodesicDisplay.hsManifold());
     ImageRender.of(bufferedImage, pixel2model(bufferedImage)) //

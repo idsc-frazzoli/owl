@@ -33,13 +33,13 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** symmetric positive definite 2 x 2 matrices */
-public abstract class HnGeodesicDisplay implements GeodesicDisplay, Serializable {
+public abstract class HnDisplay implements ManifoldDisplay, Serializable {
   private static final Tensor STAR_POINTS = StarPoints.of(6, 0.12, 0.04).unmodifiable();
   protected static final Scalar RADIUS = RealScalar.of(2.5);
   // ---
   private final int dimensions;
 
-  protected HnGeodesicDisplay(int dimensions) {
+  protected HnDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 

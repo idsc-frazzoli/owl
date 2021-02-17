@@ -16,8 +16,8 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
@@ -49,7 +49,7 @@ public class TransitionNdContainer {
         Append.of(lbounds, Pi.VALUE.negate()), //
         Append.of(ubounds, Pi.VALUE));
     tensor = RandomSample.of(randomSampleInterface, n);
-    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
+    for (ManifoldDisplay geodesicDisplay : GeodesicDisplays.CL_SE2_R2) {
       TransitionNdTypes se2TransitionNdType = TransitionNdTypes.fromString(geodesicDisplay);
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(TransitionNdTypes.RN) //
           ? new RnRrtsNodeCollection(lbounds, ubounds)
@@ -63,7 +63,7 @@ public class TransitionNdContainer {
   }
 
   public void render( //
-      GeodesicDisplay geodesicDisplay, //
+      ManifoldDisplay geodesicDisplay, //
       GeometricLayer geometricLayer, //
       Graphics2D graphics, //
       Tensor mouse) {

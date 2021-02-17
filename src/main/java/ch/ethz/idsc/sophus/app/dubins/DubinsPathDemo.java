@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
-import ch.ethz.idsc.sophus.gds.Se2CoveringGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.Se2CoveringDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.AbstractDemo;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -70,8 +70,8 @@ import ch.ethz.idsc.tensor.red.Nest;
       // graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
       Tensor map = params.map(scalarTensorFunction);
       for (Tensor point : map) { // draw control point
-        geometricLayer.pushMatrix(Se2CoveringGeodesicDisplay.INSTANCE.matrixLift(point));
-        Path2D path2d = geometricLayer.toPath2D(Se2CoveringGeodesicDisplay.INSTANCE.shape());
+        geometricLayer.pushMatrix(Se2CoveringDisplay.INSTANCE.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(Se2CoveringDisplay.INSTANCE.shape());
         graphics.fill(path2d);
         geometricLayer.popMatrix();
       }

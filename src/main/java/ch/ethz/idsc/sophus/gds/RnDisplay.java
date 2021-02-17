@@ -9,68 +9,81 @@ import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.hs.MetricBiinvariant;
-import ch.ethz.idsc.sophus.hs.rpn.RpnManifold;
-import ch.ethz.idsc.sophus.hs.rpn.RpnMetric;
-import ch.ethz.idsc.sophus.hs.rpn.RpnRandomSample;
-import ch.ethz.idsc.sophus.hs.sn.SnFastMean;
-import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieTransport;
+import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
+import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.sophus.lie.rn.RnLineDistance;
+import ch.ethz.idsc.sophus.lie.rn.RnManifold;
+import ch.ethz.idsc.sophus.lie.rn.RnMetric;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
-import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.PadRight;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
-/** symmetric positive definite 2 x 2 matrices */
-public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializable {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.05)).unmodifiable();
+public abstract class RnDisplay implements ManifoldDisplay, Serializable {
+  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.04)).unmodifiable();
+  private static final TensorUnaryOperator PAD = PadRight.zeros(2);
   // ---
   private final int dimensions;
 
-  protected RpnGeodesicDisplay(int dimensions) {
+  /* package */ RnDisplay(int dimensions) {
     this.dimensions = dimensions;
   }
 
   @Override // from GeodesicDisplay
   public final Geodesic geodesicInterface() {
-    return SnGeodesic.INSTANCE; // TODO
+    return RnGeodesic.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final int dimensions() {
     return dimensions;
   }
 
   @Override // from GeodesicDisplay
-  public final Tensor shape() {
+  public Tensor shape() {
     return CIRCLE;
   }
 
   @Override // from GeodesicDisplay
-  public final LieGroup lieGroup() {
-    return null;
+  public final Tensor project(Tensor xya) {
+    return xya.extract(0, dimensions);
   }
 
   @Override // from GeodesicDisplay
-  public LieExponential lieExponential() {
-    return null;
+  public final TensorUnaryOperator tangentProjection(Tensor p) {
+    return PAD;
+  }
+
+  @Override // from GeodesicDisplay
+  public final LieGroup lieGroup() {
+    return RnGroup.INSTANCE;
   }
 
   @Override
+  public final LieExponential lieExponential() {
+    return RnManifold.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
   public final HsManifold hsManifold() {
-    return RpnManifold.INSTANCE;
+    return RnManifold.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final HsTransport hsTransport() {
-    return null;
+    return LieTransport.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public final TensorMetric parametricDistance() {
-    return RpnMetric.INSTANCE;
+    return RnMetric.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -80,21 +93,16 @@ public abstract class RpnGeodesicDisplay implements GeodesicDisplay, Serializabl
 
   @Override // from GeodesicDisplay
   public final BiinvariantMean biinvariantMean() {
-    return SnFastMean.INSTANCE; // TODO
+    return RnBiinvariantMean.INSTANCE;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public final LineDistance lineDistance() {
-    return null;
+    return RnLineDistance.INSTANCE;
   }
 
-  @Override
+  @Override // from Object
   public final String toString() {
-    return "RP" + dimensions();
-  }
-
-  @Override
-  public final RandomSampleInterface randomSampleInterface() {
-    return RpnRandomSample.of(dimensions());
+    return "R" + dimensions;
   }
 }

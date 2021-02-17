@@ -14,8 +14,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.decim.HsLineDistance;
 import ch.ethz.idsc.sophus.decim.HsLineDistance.NormImpl;
 import ch.ethz.idsc.sophus.decim.HsLineProjection;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     Exponential exponential = Se2CoveringExponential.INSTANCE;
     // ---

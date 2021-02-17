@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparators;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.RnGeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.RnDisplay;
+import ch.ethz.idsc.sophus.gds.Se2AbstractDisplay;
 import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 
@@ -32,14 +32,14 @@ import ch.ethz.idsc.tensor.RealScalar;
     return transitionSpace;
   }
 
-  static TransitionNdTypes fromString(GeodesicDisplay geodesicDisplay) {
+  static TransitionNdTypes fromString(ManifoldDisplay geodesicDisplay) {
     if (geodesicDisplay.equals(Se2ClothoidDisplay.ANALYTIC))
       return CLOTHOID_ANALYTIC;
     if (geodesicDisplay.equals(Se2ClothoidDisplay.LEGENDRE))
       return CLOTHOID_LEGENDRE;
-    if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay)
+    if (geodesicDisplay instanceof Se2AbstractDisplay)
       return DUBINS;
-    if (geodesicDisplay instanceof RnGeodesicDisplay)
+    if (geodesicDisplay instanceof RnDisplay)
       return RN;
     throw new IllegalArgumentException();
   }

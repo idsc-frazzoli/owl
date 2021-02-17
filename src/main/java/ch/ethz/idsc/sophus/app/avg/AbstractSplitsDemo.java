@@ -12,8 +12,8 @@ import ch.ethz.idsc.sophus.app.sym.SymLink;
 import ch.ethz.idsc.sophus.app.sym.SymLinkBuilder;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     SymScalar symScalar = symScalar(Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf)));
     SymLink symLink = null;
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     if (Objects.nonNull(symScalar)) {
       graphics.drawImage(new SymLinkImage(symScalar, FONT).bufferedImage(), 0, 0, null);
       // ---

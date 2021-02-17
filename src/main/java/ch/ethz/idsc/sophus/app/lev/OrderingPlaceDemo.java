@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Scalar;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       spinnerColorData.setValueSafe(ColorDataGradients.THERMOMETER);
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color");
     }
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     setLogWeighting(LogWeightings.DISTANCES);
     shuffleSnap();
   }
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       Tensor sequence = getSequence();

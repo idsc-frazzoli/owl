@@ -31,7 +31,7 @@ import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gds.Se2ClothoidDisplay;
 import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static final Scalar OVERHEAD = RealScalar.of(0.5);
   private static final Scalar MIN_RESOLUTION = RealScalar.of(0.1);
   // ---
-  private static final GeodesicDisplay GEODESIC_DISPLAY = Se2ClothoidDisplay.ANALYTIC;
+  private static final ManifoldDisplay GEODESIC_DISPLAY = Se2ClothoidDisplay.ANALYTIC;
   private static final int DEGREE = 3;
   private static final int LEVELS = 5;
   private static final Scalar LANE_WIDTH = RealScalar.of(1.1);

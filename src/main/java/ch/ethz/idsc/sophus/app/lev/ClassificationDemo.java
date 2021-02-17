@@ -10,7 +10,7 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     // GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();

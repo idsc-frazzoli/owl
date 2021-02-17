@@ -16,8 +16,8 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.gui.ren.ArrayRender;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       }
       setControlPointsSe2(control);
     }
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     if (2 < controlPoints.length()) {

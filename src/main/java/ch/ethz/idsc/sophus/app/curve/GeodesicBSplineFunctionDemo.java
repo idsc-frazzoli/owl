@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.LieGroupBSplineInterpolation;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();

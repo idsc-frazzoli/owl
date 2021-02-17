@@ -22,11 +22,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.app.lev.LogWeightingBase;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.H2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.H2Display;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeighting;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /** transfer weights from barycentric coordinates defined by set of control points
  * in the square domain (subset of R^2) to means in non-linear spaces */
 /* package */ class CheckerBoardDemo extends LogWeightingBase //
-    implements SpinnerListener<GeodesicDisplay> {
+    implements SpinnerListener<ManifoldDisplay> {
   public static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._000.strict();
   public static final Tensor BOX = Tensors.fromString("{{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}");
   // ---
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // ---
     timerFrame.jToolBar.add(jToggleButton);
     // ---
-    GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = R2Display.INSTANCE;
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
     addSpinnerListener(l -> recompute());
@@ -163,16 +163,16 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   }
 
   @Override
-  public void actionPerformed(GeodesicDisplay geodesicDisplay) {
-    if (geodesicDisplay instanceof R2GeodesicDisplay) {
+  public void actionPerformed(ManifoldDisplay geodesicDisplay) {
+    if (geodesicDisplay instanceof R2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{0.287, -0.958, 0.000}, {-1.017, -0.953, 0.000}, {-0.717, 0.229, 0.000}, {-0.912, 0.669, 0.000}, {-0.644, 0.967, 0.000}, {0.933, 0.908, 0.000}, {0.950, -0.209, 0.000}, {-0.461, 0.637, 0.000}, {0.956, -0.627, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof H2GeodesicDisplay) {
+    if (geodesicDisplay instanceof H2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{0.783, -2.467, 0.000}, {-0.083, -1.667, 0.000}, {-2.683, -1.167, 0.000}, {-2.650, 0.133, 0.000}, {-1.450, 2.467, 0.000}, {0.083, 0.033, 0.000}, {0.867, 2.383, 0.000}, {2.217, 2.500, 0.000}, {2.183, -0.517, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+    if (geodesicDisplay instanceof S2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{-0.715, -0.357, 0.000}, {-0.708, 0.500, 0.000}, {-0.102, 0.592, 0.000}, {0.181, 0.892, 0.000}, {0.733, 0.455, 0.000}, {-0.349, 0.232, 0.000}, {-0.226, 0.008, 0.000}, {0.434, 0.097, 0.000}, {0.759, -0.492, 0.000}, {0.067, -0.712, 0.000}}"));
     }

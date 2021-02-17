@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import javax.swing.JButton;
 
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Round;
@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 public abstract class AbstractPlaceDemo extends ControlPointsDemo {
   private final JButton jButtonPrint = new JButton("print");
 
-  public AbstractPlaceDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
+  public AbstractPlaceDemo(boolean addRemoveControlPoints, List<ManifoldDisplay> list) {
     super(addRemoveControlPoints, list);
     setMidpointIndicated(false);
     // ---

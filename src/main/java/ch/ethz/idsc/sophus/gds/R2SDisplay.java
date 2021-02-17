@@ -21,7 +21,7 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-public enum R2SGeodesicDisplay implements GeodesicDisplay {
+public enum R2SDisplay implements ManifoldDisplay {
   INSTANCE;
 
   private static final Tensor ARROWHEAD = Arrowhead.of(0.2).unmodifiable();

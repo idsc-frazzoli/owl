@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.io.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
     RenderQuality.setQuality(graphics);
@@ -114,7 +114,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
     DeBoor deBoor = scalarTensorFunction.deBoor(parameter);

@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.red.Diagonal;
 
 /** symmetric positive definite 2 x 2 matrices */
-public enum Spd2GeodesicDisplay implements GeodesicDisplay {
+public enum Spd2Display implements ManifoldDisplay {
   INSTANCE;
 
   private static final Scalar SCALE = RealScalar.of(0.2);

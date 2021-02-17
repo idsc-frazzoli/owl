@@ -13,7 +13,7 @@ public abstract class GeodesicDatasetDemo extends GeodesicDisplayDemo {
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  public GeodesicDatasetDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
+  public GeodesicDatasetDemo(List<ManifoldDisplay> list, GokartPoseData gokartPoseData) {
     super(list);
     this.gokartPoseData = gokartPoseData;
     {

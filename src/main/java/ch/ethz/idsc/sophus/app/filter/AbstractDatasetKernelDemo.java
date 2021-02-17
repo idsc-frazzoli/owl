@@ -8,14 +8,14 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /* package */ abstract class AbstractDatasetKernelDemo extends AbstractSpectrogramDemo {
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  protected AbstractDatasetKernelDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
+  protected AbstractDatasetKernelDemo(List<ManifoldDisplay> list, GokartPoseData gokartPoseData) {
     super(list, gokartPoseData);
     {
       spinnerRadius.setList(IntStream.range(0, 25).boxed().collect(Collectors.toList()));

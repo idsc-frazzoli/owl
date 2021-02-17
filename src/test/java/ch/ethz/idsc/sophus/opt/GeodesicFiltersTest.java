@@ -9,8 +9,8 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.Geodesic;
@@ -28,7 +28,7 @@ public class GeodesicFiltersTest extends TestCase {
   private static void _check(GokartPoseData gokartPoseData) {
     List<String> lines = gokartPoseData.list();
     Tensor control = gokartPoseData.getPose(lines.get(0), 250);
-    GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = Se2Display.INSTANCE;
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarUnaryOperator smoothingKernel = WindowFunctions.GAUSSIAN.get();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
@@ -56,7 +56,7 @@ public class GeodesicFiltersTest extends TestCase {
   public void testTiming() {
     String name = "20190701T170957_06";
     Tensor control = GokartPoseDataV2.RACING_DAY.getPose(name, 1_000_000);
-    GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = Se2Display.INSTANCE;
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarUnaryOperator smoothingKernel = WindowFunctions.GAUSSIAN.get();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();

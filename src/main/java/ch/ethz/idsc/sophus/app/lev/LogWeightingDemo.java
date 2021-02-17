@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.math.var.Variograms;
@@ -57,7 +57,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
     }
   };
 
-  public LogWeightingDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
+  public LogWeightingDemo(boolean addRemoveControlPoints, List<ManifoldDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     spinnerLogWeighting.addSpinnerListener(spinnerListener);
     {

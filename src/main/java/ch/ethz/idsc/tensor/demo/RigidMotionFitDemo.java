@@ -11,8 +11,8 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
@@ -69,10 +69,10 @@ import ch.ethz.idsc.tensor.sca.Clips;
     RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     {
-      Tensor target = Tensor.of(getGeodesicControlPoints().stream().map(R2GeodesicDisplay.INSTANCE::project));
+      Tensor target = Tensor.of(getGeodesicControlPoints().stream().map(R2Display.INSTANCE::project));
       Tensor solve = Se2RigidMotionFit.of(points, target);
       POINTS_RENDER_RESULT //
-          .show(Se2GeodesicDisplay.INSTANCE::matrixLift, Se2GeodesicDisplay.INSTANCE.shape(), Tensors.of(solve)) //
+          .show(Se2Display.INSTANCE::matrixLift, Se2Display.INSTANCE.shape(), Tensors.of(solve)) //
           .render(geometricLayer, graphics);
       {
         Tensor domain = Subdivide.increasing(Clips.unit(), 10);
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     }
     renderControlPoints(geometricLayer, graphics);
     POINTS_RENDER_POINTS //
-        .show(R2GeodesicDisplay.INSTANCE::matrixLift, ORIGIN, points) //
+        .show(R2Display.INSTANCE::matrixLift, ORIGIN, points) //
         .render(geometricLayer, graphics);
   }
 

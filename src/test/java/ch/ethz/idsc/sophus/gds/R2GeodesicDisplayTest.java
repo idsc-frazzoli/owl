@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class R2GeodesicDisplayTest extends TestCase {
   public void testSimple() {
-    assertEquals(R2GeodesicDisplay.INSTANCE.geodesicInterface(), RnGeodesic.INSTANCE);
+    assertEquals(R2Display.INSTANCE.geodesicInterface(), RnGeodesic.INSTANCE);
   }
 }

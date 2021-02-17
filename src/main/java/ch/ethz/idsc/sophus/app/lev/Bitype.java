@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.lev;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
 
@@ -17,7 +17,7 @@ public enum Bitype {
   CUPOLA, //
   ;
 
-  public Biinvariant from(GeodesicDisplay geodesicDisplay) {
+  public Biinvariant from(ManifoldDisplay geodesicDisplay) {
     switch (this) {
     case METRIC1:
     case METRIC2:

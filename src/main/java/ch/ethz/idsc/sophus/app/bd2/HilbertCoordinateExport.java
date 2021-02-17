@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
       System.out.println(n);
       Tensor sequence = HilbertBenchmarkDemo.unit(n);
       BufferedImage bufferedImage = HilbertLevelImage.of( //
-          R2GeodesicDisplay.INSTANCE, sequence, 60, ColorDataGradients.CLASSIC, 800);
+          R2Display.INSTANCE, sequence, 60, ColorDataGradients.CLASSIC, 800);
       ImageIO.write(bufferedImage, "png", HomeDirectory.Pictures(String.format("hc%d.png", n)));
     }
   }

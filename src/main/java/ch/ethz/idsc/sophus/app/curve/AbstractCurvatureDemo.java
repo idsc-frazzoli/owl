@@ -10,8 +10,8 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.CurveVisualSet;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +33,7 @@ public abstract class AbstractCurvatureDemo extends ControlPointsDemo {
     this(GeodesicDisplays.ALL);
   }
 
-  public AbstractCurvatureDemo(List<GeodesicDisplay> list) {
+  public AbstractCurvatureDemo(List<ManifoldDisplay> list) {
     super(true, list);
     // ---
     jToggleCurvature.setSelected(true);
@@ -48,7 +48,7 @@ public abstract class AbstractCurvatureDemo extends ControlPointsDemo {
 
   @Override
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor refined = protected_render(geometricLayer, graphics);
     if (this instanceof BufferedImageSupplier && //
         jToggleGraph.isSelected()) {

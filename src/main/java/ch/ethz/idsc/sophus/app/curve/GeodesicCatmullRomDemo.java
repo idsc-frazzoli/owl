@@ -13,9 +13,9 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicCatmullRom;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.math.Geodesic;
@@ -41,7 +41,7 @@ public class GeodesicCatmullRomDemo extends AbstractCurvatureDemo {
     super(GeodesicDisplays.SE2C_SE2_R2);
     addButtonDubins();
     // ---
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(5);
@@ -68,7 +68,7 @@ public class GeodesicCatmullRomDemo extends AbstractCurvatureDemo {
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     if (4 <= control.length()) {
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = geodesicDisplay();
       Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
       Scalar exponent = RationalScalar.of(2 * jSliderExponent.getValue(), jSliderExponent.getMaximum());
       TensorUnaryOperator centripetalKnotSpacing = //

@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineInterpolation;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     File folder = HomeDirectory.Documents("s2");
     folder.mkdir();
     Export.of(new File(folder, "target.csv"), target.map(Round._6));
-    Geodesic geodesicInterface = S2GeodesicDisplay.INSTANCE.geodesicInterface();
+    Geodesic geodesicInterface = S2Display.INSTANCE.geodesicInterface();
     AbstractBSplineInterpolation abstractBSplineInterpolation = //
         new GeodesicBSplineInterpolation(geodesicInterface, 2, target);
     Iteration iteration = abstractBSplineInterpolation.untilClose(Chop._08, 100);

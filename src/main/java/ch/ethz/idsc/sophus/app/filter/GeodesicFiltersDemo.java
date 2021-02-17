@@ -9,8 +9,8 @@ import java.util.Arrays;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.opt.GeodesicFilters;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
     if (!Integers.isEven(control.length())) {
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = geodesicDisplay();
       ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
       for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {
         int ordinal = geodesicFilters.ordinal();

@@ -10,8 +10,8 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,7 +28,7 @@ public abstract class AbstractCurveDemo extends AbstractCurvatureDemo {
     this(GeodesicDisplays.ALL);
   }
 
-  public AbstractCurveDemo(List<GeodesicDisplay> list) {
+  public AbstractCurveDemo(List<ManifoldDisplay> list) {
     super(list);
     // ---
     spinnerDegree.setList(DEGREES);

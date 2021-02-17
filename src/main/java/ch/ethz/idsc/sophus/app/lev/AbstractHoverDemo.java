@@ -12,9 +12,9 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
@@ -44,12 +44,12 @@ import ch.ethz.idsc.tensor.Tensor;
       timerFrame.jToolBar.add(jButtonShuffle);
     }
     shuffle(spinnerCount.getValue());
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     timerFrame.jToolBar.addSeparator();
   }
 
   void shuffle(int n) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     RandomSampleInterface randomSampleInterface = geodesicDisplay.randomSampleInterface();
     setControlPointsSe2(RandomSample.of(randomSampleInterface, n));
   }
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.Tensor;
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor origin = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     LeversRender leversRender = //

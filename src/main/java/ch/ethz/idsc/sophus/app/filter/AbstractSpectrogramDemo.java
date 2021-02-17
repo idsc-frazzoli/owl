@@ -14,8 +14,8 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     this(GeodesicDisplays.CL_SE2_R2, gokartPoseData);
   }
 
-  protected AbstractSpectrogramDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
+  protected AbstractSpectrogramDemo(List<ManifoldDisplay> list, GokartPoseData gokartPoseData) {
     super(list);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
   @Override
   protected void differences_render( //
-      Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
+      Graphics2D graphics, ManifoldDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(geodesicDisplay.lieExponential());

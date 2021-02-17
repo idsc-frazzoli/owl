@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.gds;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-public class H2GeodesicDisplay extends HnGeodesicDisplay {
-  public static final GeodesicDisplay INSTANCE = new H2GeodesicDisplay();
+public class H2Display extends HnDisplay {
+  public static final ManifoldDisplay INSTANCE = new H2Display();
 
   /***************************************************/
-  private H2GeodesicDisplay() {
+  private H2Display() {
     super(2);
   }
 

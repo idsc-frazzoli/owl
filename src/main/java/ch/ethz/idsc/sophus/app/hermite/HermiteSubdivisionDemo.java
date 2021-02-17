@@ -16,9 +16,9 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.clt.ClothoidDistance;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
@@ -77,12 +77,12 @@ import ch.ethz.idsc.tensor.red.Mean;
     GRID_RENDER.render(geometricLayer, graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     final Tensor tensor = getControlPointsSe2();
-    POINTS_RENDER_0.show(Se2GeodesicDisplay.INSTANCE::matrixLift, //
-        Se2GeodesicDisplay.INSTANCE.shape(), //
+    POINTS_RENDER_0.show(Se2Display.INSTANCE::matrixLift, //
+        Se2Display.INSTANCE.shape(), //
         tensor).render(geometricLayer, graphics);
     // renderControlPoints(geometricLayer, graphics);
     if (1 < tensor.length()) {
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = geodesicDisplay();
       Tensor control;
       switch (geodesicDisplay.toString()) {
       case "SE2C":

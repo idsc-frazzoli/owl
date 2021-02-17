@@ -12,8 +12,8 @@ import ch.ethz.idsc.sophus.fit.HsWeiszfeldMethod;
 import ch.ethz.idsc.sophus.fit.SpatialMedian;
 import ch.ethz.idsc.sophus.fit.SphereFit;
 import ch.ethz.idsc.sophus.fit.WeiszfeldMethod;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    final ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = getGeodesicControlPoints();
     {
       Optional<SphereFit> optional = SphereFit.of(control);

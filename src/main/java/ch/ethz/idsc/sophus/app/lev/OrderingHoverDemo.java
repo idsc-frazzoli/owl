@@ -8,8 +8,8 @@ import java.util.Arrays;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
       spinnerColorData.setValueSafe(ColorDataGradients.THERMOMETER);
       spinnerColorData.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "color");
     }
-    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2Display.INSTANCE);
     setLogWeighting(LogWeightings.DISTANCES);
     addSpinnerListener(v -> recompute());
     recompute();
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
     Tensor sequence = RandomVariate.of(distribution, spinnerLength.getValue(), 3);
     setControlPointsSe2(sequence);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
     tensorUnaryOperator = //
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), getGeodesicControlPoints());
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from AbstractHoverDemo
   void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor sequence = leversRender.getSequence();
     Tensor origin = leversRender.getOrigin();
     Tensor weights = tensorUnaryOperator.apply(origin);

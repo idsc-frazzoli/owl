@@ -10,18 +10,18 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.H2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.H2Display;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.opt.PolygonCoordinates;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-/* package */ class ThreePointBarycenterDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class ThreePointBarycenterDemo extends LogWeightingDemo implements SpinnerListener<ManifoldDisplay> {
   private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
   public ThreePointBarycenterDemo() {
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
     // ---
     timerFrame.jToolBar.add(jToggleNeutral);
     // ---
-    GeodesicDisplay geodesicDisplay = S2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = S2Display.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
     actionPerformed(geodesicDisplay);
     addSpinnerListener(this);
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       Tensor sequence = getSequence();
@@ -71,16 +71,16 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   }
 
   @Override
-  public void actionPerformed(GeodesicDisplay geodesicDisplay) {
-    if (geodesicDisplay instanceof R2GeodesicDisplay) {
+  public void actionPerformed(ManifoldDisplay geodesicDisplay) {
+    if (geodesicDisplay instanceof R2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{-0.175, 0.358, 0.000}, {-0.991, 0.113, 0.000}, {-0.644, 0.967, 0.000}, {0.509, 0.840, 0.000}, {0.689, 0.513, 0.000}, {0.956, -0.627, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof H2GeodesicDisplay) {
+    if (geodesicDisplay instanceof H2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{0.200, 0.233, 0.000}, {-0.867, 2.450, 0.000}, {2.300, 2.117, 0.000}, {2.567, 0.150, 0.000}, {1.600, -2.583, 0.000}, {-2.550, -1.817, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+    if (geodesicDisplay instanceof S2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{-0.363, 0.388, 0.000}, {-0.825, -0.271, 0.000}, {-0.513, 0.804, 0.000}, {0.646, 0.667, 0.000}, {0.704, -0.100, 0.000}, {-0.075, -0.733, 0.000}}"));
     }

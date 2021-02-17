@@ -24,8 +24,8 @@ import ch.ethz.idsc.sophus.decim.LineDistances;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.gds.GeodesicDatasetDemo;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
@@ -110,7 +110,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);

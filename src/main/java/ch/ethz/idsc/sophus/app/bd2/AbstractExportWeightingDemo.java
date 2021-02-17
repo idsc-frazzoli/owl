@@ -13,7 +13,7 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.sophus.app.bdn.AbstractScatteredSetWeightingDemo;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
@@ -31,7 +31,7 @@ public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWe
   private final JButton jButtonExport = new JButton("export");
 
   public AbstractExportWeightingDemo( //
-      boolean addRemoveControlPoints, List<GeodesicDisplay> list, List<LogWeighting> array) {
+      boolean addRemoveControlPoints, List<ManifoldDisplay> list, List<LogWeighting> array) {
     super(addRemoveControlPoints, list, array);
     {
       jButtonExport.addActionListener(this);

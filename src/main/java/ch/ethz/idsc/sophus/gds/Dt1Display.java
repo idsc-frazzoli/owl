@@ -9,79 +9,83 @@ import ch.ethz.idsc.sophus.hs.HsTransport;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieTransport;
-import ch.ethz.idsc.sophus.lie.he.HeBiinvariantMean;
-import ch.ethz.idsc.sophus.lie.he.HeGeodesic;
-import ch.ethz.idsc.sophus.lie.he.HeGroup;
-import ch.ethz.idsc.sophus.lie.he.HeManifold;
+import ch.ethz.idsc.sophus.lie.dt.DtBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.dt.DtExponential;
+import ch.ethz.idsc.sophus.lie.dt.DtGeodesic;
+import ch.ethz.idsc.sophus.lie.dt.DtGroup;
+import ch.ethz.idsc.sophus.lie.dt.DtManifold;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
+import ch.ethz.idsc.tensor.red.Max;
 
-public enum He1GeodesicDisplay implements GeodesicDisplay {
+public enum Dt1Display implements ManifoldDisplay {
   INSTANCE;
 
-  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2)).unmodifiable();
+  private static final Tensor PENTAGON = CirclePoints.of(5).multiply(RealScalar.of(0.2)).unmodifiable();
+  // Fehlerhaft, aber zurzeit Probleme mit Ausnahme bei lambda = 0
+  private static final ScalarUnaryOperator MAX_X = Max.function(RealScalar.of(0.001));
 
   @Override // from GeodesicDisplay
   public Geodesic geodesicInterface() {
-    return HeGeodesic.INSTANCE;
+    return DtGeodesic.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public int dimensions() {
-    return 3;
+    return 2;
   }
 
   @Override // from GeodesicDisplay
-  public Tensor shape() {
-    return SQUARE;
-  }
-
-  @Override // from GeodesicDisplay
-  public Tensor project(Tensor xya) {
-    return Tensors.of(xya.extract(0, 1), xya.extract(1, 2), xya.Get(2));
-  }
-
-  @Override // from GeodesicDisplay
-  public final TensorUnaryOperator tangentProjection(Tensor xyz) {
+  public TensorUnaryOperator tangentProjection(Tensor p) {
     return null;
   }
 
   @Override // from GeodesicDisplay
+  public Tensor shape() {
+    return PENTAGON;
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor project(Tensor xya) {
+    Tensor point = xya.extract(0, 2);
+    point.set(MAX_X, 0);
+    return point;
+  }
+
+  @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
-    if (VectorQ.of(p))
-      throw new RuntimeException();
-    return Tensors.of(p.Get(0, 0), p.Get(1, 0));
+    return VectorQ.requireLength(p, 2);
   }
 
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
-    return Se2Matrix.translation(toPoint(p));
+    return Se2Matrix.translation(p);
   }
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return HeGroup.INSTANCE;
+    return DtGroup.INSTANCE;
   }
 
-  @Override // from GeodesicDisplay
+  @Override
   public LieExponential lieExponential() {
-    return HeManifold.INSTANCE;
+    return LieExponential.of(DtGroup.INSTANCE, DtExponential.INSTANCE);
   }
 
   @Override // from GeodesicDisplay
   public HsManifold hsManifold() {
-    return HeManifold.INSTANCE;
+    return DtManifold.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
-  public HsTransport hsTransport() {
+  public final HsTransport hsTransport() {
     return LieTransport.INSTANCE;
   }
 
@@ -97,16 +101,16 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return HeBiinvariantMean.INSTANCE;
+    return DtBiinvariantMean.INSTANCE;
   }
 
   @Override
-  public LineDistance lineDistance() {
+  public final LineDistance lineDistance() {
     return null;
   }
 
-  @Override // from GeodesicDisplay
+  @Override // from Object
   public String toString() {
-    return "He1";
+    return "Dt1";
   }
 }

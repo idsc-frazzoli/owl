@@ -18,7 +18,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.ColoredNoise;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
   // private final Tensor vector;
   public ColoredNoiseDemo() {
-    super(Arrays.asList(R2GeodesicDisplay.INSTANCE));
+    super(Arrays.asList(R2Display.INSTANCE));
     {
       spinnerAlpha.setList(Subdivide.of(-2, 2, 8 * 2).stream().map(Scalar.class::cast).collect(Collectors.toList()));
       spinnerAlpha.setIndex(0);

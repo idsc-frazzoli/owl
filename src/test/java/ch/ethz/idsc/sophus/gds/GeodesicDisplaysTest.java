@@ -16,7 +16,7 @@ public class GeodesicDisplaysTest extends TestCase {
   }
 
   public void testToPoint() {
-    for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.ALL)
+    for (ManifoldDisplay geodesicDisplay : GeodesicDisplays.ALL)
       try {
         Tensor xya = Tensors.vector(1, 2, 3);
         Tensor p = Serialization.copy(geodesicDisplay).project(xya);

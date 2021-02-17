@@ -15,8 +15,8 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     Tensor control = getGeodesicControlPoints();
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tensorUnaryOperator = //
         KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), spinnerBeta.getValue());
     Tensor knots = tensorUnaryOperator.apply(control);

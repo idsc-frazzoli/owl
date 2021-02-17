@@ -14,10 +14,10 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.S2Display;
+import ch.ethz.idsc.sophus.gds.Se2AbstractDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
 import ch.ethz.idsc.sophus.hs.HsDesign;
@@ -80,7 +80,7 @@ public class LeversRender {
    * @param graphics non-null
    * @return */
   public static LeversRender of( //
-      GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
+      ManifoldDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     return new LeversRender( //
         geodesicDisplay, //
@@ -90,7 +90,7 @@ public class LeversRender {
   }
 
   /***************************************************/
-  private final GeodesicDisplay geodesicDisplay;
+  private final ManifoldDisplay geodesicDisplay;
   private final Tensor sequence;
   private final Tensor origin;
   private final Tensor shape;
@@ -98,7 +98,7 @@ public class LeversRender {
   private final Graphics2D graphics;
 
   private LeversRender( //
-      GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
+      ManifoldDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     this.geodesicDisplay = geodesicDisplay;
     this.sequence = sequence;
@@ -292,7 +292,7 @@ public class LeversRender {
         graphics.draw(geometricLayer.toLine2D(tangentProjection.apply(v)));
       // ---
       if (tangentPlane) {
-        if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
+        if (geodesicDisplay.equals(S2Display.INSTANCE)) {
           Scalar max = Vector2Norm.of(v);
           graphics.setColor(COLOR_PLANE);
           graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(max), true));
@@ -315,7 +315,7 @@ public class LeversRender {
         graphics.draw(geometricLayer.toLine2D(tangentProjection.apply(v)));
     // ---
     if (tangentPlane) {
-      if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE)) {
+      if (geodesicDisplay.equals(S2Display.INSTANCE)) {
         Scalar max = vs.stream().map(Vector2Norm::of).reduce(Max::of).orElse(RealScalar.ONE);
         graphics.setColor(COLOR_PLANE);
         graphics.fill(geometricLayer.toPath2D(CIRCLE.multiply(max), true));
@@ -342,7 +342,7 @@ public class LeversRender {
   }
 
   public void renderLbsS2() {
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+    if (geodesicDisplay instanceof S2Display) {
       Tensor poly = Tensors.empty();
       graphics.setStroke(STROKE_TANGENT);
       for (Tensor p : sequence) {
@@ -395,13 +395,13 @@ public class LeversRender {
 
   private void renderEllipse(Tensor p, Tensor sigma_inverse) {
     Tensor vs = null;
-    if (geodesicDisplay.equals(R2GeodesicDisplay.INSTANCE))
+    if (geodesicDisplay.equals(R2Display.INSTANCE))
       vs = CIRCLE;
     else //
-    if (geodesicDisplay.equals(S2GeodesicDisplay.INSTANCE))
+    if (geodesicDisplay.equals(S2Display.INSTANCE))
       vs = CIRCLE; // .dot(TSnProjection.of(p));
     else //
-    if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay) {
+    if (geodesicDisplay instanceof Se2AbstractDisplay) {
       vs = Tensor.of(CIRCLE.stream().map(PadRight.zeros(3)));
     }
     // ---

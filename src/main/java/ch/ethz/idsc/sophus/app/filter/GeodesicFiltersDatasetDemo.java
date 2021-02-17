@@ -12,8 +12,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.opt.GeodesicFilters;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     GeodesicFilters geodesicFilters = spinnerFilters.getValue();
     TensorUnaryOperator tensorUnaryOperator = geodesicFilters.from(geodesicDisplay, smoothingKernel);

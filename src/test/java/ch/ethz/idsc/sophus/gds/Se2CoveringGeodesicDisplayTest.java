@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class Se2CoveringGeodesicDisplayTest extends TestCase {
   public void testSimple() {
-    assertEquals(Se2CoveringGeodesicDisplay.INSTANCE.lieGroup(), Se2CoveringGroup.INSTANCE);
+    assertEquals(Se2CoveringDisplay.INSTANCE.lieGroup(), Se2CoveringGroup.INSTANCE);
   }
 }

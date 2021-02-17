@@ -12,8 +12,8 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.sophus.clt.ClothoidBuilder;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
@@ -68,7 +68,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(10 / Math.sqrt(SIZE)));
     Color color_fill = new Color(255, 128, 128, 64);
     Color color_draw = new Color(255, 128, 128, 255);

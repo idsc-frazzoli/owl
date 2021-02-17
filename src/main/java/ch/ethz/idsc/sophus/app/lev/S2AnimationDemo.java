@@ -9,8 +9,8 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.lie.so3.Rodrigues;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       if (jToggleAnimate.isSelected()) {

@@ -30,15 +30,15 @@ import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 /** symmetric positive definite 2 x 2 matrices */
-public class So3GeodesicDisplay implements GeodesicDisplay, Serializable {
+public class So3Display implements ManifoldDisplay, Serializable {
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.4)).unmodifiable();
   private static final Scalar RADIUS = RealScalar.of(7);
   // ---
-  public static final GeodesicDisplay INSTANCE = new So3GeodesicDisplay(RADIUS);
+  public static final ManifoldDisplay INSTANCE = new So3Display(RADIUS);
   /***************************************************/
   private final Scalar radius;
 
-  public So3GeodesicDisplay(Scalar radius) {
+  public So3Display(Scalar radius) {
     this.radius = radius;
   }
 

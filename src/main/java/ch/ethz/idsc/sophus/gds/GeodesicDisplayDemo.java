@@ -11,10 +11,10 @@ import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.sophus.gui.win.AbstractDemo;
 
 public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoInterface {
-  private final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
-  private final List<GeodesicDisplay> list;
+  private final SpinnerLabel<ManifoldDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  private final List<ManifoldDisplay> list;
 
-  public GeodesicDisplayDemo(List<GeodesicDisplay> list) {
+  public GeodesicDisplayDemo(List<ManifoldDisplay> list) {
     if (list.isEmpty())
       throw new RuntimeException();
     this.list = list;
@@ -26,27 +26,27 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
     }
     timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
       @Override
-      public GeodesicDisplay getGeodesicDisplay() {
+      public ManifoldDisplay getGeodesicDisplay() {
         return geodesicDisplay();
       }
     });
   }
 
   /** @return */
-  public final GeodesicDisplay geodesicDisplay() {
+  public final ManifoldDisplay geodesicDisplay() {
     return geodesicDisplaySpinner.getValue();
   }
 
-  public synchronized final void setGeodesicDisplay(GeodesicDisplay geodesicDisplay) {
+  public synchronized final void setGeodesicDisplay(ManifoldDisplay geodesicDisplay) {
     geodesicDisplaySpinner.setValue(geodesicDisplay);
   }
 
-  public void addSpinnerListener(SpinnerListener<GeodesicDisplay> spinnerListener) {
+  public void addSpinnerListener(SpinnerListener<ManifoldDisplay> spinnerListener) {
     geodesicDisplaySpinner.addSpinnerListener(spinnerListener);
   }
 
   /** @return */
-  public List<GeodesicDisplay> getGeodesicDisplays() {
+  public List<ManifoldDisplay> getGeodesicDisplays() {
     return list;
   }
 

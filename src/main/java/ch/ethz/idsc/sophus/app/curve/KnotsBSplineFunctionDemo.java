@@ -15,8 +15,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
     Tensor knots = KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), exponent).apply(control);
     Scalar upper = Last.of(knots);

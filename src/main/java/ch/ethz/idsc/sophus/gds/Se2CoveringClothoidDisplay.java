@@ -6,7 +6,7 @@ import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2CoveringClothoidDisplay extends AbstractClothoidDisplay {
-  public static final GeodesicDisplay INSTANCE = new Se2CoveringClothoidDisplay();
+  public static final ManifoldDisplay INSTANCE = new Se2CoveringClothoidDisplay();
 
   /***************************************************/
   private Se2CoveringClothoidDisplay() {

@@ -22,8 +22,8 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicArrayPlot;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.hs.Biinvariant;
 import ch.ethz.idsc.sophus.hs.Biinvariants;
@@ -151,7 +151,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
   @Override
   public void recompute() {
     System.out.println("recomp");
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
     Labels labels = Objects.requireNonNull(spinnerLabels.getValue());
     Objects.requireNonNull(vector);
@@ -166,7 +166,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     if (Objects.nonNull(bufferedImage)) {
       Tensor pixel2model = geodesicDisplay.geodesicArrayPlot().pixel2model(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
       ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
@@ -175,7 +175,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     render(geometricLayer, graphics, geodesicDisplay, getGeodesicControlPoints(), vector, spinnerColor.getValue().cyclic());
   }
 
-  static void render(GeometricLayer geometricLayer, Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor sequence, Tensor vector,
+  static void render(GeometricLayer geometricLayer, Graphics2D graphics, ManifoldDisplay geodesicDisplay, Tensor sequence, Tensor vector,
       ColorDataIndexed colorDataIndexedT) {
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.0));
     int index = 0;
@@ -205,7 +205,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
           variogram(), //
           sequence);
       System.out.print("computing " + biinvariant);
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = geodesicDisplay();
       GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay.geodesicArrayPlot();
       Classification classification = spinnerLabels.getValue().apply(vector);
       ColorDataLists colorDataLists = spinnerColor.getValue();

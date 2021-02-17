@@ -11,8 +11,8 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.decim.CurveDecimation;
 import ch.ethz.idsc.sophus.decim.LineDistances;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     int length = sequence.length();
     if (0 == length)
       return;
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);

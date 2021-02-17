@@ -18,8 +18,8 @@ import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.spline.LagrangeInterpolation;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.win.DubinsGenerator;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.N;
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
-    setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(R2Display.INSTANCE);
   }
 
   @Override // from RenderInterface
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.N;
     renderControlPoints(geometricLayer, graphics);
     // ---
     int levels = spinnerRefine.getValue();
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), getGeodesicControlPoints());
     Tensor refined = Subdivide.of(0, sequence.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));

@@ -11,11 +11,11 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
-import ch.ethz.idsc.sophus.gds.Se2AbstractGeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
+import ch.ethz.idsc.sophus.gds.S2Display;
+import ch.ethz.idsc.sophus.gds.Se2AbstractDisplay;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
 import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateMatrix;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.opt.LogWeightings;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class IterativeCoordinateDemo extends LogWeightingDemo implements SpinnerListener<GeodesicDisplay> {
+/* package */ class IterativeCoordinateDemo extends LogWeightingDemo implements SpinnerListener<ManifoldDisplay> {
   private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();
   // private final JToggleButton jToggleNeutral = new JToggleButton("neutral");
 
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // spinnerTotal.addSpinnerListener(this::config);
     spinnerTotal.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "total");
     // ---
-    GeodesicDisplay geodesicDisplay = R2GeodesicDisplay.INSTANCE;
+    ManifoldDisplay geodesicDisplay = R2Display.INSTANCE;
     setGeodesicDisplay(geodesicDisplay);
     setBitype(Bitype.LEVERAGES1);
     actionPerformed(geodesicDisplay);
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       Tensor sequence = getSequence();
@@ -77,11 +77,11 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override
-  public void actionPerformed(GeodesicDisplay geodesicDisplay) {
-    if (geodesicDisplay instanceof R2GeodesicDisplay) {
+  public void actionPerformed(ManifoldDisplay geodesicDisplay) {
+    if (geodesicDisplay instanceof R2Display) {
       setControlPointsSe2(R2PointCollection.SOME);
     } else //
-    if (geodesicDisplay instanceof S2GeodesicDisplay) {
+    if (geodesicDisplay instanceof S2Display) {
       setControlPointsSe2(Tensors.fromString( //
           "{{0.300, 0.092, 0.000}, {-0.563, -0.658, 0.262}, {-0.854, -0.200, 0.000}, {-0.746, 0.663, -0.262}, {0.467, 0.758, 0.262}, {0.446, -0.554, 0.262}}"));
       setControlPointsSe2(Tensors.fromString( //
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.Tensors;
       setControlPointsSe2(Tensors.fromString( //
           "{{-0.363, 0.388, 0.000}, {-0.825, -0.271, 0.000}, {-0.513, 0.804, 0.000}, {0.646, 0.667, 0.000}, {0.704, -0.100, 0.000}, {-0.075, -0.733, 0.000}}"));
     } else //
-    if (geodesicDisplay instanceof Se2AbstractGeodesicDisplay) {
+    if (geodesicDisplay instanceof Se2AbstractDisplay) {
       setControlPointsSe2(Tensors.fromString(
           "{{3.150, -2.700, -0.524}, {-1.950, -3.683, 0.000}, {-1.500, -1.167, 2.094}, {4.533, -0.733, -1.047}, {8.567, -3.300, -1.309}, {2.917, -5.050, -1.047}}"));
     }

@@ -11,9 +11,9 @@ import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.S2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   public HeadTailGeodesicDemo() {
     super(false, GeodesicDisplays.ALL);
     // ---
-    setGeodesicDisplay(S2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(S2Display.INSTANCE);
     spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(6);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     Tensor p = controlPoints.get(0);
     Tensor q = controlPoints.get(1);

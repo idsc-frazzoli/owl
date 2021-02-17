@@ -8,8 +8,8 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     HsManifold hsManifold = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
     // ---
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();

@@ -7,9 +7,9 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class Se2ClothoidDisplay extends AbstractClothoidDisplay {
-  public static final GeodesicDisplay ANALYTIC = //
+  public static final ManifoldDisplay ANALYTIC = //
       new Se2ClothoidDisplay(ClothoidBuilders.SE2_ANALYTIC.clothoidBuilder(), "ClA");
-  public static final GeodesicDisplay LEGENDRE = //
+  public static final ManifoldDisplay LEGENDRE = //
       new Se2ClothoidDisplay(ClothoidBuilders.SE2_LEGENDRE.clothoidBuilder(), "Cl3");
   // ---
   private final ClothoidBuilder clothoidBuilder;

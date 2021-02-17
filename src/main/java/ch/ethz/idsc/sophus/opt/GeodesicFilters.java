@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.opt;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.Geodesic;
 import ch.ethz.idsc.sophus.math.SplitInterface;
@@ -45,7 +45,7 @@ public enum GeodesicFilters {
   /** @param geodesicDisplay
    * @param smoothingKernel
    * @return */
-  public TensorUnaryOperator from(GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel) {
+  public TensorUnaryOperator from(ManifoldDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel) {
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     return supply(geodesicInterface, smoothingKernel, biinvariantMean);

@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.R2Display;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.itp.CrossAveraging;
 import ch.ethz.idsc.sophus.itp.RadialBasisFunctionInterpolation;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 /** TODO investigate, this produces some nice results for kriging+metric+power */
 /* package */ class R1RadialBasisFunctionDemo extends A1AveragingDemo {
   public R1RadialBasisFunctionDemo() {
-    super(R2GeodesicDisplay.INSTANCE);
+    super(R2Display.INSTANCE);
     setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 2, 0}, {2, -1, 0}}"));
   }
 

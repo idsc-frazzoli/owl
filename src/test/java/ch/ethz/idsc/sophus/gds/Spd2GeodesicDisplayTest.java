@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class Spd2GeodesicDisplayTest extends TestCase {
-  private static final GeodesicDisplay GEODESIC_DISPLAY = Spd2GeodesicDisplay.INSTANCE;
+  private static final ManifoldDisplay GEODESIC_DISPLAY = Spd2Display.INSTANCE;
 
   public void testSimple() {
     Tensor tensor = GEODESIC_DISPLAY.project(Tensors.vector(1, 0.2, -1));

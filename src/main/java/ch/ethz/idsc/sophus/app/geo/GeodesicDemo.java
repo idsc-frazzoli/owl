@@ -14,9 +14,9 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
-import ch.ethz.idsc.sophus.gds.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
+import ch.ethz.idsc.sophus.gds.Se2Display;
 import ch.ethz.idsc.sophus.gui.ren.Curvature2DRender;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.win.AbstractDemo;
@@ -33,13 +33,13 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
   // ---
   private final PathRender pathRender = new PathRender(new Color(128, 128, 255), //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
-  private final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  private final SpinnerLabel<ManifoldDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("line");
 
   public GeodesicDemo() {
-    List<GeodesicDisplay> list = GeodesicDisplays.ALL;
+    List<ManifoldDisplay> list = GeodesicDisplays.ALL;
     geodesicDisplaySpinner.setList(list);
-    geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
+    geodesicDisplaySpinner.setValue(Se2Display.INSTANCE);
     if (1 < list.size()) {
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     // AxesRender.INSTANCE.render(geometricLayer, graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplaySpinner.getValue();
+    ManifoldDisplay geodesicDisplay = geodesicDisplaySpinner.getValue();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor xya = geometricLayer.getMouseSe2State();
     graphics.setColor(COLOR);

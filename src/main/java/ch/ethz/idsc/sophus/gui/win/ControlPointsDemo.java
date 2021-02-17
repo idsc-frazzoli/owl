@@ -16,8 +16,8 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
@@ -58,7 +58,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final static Color GREEN = new Color(0, 255, 0, 192);
 
   private class Midpoints {
-    private final GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    private final ManifoldDisplay geodesicDisplay = geodesicDisplay();
     private final Tensor midpoints;
     private final int index;
 
@@ -88,7 +88,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       if (isPositioningOngoing())
         control.set(mouse, min_index);
       else {
-        GeodesicDisplay geodesicDisplay = geodesicDisplay();
+        ManifoldDisplay geodesicDisplay = geodesicDisplay();
         final boolean hold;
         {
           Tensor mouse_dist = Tensor.of(control.stream() //
@@ -126,7 +126,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
    * 
    * @param addRemoveControlPoints whether the number of control points is variable
    * @param list */
-  public ControlPointsDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
+  public ControlPointsDemo(boolean addRemoveControlPoints, List<ManifoldDisplay> list) {
     super(list);
     // ---
     if (addRemoveControlPoints) {
@@ -249,7 +249,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     return control.unmodifiable(); // TODO should return copy!?
   }
 
-  /** @return control points for selected {@link GeodesicDisplay} */
+  /** @return control points for selected {@link ManifoldDisplay} */
   public final Tensor getGeodesicControlPoints() {
     return getGeodesicControlPoints(0, Integer.MAX_VALUE);
   }
@@ -270,7 +270,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   }
 
   protected final void renderPoints( //
-      GeodesicDisplay geodesicDisplay, Tensor points, //
+      ManifoldDisplay geodesicDisplay, Tensor points, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     POINTS_RENDER_1.show(geodesicDisplay::matrixLift, getControlPointShape(), points).render(geometricLayer, graphics);
   }

@@ -17,7 +17,7 @@ import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
-import ch.ethz.idsc.sophus.gds.GeodesicDisplay;
+import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.ArrayPlotRender;
 import ch.ethz.idsc.sophus.gui.ren.ArrayRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Tensor movingOrigin;
   private MovingDomain2D movingDomain2D;
 
-  AbstractDeformationDemo(List<GeodesicDisplay> list, List<LogWeighting> array) {
+  AbstractDeformationDemo(List<ManifoldDisplay> list, List<LogWeighting> array) {
     super(false, list, array);
     spinnerLogWeighting.addSpinnerListener(v -> recompute());
     // ---
@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   final void snap() {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
     recompute();
   }
@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.sca.N;
     RenderQuality.setQuality(graphics);
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = geodesicDisplay();
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();
     // ---
