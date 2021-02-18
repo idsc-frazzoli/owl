@@ -15,6 +15,8 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.SimpleUnitSystem;
 import ch.ethz.idsc.tensor.qty.UnitSystem;
 import ch.ethz.idsc.tensor.qty.UnitSystems;
 
@@ -25,9 +27,10 @@ public class UnitSystemDemo {
   private final JTextArea jTextArea = new JTextArea();
   private final JLabel jLabel = new JLabel();
   // ---
-  UnitSystem unitSystem = UnitSystem.SI();
+  UnitSystem unitSystem;
 
   public UnitSystemDemo() {
+    unitSystem = SimpleUnitSystem.from(ResourceData.properties("/demo/si.properties"));
     jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     JPanel jPane = new JPanel(new BorderLayout());
     JPanel jPanel = new JPanel(new BorderLayout());
