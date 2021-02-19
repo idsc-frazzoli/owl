@@ -15,19 +15,19 @@ import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.ExpInterface;
+import ch.ethz.idsc.tensor.api.LogInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
+import ch.ethz.idsc.tensor.api.TrigonometryInterface;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Cosh;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** automatic differentiation */
 public class JetScalar extends AbstractScalar implements //

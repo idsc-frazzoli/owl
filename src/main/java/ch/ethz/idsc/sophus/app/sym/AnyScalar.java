@@ -4,19 +4,19 @@ package ch.ethz.idsc.sophus.app.sym;
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
-import ch.ethz.idsc.tensor.sca.LogInterface;
-import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ArcTanInterface;
+import ch.ethz.idsc.tensor.api.ArgInterface;
+import ch.ethz.idsc.tensor.api.ComplexEmbedding;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.ExpInterface;
+import ch.ethz.idsc.tensor.api.LogInterface;
+import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
+import ch.ethz.idsc.tensor.api.RoundingInterface;
+import ch.ethz.idsc.tensor.api.TrigonometryInterface;
 
 /** any scalar tracks whether a scalar in a tensor has any effect within a computation */
 public final class AnyScalar extends AbstractScalar implements //

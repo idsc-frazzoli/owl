@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.sim;
+package ch.ethz.idsc.tensor.demo;
 
 /* package */ enum TargetSum {
   ;

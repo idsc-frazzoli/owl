@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.kd;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum Klondike {
+/* package */ enum Klondike {
   ;
   static final Tensor BOARD = Tensors.of( //
       Tensors.vector(4, 7, 7), //

@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 
-enum EspPlot {
+/* package */ enum EspPlot {
   ;
   static final int RES = 64;
 

@@ -8,17 +8,17 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.MachineNumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
+import ch.ethz.idsc.tensor.api.NInterface;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.NInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Q[Sqrt[n]] */

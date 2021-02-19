@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 
-class EspRender implements RenderInterface {
+/* package */ class EspRender implements RenderInterface {
   private static final Tensor CIRCLE = CirclePoints.of(31).multiply(RealScalar.of(0.48));
   private static final Color LIGHT = new Color(188, 169, 80);
   private static final Color DARK = new Color(63, 54, 14);
