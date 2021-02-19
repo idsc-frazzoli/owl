@@ -131,7 +131,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
   @Override
   public Tensor represent(StateTime stateTime) {
     Tensor range = LidarRaytracer.scan(stateTime, raytraceQuery);
-    return CarDiscreteModel.represent(range);
+    return ScanToState.of(range);
   }
 
   @Override // from RewardInterface

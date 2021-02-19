@@ -5,43 +5,49 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.subare.core.DiscreteModel;
 import ch.ethz.idsc.subare.core.TerminalInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.num.Rationalize;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Factorial;
 
 /* package */ class CarDiscreteModel implements DiscreteModel, TerminalInterface {
-  public static final Tensor COLLISION = Tensors.vector(0).unmodifiable();
+  // TODO should depend on time!
+  private static final Scalar DISCOUNT_FACTOR = RealScalar.of(0.98);
   // ---
   private final Tensor states;
   private final Tensor actions;
   public final int resolution;
 
+  /** Hint: the model will have (resolution!)/2 + 1 states
+   * 
+   * @param resolution */
   public CarDiscreteModel(int resolution) {
-    states = Tensors.empty();
-    for (Tensor perm : Permutations.of(Range.of(0, resolution))) {
-      Tensor pair = represent(perm);
+    Integers.requirePositive(resolution);
+    states = Tensors.reserve(Scalars.intValueExact(Factorial.of(resolution).multiply(RationalScalar.HALF)) + 1);
+    for (Tensor perm : Permutations.of(Range.of(0, resolution))) { // for instance perm = {2, 0, 1, 4, 3}
+      Tensor pair = ScanToState.of(perm);
       if (pair.Get(1).equals(RealScalar.ONE))
         states.append(pair.get(0));
     }
-    states.append(COLLISION);
-    FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.of(1), RealScalar.of(2));
-    Collection<Tensor> collection = carFlows.getFlows(6);
+    states.append(ScanToState.COLLISION);
+    FlowsInterface flowsInterface = Se2CarFlows.forward(RealScalar.of(1), RealScalar.of(3));
+    Collection<Tensor> collection = flowsInterface.getFlows(2); // TODO magic const!!!?!?!
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
     actions = Tensor.of(collection.stream() //
         .map(u -> u.map(suo)) //
     ).unmodifiable();
+    System.out.println(actions);
     this.resolution = resolution;
   }
 
@@ -52,27 +58,18 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   @Override // from DiscreteModel
   public Tensor actions(Tensor state) {
-    return isTerminal(state) ? Array.zeros(1, 3) : actions;
+    return isTerminal(state) //
+        ? Array.zeros(1, 3)
+        : actions;
   }
 
   @Override // from DiscreteModel
   public Scalar gamma() {
-    return RealScalar.of(0.98);
+    return DISCOUNT_FACTOR;
   }
 
   @Override // from TerminalInterface
   public boolean isTerminal(Tensor state) {
-    return state.equals(COLLISION);
-  }
-
-  public static Tensor represent(Tensor range) {
-    if (Chop.NONE.allZero(range))
-      return Tensors.of(CarDiscreteModel.COLLISION, RealScalar.ONE);
-    Tensor tensor = Tensors.vectorInt(Ordering.DECREASING.of(range));
-    Tensor revrse = Reverse.of(tensor);
-    int cmp = VectorLexicographic.COMPARATOR.compare(tensor, revrse);
-    if (1 == cmp)
-      return Tensors.of(revrse, RealScalar.ONE.negate());
-    return Tensors.of(tensor, RealScalar.ONE);
+    return state.equals(ScanToState.COLLISION);
   }
 }
