@@ -1,11 +1,15 @@
 // code by fluric
-package ch.ethz.idsc.subare.analysis;
+package ch.ethz.idsc.subare.demo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.ethz.idsc.subare.analysis.DiscreteModelErrorAnalysis;
+import ch.ethz.idsc.subare.analysis.MonteCarloAlgorithms;
+import ch.ethz.idsc.subare.analysis.MonteCarloExamples;
+import ch.ethz.idsc.subare.analysis.SarsaMonteCarloTrial;
 import ch.ethz.idsc.subare.core.MonteCarloInterface;
 import ch.ethz.idsc.subare.core.StandardModel;
 import ch.ethz.idsc.subare.core.StateActionCounter;

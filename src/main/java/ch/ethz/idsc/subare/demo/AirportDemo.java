@@ -1,5 +1,5 @@
 // code by fluric
-package ch.ethz.idsc.subare.demo.airport;
+package ch.ethz.idsc.subare.demo;
 
 import java.awt.Color;
 
@@ -24,6 +24,7 @@ import ch.ethz.idsc.subare.core.util.FeatureMapper;
 import ch.ethz.idsc.subare.core.util.FeatureWeight;
 import ch.ethz.idsc.subare.core.util.LearningRate;
 import ch.ethz.idsc.subare.core.util.PolicyType;
+import ch.ethz.idsc.subare.demo.airport.Airport;
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

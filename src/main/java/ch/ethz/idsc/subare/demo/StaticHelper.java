@@ -1,5 +1,5 @@
 // code by fluric
-package ch.ethz.idsc.subare.analysis;
+package ch.ethz.idsc.subare.demo;
 
 import java.io.File;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
+import ch.ethz.idsc.subare.analysis.DiscreteModelErrorAnalysis;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.fig.ListPlot;

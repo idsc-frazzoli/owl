@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.bot.se2.rl;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
@@ -26,9 +26,9 @@ public class Se2PolicyImageDemo implements DemoInterface {
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---
     {
-      CarPolicyEntity twdPolicyEntity = //
+      CarPolicyEntity carPolicyEntity = //
           new CarPolicyEntity(Tensors.vector(2.383, 2.567, 1.571), SarsaType.QLEARNING, trq);
-      owlyAnimationFrame.add(twdPolicyEntity);
+      owlyAnimationFrame.add(carPolicyEntity);
     }
     {
       CarPolicyEntity twdPolicyEntity = //

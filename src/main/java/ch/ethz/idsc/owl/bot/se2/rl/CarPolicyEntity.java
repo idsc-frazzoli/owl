@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.bot.se2.rl;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

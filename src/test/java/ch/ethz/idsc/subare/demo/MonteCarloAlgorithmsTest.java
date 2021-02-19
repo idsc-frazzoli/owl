@@ -1,9 +1,12 @@
 // code by fluric
-package ch.ethz.idsc.subare.analysis;
+package ch.ethz.idsc.subare.demo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.ethz.idsc.subare.analysis.DiscreteModelErrorAnalysis;
+import ch.ethz.idsc.subare.analysis.MonteCarloAlgorithms;
+import ch.ethz.idsc.subare.analysis.MonteCarloExamples;
 import ch.ethz.idsc.subare.core.MonteCarloInterface;
 import ch.ethz.idsc.subare.core.util.DiscreteQsa;
 import junit.framework.TestCase;
