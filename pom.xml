@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>owl</name>
-	<url>http://maven.apache.org</url>
+	<url>http://www.hakenberg.de</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
