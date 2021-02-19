@@ -31,24 +31,24 @@ import ch.ethz.idsc.tensor.sca.Factorial;
 
   /** Hint: the model will have (resolution!)/2 + 1 states
    * 
-   * @param resolution */
-  public CarDiscreteModel(int resolution) {
-    Integers.requirePositive(resolution);
-    states = Tensors.reserve(Scalars.intValueExact(Factorial.of(resolution).multiply(RationalScalar.HALF)) + 1);
-    for (Tensor perm : Permutations.of(Range.of(0, resolution))) { // for instance perm = {2, 0, 1, 4, 3}
+   * @param scans */
+  public CarDiscreteModel(int scans, int flows) {
+    Integers.requirePositive(scans);
+    states = Tensors.reserve(Scalars.intValueExact(Factorial.of(scans).multiply(RationalScalar.HALF)) + 1);
+    for (Tensor perm : Permutations.of(Range.of(0, scans))) { // for instance perm = {2, 0, 1, 4, 3}
       Tensor pair = ScanToState.of(perm);
       if (pair.Get(1).equals(RealScalar.ONE))
         states.append(pair.get(0));
     }
     states.append(ScanToState.COLLISION);
     FlowsInterface flowsInterface = Se2CarFlows.forward(RealScalar.of(1), RealScalar.of(3));
-    Collection<Tensor> collection = flowsInterface.getFlows(2); // TODO magic const!!!?!?!
+    Collection<Tensor> collection = flowsInterface.getFlows(flows);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
     actions = Tensor.of(collection.stream() //
         .map(u -> u.map(suo)) //
     ).unmodifiable();
     System.out.println(actions);
-    this.resolution = resolution;
+    this.resolution = scans;
   }
 
   @Override // from DiscreteModel

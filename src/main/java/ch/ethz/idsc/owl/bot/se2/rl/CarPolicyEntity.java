@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rl;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +36,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Partition;
+import ch.ethz.idsc.tensor.alg.Rescale;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;
 import ch.ethz.idsc.tensor.qty.Degree;
 
@@ -45,7 +50,10 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
       new Color(192, 255, 192), //
       new Color(192, 192, 255) };
   /** modified in constructor */
-  private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(0.1));
+  private static final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(0.1));
+  static {
+    SHAPE.set(Tensors.vector(0.2, 0), 0);
+  }
   // ---
   private final Tensor start;
   private final SarsaType sarsaType;
@@ -60,11 +68,12 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
   private final TrajectoryRegionQuery raytraceQuery;
 
   /** @param start
+   * @param sarsaType
    * @param raytraceQuery */
   public CarPolicyEntity(Tensor start, SarsaType sarsaType, TrajectoryRegionQuery raytraceQuery) {
     this.start = start;
     this.sarsaType = sarsaType;
-    CarDiscreteModel carDiscreteModel = new CarDiscreteModel(5);
+    CarDiscreteModel carDiscreteModel = new CarDiscreteModel(5, 2);
     qsa = DiscreteQsa.build(carDiscreteModel);
     policy = PolicyType.EGREEDY.bestEquiprobable(carDiscreteModel, qsa, sac);
     this.carDiscreteModel = carDiscreteModel;
@@ -74,7 +83,6 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
         Subdivide.of(Degree.of(+50), Degree.of(-50), carDiscreteModel.resolution - 1), //
         Subdivide.of(0.0, 5.0, 23));
     lidarEmulator = new LidarEmulator(LidarRaytracer, this::getStateTimeNow, raytraceQuery);
-    SHAPE.set(Tensors.vector(0.2, 0), 0);
     reset(RealScalar.ZERO);
   }
 
@@ -153,8 +161,19 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     {
       StateTime stateTime = getStateTimeNow();
       Point2D p = geometricLayer.toPoint2D(stateTime.state());
+      int pix = (int) p.getX();
+      int piy = (int) p.getY();
+      {
+        Tensor values = qsa.values();
+        Tensor imag = Rescale.of(Partition.of(values, 8)).map(ColorDataGradients.CLASSIC);
+        BufferedImage bufferedImage = ImageFormat.of(imag);
+        int mag = 4;
+        graphics.drawImage(bufferedImage, pix, piy, //
+            bufferedImage.getWidth() * mag, //
+            bufferedImage.getHeight() * mag, null);
+      }
       graphics.setColor(Color.GRAY);
-      graphics.drawString("  " + collisionCount, (int) p.getX(), (int) p.getY());
+      graphics.drawString("  " + collisionCount, pix, piy);
     }
     {
       lidarEmulator.render(geometricLayer, graphics);
