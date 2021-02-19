@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
 import ch.ethz.idsc.sophus.math.MinMax;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

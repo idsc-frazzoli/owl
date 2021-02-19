@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.sophus.lie.LieIntegrator;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

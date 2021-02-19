@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.gui.ren;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import ch.ethz.idsc.sophus.crv.ArcTan2D;
-import ch.ethz.idsc.sophus.crv.Curvature2D;
+import ch.ethz.idsc.sophus.crv.d2.Curvature2D;
 import ch.ethz.idsc.sophus.lie.so2.So2;
+import ch.ethz.idsc.sophus.math.d2.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Accumulate;

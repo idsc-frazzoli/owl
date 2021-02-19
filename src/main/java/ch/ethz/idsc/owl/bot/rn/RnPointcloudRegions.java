@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.math.region.BufferedImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import ch.ethz.idsc.owl.glc.rl2.RelaxedPriorityQueue;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;

@@ -11,8 +11,8 @@ import java.util.Random;
 
 import ch.ethz.idsc.java.awt.RenderQuality;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.sophus.ply.d2.ConvexHull;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;

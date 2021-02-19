@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.sophus.ref.d1.CurveSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

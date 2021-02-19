@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;

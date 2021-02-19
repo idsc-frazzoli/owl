@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.crv.Curvature2D;
+import ch.ethz.idsc.sophus.crv.d2.Curvature2D;
 import ch.ethz.idsc.sophus.hs.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.HsTransport;

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.spi;
 
-import ch.ethz.idsc.sophus.crv.EulerSpiral;
+import ch.ethz.idsc.sophus.crv.se2c.EulerSpiral;
 
 /* package */ class EulerSpiralDemo extends AbstractSpiralDemo {
   public EulerSpiralDemo() {

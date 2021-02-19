@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.crv.ArcTan2D;
 import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
+import ch.ethz.idsc.sophus.math.d2.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

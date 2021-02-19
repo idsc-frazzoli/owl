@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.lane;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.clt.ClothoidBuilders;
-import ch.ethz.idsc.sophus.lie.r2.Polygons;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.sophus.ply.d2.Polygons;
 import ch.ethz.idsc.sophus.ref.d1.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.data.LinearRasterMap;
 import ch.ethz.idsc.owl.data.RasterMap;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeRegionCallback;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

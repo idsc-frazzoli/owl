@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.lev.LeversRender;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.hs.r2.HilbertPolygon;
+import ch.ethz.idsc.sophus.ply.d2.HilbertPolygon;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;

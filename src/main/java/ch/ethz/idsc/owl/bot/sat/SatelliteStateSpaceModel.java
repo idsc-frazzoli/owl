@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.sat;
 
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;

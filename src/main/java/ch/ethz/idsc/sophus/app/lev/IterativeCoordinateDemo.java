@@ -18,8 +18,8 @@ import ch.ethz.idsc.sophus.gds.S2Display;
 import ch.ethz.idsc.sophus.gds.Se2AbstractDisplay;
 import ch.ethz.idsc.sophus.hs.HsDesign;
 import ch.ethz.idsc.sophus.hs.VectorLogManifold;
-import ch.ethz.idsc.sophus.lie.r2.IterativeCoordinateMatrix;
 import ch.ethz.idsc.sophus.opt.LogWeightings;
+import ch.ethz.idsc.sophus.ply.d2.IterativeCoordinateMatrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

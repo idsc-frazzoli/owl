@@ -15,8 +15,8 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
-import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
-import ch.ethz.idsc.sophus.lie.r2.Extract2D;
+import ch.ethz.idsc.sophus.math.d2.Extract2D;
+import ch.ethz.idsc.sophus.ply.d2.ConvexHull;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class GoalRender implements RenderInterface {

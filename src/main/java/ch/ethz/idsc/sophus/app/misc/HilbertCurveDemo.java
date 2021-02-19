@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.ren.PathRender;
 import ch.ethz.idsc.sophus.gui.ren.PointsRender;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.sophus.hs.r2.HilbertPolygon;
+import ch.ethz.idsc.sophus.ply.d2.HilbertPolygon;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;

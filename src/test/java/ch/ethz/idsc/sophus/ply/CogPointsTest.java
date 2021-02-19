@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.ply;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
+import ch.ethz.idsc.sophus.ply.d2.ConvexHull;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;

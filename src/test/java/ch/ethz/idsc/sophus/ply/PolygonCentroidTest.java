@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.ply;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.math.AssertFail;
-import ch.ethz.idsc.sophus.lie.r2.ConvexHull;
+import ch.ethz.idsc.sophus.ply.d2.ConvexHull;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.r2.CirclePoints;

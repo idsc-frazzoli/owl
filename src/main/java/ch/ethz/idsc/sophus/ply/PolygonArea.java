@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.ply;
 
 import java.util.Iterator;
 
-import ch.ethz.idsc.sophus.lie.r2.Det2D;
+import ch.ethz.idsc.sophus.math.d2.Det2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
