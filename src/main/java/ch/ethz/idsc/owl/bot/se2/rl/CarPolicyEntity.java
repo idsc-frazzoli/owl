@@ -127,7 +127,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     PolicyWrap policyWrap = new PolicyWrap(policy);
     Tensor actions = carDiscreteModel.actions(state);
     prev_action = policyWrap.next(state, actions);
-    prev_action.set(s -> s.pmul(pair.Get(1)), 1);
+    prev_action.set(s -> s.multiply(pair.Get(1)), 1);
     // System.out.println(prev_action);
     episodeIntegrator.move(prev_action, now);
     if (carDiscreteModel.isTerminal(prev_state)) {

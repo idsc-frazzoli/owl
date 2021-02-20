@@ -9,10 +9,10 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
-import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.ReadLine;
+import ch.ethz.idsc.tensor.lie.Quaternion;
 import ch.ethz.idsc.tensor.lie.QuaternionToRotationMatrix;
 
 /** text file with values separated by space with first line as
