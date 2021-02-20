@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Round;
 
@@ -31,8 +32,8 @@ import ch.ethz.idsc.tensor.sca.Round;
         new GeodesicBSplineInterpolation(geodesicInterface, 2, target);
     Iteration iteration = abstractBSplineInterpolation.untilClose(Chop._08, 100);
     Tensor control = iteration.control();
-    Chop._12.requireClose(control.get(0), target.get(0));
-    Chop._12.requireClose(control.get(3), target.get(3));
+    Tolerance.CHOP.requireClose(control.get(0), target.get(0));
+    Tolerance.CHOP.requireClose(control.get(3), target.get(3));
     MatrixQ.require(control);
     Export.of(new File(folder, "control.csv"), control.map(Round._6));
     GeodesicBSplineFunction geodesicBSplineFunction = //

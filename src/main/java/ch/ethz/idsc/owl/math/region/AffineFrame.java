@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * for use in BufferedImageRegion
  * 
  * @see AffineTransform */
+// TODO the redundancy with AffineFrame2D is unfortunate
 /* package */ class AffineFrame implements Serializable {
   private final double m00;
   private final double m01;

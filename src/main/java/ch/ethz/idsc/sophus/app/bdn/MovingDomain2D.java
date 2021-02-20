@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.bdn;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.bm.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;

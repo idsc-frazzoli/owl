@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.gds;
 
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.hs.BiinvariantMean;
+import ch.ethz.idsc.sophus.bm.BiinvariantMean;
 import ch.ethz.idsc.sophus.hs.HsManifold;
 import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametric;
 import ch.ethz.idsc.sophus.lie.LieExponential;

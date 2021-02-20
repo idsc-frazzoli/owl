@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   /** @param px
    * @param py
-   * @return */
+   * @return vector of length 2 */
   public Point2D toPoint2D(double px, double py) {
     return new Point2D.Double( //
         m00 * px + m01 * py + m02, //
