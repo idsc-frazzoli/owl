@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.rrts.core;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.tensor.Scalar;
@@ -39,6 +38,5 @@ public interface RrtsNode extends StateCostNode {
    * @param child
    * @param edgeCost calculator between two nodes
    * @param influence region of influence for cost */
-  // TODO JPH influence is obsolete, since edgeCost has access
-  void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> edgeCost, int influence);
+  void rewireTo(RrtsNode child, Scalar costFromParent);
 }

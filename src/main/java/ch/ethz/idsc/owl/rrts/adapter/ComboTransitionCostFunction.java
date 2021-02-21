@@ -22,15 +22,15 @@ public class ComboTransitionCostFunction implements TransitionCostFunction, Seri
 
   /***************************************************/
   private final Map<TransitionCostFunction, Scalar> map;
-  private final int influence;
+//  private final int influence;
 
   /** @param map */
   public ComboTransitionCostFunction(Map<TransitionCostFunction, Scalar> map) {
     this.map = map;
-    influence = map.keySet().stream() //
-        .mapToInt(TransitionCostFunction::influence) //
-        .max() //
-        .getAsInt();
+//    influence = map.keySet().stream() //
+//        .mapToInt(TransitionCostFunction::influence) //
+//        .max() //
+//        .getAsInt();
   }
 
   @Override // from TransitionCostFunction
@@ -40,8 +40,8 @@ public class ComboTransitionCostFunction implements TransitionCostFunction, Seri
         .reduce(Scalar::add).get();
   }
 
-  @Override // from TransitionCostFunction
-  public int influence() {
-    return influence;
-  }
+//  @Override // from TransitionCostFunction
+//  public int influence() {
+//    return influence;
+//  }
 }

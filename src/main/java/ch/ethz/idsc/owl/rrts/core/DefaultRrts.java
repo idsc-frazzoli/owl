@@ -109,7 +109,7 @@ public class DefaultRrts implements Rrts {
       Scalar costFromParent = transitionCostFunction.cost(parent, transition);
       if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), child.costFromRoot()) && // reduce costs
           isCollisionFree(transition)) {
-        parent.rewireTo(child, this::edgeCost, transitionCostFunction.influence());
+        parent.rewireTo(child, costFromParent); // , transitionCostFunction.influence());
         ++rewireCount;
       }
     }
@@ -127,11 +127,5 @@ public class DefaultRrts implements Rrts {
 
   /* package */ TransitionRegionQuery getObstacleQuery() {
     return obstacleQuery;
-  }
-
-  // helper function
-  private Scalar edgeCost(RrtsNode parent, RrtsNode child) {
-    Transition transition = transitionSpace.connect(parent.state(), child.state());
-    return transitionCostFunction.cost(parent, transition);
   }
 }
