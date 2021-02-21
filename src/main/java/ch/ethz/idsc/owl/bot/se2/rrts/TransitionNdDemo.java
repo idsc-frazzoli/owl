@@ -1,17 +1,14 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import java.awt.Dimension;
+import java.awt.Container;
 import java.awt.Graphics2D;
-import java.util.Arrays;
 
-import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
 
 /** this demo maps the GeodesicDisplays
  * 
@@ -22,11 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * this design is not extendable!
  * do not reproduce this design! */
 public class TransitionNdDemo extends ControlPointsDemo {
-  private static final Tensor LBOUNDS = Tensors.vector(-5, -5).unmodifiable();
-  private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
-  // ---
-  private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
+  private final TransitionNdParam transitionNdParam = new TransitionNdParam();
   // ---
   private TransitionNdContainer transitionNdContainer;
 
@@ -35,25 +28,15 @@ public class TransitionNdDemo extends ControlPointsDemo {
     setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---
-    spinnerTotal.setList(Arrays.asList(5, 10, 20, 50, 100, 200, 500, 1000, 2000));
-    spinnerTotal.setValue(20);
-    spinnerTotal.addSpinnerListener(this::config);
-    spinnerTotal.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "total");
+    ConfigPanel configPanel = ConfigPanel.of(transitionNdParam);
+    configPanel.fieldPanels().addUniversalListener(s -> {
+      System.out.println("compute udpate: " + s);
+      transitionNdContainer = transitionNdParam.config();
+    });
+    Container container = timerFrame.jFrame.getContentPane();
+    container.add("West", configPanel.getFields());
     // ---
-    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 10, 20, 50));
-    spinnerValue.setValue(3);
-    spinnerValue.addSpinnerListener(this::config);
-    spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    // ---
-    config(spinnerTotal.getValue());
-  }
-
-  /** @param not used */
-  private void config(int not) {
-    transitionNdContainer = new TransitionNdContainer( //
-        LBOUNDS, UBOUNDS, //
-        spinnerTotal.getValue(), //
-        spinnerValue.getValue());
+    transitionNdContainer = transitionNdParam.config();
   }
 
   @Override // from RenderInterface

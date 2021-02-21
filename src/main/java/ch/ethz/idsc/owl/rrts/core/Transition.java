@@ -14,9 +14,11 @@ public interface Transition {
   /** @return length of transition; length does not have to be Euclidean length but
    * is an abstract measure, which is a concept used in relation with minResolution */
   Scalar length();
-  /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
-  // ---
 
+  /***************************************************/
+  /** FUNCTIONALITY BELOW IS ONLY FOR
+   * COLLISION CHECKING AND RENDERING */
+  /***************************************************/
   /** sequence of samples along transition that are not further than given
    * minResolution apart.
    * 

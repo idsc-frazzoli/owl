@@ -13,5 +13,9 @@ import java.time.temporal.ChronoUnit;
     LocalDateTime ldt3 = ldt1.plusYears(1); // plus 1 Jahr
     long difference_ms2 = ChronoUnit.NANOS.between(ldt1, ldt4); // difference in millis
     System.out.println(difference_ms2);
+    LocalDateTime ldt4b = ldt1.plusNanos(difference_ms2);
+    System.out.println(ldt4);
+    System.out.println(ldt4b);
+    System.out.println(ldt4.equals(ldt4b));
   }
 }

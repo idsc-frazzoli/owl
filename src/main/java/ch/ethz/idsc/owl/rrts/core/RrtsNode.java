@@ -20,7 +20,6 @@ public interface RrtsNode extends StateCostNode {
         Objects.requireNonNull(cost));
   }
 
-  // ---
   @Override // from Node
   RrtsNode parent();
 
@@ -40,5 +39,6 @@ public interface RrtsNode extends StateCostNode {
    * @param child
    * @param edgeCost calculator between two nodes
    * @param influence region of influence for cost */
+  // TODO JPH influence is obsolete, since edgeCost has access
   void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> edgeCost, int influence);
 }
