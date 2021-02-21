@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   void shuffle(int n) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     RandomSampleInterface randomSampleInterface = geodesicDisplay.randomSampleInterface();
     setControlPointsSe2(RandomSample.of(randomSampleInterface, n));
   }
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.Tensor;
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor origin = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     LeversRender leversRender = //

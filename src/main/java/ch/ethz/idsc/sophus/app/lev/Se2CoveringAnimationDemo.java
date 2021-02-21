@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.ext.Timing;
           Tensor sequence = getGeodesicControlPoints();
           if (0 < sequence.length()) {
             Tensor origin = sequence.get(0);
-            LieGroup lieGroup = geodesicDisplay().lieGroup();
+            LieGroup lieGroup = manifoldDisplay().lieGroup();
             Tensor shift = lieGroup.element(origin).inverse().toCoordinate();
             snapshot = new LieGroupOps(lieGroup).actionL(shift).slash(sequence);
           }
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.ext.Timing;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     LieGroupOps lieGroupOps = new LieGroupOps(lieGroup);
     Optional<Tensor> optional = getOrigin();

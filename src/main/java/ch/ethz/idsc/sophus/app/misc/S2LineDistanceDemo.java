@@ -127,7 +127,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     RenderQuality.setDefault(graphics);
     BufferedImage bufferedImage = bufferedImage(spinnerRes.getValue(), geodesicDisplay.hsManifold());
     ImageRender.of(bufferedImage, pixel2model(bufferedImage)) //

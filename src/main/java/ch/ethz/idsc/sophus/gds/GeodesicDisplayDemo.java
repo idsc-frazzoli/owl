@@ -27,13 +27,13 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
     timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
       @Override
       public ManifoldDisplay getGeodesicDisplay() {
-        return geodesicDisplay();
+        return manifoldDisplay();
       }
     });
   }
 
   /** @return */
-  public final ManifoldDisplay geodesicDisplay() {
+  public final ManifoldDisplay manifoldDisplay() {
     return geodesicDisplaySpinner.getValue();
   }
 

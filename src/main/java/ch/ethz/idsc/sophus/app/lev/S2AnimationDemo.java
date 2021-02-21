@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       if (jToggleAnimate.isSelected()) {

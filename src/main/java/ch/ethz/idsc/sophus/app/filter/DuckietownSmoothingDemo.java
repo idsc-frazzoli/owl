@@ -77,12 +77,12 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        KnotSpacing.centripetal(geodesicDisplay().parametricDistance(), 0.5);
+        KnotSpacing.centripetal(manifoldDisplay().parametricDistance(), 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
     RenderQuality.setQuality(graphics);
@@ -110,11 +110,11 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        KnotSpacing.centripetal(geodesicDisplay().parametricDistance(), 0.5);
+        KnotSpacing.centripetal(manifoldDisplay().parametricDistance(), 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
     DeBoor deBoor = scalarTensorFunction.deBoor(parameter);

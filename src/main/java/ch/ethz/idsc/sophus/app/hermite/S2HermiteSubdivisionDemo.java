@@ -72,7 +72,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
     timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
       @Override
       public ManifoldDisplay getGeodesicDisplay() {
-        return geodesicDisplay();
+        return manifoldDisplay();
       }
     });
     Tensor model2pixel = timerFrame.geometricComponent.getModel2Pixel();
@@ -91,7 +91,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    S2Display geodesicDisplay = (S2Display) geodesicDisplay();
+    S2Display geodesicDisplay = (S2Display) manifoldDisplay();
     Scalar vscale = spinnerBeta.getValue();
     Tensor control = Tensor.of(getControlPointsSe2().stream().map(xya -> {
       Tensor xy0 = xya.copy();
@@ -100,7 +100,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
           geodesicDisplay.project(xy0), //
           geodesicDisplay.createTangent(xy0, xya.Get(2)).multiply(vscale));
     }));
-    POINTS_RENDER_0.show(geodesicDisplay()::matrixLift, getControlPointShape(), control.get(Tensor.ALL, 0)).render(geometricLayer, graphics);
+    POINTS_RENDER_0.show(manifoldDisplay()::matrixLift, getControlPointShape(), control.get(Tensor.ALL, 0)).render(geometricLayer, graphics);
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     { // render tangents as geodesic on sphere
       for (Tensor ctrl : control) {

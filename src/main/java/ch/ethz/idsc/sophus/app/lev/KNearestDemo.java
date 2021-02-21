@@ -100,7 +100,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, Tensor sequence, Tensor origin, String p) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
     TensorUnaryOperator tensorUnaryOperator = //
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), sequence);

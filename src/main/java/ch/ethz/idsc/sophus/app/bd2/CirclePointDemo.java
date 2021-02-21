@@ -39,14 +39,14 @@ import ch.ethz.idsc.tensor.nrm.Vector2Norm;
     Tensor levers = Tensor.of(sequence.stream().map(Vector2Norm.NORMALIZE));
     {
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), sequence, Array.zeros(2), geometricLayer, graphics);
+          manifoldDisplay(), sequence, Array.zeros(2), geometricLayer, graphics);
       leversRender.renderSurfaceP();
     }
     {
       graphics.setColor(Color.LIGHT_GRAY);
       graphics.draw(geometricLayer.toPath2D(CirclePoints.of(31), true));
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
+          manifoldDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
       leversRender.renderSequence();
       if (2 < sequence.length()) {
         // ---
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.nrm.Vector2Norm;
       graphics.setColor(Color.LIGHT_GRAY);
       graphics.draw(geometricLayer.toPath2D(CirclePoints.of(31), true));
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
+          manifoldDisplay(), levers, Array.zeros(2), geometricLayer, graphics);
       leversRender.renderSequence();
       leversRender.renderInfluenceX(LeversHud.COLOR_DATA_GRADIENT);
       if (2 < sequence.length()) {

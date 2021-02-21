@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override // from AbstractDatasetFilterDemo
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     return Regularization2Step.string( //
-        geodesicDisplay().geodesicInterface(), //
+        manifoldDisplay().geodesicInterface(), //
         N.DOUBLE.apply(sliderRatio())).apply(control());
   }
 

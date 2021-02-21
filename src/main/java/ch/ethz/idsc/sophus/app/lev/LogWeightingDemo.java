@@ -82,7 +82,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
   }
 
   protected final Biinvariant biinvariant() {
-    return bitype().from(geodesicDisplay());
+    return bitype().from(manifoldDisplay());
   }
 
   protected final Bitype bitype() {
@@ -106,7 +106,7 @@ public abstract class LogWeightingDemo extends LogWeightingBase {
   protected final TensorScalarFunction function(Tensor sequence, Tensor values) {
     return logWeighting().function( //
         biinvariant(), //
-        geodesicDisplay().hsManifold(), //
+        manifoldDisplay().hsManifold(), //
         variogram(), //
         sequence, values);
   }

@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override
   protected final void recompute() {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = getGeodesicControlPoints();
     renderInterface = geodesicDisplay.dimensions() < sequence.length() //
         ? arrayPlotRender(sequence, refinement(), operator(sequence), magnification())
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.Tensor;
     {
       final Tensor sequence = getGeodesicControlPoints();
       LeversRender leversRender = //
-          LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
+          LeversRender.of(manifoldDisplay(), sequence, null, geometricLayer, graphics);
       leversRender.renderIndexX();
       leversRender.renderIndexP();
     }

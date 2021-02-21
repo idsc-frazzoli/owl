@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.N;
     renderControlPoints(geometricLayer, graphics);
     // ---
     int levels = spinnerRefine.getValue();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), getGeodesicControlPoints());
     Tensor refined = Subdivide.of(0, sequence.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));

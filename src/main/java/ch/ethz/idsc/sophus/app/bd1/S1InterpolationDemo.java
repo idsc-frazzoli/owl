@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.num.Pi;
         graphics.draw(geometricLayer.toLine2D(control.get(index), target.get(index)));
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255))
           // new PointsRender(new Color(128, 255, 128, 64), new Color(128, 255, 128, 255)) //
-          .show(geodesicDisplay()::matrixLift, shape, target) //
+          .show(manifoldDisplay()::matrixLift, shape, target) //
           .render(geometricLayer, graphics);
       // ---
       Tensor values = Tensor.of(control.stream().map(Vector2Norm::of));

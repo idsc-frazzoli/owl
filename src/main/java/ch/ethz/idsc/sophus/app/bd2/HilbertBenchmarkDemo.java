@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     RenderQuality.setQuality(graphics);
     final Tensor sequence = getGeodesicControlPoints();
     LeversRender leversRender = //
-        LeversRender.of(geodesicDisplay(), sequence, null, geometricLayer, graphics);
+        LeversRender.of(manifoldDisplay(), sequence, null, geometricLayer, graphics);
     if (jToggleButton.isSelected())
       renderControlPoints(geometricLayer, graphics);
     // leversRender.renderIndexX();
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   public void compute() {
-    bufferedImage = HilbertLevelImage.of(geodesicDisplay(), getGeodesicControlPoints(), spinnerRefine.getValue(), ColorDataGradients.CLASSIC, 32);
+    bufferedImage = HilbertLevelImage.of(manifoldDisplay(), getGeodesicControlPoints(), spinnerRefine.getValue(), ColorDataGradients.CLASSIC, 32);
   }
 
   /** @param n positive

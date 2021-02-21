@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     HsManifold hsManifold = LieExponential.of(geodesicDisplay.lieGroup(), Se2CoveringExponential.INSTANCE);
     // ---
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();

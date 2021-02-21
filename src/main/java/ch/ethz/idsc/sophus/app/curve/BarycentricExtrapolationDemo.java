@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = getGeodesicControlPoints();
     int length = sequence.length();
     Tensor domain = Range.of(-sequence.length(), 0).map(Tensors::of).unmodifiable();

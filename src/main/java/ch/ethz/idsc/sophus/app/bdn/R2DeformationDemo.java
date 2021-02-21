@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   BiinvariantMean biinvariantMean() {
-    return geodesicDisplay().biinvariantMean();
+    return manifoldDisplay().biinvariantMean();
   }
 
   public static void main(String[] args) {

@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
     if (jToggleData.isSelected()) {
       pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     }
     RenderQuality.setDefault(graphics);
     if (jToggleDiff.isSelected())
-      differences_render(graphics, geodesicDisplay(), refined, jToggleSpec.isSelected());
+      differences_render(graphics, manifoldDisplay(), refined, jToggleSpec.isSelected());
   }
 
   public Scalar markerScale() {

@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
     GeodesicFilters geodesicFilters = spinnerFilters.getValue();
     TensorUnaryOperator tensorUnaryOperator = geodesicFilters.from(geodesicDisplay, smoothingKernel);

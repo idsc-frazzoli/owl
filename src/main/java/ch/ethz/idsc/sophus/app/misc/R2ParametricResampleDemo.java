@@ -54,7 +54,7 @@ public class R2ParametricResampleDemo extends ControlPointsDemo {
     ParametricResample parametricResample = new ParametricResample(threshold, ds);
     ResampleResult resampleResult = parametricResample.apply(control);
     for (Tensor points : resampleResult.getPoints())
-      POINTS_RENDER.show(geodesicDisplay()::matrixLift, geodesicDisplay().shape(), points) //
+      POINTS_RENDER.show(manifoldDisplay()::matrixLift, manifoldDisplay().shape(), points) //
           .render(geometricLayer, graphics);
   }
 

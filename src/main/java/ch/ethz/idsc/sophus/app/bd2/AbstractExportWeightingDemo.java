@@ -44,14 +44,14 @@ public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWe
     LogWeighting logWeighting = logWeighting();
     File root = HomeDirectory.Pictures( //
         getClass().getSimpleName(), //
-        geodesicDisplay().toString(), //
+        manifoldDisplay().toString(), //
         logWeighting.toString());
     root.mkdirs();
     for (Biinvariant biinvariant : distinct()) {
       Tensor sequence = getGeodesicControlPoints();
       TensorUnaryOperator tensorUnaryOperator = logWeighting.operator( //
           biinvariant, //
-          geodesicDisplay().hsManifold(), //
+          manifoldDisplay().hsManifold(), //
           variogram(), //
           sequence);
       System.out.print("computing " + biinvariant);
@@ -69,7 +69,7 @@ public abstract class AbstractExportWeightingDemo extends AbstractScatteredSetWe
   }
 
   protected final ArrayPlotRender arrayPlotRender(Tensor sequence, int refinement, TensorUnaryOperator tensorUnaryOperator, int magnification) {
-    GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+    GeodesicArrayPlot geodesicArrayPlot = manifoldDisplay().geodesicArrayPlot();
     Tensor fallback = ConstantArray.of(DoubleScalar.INDETERMINATE, sequence.length());
     Tensor wgs = geodesicArrayPlot.raster(refinement, tensorUnaryOperator, fallback);
     return StaticHelper.arrayPlotFromTensor(wgs, magnification, logWeighting().equals(LogWeightings.DISTANCES), colorDataGradient());

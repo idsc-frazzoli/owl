@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.red.Mean;
         tensor).render(geometricLayer, graphics);
     // renderControlPoints(geometricLayer, graphics);
     if (1 < tensor.length()) {
-      ManifoldDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = manifoldDisplay();
       Tensor control;
       switch (geodesicDisplay.toString()) {
       case "SE2C":

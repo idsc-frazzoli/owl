@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     GeodesicCatmullClarkSubdivision catmullClarkSubdivision = //
         new GeodesicCatmullClarkSubdivision(geodesicInterface);

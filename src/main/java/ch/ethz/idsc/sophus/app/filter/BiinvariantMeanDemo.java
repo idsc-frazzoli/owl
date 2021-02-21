@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     if (0 == length)
       return;
     Tensor weights = ConstantArray.of(RationalScalar.of(1, length), length);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     Tensor mean = biinvariantMean.mean(sequence, weights);
     graphics.setColor(Color.LIGHT_GRAY);

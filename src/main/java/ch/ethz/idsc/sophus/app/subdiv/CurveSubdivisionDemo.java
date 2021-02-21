@@ -173,7 +173,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine( //
         control, levels, spinnerLabel.getValue().of(geodesicDisplay), //

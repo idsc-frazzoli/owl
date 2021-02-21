@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
       }
       setControlPointsSe2(control);
     }
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     if (2 < controlPoints.length()) {

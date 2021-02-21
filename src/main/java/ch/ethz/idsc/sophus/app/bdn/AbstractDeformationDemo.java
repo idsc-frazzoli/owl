@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   final void snap() {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     movingOrigin = Tensor.of(getControlPointsSe2().map(N.DOUBLE).stream().map(geodesicDisplay::project));
     recompute();
   }
@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.sca.N;
     RenderQuality.setQuality(graphics);
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor origin = movingDomain2D.origin();
     Tensor target = getGeodesicControlPoints();
     // ---

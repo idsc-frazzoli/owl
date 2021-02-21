@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     Exponential exponential = Se2CoveringExponential.INSTANCE;
     // ---

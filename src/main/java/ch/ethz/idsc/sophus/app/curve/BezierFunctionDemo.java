@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---

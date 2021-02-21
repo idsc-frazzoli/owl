@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarTensorFunction scalarTensorFunction = //
         DeBoor.of(geodesicInterface, knots, control);

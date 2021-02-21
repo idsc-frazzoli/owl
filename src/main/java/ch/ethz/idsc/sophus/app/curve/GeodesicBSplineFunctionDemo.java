@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     RenderQuality.setQuality(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();

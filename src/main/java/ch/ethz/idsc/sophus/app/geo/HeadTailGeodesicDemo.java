@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     Tensor p = controlPoints.get(0);
     Tensor q = controlPoints.get(1);

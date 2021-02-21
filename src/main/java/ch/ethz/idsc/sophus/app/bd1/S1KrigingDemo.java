@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.N;
       for (int index = 0; index < sequence.length(); ++index)
         graphics.draw(geometricLayer.toLine2D(control.get(index), sequence.get(index)));
       new PointsRender(new Color(64, 128, 64, 64), new Color(64, 128, 64, 255)) //
-          .show(geodesicDisplay()::matrixLift, shape, sequence) //
+          .show(manifoldDisplay()::matrixLift, shape, sequence) //
           .render(geometricLayer, graphics);
       Tensor covariance = DiagonalMatrix.with(cvarian);
       if (isDeterminate()) {

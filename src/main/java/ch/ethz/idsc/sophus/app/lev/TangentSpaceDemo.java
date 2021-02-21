@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       Tensor origin = optional.get();
-      VectorLogManifold vectorLogManifold = geodesicDisplay().hsManifold();
+      VectorLogManifold vectorLogManifold = manifoldDisplay().hsManifold();
       final Tensor sequence = getSequence();
       HsDesign hsDesign = new HsDesign(vectorLogManifold);
       final Tensor levers2 = hsDesign.matrix(sequence, origin);
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
           }
           {
             LeversRender leversRender = LeversRender.of( //
-                geodesicDisplay(), leversVirtual, origin.map(Scalar::zero), geometricLayer, graphics);
+                manifoldDisplay(), leversVirtual, origin.map(Scalar::zero), geometricLayer, graphics);
             leversRender.renderSequence(POINTS_RENDER);
             // Tensor weights = iterativeAffineCoordinate.origin(deque, levers2);
             // leversRender.renderWeights(weights);
@@ -119,7 +119,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
       }
       {
         LeversRender leversRender = LeversRender.of( //
-            geodesicDisplay(), sequence, origin, geometricLayer, graphics);
+            manifoldDisplay(), sequence, origin, geometricLayer, graphics);
         leversRender.renderSequence();
         leversRender.renderOrigin();
       }

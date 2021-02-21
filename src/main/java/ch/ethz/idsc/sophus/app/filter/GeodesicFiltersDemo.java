@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
     if (!Integers.isEven(control.length())) {
-      ManifoldDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = manifoldDisplay();
       ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue().get();
       for (GeodesicFilters geodesicFilters : GeodesicFilters.values()) {
         int ordinal = geodesicFilters.ordinal();

@@ -56,8 +56,8 @@ import ch.ethz.idsc.tensor.red.Mean;
         Color color = COLOR_DATA_INDEXED.getColor(cind);
         PointsRender pointsRender = new PointsRender(color, Color.BLACK);
         pointsRender.show( //
-            geodesicDisplay()::matrixLift, //
-            geodesicDisplay().shape().multiply(RealScalar.of(2)), //
+            manifoldDisplay()::matrixLift, //
+            manifoldDisplay().shape().multiply(RealScalar.of(2)), //
             Tensors.of(result.get(index))) //
             .render(geometricLayer, graphics);
       }
@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       graphics.draw(geometricLayer.toLine2D(nsum));
       geometricLayer.popMatrix();
     }
-    LeversRender leversRender = LeversRender.of(geodesicDisplay(), result, null, geometricLayer, graphics);
+    LeversRender leversRender = LeversRender.of(manifoldDisplay(), result, null, geometricLayer, graphics);
     leversRender.renderIndexP();
     RenderQuality.setDefault(graphics);
     // new PathRender(COLOR_DATA_INDEXED.getColor(1), 2.5f).setCurve(HILBERT, false).render(geometricLayer, graphics);

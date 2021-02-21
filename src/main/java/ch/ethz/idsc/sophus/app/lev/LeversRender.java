@@ -73,17 +73,17 @@ public class LeversRender {
   // ---
   public static boolean DEBUG_FLAG = false;
 
-  /** @param geodesicDisplay non-null
+  /** @param manifoldDisplay non-null
    * @param sequence
    * @param origin
    * @param geometricLayer non-null
    * @param graphics non-null
    * @return */
   public static LeversRender of( //
-      ManifoldDisplay geodesicDisplay, Tensor sequence, Tensor origin, //
+      ManifoldDisplay manifoldDisplay, Tensor sequence, Tensor origin, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
     return new LeversRender( //
-        geodesicDisplay, //
+        manifoldDisplay, //
         sequence, origin, //
         Objects.requireNonNull(geometricLayer), //
         Objects.requireNonNull(graphics));

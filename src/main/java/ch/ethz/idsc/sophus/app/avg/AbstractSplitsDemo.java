@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     SymScalar symScalar = symScalar(Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf)));
     SymLink symLink = null;
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     if (Objects.nonNull(symScalar)) {
       graphics.drawImage(new SymLinkImage(symScalar, FONT).bufferedImage(), 0, 0, null);
       // ---

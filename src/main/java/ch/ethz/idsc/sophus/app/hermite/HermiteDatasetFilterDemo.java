@@ -95,7 +95,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       pathRenderCurve.setCurve(_control.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);

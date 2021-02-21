@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.num.Pi;
     renderControlPoints(geometricLayer, graphics);
     final Tensor controlPoints = getGeodesicControlPoints();
     int index = 0;
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor shape = geodesicDisplay.shape();
     graphics.setFont(FONT);
     FontMetrics fontMetrics = graphics.getFontMetrics();

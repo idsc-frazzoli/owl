@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
   @Override // from RenderInterface
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     VisualSet visualSet1 = new VisualSet();
     visualSet1.setPlotLabel("Curvature");
     visualSet1.setAxesLabelX("length");
@@ -138,7 +138,7 @@ import ch.ethz.idsc.tensor.red.Quantile;
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor refined = StaticHelper.refine(control, levels, scheme.of(geodesicDisplay), //
         CurveSubdivisionHelper.isDual(scheme), false, geodesicInterface);

@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.ext.Timing;
     graphics.setColor(Color.BLUE);
     graphics.setStroke(new BasicStroke(2));
     Scalar value = spinnerBeta.getValue();
-    Geodesic geodesicInterface = geodesicDisplay().geodesicInterface();
+    Geodesic geodesicInterface = manifoldDisplay().geodesicInterface();
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     Tensor beg = sequence.get(0);
     ClothoidBuilder clothoidBuilder2 = PriorityClothoid.of(ClothoidComparators.CURVATURE_HEAD);

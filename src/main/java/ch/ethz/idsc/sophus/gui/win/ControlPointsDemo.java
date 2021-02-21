@@ -58,7 +58,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final static Color GREEN = new Color(0, 255, 0, 192);
 
   private class Midpoints {
-    private final ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    private final ManifoldDisplay geodesicDisplay = manifoldDisplay();
     private final Tensor midpoints;
     private final int index;
 
@@ -88,7 +88,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       if (isPositioningOngoing())
         control.set(mouse, min_index);
       else {
-        ManifoldDisplay geodesicDisplay = geodesicDisplay();
+        ManifoldDisplay geodesicDisplay = manifoldDisplay();
         final boolean hold;
         {
           Tensor mouse_dist = Tensor.of(control.stream() //
@@ -261,12 +261,12 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     return Tensor.of(control.stream() //
         .skip(skip) //
         .limit(maxSize) //
-        .map(geodesicDisplay()::project) //
+        .map(manifoldDisplay()::project) //
         .map(N.DOUBLE::of));
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_0.show(geodesicDisplay()::matrixLift, getControlPointShape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
+    POINTS_RENDER_0.show(manifoldDisplay()::matrixLift, getControlPointShape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
   }
 
   protected final void renderPoints( //
@@ -279,6 +279,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
    * 
    * @return */
   protected Tensor getControlPointShape() {
-    return geodesicDisplay().shape();
+    return manifoldDisplay().shape();
   }
 }

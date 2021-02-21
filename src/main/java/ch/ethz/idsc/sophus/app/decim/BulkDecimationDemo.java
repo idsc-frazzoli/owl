@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     int length = sequence.length();
     if (0 == length)
       return;
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);

@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(new Color(128, 128, 128, 64));
     graphics.fill(path2d);
     new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f).setCurve(tensor, true).render(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     {
       PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
       pointsRender.show(geodesicDisplay::matrixLift, geodesicDisplay.shape(), tensor).render(geometricLayer, graphics);

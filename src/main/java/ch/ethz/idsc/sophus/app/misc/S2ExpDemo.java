@@ -10,11 +10,17 @@ import ch.ethz.idsc.sophus.gds.GeodesicDisplayRender;
 import ch.ethz.idsc.sophus.gds.GeodesicDisplays;
 import ch.ethz.idsc.sophus.gds.ManifoldDisplay;
 import ch.ethz.idsc.sophus.gui.win.ControlPointsDemo;
+import ch.ethz.idsc.sophus.hs.sn.SnManifold;
+import ch.ethz.idsc.sophus.hs.sn.TSnProjection;
+import ch.ethz.idsc.sophus.math.Exponential;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Flatten;
 
-/* package */ class S2LogDemo extends ControlPointsDemo {
-  public S2LogDemo() {
+/* package */ class S2ExpDemo extends ControlPointsDemo {
+  public S2ExpDemo() {
     super(true, GeodesicDisplays.S2_ONLY);
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(new GeodesicDisplayRender() {
@@ -33,21 +39,22 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
+    ManifoldDisplay manifoldDisplay = manifoldDisplay();
     Tensor points = getGeodesicControlPoints(0, 1);
     if (0 < points.length()) {
       Tensor origin = points.get(0);
-      Tensor sequence = getGeodesicControlPoints(1, Integer.MAX_VALUE);
+      Exponential exponential = SnManifold.INSTANCE.exponential(origin);
+      Tensor tSnProjection = TSnProjection.of(origin);
+      Tensor m = Array.of(list -> exponential.exp(Tensors.vector(list).multiply(RealScalar.of(.25)).dot(tSnProjection)), 5, 5);
+      Tensor sequence = Flatten.of(m, 1);
       LeversRender leversRender = //
-          LeversRender.of(manifoldDisplay(), sequence, origin, geometricLayer, graphics);
-      leversRender.renderLevers();
+          LeversRender.of(manifoldDisplay, sequence, origin, geometricLayer, graphics);
       leversRender.renderOrigin();
       leversRender.renderSequence();
-      leversRender.renderTangentsPtoX(true);
-      leversRender.renderTangentsXtoP(true);
     }
   }
 
   public static void main(String[] args) {
-    new S2LogDemo().setVisible(1000, 800);
+    new S2ExpDemo().setVisible(1000, 800);
   }
 }

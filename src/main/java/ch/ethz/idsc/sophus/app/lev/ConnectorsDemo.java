@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.itp.LinearInterpolation;
     // ---
     Tensor controlPoints = leversRender.getSequence();
     int length = controlPoints.length();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     graphics.setColor(Color.RED);
     for (int index = 0; index < length; ++index) {

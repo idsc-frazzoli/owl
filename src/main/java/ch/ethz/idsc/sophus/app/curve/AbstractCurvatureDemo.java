@@ -48,7 +48,7 @@ public abstract class AbstractCurvatureDemo extends ControlPointsDemo {
 
   @Override
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor refined = protected_render(geometricLayer, graphics);
     if (this instanceof BufferedImageSupplier && //
         jToggleGraph.isSelected()) {

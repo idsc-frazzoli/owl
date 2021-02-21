@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {

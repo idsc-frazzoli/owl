@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.fig.VisualSet;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
     Tensor control = getGeodesicControlPoints();
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     TensorUnaryOperator tensorUnaryOperator = //
         KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), spinnerBeta.getValue());
     Tensor knots = tensorUnaryOperator.apply(control);

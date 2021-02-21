@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     ColorDataGradient colorDataGradient = colorDataGradient();
     AxesRender.INSTANCE.render(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor controlPoints = getGeodesicControlPoints();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();

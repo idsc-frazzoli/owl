@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     int resolution = spinnerRes.getValue();
     try {
       TensorScalarFunction tensorScalarFunction = function(sequence, values);
-      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      GeodesicArrayPlot geodesicArrayPlot = manifoldDisplay().geodesicArrayPlot();
       ScalarUnaryOperator suo = Round.toMultipleOf(RationalScalar.of(2, 10));
       TensorScalarFunction tsf = t -> suo.apply(tensorScalarFunction.apply(t));
       Timing timing = Timing.started();
@@ -126,7 +126,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     RenderQuality.setQuality(graphics);
     prepare();
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = getGeodesicControlPoints();
     Tensor values = getControlPointsSe2().get(Tensor.ALL, 2);
     BufferedImage bufferedImage = cache.apply(Unprotect.byRef(sequence, values));

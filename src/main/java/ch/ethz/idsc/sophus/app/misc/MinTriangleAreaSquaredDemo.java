@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    final ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    final ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = getGeodesicControlPoints();
     pathRender.setCurve(sequence, true);
     if (0 < sequence.length()) {

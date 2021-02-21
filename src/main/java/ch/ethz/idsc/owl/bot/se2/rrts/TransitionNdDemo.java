@@ -58,7 +58,7 @@ public class TransitionNdDemo extends ControlPointsDemo {
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     transitionNdContainer.render( //
         geodesicDisplay, //
         geometricLayer, //

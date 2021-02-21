@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor control = getGeodesicControlPoints();
     int radius = spinnerRadius.getValue();
     renderControlPoints(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(geodesicDisplay.geodesicInterface(), radius);
     Tensor refined = geodesicMeanFilter.apply(control);
     Tensor curve = Nest.of(BSpline4CurveSubdivision.split2lo(geodesicDisplay.geodesicInterface())::string, refined, 7);

@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.N;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     renderControlPoints(geometricLayer, graphics);
     if (1 < _control.length()) {
-      ManifoldDisplay geodesicDisplay = geodesicDisplay();
+      ManifoldDisplay geodesicDisplay = manifoldDisplay();
       HermiteSubdivision hermiteSubdivision = //
           spinnerLabelScheme.getValue().supply( //
               geodesicDisplay.hsManifold(), //

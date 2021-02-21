@@ -68,7 +68,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(10 / Math.sqrt(SIZE)));
     Color color_fill = new Color(255, 128, 128, 64);
     Color color_draw = new Color(255, 128, 128, 255);

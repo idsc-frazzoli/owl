@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   synchronized Tensor shufflePointsSe2(int n) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Distribution distributionp = UniformDistribution.of(-1, 7);
     Distribution distributiona = UniformDistribution.of(-1, 1);
     return Tensors.vector(i -> geodesicDisplay.project( //
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override
   BiinvariantMean biinvariantMean() {
-    return geodesicDisplay().biinvariantMean();
+    return manifoldDisplay().biinvariantMean();
   }
 
   public static void main(String[] args) {

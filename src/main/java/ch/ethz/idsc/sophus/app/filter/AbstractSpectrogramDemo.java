@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
   @Override
   protected final Tensor control() {
-    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
+    return Tensor.of(_control.stream().map(manifoldDisplay()::project)).unmodifiable();
   }
 
   /** @return */

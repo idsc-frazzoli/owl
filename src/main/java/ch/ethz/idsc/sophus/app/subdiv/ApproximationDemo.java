@@ -115,7 +115,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 
   private void updateState() {
     Tensor rawdata = gokartPoseData.getPose(spinnerLabelString.getValue(), spinnerLabelLimit.getValue());
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay.geodesicInterface(), GaussianWindow.FUNCTION);
     TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, spinnerLabelWidth.getValue());
     Tensor tracked = centerFilter.apply(rawdata);

@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.red.Total;
     Tensor sequence = getControlPointsSe2();
     if (sequence.length() == 4)
       try {
-        ManifoldDisplay geodesicDisplay = geodesicDisplay();
+        ManifoldDisplay geodesicDisplay = manifoldDisplay();
         // ---
         Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
         final ScalarTensorFunction curve = geodesicInterface.curve(sequence.get(0), sequence.get(1));

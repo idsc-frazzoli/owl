@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.ext.Serialization;
     renderControlPoints(geometricLayer, graphics);
     LaneInterface lane = StableLanes.of( //
         control, //
-        LaneRiesenfeldCurveSubdivision.of(geodesicDisplay().geodesicInterface(), degree)::string, //
+        LaneRiesenfeldCurveSubdivision.of(manifoldDisplay().geodesicInterface(), degree)::string, //
         levels, width().multiply(RationalScalar.HALF));
     try {
       this.lane = Serialization.copy(lane);

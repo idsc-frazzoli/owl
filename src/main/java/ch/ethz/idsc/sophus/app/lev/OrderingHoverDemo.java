@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
     Tensor sequence = RandomVariate.of(distribution, spinnerLength.getValue(), 3);
     setControlPointsSe2(sequence);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     VectorLogManifold vectorLogManifold = geodesicDisplay.hsManifold();
     tensorUnaryOperator = //
         logWeighting().operator(biinvariant(), vectorLogManifold, variogram(), getGeodesicControlPoints());
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   @Override // from AbstractHoverDemo
   void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor sequence = leversRender.getSequence();
     Tensor origin = leversRender.getOrigin();
     Tensor weights = tensorUnaryOperator.apply(origin);

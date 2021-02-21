@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.lie.r2.RotationMatrix;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleAxes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Optional<Tensor> optional = getOrigin();
     if (optional.isPresent()) {
       if (jToggleAnimate.isSelected()) {

@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Geodesic geodesicInterface = geodesicDisplay.geodesicInterface();
     RenderQuality.setQuality(graphics);
     Tensor sequence = getGeodesicControlPoints();
@@ -82,12 +82,12 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
       int unique = map.get(disjointSets.key(index));
       Color color = ColorDataLists._097.cyclic().getColor(unique);
       PointsRender pointsRender = new PointsRender(color, color);
-      pointsRender.show(geodesicDisplay()::matrixLift, getControlPointShape(), Tensors.of(sequence.get(index))).render(geometricLayer, graphics);
+      pointsRender.show(manifoldDisplay()::matrixLift, getControlPointShape(), Tensors.of(sequence.get(index))).render(geometricLayer, graphics);
     }
   }
 
   public Tensor distanceMatrix(Tensor sequence) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     TensorUnaryOperator tuo = biinvariant().distances(geodesicDisplay.hsManifold(), sequence);
     Tensor matrix = Tensor.of(sequence.stream().map(tuo));
     return SymmetricMatrixQ.of(matrix) //

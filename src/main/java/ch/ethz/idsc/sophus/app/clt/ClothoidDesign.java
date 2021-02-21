@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     graphics.setColor(Color.BLUE);
     graphics.setStroke(new BasicStroke(2));
     Scalar value = spinnerBeta.getValue();
-    Geodesic geodesicInterface = geodesicDisplay().geodesicInterface();
+    Geodesic geodesicInterface = manifoldDisplay().geodesicInterface();
     ClothoidBuilder clothoidBuilder = (ClothoidBuilder) geodesicInterface;
     for (int index = 0; index < sequence.length() - 2; index += 3) {
       Tensor cr = sequence.get(index + 0);

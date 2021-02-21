@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.io.Primitives;
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     surfaceMesh.vrt = getControlPointsSe2();
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     SurfaceMeshRefinement surfaceMeshRefinement = //
         CatmullClarkRefinement.of(geodesicDisplay.biinvariantMean());
     // surfaceMeshRefinement = DooSabinRefinement.of(geodesicDisplay.biinvariantMean());

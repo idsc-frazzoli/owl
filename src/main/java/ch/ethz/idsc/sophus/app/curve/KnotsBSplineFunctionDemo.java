@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.itp.DeBoor;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
     Tensor knots = KnotSpacing.centripetal(geodesicDisplay.parametricDistance(), exponent).apply(control);
     Scalar upper = Last.of(knots);

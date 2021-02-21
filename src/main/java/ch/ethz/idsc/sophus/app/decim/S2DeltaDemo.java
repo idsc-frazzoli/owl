@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.ref.gui.ConfigPanel;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     // Tensor planar = ;
     pathRenderCurve.setCurve(Tensor.of(snDeltaRaw.sequence.stream().map(geodesicDisplay::toPoint)), false).render(geometricLayer, graphics);
     pathRenderShape.setCurve(Tensor.of(snDeltaFil.sequence.stream().map(geodesicDisplay::toPoint)), false).render(geometricLayer, graphics);

@@ -20,7 +20,6 @@ import ch.ethz.idsc.subare.core.util.DiscreteQsa;
 import ch.ethz.idsc.subare.core.util.DiscreteStateActionCounter;
 import ch.ethz.idsc.subare.core.util.PolicyBase;
 import ch.ethz.idsc.subare.core.util.PolicyType;
-import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Timing;
@@ -54,7 +53,7 @@ import ch.ethz.idsc.tensor.ext.Timing;
       return sarsa.qsa();
     }
     Timing timing = Timing.started();
-    DiscreteQsa optimalQsa = ActionValueIterations.solve((StandardModel) monteCarloInterface, DecimalScalar.of(0.0001));
+    DiscreteQsa optimalQsa = ActionValueIterations.solve((StandardModel) monteCarloInterface, RealScalar.of(0.0001));
     System.out.println("Time for AVI: " + timing.seconds() + "s");
     return optimalQsa;
   }

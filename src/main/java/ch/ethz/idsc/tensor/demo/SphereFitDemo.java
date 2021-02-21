@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RenderQuality.setQuality(graphics);
-    final ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    final ManifoldDisplay geodesicDisplay = manifoldDisplay();
     Tensor control = getGeodesicControlPoints();
     {
       Optional<SphereFit> optional = SphereFit.of(control);

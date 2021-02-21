@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
         try {
           System.out.println(logWeighting);
           TensorScalarFunction tensorUnaryOperator = function(sequence, reference.multiply(DoubleScalar.of(spinnerFactor.getValue())));
-          GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+          GeodesicArrayPlot geodesicArrayPlot = manifoldDisplay().geodesicArrayPlot();
           // LONGTERM redundant
           Tensor matrix = geodesicArrayPlot.raster(512, tensorUnaryOperator, DoubleScalar.INDETERMINATE);
           BufferedImage bufferedImage = ArrayPlotRender.rescale(matrix, COLOR_DATA_INDEXED, 1).export();
@@ -119,7 +119,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     if (jToggleButton.isSelected()) {
       System.out.println("compute");
       Tensor sequence = getGeodesicControlPoints();
-      GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+      GeodesicArrayPlot geodesicArrayPlot = manifoldDisplay().geodesicArrayPlot();
       Tensor matrix = geodesicArrayPlot.raster( //
           spinnerRefine.getValue(), //
           function(sequence, reference.multiply(DoubleScalar.of(spinnerFactor.getValue()))), //
@@ -139,20 +139,20 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     // ---
     if (jToggleButton.isSelected()) {
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
+          manifoldDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
       leversRender.renderSurfaceP();
       if (Objects.isNull(bufferedImage))
         recompute();
       if (Objects.nonNull(bufferedImage)) {
         RenderQuality.setDefault(graphics); // default so that raster becomes visible
-        GeodesicArrayPlot geodesicArrayPlot = geodesicDisplay().geodesicArrayPlot();
+        GeodesicArrayPlot geodesicArrayPlot = manifoldDisplay().geodesicArrayPlot();
         Tensor pixel2model = geodesicArrayPlot.pixel2model(new Dimension(bufferedImage.getHeight(), bufferedImage.getHeight()));
         ImageRender.of(bufferedImage, pixel2model).render(geometricLayer, graphics);
       }
     } else {
       reference = getGeodesicControlPoints();
       LeversRender leversRender = LeversRender.of( //
-          geodesicDisplay(), reference, null, geometricLayer, graphics);
+          manifoldDisplay(), reference, null, geometricLayer, graphics);
       leversRender.renderSurfaceP();
       bufferedImage = null;
     }

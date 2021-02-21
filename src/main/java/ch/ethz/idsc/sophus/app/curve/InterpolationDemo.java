@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     renderControlPoints(geometricLayer, graphics);
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     Tensor sequence = getGeodesicControlPoints();
     if (0 < sequence.length()) {

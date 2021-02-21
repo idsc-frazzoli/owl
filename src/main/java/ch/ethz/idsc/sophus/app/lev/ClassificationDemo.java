@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics, LeversRender leversRender) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     // GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     Tensor controlPoints = leversRender.getSequence();
     Tensor geodesicMouse = leversRender.getOrigin();

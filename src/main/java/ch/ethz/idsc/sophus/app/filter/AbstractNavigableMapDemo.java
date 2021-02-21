@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
   protected void updateStateTime() {
     _time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.Get(0)));
     _state = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250)
-        .map(row -> row.extract(1, row.length()).map(geodesicDisplay()::project)));
+        .map(row -> row.extract(1, row.length()).map(manifoldDisplay()::project)));
     _quality = Tensor
         .of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.get(row.length() - 1)));
   }

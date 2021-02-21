@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.N;
       // ---
       Tensor domain = domain(support);
       if (jToggleButton.isSelected()) {
-        ScalarTensorFunction geodesicNeville = InterpolatingPolynomial.of(geodesicDisplay().geodesicInterface(), support).scalarTensorFunction(funceva);
+        ScalarTensorFunction geodesicNeville = InterpolatingPolynomial.of(manifoldDisplay().geodesicInterface(), support).scalarTensorFunction(funceva);
         Tensor basis = domain.map(geodesicNeville);
         {
           Tensor curve = Transpose.of(Tensors.of(domain, basis));

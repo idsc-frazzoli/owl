@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
     super.render(geometricLayer, graphics);
     // ---
     LeversRender leversRender = LeversRender.of( //
-        geodesicDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
+        manifoldDisplay(), getGeodesicControlPoints(), null, geometricLayer, graphics);
     leversRender.renderSurfaceP();
     // BufferedImage bufferedImage = levelsImage(refinement());
     // graphics.drawImage(bufferedImage, 0, 200, bufferedImage.getWidth() * magnification(), bufferedImage.getHeight() * magnification(), null);
@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 
   @Override
   public final void actionPerformed(ActionEvent actionEvent) {
-    ManifoldDisplay geodesicDisplay = geodesicDisplay();
+    ManifoldDisplay geodesicDisplay = manifoldDisplay();
     File root = HomeDirectory.Pictures( //
         getClass().getSimpleName(), //
         geodesicDisplay.toString());
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
       final Tensor sequence = getGeodesicControlPoints();
       {
         System.out.println("computing levels image");
-        BufferedImage bufferedImage = HilbertLevelImage.of(geodesicDisplay(), sequence, resolution(), colorDataGradient(), 32);
+        BufferedImage bufferedImage = HilbertLevelImage.of(manifoldDisplay(), sequence, resolution(), colorDataGradient(), 32);
         try {
           File file = new File(root, "levels.png");
           ImageIO.write(bufferedImage, "png", file);
